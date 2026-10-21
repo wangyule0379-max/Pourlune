@@ -2,6 +2,8 @@
 
 面向海外的离线单机解谜游戏。技术基线：Flutter、纯 Dart 核心、SQLite/sqflite；Firebase 与 AdMob 是可降级的外部服务。当前处于开发准备阶段，尚无 Flutter App 工程。
 
+代码仓库：[wangyule0379-max/Pourlune](https://github.com/wangyule0379-max/Pourlune)，主分支 `main`。首批提交包含产品文档、原设计档案、独立验收记录和内容准备工具；仍在修复的 UI 增量目录暂未纳入，待后续单独提交。
+
 ## 开工入口
 
 - [协作约定](AGENTS.md)
