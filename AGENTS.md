@@ -51,6 +51,10 @@ UI 增量目录 `docs/design/ui-addendum/` 中的原型、截图和自查仅是�
 
 当前尚无 Flutter 应用工程。不要声称构建、测试或 CI 已通过，也不要对文档修改硬跑不存在的工程命令。
 
+目前已有独立本地 Git 仓库（无远端）及 Python 内容准备工具。在项目根目录使用 Python 3.11+ 的 .venv，依赖固定在 `tools/content/requirements.txt`；命令为 `.venv/bin/python -m unittest discover -s tools/content -v` 和 `.venv/bin/python tools/content/validate.py docs/content/fixtures/*.json`。`--release --catalog ...` 用于正式内容完整性检查；当前工程夹具不能通过发布门槛。具体用法见 `tools/content/README.md`。这些检查不等于 Dart / Flutter 测试。
+
+正式资源和账号交接见 `docs/pmpowers/specs/production-handoff.md`。`docs/design/production-candidates/` 仅是待接入验证的资源；不要把候选状态改成视觉/运行通过。工具链现状见 `toolchain-check-2026-10-21.md`：CocoaPods 已安装，Android doctor 的旧输出解析仍有兼容警告，须以实际构建进一步核验。
+
 工程建立后，在应用实际目录运行与改动相关的检查。基础命令为 `dart format --output=none --set-exit-if-changed .`、`flutter analyze`、`flutter test`；明确工作目录和测试范围。平台构建、集成测试、真机或性能检查按改动风险增加，不把所有平台全量测试套在每次小修改上。
 
 规则、参考解、撤销、事务、奖励幂等、迁移及异步过期结果必须有有效的自动验证；UI 则检查实际渲染、操作路径与适用设备条件。沿用 AC 编号记录证据，避免只镜像实现细节的测试。
