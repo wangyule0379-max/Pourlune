@@ -1,0 +1,142 @@
+test_ui_manifest (unittest.loader._FailedTest.test_ui_manifest) ... ERROR
+test_accidental_duplicate_content_is_rejected (test_visual_manifest.VisualManifestTest.test_accidental_duplicate_content_is_rejected) ... FAIL
+test_changed_valid_png_bytes_cannot_silently_rebaseline_check (test_visual_manifest.VisualManifestTest.test_changed_valid_png_bytes_cannot_silently_rebaseline_check) ... ERROR
+test_flattened_transparency_is_rejected (test_visual_manifest.VisualManifestTest.test_flattened_transparency_is_rejected) ... FAIL
+test_geometry_change_requires_explicit_manifest_refresh (test_visual_manifest.VisualManifestTest.test_geometry_change_requires_explicit_manifest_refresh) ... ERROR
+test_inventory_covers_23_unique_ids_and_22_exact_runtime_copies (test_visual_manifest.VisualManifestTest.test_inventory_covers_23_unique_ids_and_22_exact_runtime_copies) ... ERROR
+test_missing_expected_png_is_rejected (test_visual_manifest.VisualManifestTest.test_missing_expected_png_is_rejected) ... ok
+test_opaque_front_window_pixel_is_rejected (test_visual_manifest.VisualManifestTest.test_opaque_front_window_pixel_is_rejected) ... FAIL
+test_runtime_copy_drift_is_rejected (test_visual_manifest.VisualManifestTest.test_runtime_copy_drift_is_rejected) ... FAIL
+test_unexpected_png_is_rejected (test_visual_manifest.VisualManifestTest.test_unexpected_png_is_rejected) ... ok
+test_wrong_dimensions_are_rejected_even_before_baseline (test_visual_manifest.VisualManifestTest.test_wrong_dimensions_are_rejected_even_before_baseline) ... FAIL
+
+======================================================================
+ERROR: test_ui_manifest (unittest.loader._FailedTest.test_ui_manifest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_ui_manifest
+Traceback (most recent call last):
+  File "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_ui_manifest.py", line 11, in <module>
+    import ui_manifest as ui
+ModuleNotFoundError: No module named 'ui_manifest'
+
+
+======================================================================
+ERROR: test_changed_valid_png_bytes_cannot_silently_rebaseline_check (test_visual_manifest.VisualManifestTest.test_changed_valid_png_bytes_cannot_silently_rebaseline_check)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 68, in test_changed_valid_png_bytes_cannot_silently_rebaseline_check
+    self.baseline()
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 40, in baseline
+    manifest = vm.build_manifest(self.root)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/data/App Development/Pourlune/tools/assets/visual_manifest.py", line 72, in build_manifest
+    require(actual == wanted, f"PNG inventory mismatch: missing={sorted(wanted - actual)} extra={sorted(actual - wanted)}")
+  File "/Volumes/data/App Development/Pourlune/tools/assets/visual_manifest.py", line 34, in require
+    raise ValueError(message)
+ValueError: PNG inventory mismatch: missing=[] extra=['ui/calendar.png', 'ui/chapters.png', 'ui/cream-frame.png', 'ui/cream-tile.png', 'ui/green-frame.png', 'ui/green-tile.png', 'ui/logo.png', 'ui/moon.png', 'ui/patch-tile.png', 'ui/success.png']
+
+======================================================================
+ERROR: test_geometry_change_requires_explicit_manifest_refresh (test_visual_manifest.VisualManifestTest.test_geometry_change_requires_explicit_manifest_refresh)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 110, in test_geometry_change_requires_explicit_manifest_refresh
+    self.baseline()
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 40, in baseline
+    manifest = vm.build_manifest(self.root)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/data/App Development/Pourlune/tools/assets/visual_manifest.py", line 72, in build_manifest
+    require(actual == wanted, f"PNG inventory mismatch: missing={sorted(wanted - actual)} extra={sorted(actual - wanted)}")
+  File "/Volumes/data/App Development/Pourlune/tools/assets/visual_manifest.py", line 34, in require
+    raise ValueError(message)
+ValueError: PNG inventory mismatch: missing=[] extra=['ui/calendar.png', 'ui/chapters.png', 'ui/cream-frame.png', 'ui/cream-tile.png', 'ui/green-frame.png', 'ui/green-tile.png', 'ui/logo.png', 'ui/moon.png', 'ui/patch-tile.png', 'ui/success.png']
+
+======================================================================
+ERROR: test_inventory_covers_23_unique_ids_and_22_exact_runtime_copies (test_visual_manifest.VisualManifestTest.test_inventory_covers_23_unique_ids_and_22_exact_runtime_copies)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 45, in test_inventory_covers_23_unique_ids_and_22_exact_runtime_copies
+    result = self.baseline()
+             ^^^^^^^^^^^^^^^
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 40, in baseline
+    manifest = vm.build_manifest(self.root)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/data/App Development/Pourlune/tools/assets/visual_manifest.py", line 72, in build_manifest
+    require(actual == wanted, f"PNG inventory mismatch: missing={sorted(wanted - actual)} extra={sorted(actual - wanted)}")
+  File "/Volumes/data/App Development/Pourlune/tools/assets/visual_manifest.py", line 34, in require
+    raise ValueError(message)
+ValueError: PNG inventory mismatch: missing=[] extra=['ui/calendar.png', 'ui/chapters.png', 'ui/cream-frame.png', 'ui/cream-tile.png', 'ui/green-frame.png', 'ui/green-tile.png', 'ui/logo.png', 'ui/moon.png', 'ui/patch-tile.png', 'ui/success.png']
+
+======================================================================
+FAIL: test_accidental_duplicate_content_is_rejected (test_visual_manifest.VisualManifestTest.test_accidental_duplicate_content_is_rejected)
+----------------------------------------------------------------------
+ValueError: PNG inventory mismatch: missing=[] extra=['ui/calendar.png', 'ui/chapters.png', 'ui/cream-frame.png', 'ui/cream-tile.png', 'ui/green-frame.png', 'ui/green-tile.png', 'ui/logo.png', 'ui/moon.png', 'ui/patch-tile.png', 'ui/success.png']
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 87, in test_accidental_duplicate_content_is_rejected
+    with self.assertRaisesRegex(ValueError, "duplicate content"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "duplicate content" does not match "PNG inventory mismatch: missing=[] extra=['ui/calendar.png', 'ui/chapters.png', 'ui/cream-frame.png', 'ui/cream-tile.png', 'ui/green-frame.png', 'ui/green-tile.png', 'ui/logo.png', 'ui/moon.png', 'ui/patch-tile.png', 'ui/success.png']"
+
+======================================================================
+FAIL: test_flattened_transparency_is_rejected (test_visual_manifest.VisualManifestTest.test_flattened_transparency_is_rejected)
+----------------------------------------------------------------------
+ValueError: PNG inventory mismatch: missing=[] extra=['ui/calendar.png', 'ui/chapters.png', 'ui/cream-frame.png', 'ui/cream-tile.png', 'ui/green-frame.png', 'ui/green-tile.png', 'ui/logo.png', 'ui/moon.png', 'ui/patch-tile.png', 'ui/success.png']
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 96, in test_flattened_transparency_is_rejected
+    with self.assertRaisesRegex(ValueError, "RGBA"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "RGBA" does not match "PNG inventory mismatch: missing=[] extra=['ui/calendar.png', 'ui/chapters.png', 'ui/cream-frame.png', 'ui/cream-tile.png', 'ui/green-frame.png', 'ui/green-tile.png', 'ui/logo.png', 'ui/moon.png', 'ui/patch-tile.png', 'ui/success.png']"
+
+======================================================================
+FAIL: test_opaque_front_window_pixel_is_rejected (test_visual_manifest.VisualManifestTest.test_opaque_front_window_pixel_is_rejected)
+----------------------------------------------------------------------
+ValueError: PNG inventory mismatch: missing=[] extra=['ui/calendar.png', 'ui/chapters.png', 'ui/cream-frame.png', 'ui/cream-tile.png', 'ui/green-frame.png', 'ui/green-tile.png', 'ui/logo.png', 'ui/moon.png', 'ui/patch-tile.png', 'ui/success.png']
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 106, in test_opaque_front_window_pixel_is_rejected
+    with self.assertRaisesRegex(ValueError, "front window"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "front window" does not match "PNG inventory mismatch: missing=[] extra=['ui/calendar.png', 'ui/chapters.png', 'ui/cream-frame.png', 'ui/cream-tile.png', 'ui/green-frame.png', 'ui/green-tile.png', 'ui/logo.png', 'ui/moon.png', 'ui/patch-tile.png', 'ui/success.png']"
+
+======================================================================
+FAIL: test_runtime_copy_drift_is_rejected (test_visual_manifest.VisualManifestTest.test_runtime_copy_drift_is_rejected)
+----------------------------------------------------------------------
+ValueError: PNG inventory mismatch: missing=[] extra=['ui/calendar.png', 'ui/chapters.png', 'ui/cream-frame.png', 'ui/cream-tile.png', 'ui/green-frame.png', 'ui/green-tile.png', 'ui/logo.png', 'ui/moon.png', 'ui/patch-tile.png', 'ui/success.png']
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 64, in test_runtime_copy_drift_is_rejected
+    with self.assertRaisesRegex(ValueError, "runtime copy"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "runtime copy" does not match "PNG inventory mismatch: missing=[] extra=['ui/calendar.png', 'ui/chapters.png', 'ui/cream-frame.png', 'ui/cream-tile.png', 'ui/green-frame.png', 'ui/green-tile.png', 'ui/logo.png', 'ui/moon.png', 'ui/patch-tile.png', 'ui/success.png']"
+
+======================================================================
+FAIL: test_wrong_dimensions_are_rejected_even_before_baseline (test_visual_manifest.VisualManifestTest.test_wrong_dimensions_are_rejected_even_before_baseline)
+----------------------------------------------------------------------
+ValueError: PNG inventory mismatch: missing=[] extra=['ui/calendar.png', 'ui/chapters.png', 'ui/cream-frame.png', 'ui/cream-tile.png', 'ui/green-frame.png', 'ui/green-tile.png', 'ui/logo.png', 'ui/moon.png', 'ui/patch-tile.png', 'ui/success.png']
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 81, in test_wrong_dimensions_are_rejected_even_before_baseline
+    with self.assertRaisesRegex(ValueError, "dimensions"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "dimensions" does not match "PNG inventory mismatch: missing=[] extra=['ui/calendar.png', 'ui/chapters.png', 'ui/cream-frame.png', 'ui/cream-tile.png', 'ui/green-frame.png', 'ui/green-tile.png', 'ui/logo.png', 'ui/moon.png', 'ui/patch-tile.png', 'ui/success.png']"
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.968s
+
+FAILED (failures=5, errors=4)

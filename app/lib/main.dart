@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +7,7 @@ import 'package:pourlune_core/pourlune_core.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'application/game_controller.dart';
+import 'application/game_audio.dart';
 import 'data/game_store.dart';
 import 'data/content_library.dart';
 import 'development/scenarios.dart';
@@ -13,8 +16,18 @@ import 'presentation/pourlune_app.dart';
 export 'presentation/pourlune_app.dart' show PourluneApp;
 export 'presentation/game_screen.dart' show GameScreen;
 
+bool _fontLicenseRegistered = false;
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  if (!_fontLicenseRegistered) {
+    _fontLicenseRegistered = true;
+    LicenseRegistry.addLicense(() async* {
+      yield LicenseEntryWithLineBreaks([
+        'Nunito',
+      ], await rootBundle.loadString('assets/fonts/nunito/OFL.txt'));
+    });
+  }
   runApp(const Bootstrap());
 }
 
@@ -27,6 +40,7 @@ class Bootstrap extends StatefulWidget {
 class _BootstrapState extends State<Bootstrap> {
   GameController? controller;
   DevelopmentScenario? development;
+  GameAudio? audio;
   bool failed = false;
   @override
   void initState() {
@@ -37,6 +51,7 @@ class _BootstrapState extends State<Bootstrap> {
   Future<void> _open() async {
     setState(() => failed = false);
     GameStore? store;
+    GameAudio? pendingAudio;
     try {
       final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
       final formal = manifest
@@ -97,19 +112,33 @@ class _BootstrapState extends State<Bootstrap> {
         );
         library = development!.library;
       }
+      final sounds = pendingAudio = GameAudio();
       final c = GameController(
         store,
         library: library,
         clock: development?.now,
+        onFeedback: (feedback) => unawaited(
+          sounds.play(switch (feedback) {
+            GameFeedback.select => GameSound.select,
+            GameFeedback.pour => GameSound.pour,
+            GameFeedback.error => GameSound.error,
+            GameFeedback.complete => GameSound.win,
+          }),
+        ),
       );
       await c.initialize();
       if (!mounted) {
         c.dispose();
+        await sounds.dispose();
         await store.close();
         return;
       }
-      setState(() => controller = c);
+      setState(() {
+        controller = c;
+        audio = sounds;
+      });
     } catch (_) {
+      await pendingAudio?.dispose();
       await store?.close();
       if (mounted) setState(() => failed = true);
     }
@@ -118,6 +147,7 @@ class _BootstrapState extends State<Bootstrap> {
   @override
   void dispose() {
     controller?.dispose();
+    if (audio != null) unawaited(audio!.dispose());
     controller?.store.close();
     super.dispose();
   }
@@ -128,6 +158,7 @@ class _BootstrapState extends State<Bootstrap> {
     if (c != null) {
       return PourluneApp(
         controller: c,
+        audio: audio,
         advanceTestDay: development == null
             ? null
             : () {

@@ -1,0 +1,50 @@
+[
+  {
+    "name": "asset-tests",
+    "command": [
+      "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools/assets",
+      "-v"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "visual-manifest",
+    "command": [
+      "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "tools/assets/visual_manifest.py",
+      "--check"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "ui-manifest",
+    "command": [
+      "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "tools/assets/ui_manifest.py",
+      "--check"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "audio-source",
+    "command": [
+      ".venv/bin/python",
+      "tools/assets/audio_generate.py",
+      "--check"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "audio-verify",
+    "command": [
+      ".venv/bin/python",
+      "tools/assets/audio_verify.py"
+    ],
+    "exit_code": 0
+  }
+]

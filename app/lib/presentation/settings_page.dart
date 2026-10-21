@@ -39,7 +39,7 @@ class SettingsPage extends StatelessWidget {
                 ? null
                 : (value) => c.updateSetting(entry.key, value),
           ),
-        Text(l.audioPending),
+        Text(l.audioInfo),
         OutlinedButton(
           key: const Key('rules'),
           onPressed: c.busy ? null : () => c.navigate(GamePage.rules),
@@ -60,17 +60,23 @@ class SettingsPage extends StatelessWidget {
           onPressed: c.busy || c.phase == SavePhase.failed ? null : onReset,
           child: Text(l.resetProgress),
         ),
+        OutlinedButton(
+          key: const Key('licenses'),
+          onPressed: () =>
+              showLicensePage(context: context, applicationName: 'Pourlune'),
+          child: Text(l.licenses),
+        ),
         Text(l.yourProgress, style: Theme.of(context).textTheme.titleLarge),
         Text(l.localOnly),
         Text(
           l.versionInfo(
             const String.fromEnvironment(
               'FLUTTER_BUILD_NAME',
-              defaultValue: '0.2.0',
+              defaultValue: '0.3.0',
             ),
             const String.fromEnvironment(
               'FLUTTER_BUILD_NUMBER',
-              defaultValue: '2',
+              defaultValue: '3',
             ),
           ),
         ),

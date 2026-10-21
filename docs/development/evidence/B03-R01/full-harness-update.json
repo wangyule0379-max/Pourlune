@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-22",
+  "scope": "test-harness-only follow-up requested during architecture second acceptance",
+  "path": "app/integration_test/b03_runtime_test.dart",
+  "prior_delivery_sha256": "616bcb6ef68ea703986c56601371b493238d69e1fa0250d858654f02af42b0e5",
+  "current_sha256": "340ab06532e4fc35933bfbbc6127af90e35ac4aa8bbb526f3a271ef3464da6f6",
+  "changes": [
+    "Replace sole AlertDialog type assertion with hit-testable pause-card, localized title/saved copy, no memory-only copy, three enabled/actionable labelled buttons and exact persisted snapshot comparison. Existing motion, move-count, Resume/Undo assertions retained.",
+    "Find real Bootstrap GameScreen even offstage and await real audio dispose after bounded stop attempt before widget teardown."
+  ],
+  "checks": [
+    {
+      "command": "dart format --output=none --set-exit-if-changed app/integration_test/b03_runtime_test.dart",
+      "cwd": "/Volumes/data/App Development/Pourlune",
+      "exit_code": 0,
+      "log": "full-harness-format.log"
+    },
+    {
+      "command": "dart analyze integration_test/b03_runtime_test.dart",
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "exit_code": 0,
+      "log": "full-harness-analyze.log"
+    }
+  ],
+  "native_rerun": "NOT RUN here; architecture owns Simulator and will rerun full harness",
+  "production_code_changed": false,
+  "review_tracking_changed": false
+}

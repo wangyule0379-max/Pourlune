@@ -9,6 +9,28 @@ import '../data/player_settings.dart';
 import '../data/scenes.dart';
 import 'hint_worker.dart';
 
+/// A presentation of one already committed move. Never serialized or settled.
+class PourMotion {
+  const PourMotion({
+    required this.token,
+    required this.from,
+    required this.to,
+    required this.units,
+    required this.before,
+    required this.after,
+    required this.instanceId,
+    required this.revision,
+    required this.reducedMotion,
+  });
+  final int token, from, to, units, revision;
+  final Board before, after;
+  final String instanceId;
+  final bool reducedMotion;
+  Duration get duration => Duration(milliseconds: reducedMotion ? 180 : 900);
+}
+
+enum GameFeedback { select, pour, error, complete }
+
 enum SavePhase { clean, saving, failed }
 
 enum GamePage {
@@ -45,10 +67,69 @@ class GameController extends ChangeNotifier {
     ContentLibrary? library,
     LocalClock? clock,
     HintLauncher? hintLauncher,
+    this.onFeedback,
   }) : library = library ?? ContentLibrary(main: {}),
        clock = clock ?? LocalDay.now,
        _launchHint = hintLauncher ?? runHint;
   final GameStore store;
+  final void Function(GameFeedback)? onFeedback;
+  PourMotion? motion;
+  int _motionToken = 0;
+  bool _motionPresenter = false;
+  ({String instanceId, int revision})? _pendingCompletionFeedback;
+  int? rejectedBottle;
+  int rejectionRevision = 0;
+
+  void attachMotionPresenter() => _motionPresenter = true;
+  void detachMotionPresenter() {
+    _motionPresenter = false;
+    _finishMotion();
+  }
+
+  /// Token check prevents a late frame from clearing a newer presentation.
+  void completeMotion(int token) {
+    if (motion?.token != token) return;
+    _finishMotion();
+    _notify();
+  }
+
+  void _finishMotion() {
+    final m = motion;
+    motion = null;
+    if (m != null &&
+        current?.id == m.instanceId &&
+        current?.revision == m.revision &&
+        current!.completed &&
+        page == GamePage.board) {
+      page = GamePage.completion;
+    }
+    _presentCompletionFeedback();
+  }
+
+  void _presentCompletionFeedback() {
+    final pending = _pendingCompletionFeedback;
+    if (pending == null) return;
+    if (current?.id != pending.instanceId ||
+        current?.revision != pending.revision) {
+      _pendingCompletionFeedback = null;
+      return;
+    }
+    if (!_alive ||
+        !_foreground ||
+        phase != SavePhase.clean ||
+        !current!.completed ||
+        receipt?.instanceId != pending.instanceId ||
+        motion != null ||
+        page != GamePage.completion ||
+        _pendingNav != null ||
+        _afterWrite != null) {
+      return;
+    }
+    // Consume before the callback: feedback cannot replay on Retry or re-entry.
+    _pendingCompletionFeedback = null;
+    onFeedback?.call(GameFeedback.complete);
+  }
+
   ContentLibrary library;
   final LocalClock clock;
   final HintLauncher _launchHint;
@@ -75,7 +156,7 @@ class GameController extends ChangeNotifier {
   Future<void> Function()? _afterWrite;
   _Write _write = _Write.snapshot;
   bool _alive = true, _navigating = false, _foreground = true;
-  bool get busy => phase == SavePhase.saving || _navigating;
+  bool get busy => phase == SavePhase.saving || _navigating || motion != null;
   bool get continueLabelIsReplay =>
       ordinary != null && !ordinary!.completed && ordinary!.isReplay;
   bool get canContinueOrdinary => ordinary != null && !ordinary!.completed;
@@ -287,6 +368,8 @@ class GameController extends ChangeNotifier {
   /// UI actions that need validation/confirmation after a failed save share the
   /// same first-intent queue as page navigation. Stay cancels either kind.
   bool deferNavigationUntilSaved(Future<void> Function() action) {
+    _pendingCompletionFeedback = null;
+    _finishMotion();
     if (!busy && phase != SavePhase.failed) return false;
     if (_pendingNav == null) _afterWrite ??= action;
     _notify();
@@ -294,6 +377,8 @@ class GameController extends ChangeNotifier {
   }
 
   Future<void> navigate(GamePage target, {String? slot, String? scene}) async {
+    _pendingCompletionFeedback = null;
+    _finishMotion();
     _cancelHint();
     final intent = (page: target, slot: slot, scene: scene);
     if (busy || phase == SavePhase.failed) {
@@ -341,7 +426,10 @@ class GameController extends ChangeNotifier {
       return;
     }
     if (selectedSource == null) {
-      if (s.board[index].isNotEmpty) selectedSource = index;
+      if (s.board[index].isNotEmpty) {
+        selectedSource = index;
+        onFeedback?.call(GameFeedback.select);
+      }
       _notify();
       return;
     }
@@ -360,8 +448,25 @@ class GameController extends ChangeNotifier {
     final result = current!.pour(from, to);
     rejection = result.rejection;
     if (result.changed) {
+      if (_motionPresenter && _foreground && page == GamePage.board) {
+        motion = PourMotion(
+          token: ++_motionToken,
+          from: from,
+          to: to,
+          units: current!.board[from].length - result.state.board[from].length,
+          before: current!.board,
+          after: result.state.board,
+          instanceId: current!.id,
+          revision: result.state.revision,
+          reducedMotion: settings.reducedMotion,
+        );
+      }
+      onFeedback?.call(GameFeedback.pour);
       await _change(result.state);
     } else {
+      rejectedBottle = to;
+      rejectionRevision++;
+      onFeedback?.call(GameFeedback.error);
       _notify();
     }
   }
@@ -385,13 +490,19 @@ class GameController extends ChangeNotifier {
     _slots[state.slot] = state;
     receipt = null;
     rejection = null;
+    _pendingCompletionFeedback =
+        state.completed && _foreground && page == GamePage.board
+        ? (instanceId: state.id, revision: state.revision)
+        : null;
     if (state.completed) {
       if (state.slot == 'ordinary' &&
           !state.isReplay &&
           !progress.completedLevels.contains(state.puzzle.mainLevel)) {
         _freshCompletions.add(state.id);
       }
-      page = GamePage.completion;
+      if (motion == null) {
+        page = GamePage.completion;
+      }
     }
     if (phase == SavePhase.failed) {
       _notify();
@@ -473,7 +584,11 @@ class GameController extends ChangeNotifier {
       final continuation = _afterWrite;
       _afterWrite = null;
       _notify();
-      if (continuation != null) await continuation();
+      if (continuation != null) {
+        await continuation();
+      } else {
+        _presentCompletionFeedback();
+      }
     } catch (e) {
       phase = SavePhase.failed;
       _navigating = false;
@@ -643,6 +758,7 @@ class GameController extends ChangeNotifier {
 
   void _cancelHint({bool clearSelection = true}) {
     rejection = null;
+    rejectedBottle = null;
     _hintGeneration++;
     _hintTask?.cancel();
     _hintTask = null;
@@ -659,6 +775,8 @@ class GameController extends ChangeNotifier {
   void setForeground(bool value) {
     _foreground = value;
     if (!value) {
+      _pendingCompletionFeedback = null;
+      _finishMotion();
       _cancelHint();
     } else {
       refreshToday();
@@ -669,6 +787,8 @@ class GameController extends ChangeNotifier {
   @override
   void dispose() {
     _alive = false;
+    _pendingCompletionFeedback = null;
+    _finishMotion();
     _cancelHint();
     super.dispose();
   }

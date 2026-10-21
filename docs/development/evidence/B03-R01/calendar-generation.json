@@ -1,0 +1,84 @@
+{
+  "task": "B03-R01 blank calendar asset only",
+  "status": "candidate; independent visual acceptance and rights unconfirmed",
+  "tool": {
+    "mode": "built-in image_gen",
+    "name": "image_gen__imagegen",
+    "transparent_background": true
+  },
+  "prompt": "Use case: stylized-concept\nAsset type: one isolated blank knitted calendar icon for an existing Flutter game's Daily puzzle navigation.\nInput image: reference only, approved Pourlune board 05_Scene_and_Daily.png. Use only the calendar in P14 DAILY PUZZLE as the style and shape reference; P15 corroborates the soft yarn materials. Do not reproduce any page.\nPrimary request: a single compact square calendar, warmly ivory cream knitted page, coral-red knitted top binding and two small upright red yarn binding loops. The front page must be completely blank, broad and unobstructed so the app can overlay today's real date as native text.\nStyle/medium: soft polished 3D stuffed knitted textile, visible chunky yarn loops, rounded plump edges and shallow cream page layering at bottom, exact friendly Pourlune reference palette and gentle diffuse upper-left lighting.\nComposition: straight-on near-frontal view with minimal perspective, centered complete calendar filling about 80 percent of a square canvas, generous transparent margin on all four sides. Broad blank cream face occupies most of icon; lower 70 percent is usable text space. Designed for 55 logical-pixel display with an 18px native date overlay.\nBackground: genuine transparent RGBA alpha, no colored ground, no separate cast shadow.\nConstraints: ONLY the calendar itself; no moon, star, cloud, confetti, badge, checkmark, decorative objects, outer button frame, button tile or whole UI. Absolutely NO day, date, number, letter, word, symbol or printed/stitched text on the page. Do not put 21 or any other number from the reference. Keep front cream page empty. Clean transparent silhouette with no opaque backdrop, no checkerboard, no watermark.",
+  "input": {
+    "role": "reference only; no original pixels edited",
+    "path": "docs/design/original/Pourlune_Design_Pack/boards/05_Scene_and_Daily.png",
+    "areas": "P14 DAILY PUZZLE calendar shape/material, P15 DAILY COMPLETE corroborating palette",
+    "sha256": "24706897dc8d09e58a3e1d7166a2235df091eb9ec76ec80ca8a11f507c1e9e18",
+    "dimensions_px": [
+      1476,
+      1065
+    ]
+  },
+  "source": {
+    "path": "/Users/wangyule/.codex/generated_images/01a1604b-de1d-7d70-beb7-73a9a49b6875/exec-aaa5073c-c86b-4821-bbd4-227061825b17.png",
+    "selection": "only generated output; copied byte-for-byte; original generation file preserved",
+    "sha256": "4b24ec3ccaf6a6b1f05ff10595dca9fc175a27ded129837f9a3cf78c18b4ba5f"
+  },
+  "destinations": [
+    "docs/design/production-candidates/runtime/ui/calendar.png",
+    "app/assets/art/ui/calendar.png"
+  ],
+  "rights": {
+    "status": "UNCONFIRMED",
+    "basis": "AI-generated, reference-derived from approved original UI board; commercial ownership/license not verified"
+  },
+  "qa": {
+    "visual_observation": "One ivory cream knitted blank calendar with coral-red top binding and two upright yarn loops. Broad blank front permits native date overlay. No numbers, words, letters, moon, whole UI or outer button tile. Chunkier yarn than original tiny source; reference-derived approximation.",
+    "date_overlay_guidance": "Approximate cream face on source canvas x=180..1080,y=480..1080; center around normalized (0.5,0.63). Front is deliberately empty. Native Flutter owner must verify actual 18px date legibility within roughly 55 logical-pixel icon.",
+    "alpha_limitation": "Faint generated low-alpha residue outside main silhouette is preserved; record alpha>16 bbox separately as main-silhouette diagnostic.",
+    "scope": "File mode, alpha histogram/bboxes and byte identity inspected. No Flutter rendering, simulator, platform build, SDK, or independent acceptance performed.",
+    "pixels_modified": false
+  },
+  "output": {
+    "format": "PNG",
+    "mode": "RGBA",
+    "dimensions_px": [
+      1254,
+      1254
+    ],
+    "file_bytes": 1877037,
+    "bbox_convention": "[left, top, right-exclusive, bottom-exclusive]",
+    "alpha_nonzero_bbox": [
+      0,
+      0,
+      1240,
+      1254
+    ],
+    "alpha_gt16_bbox": [
+      104,
+      62,
+      1154,
+      1190
+    ],
+    "alpha_gt128_bbox": [
+      105,
+      63,
+      1152,
+      1189
+    ],
+    "alpha_min_max": [
+      0,
+      255
+    ],
+    "alpha_pixel_counts": {
+      "zero": 483820,
+      "one_to_16": 31185,
+      "17_to_127": 4299,
+      "128_to_254": 1052869,
+      "255": 343
+    },
+    "low_alpha_1_to_16_fraction_of_canvas": 0.019831276756484512,
+    "total_pixels": 1572516,
+    "copies_byte_identical": true,
+    "resized_or_cleaned": false
+  },
+  "recorded_at_utc": "2026-10-21T21:16:32.645093+00:00"
+}

@@ -411,10 +411,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get strongContrast => 'Stronger contrast';
 
   @override
-  String get audioPending =>
-      'Music and sound preferences are saved. Audio tracks are not included in this development build.';
-
-  @override
   String get privacyChoices => 'Privacy choices';
 
   @override
@@ -542,4 +538,41 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get audioInfo =>
+      'Music and sound play offline. Pause or leave the app to stop audio.';
+
+  @override
+  String get licenses => 'Licenses';
+
+  @override
+  String get gardenArch => 'Flower arch';
+
+  @override
+  String get gardenTable => 'Garden table';
+
+  @override
+  String get gardenChair => 'Chair';
+
+  @override
+  String get gardenPlants => 'Potted plants';
+
+  @override
+  String get gardenTea => 'Tea and flowers';
+
+  @override
+  String get seasideDock => 'Dock';
+
+  @override
+  String get seasideCabana => 'Cabana';
+
+  @override
+  String get seasideRing => 'Life ring';
+
+  @override
+  String get seasidePlant => 'Coastal plant';
+
+  @override
+  String get seasideGull => 'Seagull';
 }

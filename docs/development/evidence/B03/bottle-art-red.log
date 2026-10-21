@@ -1,0 +1,177 @@
+Resolving dependencies...
+Downloading packages...
+  code_assets 1.2.1 (2.1.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  objective_c 9.5.0 (9.6.2 available)
+  record_use 0.6.0 (1.1.1 available)
+  sqlite3 3.5.2 (3.7.1 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+Got dependencies!
+10 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Volumes/data/App Development/Pourlune/app/test/bottle_art_test.dart
+00:00 +0: B03 bottle runtime layers are separate from current contents and fixed target
+══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+The following assertion was thrown building _InkResponseStateWidget(gestures: [tap], mouseCursor:
+null, clipped to BoxShape.rectangle, dirty, state: _InkResponseState#05e8a):
+No Material widget found.
+_InkResponseStateWidget widgets require a Material widget ancestor within the closest
+LookupBoundary.
+In Material Design, most widgets are conceptually "printed" on a sheet of material. In Flutter's
+material library, that material is represented by the Material widget. It is the Material widget
+that renders ink splashes, for instance. Because of this, many material library widgets require that
+there be a Material widget in the tree above them.
+To introduce a Material widget, you can either directly include one, or use a widget that contains
+Material itself, such as a Card, Dialog, Drawer, or Scaffold.
+The specific widget that could not find a Material ancestor was:
+  _InkResponseStateWidget
+The ancestors of this widget were:
+  ...
+  InkWell
+  ExcludeSemantics
+  Semantics
+  BottleButton
+  Center
+  ...
+
+The relevant error-causing widget was:
+  InkWell
+  InkWell:file:///Volumes/data/App%20Development/Pourlune/app/lib/presentation/bottle.dart:57:14
+
+When the exception was thrown, this was the stack:
+#0      debugCheckHasMaterial.<anonymous closure> (package:flutter/src/material/debug.dart:40:7)
+#1      debugCheckHasMaterial (package:flutter/src/material/debug.dart:67:4)
+#2      InkResponse.debugCheckContext (package:flutter/src/material/ink_well.dart:721:12)
+#3      _InkResponseState.build (package:flutter/src/material/ink_well.dart:1340:36)
+#4      StatefulElement.build (package:flutter/src/widgets/framework.dart:5944:27)
+#5      ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5830:15)
+#6      StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#7      Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#8      ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5812:5)
+#9      StatefulElement._firstBuild (package:flutter/src/widgets/framework.dart:5986:11)
+#10     ComponentElement.mount (package:flutter/src/widgets/framework.dart:5806:5)
+...     Normal element mounting (281 frames)
+#291    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4600:20)
+#292    MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7277:36)
+#293    MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7292:32)
+...     Normal element mounting (467 frames)
+#760    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4600:20)
+#761    Element.updateChild (package:flutter/src/widgets/framework.dart:4066:20)
+#762    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#763    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#764    ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#765    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)
+#766    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#767    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#768    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#769    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#770    StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#771    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#772    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#773    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#774    ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#775    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)
+#776    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#777    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#778    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#779    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#780    StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#781    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#782    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#783    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#784    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#785    StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#786    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#787    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#788    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#789    ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#790    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#791    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#792    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#793    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#794    StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#795    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#796    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#797    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#798    ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#799    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#800    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#801    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#802    ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#803    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#804    _RawViewElement._updateChild (package:flutter/src/widgets/view.dart:488:16)
+#805    _RawViewElement.update (package:flutter/src/widgets/view.dart:575:5)
+#806    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#807    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#808    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#809    StatelessElement.update (package:flutter/src/widgets/framework.dart:5908:5)
+#810    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#811    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#812    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#813    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#814    StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#815    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#816    RootElement._rebuild (package:flutter/src/widgets/binding.dart:2091:16)
+#817    RootElement.update (package:flutter/src/widgets/binding.dart:2069:5)
+#818    RootElement.performRebuild (package:flutter/src/widgets/binding.dart:2083:7)
+#819    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#820    BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2763:15)
+#821    BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2820:11)
+#822    BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3124:18)
+#823    AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:2432:19)
+#824    RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:558:5)
+#825    SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1430:15)
+#826    SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1345:9)
+#827    AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:2261:9)
+#830    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#831    AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:2250:27)
+#832    WidgetTester.pumpWidget.<anonymous closure> (package:flutter_test/src/widget_tester.dart:598:22)
+#835    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#836    WidgetTester.pumpWidget (package:flutter_test/src/widget_tester.dart:595:27)
+#837    main.<anonymous closure> (file:///Volumes/data/App%20Development/Pourlune/app/test/bottle_art_test.dart:8:13)
+#838    testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#839    TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _KeyWidgetFinder:<Found 0 widgets with key [<'bottle-0-back'>]: []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Volumes/data/App%20Development/Pourlune/app/test/bottle_art_test.dart:10:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Volumes/data/App%20Development/Pourlune/app/test/bottle_art_test.dart line 10
+The test description was:
+  B03 bottle runtime layers are separate from current contents and fixed target
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following message was thrown:
+Multiple exceptions (2) were detected during the running of the current test, and at least one was
+unexpected.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:00 +0 -1: B03 bottle runtime layers are separate from current contents and fixed target [E]
+  Test failed. See exception logs above.
+  The test description was: B03 bottle runtime layers are separate from current contents and fixed target
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Volumes/data/App Development/Pourlune/app/test/bottle_art_test.dart: B03 bottle runtime layers are separate from current contents and fixed target

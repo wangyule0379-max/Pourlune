@@ -62,7 +62,7 @@ void main() {
       await tap(const Key('pause'));
       expect(
         find.descendant(
-          of: find.byType(AlertDialog),
+          of: find.byKey(const Key('pause-card')),
           matching: find.text(
             'Some changes are only in memory. Resume and Retry before leaving.',
           ),

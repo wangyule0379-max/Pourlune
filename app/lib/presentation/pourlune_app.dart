@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:pourlune_core/pourlune_core.dart';
 
 import '../application/game_controller.dart';
+import '../application/game_audio.dart';
 import '../l10n/app_localizations.dart';
 import 'bottle.dart';
 import 'game_screen.dart';
+import 'knit_components.dart';
 
 class PourluneApp extends StatelessWidget {
   const PourluneApp({
@@ -13,11 +15,13 @@ class PourluneApp extends StatelessWidget {
     this.puzzles = const [],
     this.textScaler,
     this.advanceTestDay,
+    this.audio,
   });
   final GameController controller;
   final List<Puzzle> puzzles;
   final TextScaler? textScaler;
   final VoidCallback? advanceTestDay;
+  final GameAudio? audio;
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: controller,
@@ -28,6 +32,7 @@ class PourluneApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       theme: ThemeData(
+        fontFamily: 'Nunito',
         colorScheme: ColorScheme.fromSeed(
           seedColor: ink,
           primary: ink,
@@ -35,17 +40,65 @@ class PourluneApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: controller.settings.strongContrast
             ? Colors.white
-            : cream,
+            : const Color(0xff82dff1),
         useMaterial3: true,
         textTheme: ThemeData.light().textTheme.apply(
+          fontFamily: 'Nunito',
           bodyColor: ink,
           displayColor: ink,
         ),
         filledButtonTheme: FilledButtonThemeData(
-          style: FilledButton.styleFrom(minimumSize: const Size(48, 48)),
+          style:
+              FilledButton.styleFrom(
+                minimumSize: const Size(48, 64),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 14,
+                ),
+                backgroundColor: Colors.transparent,
+                foregroundColor: ink,
+                disabledBackgroundColor: Colors.transparent,
+                textStyle: const TextStyle(
+                  fontFamily: 'Nunito',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(28),
+                ),
+              ).copyWith(
+                backgroundBuilder: (context, states, child) =>
+                    knitButtonBackground(context, states, child, primary: true),
+              ),
         ),
         outlinedButtonTheme: OutlinedButtonThemeData(
-          style: OutlinedButton.styleFrom(minimumSize: const Size(48, 48)),
+          style:
+              OutlinedButton.styleFrom(
+                minimumSize: const Size(48, 56),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 12,
+                ),
+                backgroundColor: Colors.transparent,
+                foregroundColor: ink,
+                side: BorderSide.none,
+                textStyle: const TextStyle(
+                  fontFamily: 'Nunito',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+              ).copyWith(
+                backgroundBuilder: (context, states, child) =>
+                    knitButtonBackground(
+                      context,
+                      states,
+                      child,
+                      primary: false,
+                    ),
+              ),
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
@@ -66,6 +119,7 @@ class PourluneApp extends StatelessWidget {
         controller: controller,
         puzzles: puzzles,
         advanceTestDay: advanceTestDay,
+        audio: audio,
       ),
     ),
   );

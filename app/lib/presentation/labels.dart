@@ -17,9 +17,24 @@ Set<int> ownedRegions(List<String> pieces, String scene) => pieces
     .map((p) => int.parse(p.split(':').last))
     .toSet();
 String regionLabel(AppLocalizations l, String scene, int number) =>
-    scene == 'color_studio'
-    ? [l.window, l.deskPaint, l.stool, l.plant, l.table][number - 1]
-    : l.patchNumber(number);
+    (switch (scene) {
+      'color_studio' => [l.window, l.deskPaint, l.stool, l.plant, l.table],
+      'garden_nook' => [
+        l.gardenArch,
+        l.gardenTable,
+        l.gardenChair,
+        l.gardenPlants,
+        l.gardenTea,
+      ],
+      'seaside_corner' => [
+        l.seasideDock,
+        l.seasideCabana,
+        l.seasideRing,
+        l.seasidePlant,
+        l.seasideGull,
+      ],
+      _ => [for (var i = 1; i <= 5; i++) l.patchNumber(i)],
+    })[number - 1];
 String rejectionLabel(AppLocalizations l, String message) => switch (message) {
   'Choose another bottle' => l.chooseAnother,
   'Choose a bottle with liquid' => l.chooseLiquid,

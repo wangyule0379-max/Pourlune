@@ -40,7 +40,8 @@ void main() {
           await t.runAsync(
             () => Future<void>.delayed(const Duration(milliseconds: 5)),
           );
-          await t.pump(const Duration(milliseconds: 5));
+          // Advance presentation in coarse frames; SQL still gets real I/O time.
+          await t.pump(const Duration(milliseconds: 100));
         }
         expect(c.busy, isFalse);
         expect(c.hintSearching, isFalse);
@@ -135,7 +136,8 @@ void main() {
           await t.runAsync(
             () => Future<void>.delayed(const Duration(milliseconds: 5)),
           );
-          await t.pump(const Duration(milliseconds: 5));
+          // Advance presentation in coarse frames; SQL still gets real I/O time.
+          await t.pump(const Duration(milliseconds: 100));
         }
         await t.pumpAndSettle();
       }

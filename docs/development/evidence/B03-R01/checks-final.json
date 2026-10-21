@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-22",
+  "checks": [
+    {
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": "flutter test --reporter expanded",
+      "exit_code": 0,
+      "result": "101/101",
+      "log": "app-tests-final.log"
+    },
+    {
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": "flutter analyze",
+      "exit_code": 0,
+      "result": "No issues",
+      "log": "analyze-final.log"
+    },
+    {
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": "dart format --output=none --set-exit-if-changed .",
+      "exit_code": 0,
+      "result": "52 files,0changed",
+      "log": "format-final.log"
+    },
+    {
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": "flutter build apk --debug",
+      "exit_code": 0,
+      "result": "debug APK",
+      "log": "build-android-final.log"
+    },
+    {
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": "flutter build ios --simulator --debug --dart-define=POURLUNE_DATABASE=b03_r01_manual.sqlite",
+      "exit_code": 0,
+      "result": "simulator debug",
+      "log": "build-ios-final.log"
+    },
+    {
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": "flutter test integration_test/b03_r01_design_test.dart -d 4DF92321-95EC-4C8E-849C-0CF0AA6FE1D2 --dart-define=POURLUNE_DATABASE=b03_r01_runtime.sqlite --reporter expanded",
+      "exit_code": 0,
+      "result": "1/1;25PNG;1:05",
+      "log": "native-runtime.log"
+    },
+    {
+      "cwd": "/Volumes/data/App Development/Pourlune",
+      "command": "bundled-python -m unittest discover -s tools/assets -v",
+      "exit_code": 0,
+      "result": "23/23",
+      "log": "asset-tests-final.log"
+    }
+  ],
+  "scope": "Execution evidence; no independent B03 acceptance, Android runtime, listening or physical-device claim",
+  "candidate_index_empty": true,
+  "head": "6699654998fbaa9397da67d9d021680d539a30ca"
+}

@@ -7,7 +7,8 @@ import 'package:pourlune_core/pourlune_core.dart';
 
 import '../application/game_controller.dart';
 import '../l10n/app_localizations.dart';
-import 'collection_pages.dart';
+import 'knit_components.dart';
+import 'scene_art.dart';
 import 'labels.dart';
 
 class HomePage extends StatelessWidget {
@@ -30,132 +31,224 @@ class HomePage extends StatelessWidget {
         c.daily == null &&
         c.progress.firstClears == 0 &&
         !c.tutorialComplete;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (welcome) ...[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 28),
-            child: Text(
-              l.rulesTitle,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-          ),
-          FilledButton(
-            key: const Key('sample-main-001'),
-            onPressed: c.busy ? null : () => onPlay(1),
-            child: Text(l.start),
-          ),
-        ] else ...[
-          if (c.progress.storyComplete) ...[
-            Text(
-              l.storyComplete,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            Text(l.storyCompleteBody),
-            FilledButton(
-              key: const Key('daily-primary'),
-              onPressed: c.busy ? null : () => c.navigate(GamePage.daily),
-              child: Text(l.dailyPuzzle),
-            ),
-            if (c.progress.dailyStamps.contains(c.today.date))
-              Text(l.dailyDone),
-          ] else if (c.canContinueOrdinary)
-            FilledButton(
-              key: const Key('resume'),
-              onPressed: c.busy ? null : () => c.resumeSlot('ordinary'),
-              child: Text(
-                c.continueLabelIsReplay
-                    ? l.continueReplay(c.ordinary!.puzzle.mainLevel!)
-                    : l.continueLevel(c.ordinary!.puzzle.mainLevel!),
+    final scene = sceneForLevel(level);
+    return LayoutBuilder(
+      builder: (context, box) {
+        final largeText = MediaQuery.textScalerOf(context).scale(16) > 22;
+        final heroWidth = box.maxWidth.clamp(
+          0.0,
+          largeText
+              ? 220.0
+              : MediaQuery.sizeOf(context).height * (welcome ? .38 : .32),
+        );
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (welcome) ...[
+              const SizedBox(height: 16),
+              Semantics(
+                label: 'Pourlune',
+                header: true,
+                child: const KnitArt(name: 'logo', height: 116),
               ),
-            )
-          else
-            FilledButton(
-              key: Key('sample-main-${level.toString().padLeft(3, '0')}'),
-              onPressed: c.busy ? null : () => onPlay(level),
-              child: Text(l.playLevel(level)),
-            ),
-          if (c.progress.storyComplete && c.canContinueOrdinary)
-            OutlinedButton(
-              key: const Key('resume'),
-              onPressed: c.busy ? null : () => c.resumeSlot('ordinary'),
-              child: Text(l.continueReplay(c.ordinary!.puzzle.mainLevel!)),
-            ),
-          if (!c.progress.storyComplete &&
-              !c.canContinueOrdinary &&
-              !c.library.main.containsKey(level))
-            Text(l.contentUnavailable),
-          if (c.ordinary?.completed ?? false)
-            TextButton(
-              key: const Key('saved-result'),
-              onPressed: c.busy ? null : () => c.resumeSlot('ordinary'),
-              child: Text(l.viewResult),
-            ),
-          const SizedBox(height: 16),
-          ScenePreview(scene: sceneForLevel(level), pieces: c.progress.pieces),
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              OutlinedButton(
-                key: Key(
-                  c.progress.storyComplete ? 'replay-levels' : 'chapters',
-                ),
-                onPressed: c.busy ? null : () => c.navigate(GamePage.chapters),
-                child: Text(
-                  c.progress.storyComplete ? l.replayLevels : l.chapters,
-                ),
+              const SizedBox(height: 10),
+              Text(
+                'A little color. A little calm.',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleLarge
+                    ?.copyWith(fontWeight: FontWeight.w800),
               ),
-              OutlinedButton(
-                key: const Key('daily'),
-                onPressed: c.busy ? null : () => c.navigate(GamePage.daily),
-                child: Text(l.dailyPuzzle),
-              ),
-              OutlinedButton(
-                key: const Key('collection'),
-                onPressed: c.busy
-                    ? null
-                    : () => c.navigate(GamePage.collection),
-                child: Text(l.collection),
-              ),
-              OutlinedButton(
-                key: const Key('settings'),
-                onPressed: c.busy ? null : () => c.navigate(GamePage.settings),
-                child: Text(l.settings),
-              ),
-            ],
-          ),
-        ],
-        if (kDebugMode) ...[
-          ExpansionTile(
-            key: const Key('development-tools'),
-            title: const Text('Engineering tools'),
-            children: [
-              const Text(
-                'Debug-only fixture bypass. These samples are not a release catalog.',
-              ),
-              for (final p in c.library.main.values.where(
-                (p) => [1, 12, 21].contains(p.mainLevel),
-              ))
-                TextButton(
-                  key: Key('engineering-${p.id}'),
-                  onPressed: c.busy ? null : () => onEngineering(p),
-                  child: Text(
-                    '${p.id} · ${p.initial.expand((b) => b).toSet().length} colors',
+              const SizedBox(height: 12),
+              Center(
+                child: SizedBox(
+                  width: heroWidth,
+                  // The welcome illustration is decorative, never saved progress.
+                  child: const SceneArt(
+                    scene: 'color_studio',
+                    pieces: [
+                      'color_studio:1',
+                      'color_studio:2',
+                      'color_studio:3',
+                      'color_studio:4',
+                      'color_studio:5',
+                    ],
                   ),
                 ),
+              ),
+              const SizedBox(height: 16),
+              FilledButton(
+                key: const Key('sample-main-001'),
+                onPressed: c.busy ? null : () => onPlay(1),
+                child: Text(l.start),
+              ),
+              const SizedBox(height: 10),
+              const Text('Play at your own pace', textAlign: TextAlign.center),
+            ] else ...[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Semantics(
+                      label: 'Pourlune',
+                      header: true,
+                      child: KnitArt(
+                        name: 'logo',
+                        height: largeText ? 76 : 100,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  KnitIconButton(
+                    key: const Key('settings'),
+                    icon: Icons.settings_rounded,
+                    label: l.settings,
+                    onPressed: c.busy
+                        ? null
+                        : () => c.navigate(GamePage.settings),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Center(
+                child: SizedBox(
+                  width: heroWidth,
+                  child: SceneArt(scene: scene, pieces: c.progress.pieces),
+                ),
+              ),
+              Text(
+                sceneTitle(scene),
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineSmall
+                    ?.copyWith(fontWeight: FontWeight.w900),
+              ),
+              const SizedBox(height: 10),
+              PatchProgress(scene: scene, pieces: c.progress.pieces),
+              const SizedBox(height: 16),
+              if (c.progress.storyComplete) ...[
+                Text(
+                  l.storyComplete,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                Text(l.storyCompleteBody, textAlign: TextAlign.center),
+                FilledButton(
+                  key: const Key('daily-primary'),
+                  onPressed: c.busy ? null : () => c.navigate(GamePage.daily),
+                  child: Text(l.dailyPuzzle),
+                ),
+                if (c.progress.dailyStamps.contains(c.today.date))
+                  Text(l.dailyDone),
+              ] else if (c.canContinueOrdinary)
+                FilledButton(
+                  key: const Key('resume'),
+                  onPressed: c.busy ? null : () => c.resumeSlot('ordinary'),
+                  child: Text(
+                    c.continueLabelIsReplay
+                        ? l.continueReplay(c.ordinary!.puzzle.mainLevel!)
+                        : l.continueLevel(c.ordinary!.puzzle.mainLevel!),
+                  ),
+                )
+              else
+                FilledButton(
+                  key: Key('sample-main-${level.toString().padLeft(3, '0')}'),
+                  onPressed: c.busy ? null : () => onPlay(level),
+                  child: Text(l.playLevel(level)),
+                ),
+              if (c.progress.storyComplete && c.canContinueOrdinary)
+                OutlinedButton(
+                  key: const Key('resume'),
+                  onPressed: c.busy ? null : () => c.resumeSlot('ordinary'),
+                  child: Text(l.continueReplay(c.ordinary!.puzzle.mainLevel!)),
+                ),
+              if (!c.progress.storyComplete &&
+                  !c.canContinueOrdinary &&
+                  !c.library.main.containsKey(level))
+                Text(l.contentUnavailable),
+              if (c.ordinary?.completed ?? false)
+                TextButton(
+                  key: const Key('saved-result'),
+                  onPressed: c.busy ? null : () => c.resumeSlot('ordinary'),
+                  child: Text(l.viewResult),
+                ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final entry in [
+                    (
+                      c.progress.storyComplete ? 'replay-levels' : 'chapters',
+                      'chapters',
+                      c.progress.storyComplete ? l.replayLevels : l.chapters,
+                      GamePage.chapters,
+                    ),
+                    ('daily', 'calendar', l.dailyPuzzle, GamePage.daily),
+                    (
+                      'collection',
+                      'patch-tile',
+                      l.collection,
+                      GamePage.collection,
+                    ),
+                  ])
+                    SizedBox(
+                      width: largeText ? box.maxWidth : (box.maxWidth - 16) / 3,
+                      child: OutlinedButton(
+                        key: Key(entry.$1),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 12,
+                          ),
+                        ),
+                        onPressed: c.busy ? null : () => c.navigate(entry.$4),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (entry.$2 == 'calendar')
+                              CalendarArt(
+                                day: parseCalendarDate(c.today.date).day,
+                                size: 52,
+                              )
+                            else
+                              KnitArt(name: entry.$2, width: 52, height: 52),
+                            const SizedBox(height: 6),
+                            Text(entry.$3, textAlign: TextAlign.center),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ],
-          ),
-          TextButton(
-            key: const Key('progress'),
-            onPressed: c.busy ? null : c.showProgress,
-            child: Text(l.progress),
-          ),
-        ],
-      ],
+            if (kDebugMode) ...[
+              ExpansionTile(
+                key: const Key('development-tools'),
+                title: const Text('Engineering tools'),
+                children: [
+                  const Text(
+                    'Debug-only fixture bypass. These samples are not a release catalog.',
+                  ),
+                  for (final p in c.library.main.values.where(
+                    (p) => [1, 12, 21].contains(p.mainLevel),
+                  ))
+                    TextButton(
+                      key: Key('engineering-${p.id}'),
+                      onPressed: c.busy ? null : () => onEngineering(p),
+                      child: Text(
+                        '${p.id} · ${p.initial.expand((b) => b).toSet().length} colors',
+                      ),
+                    ),
+                ],
+              ),
+              TextButton(
+                key: const Key('progress'),
+                onPressed: c.busy ? null : c.showProgress,
+                child: Text(l.progress),
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 }
@@ -176,11 +269,13 @@ class ChaptersPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           for (var chapter = 0; chapter < 3; chapter++) ...[
-            Text(
-              sceneTitle(
-                ['color_studio', 'garden_nook', 'seaside_corner'][chapter],
+            KnitPanel(
+              child: Text(
+                sceneTitle(
+                  ['color_studio', 'garden_nook', 'seaside_corner'][chapter],
+                ),
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
-              style: Theme.of(context).textTheme.headlineSmall,
             ),
             Wrap(
               spacing: 8,
@@ -306,9 +401,33 @@ class _DailyPageState extends State<DailyPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        Center(
+          child: CalendarArt(
+            key: const Key('daily-calendar-hero'),
+            day: parseCalendarDate(c.today.date).day,
+            size: MediaQuery.textScalerOf(context).scale(16) > 22 ? 108 : 156,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          c.progress.dailyStamps.contains(c.today.date)
+              ? l.dailyDone
+              : l.dailyTitle,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headlineSmall
+              ?.copyWith(fontWeight: FontWeight.w900),
+        ),
         Text(
           l.dailyDate(c.today.date),
-          style: Theme.of(context).textTheme.headlineSmall,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const KnitPanel(
+          child: Text(
+            'A fresh puzzle.\nAt your own pace.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+          ),
         ),
         if (c.library.daily == null) Text(l.dailyUnavailable),
         if (active != null && !active.completed)
@@ -321,7 +440,6 @@ class _DailyPageState extends State<DailyPage> {
                   : l.continuePrevious(active.puzzleDate!),
             ),
           ),
-        if (c.progress.dailyStamps.contains(c.today.date)) Text(l.dailyDone),
         FilledButton(
           key: const Key('today'),
           onPressed: c.busy || c.library.daily == null ? null : widget.onToday,
@@ -336,93 +454,110 @@ class _DailyPageState extends State<DailyPage> {
           ),
         ),
         const SizedBox(height: 16),
-        Row(
-          children: [
-            IconButton(
-              tooltip: l.previousMonth,
-              onPressed: month.year == 1 && month.month == 1
-                  ? null
-                  : () => setState(
-                      () => month = DateTime.utc(month.year, month.month - 1),
-                    ),
-              icon: const Icon(Icons.chevron_left),
-            ),
-            Expanded(
-              child: Text(
-                DateFormat.yMMMM('en').format(month),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            IconButton(
-              tooltip: l.nextMonth,
-              onPressed: month.year == 9999 && month.month == 12
-                  ? null
-                  : () => setState(
-                      () => month = DateTime.utc(month.year, month.month + 1),
-                    ),
-              icon: const Icon(Icons.chevron_right),
-            ),
-          ],
-        ),
-        LayoutBuilder(
-          builder: (context, box) => SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: SizedBox(
-              width: box.maxWidth < minimumCalendarWidth
-                  ? minimumCalendarWidth
-                  : box.maxWidth,
-              child: Column(
+        KnitPanel(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      for (final day in l.weekdays.split(','))
-                        Expanded(child: Text(day, textAlign: TextAlign.center)),
-                    ],
+                  IconButton(
+                    tooltip: l.previousMonth,
+                    onPressed: month.year == 1 && month.month == 1
+                        ? null
+                        : () => setState(
+                            () => month = DateTime.utc(
+                              month.year,
+                              month.month - 1,
+                            ),
+                          ),
+                    icon: const Icon(Icons.chevron_left),
                   ),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: leading + days,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 7,
-                      mainAxisExtent: dayExtent,
-                      crossAxisSpacing: 2,
-                      mainAxisSpacing: 2,
+                  Expanded(
+                    child: Text(
+                      DateFormat.yMMMM('en').format(month),
+                      textAlign: TextAlign.center,
                     ),
-                    itemBuilder: (context, index) {
-                      if (index < leading) return const SizedBox();
-                      final day = index - leading + 1,
-                          date = calendarDate(
-                            DateTime.utc(month.year, month.month, day),
+                  ),
+                  IconButton(
+                    tooltip: l.nextMonth,
+                    onPressed: month.year == 9999 && month.month == 12
+                        ? null
+                        : () => setState(
+                            () => month = DateTime.utc(
+                              month.year,
+                              month.month + 1,
+                            ),
                           ),
-                          stamped = c.progress.dailyStamps.contains(date);
-                      return Semantics(
-                        label: l.dateState(
-                          date,
-                          stamped ? l.stampOwned : l.noStamp,
-                        ),
-                        button: true,
-                        child: TextButton(
-                          key: Key('date-$date'),
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.all(2),
-                            minimumSize: const Size(48, 48),
-                          ),
-                          onPressed: c.busy ? null : () => _date(date),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('$day'),
-                              if (stamped) const Icon(Icons.check, size: 12),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
+                    icon: const Icon(Icons.chevron_right),
                   ),
                 ],
               ),
-            ),
+              LayoutBuilder(
+                builder: (context, box) => SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: SizedBox(
+                    width: box.maxWidth < minimumCalendarWidth
+                        ? minimumCalendarWidth
+                        : box.maxWidth,
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            for (final day in l.weekdays.split(','))
+                              Expanded(
+                                child: Text(day, textAlign: TextAlign.center),
+                              ),
+                          ],
+                        ),
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: leading + days,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 7,
+                                mainAxisExtent: dayExtent,
+                                crossAxisSpacing: 2,
+                                mainAxisSpacing: 2,
+                              ),
+                          itemBuilder: (context, index) {
+                            if (index < leading) return const SizedBox();
+                            final day = index - leading + 1,
+                                date = calendarDate(
+                                  DateTime.utc(month.year, month.month, day),
+                                ),
+                                stamped = c.progress.dailyStamps.contains(date);
+                            return Semantics(
+                              label: l.dateState(
+                                date,
+                                stamped ? l.stampOwned : l.noStamp,
+                              ),
+                              button: true,
+                              child: TextButton(
+                                key: Key('date-$date'),
+                                style: TextButton.styleFrom(
+                                  padding: const EdgeInsets.all(2),
+                                  minimumSize: const Size(48, 48),
+                                ),
+                                onPressed: c.busy ? null : () => _date(date),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text('$day'),
+                                    if (stamped)
+                                      const Icon(Icons.check, size: 12),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         Text(l.historyReadOnly),

@@ -1,8 +1,8 @@
-# Pourlune offline client — B01 + B02
+# Pourlune offline client — B03 candidates
 
-Actual Flutter iOS/Android app, local pure Dart core and sqflite SQLite. B01 and B02 are independently accepted within their documented engineering scope; see `docs/development/review/B02-acceptance.md` for checks and limits. Default debug content is **three engineering fixtures**, with missing levels visibly unavailable. Production content, art/audio and SDKs remain B03/B04 work. Development drawings and launcher icons are probes.
+Actual Flutter iOS/Android app, local pure Dart core and sqflite SQLite. B01 and B02 are independently accepted within their documented engineering scope; see `docs/development/review/B02-acceptance.md` for checks and limits. Default content is **60 main +30 independent daily candidates** from `assets/puzzles/` and `assets/catalog/daily.json`; original main012 stays v1 and newly authored main021 is v2. B03 replaces development visual probes with layered candidate art, original synthesized local WAVs, Nunito/OFL and platform icon exports. Candidate content/visuals remain subject to independent acceptance and the reference artwork commercial rights remain unconfirmed. Firebase/AdMob and official support destinations are B04.
 
-Use Flutter **3.47.2** (`d3b14c876900e553bc736ca19295fc09e3853e8e`), Dart **3.13.2**. `.flutter-version` and both lockfiles fix the toolchain/dependencies. Runtime dependencies remain Flutter localization, intl 0.20.3, sqflite 2.4.5 and local core; host tests also use sqflite_common_ffi 2.4.4 against actual SQLite files. No new B02 dependency.
+Use Flutter **3.47.2** (`d3b14c876900e553bc736ca19295fc09e3853e8e`), Dart **3.13.2**. `.flutter-version` and both lockfiles fix the toolchain/dependencies. Runtime dependencies are Flutter localization, intl 0.20.3, sqflite 2.4.5, audioplayers 6.8.1 and local core; host tests also use sqflite_common_ffi 2.4.4 against actual SQLite files. Audioplayers provides local asset playback; the lockfile pins its platform dependencies.
 
 Development IDs: iOS `dev.pourlune.pourluneDev`, Android `dev.pourlune.pourlune_dev`; Android minimum24, iOS minimum15.0. These settings do not establish minimum-device coverage or production signing.
 
@@ -28,7 +28,7 @@ Every accepted action saves a full snapshot. Win + progress + piece/stamp + rece
 
 The qualification counter is preserved. `canCheckInterstitialOnNext` only identifies a fresh ordinary settlement with a valid next target; it excludes chapter/final/replay/daily and opportunities already left/restored. It neither displays an ad nor resets the counter. No ad entitlement is simulated.
 
-Production daily catalog: `assets/catalog/daily.json`, strict schema1, version, calendar epoch and ordered unique daily IDs, at least30 definitions. Puzzle assets go under `assets/puzzles/`. Missing/malformed catalog leaves saved daily and ordinary games available. Date mapping uses UTC-normalized calendar components; each daily instance embeds its date, platform timezone name + offset, catalog version and full definition. No IANA identifier is claimed. Only today starts a new game; historical dates are read-only. Default bundle currently has no production daily catalog. Release mode excludes fixture fallback and debug controls.
+Production daily catalog: `assets/catalog/daily.json`, strict schema1, version, calendar epoch and ordered unique daily IDs, at least30 definitions. Puzzle assets go under `assets/puzzles/`. Missing/malformed catalog leaves saved daily and ordinary games available. Date mapping uses UTC-normalized calendar components; each daily instance embeds its date, platform timezone name + offset, catalog version and full definition. No IANA identifier is claimed. Only today starts a new game; historical dates are read-only. Default candidate catalog version1, epoch2026-01-01, ordered daily001–030 is bundled. Release mode excludes fixture fallback and debug controls.
 
 For native integration with real sqflite and isolate:
 
@@ -49,4 +49,28 @@ flutter build ios --simulator --debug --dart-define=POURLUNE_SCENARIO=flow --dar
 
 For genuine cold restoration install this normal build, play and wait for Saved, terminate/launch the same installed app, then Continue. **Do not reinstall or clear data between compared launches.** Exact device, commands, results and limits are in [B02 delivery](../docs/development/deliveries/B02.md); B01 evidence remains in [B01 delivery](../docs/development/deliveries/B01.md).
 
-English ARB drives product copy and bottle semantics. The six preferences persist; audio tracks are unavailable pending production assets. Privacy/support actions accurately explain the missing approved destinations and never send to placeholders. Host narrow/2x checks are foundational, not full device, screen-reader speech or production visual acceptance. No SDK, release signing, store submission or production performance certification is implied.
+English ARB drives product copy and bottle semantics. The six preferences persist; music and sound use local assets and stop on Pause/background; reduced motion shortens the pour to180ms and reveals fade without scale. Normal pour presentation is900ms, independent of the already updated full board and atomic persistence. Board actions wait for presentation/storage; lifecycle/navigation cancels the presentation to the full state. Privacy/support actions accurately explain the missing approved destinations and never send to placeholders. Native B03 evidence, content replay, 18 scene states,15 milestones,320px/2x checks and limitations are indexed in `../docs/development/deliveries/B03.md`; they do not establish physical-device, screen-reader speech, human difficulty or independent visual acceptance. No SDK, release signing, store submission or production performance certification is implied.
+
+
+B03 commands from app (use a disposable named integration database):
+```sh
+flutter test integration_test/b03_runtime_test.dart -d <device-id> --dart-define=POURLUNE_DATABASE=b03_runtime.sqlite
+flutter test integration_test/b03_audio_native_test.dart -d <device-id>
+```
+The B03 runtime harness clears only `b03_runtime.sqlite`, uses default Bootstrap with no scenario/injected clock, and records actual rendered UI to the app data sandbox `Documents/b03-evidence/`. Automated settlement setup is distinguished from UI-driven reference actions. The audio probe proves actual backend decode/transport, not subjective listening. Normal App cold-restart evidence is separate from integration-runner installation.
+
+Candidate images and byte-identical runtime copies are checked from repository root with the bundled Python/Pillow runtime:
+```sh
+python3 tools/assets/visual_manifest.py --check
+python3 -m unittest discover -s tools/assets -v
+```
+The image verifier does not change pixels. After an intentional geometry/resource change explicitly refresh with `--write`, then review the diff and run `--check`. Platform icon exports use `tools/assets/export_icons.py` (RGB conversion +LANCZOS resize only). Audio source/metrics, font OFL and per-file provenance are under `docs/design/production-candidates/`, with run evidence under `docs/development/evidence/B03/`. Content commands are in `../tools/content/README.md`.
+
+B03 final quality fixes: the rounded bottle window uses horizontal area quantiles in upright/tilted poses so visible fluid volume is conserved; both system and app Reduce Motion suppress pour/selection/rejection displacement. Completion headings animate only after a saved receipt (700ms, reduced150ms); presentation never grants rewards. Final host suite82, native component calibration29 screenshots, plus ordinary App cold-restart and main1 completion proof. One deferred visual minor remains: same-color runs still display per-unit shape markers. See `../docs/development/evidence/B03/final-quality-review.md` for the sole fresh review and one RED→GREEN fix pass. This is not architecture acceptance.
+
+B03 independent-acceptance repairs R01/R02 restore the approved welcome/Home/board/Pause composition with shared native knitted controls. Completion audio requires the same-instance saved receipt, clean phase, foreground, completion page and finished motion; Retry and stale-callback regressions use real SQLite. Latest checks and limits are in `../docs/development/evidence/B03-R01/repair-report.md`; the earlier82-test line above is historical, not the repair count.
+
+```sh
+flutter test integration_test/b03_r01_design_test.dart -d <device-id> --dart-define=POURLUNE_DATABASE=b03_r01_runtime.sqlite
+```
+This clears only its named integration DB. The25 actual Flutter captures distinguish ordinary UI-driven main1–4 progression from explicit6/7-bottle QA setup. Normal App cold restoration is separately documented. UI asset inventory is independently checked from repository root with `python3 tools/assets/ui_manifest.py --check` alongside the existing visual checker (Pillow required). All reference-derived graphics remain candidates with rights UNCONFIRMED.

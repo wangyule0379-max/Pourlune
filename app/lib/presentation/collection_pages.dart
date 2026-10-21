@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../application/game_controller.dart';
 import '../l10n/app_localizations.dart';
-import 'bottle.dart';
+import 'board_page.dart';
+import 'knit_components.dart';
 import 'labels.dart';
+import 'scene_art.dart';
 
 Future<void> _finalNavigate(GameController c, GamePage target) async {
   final piece = c.receipt?.piece;
@@ -15,79 +17,31 @@ Future<void> _finalNavigate(GameController c, GamePage target) async {
 }
 
 class ScenePreview extends StatelessWidget {
-  const ScenePreview({super.key, required this.scene, required this.pieces});
+  const ScenePreview({
+    super.key,
+    required this.scene,
+    required this.pieces,
+    this.reveal,
+  });
   final String scene;
   final List<String> pieces;
+  final int? reveal;
   @override
   Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context), owned = ownedRegions(pieces, scene);
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              sceneTitle(scene),
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            Text(l.sceneCount(owned.length)),
-            LayoutBuilder(
-              builder: (context, box) => Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  for (var i = 1; i <= 5; i++)
-                    SizedBox(
-                      width: (box.maxWidth - 16) / 3,
-                      child: Semantics(
-                        label:
-                            '${regionLabel(l, scene, i)} · ${owned.contains(i) ? l.sceneOwned : l.sceneLocked}',
-                        child: Column(
-                          children: [
-                            ExcludeSemantics(
-                              child: Container(
-                                height: 64,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: owned.contains(i)
-                                      ? const Color(0xffb9d89f)
-                                      : const Color(0xffe3e2d8),
-                                  border: Border.all(color: ink, width: 2),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Center(
-                                  child: owned.contains(i)
-                                      ? Text(
-                                          '$i',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
-                                      : const Icon(Icons.lock_outline),
-                                ),
-                              ),
-                            ),
-                            ExcludeSemantics(
-                              child: Text(
-                                regionLabel(l, scene, i),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            Text(
-              l.scenePendingArt,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SceneArt(scene: scene, pieces: pieces, reveal: reveal),
+        Text(
+          sceneTitle(scene),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
-      ),
+        const SizedBox(height: 12),
+        KnitPanel(
+          child: PatchProgress(scene: scene, pieces: pieces),
+        ),
+      ],
     );
   }
 }
@@ -99,18 +53,72 @@ class CollectionPage extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     children: [
       for (final scene in ['color_studio', 'garden_nook', 'seaside_corner'])
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ScenePreview(scene: scene, pieces: controller.progress.pieces),
-            OutlinedButton(
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Semantics(
+            button: true,
+            enabled: !controller.busy,
+            child: InkWell(
               key: Key('scene-$scene'),
-              onPressed: controller.busy
+              borderRadius: BorderRadius.circular(28),
+              onTap: controller.busy
                   ? null
                   : () => controller.navigate(GamePage.scene, scene: scene),
-              child: Text(sceneTitle(scene)),
+              child: KnitPanel(
+                padding: const EdgeInsets.all(16),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final narrow =
+                        constraints.maxWidth < 280 ||
+                        MediaQuery.textScalerOf(context).scale(1) > 1.4;
+                    final thumbnail = SizedBox(
+                      width: narrow ? 160 : 136,
+                      child: SceneArt(
+                        scene: scene,
+                        pieces: controller.progress.pieces,
+                      ),
+                    );
+                    final details = Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          sceneTitle(scene),
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 8),
+                        PatchProgress(
+                          scene: scene,
+                          pieces: controller.progress.pieces,
+                          compact: true,
+                        ),
+                      ],
+                    );
+                    if (narrow) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Center(child: thumbnail),
+                          details,
+                          const Align(
+                            alignment: Alignment.centerRight,
+                            child: Icon(Icons.chevron_right),
+                          ),
+                        ],
+                      );
+                    }
+                    return Row(
+                      children: [
+                        thumbnail,
+                        const SizedBox(width: 12),
+                        Expanded(child: details),
+                        const Icon(Icons.chevron_right),
+                      ],
+                    );
+                  },
+                ),
+              ),
             ),
-          ],
+          ),
         ),
     ],
   );
@@ -127,8 +135,9 @@ class ScenePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ScenePreview(scene: c.selectedScene, pieces: c.progress.pieces),
+        const SizedBox(height: 16),
         if (ownedRegions(c.progress.pieces, c.selectedScene).length == 5)
-          Text(l.chapterComplete),
+          Text(l.chapterComplete, textAlign: TextAlign.center),
         if (c.canContinueOrdinary)
           FilledButton(
             key: const Key('scene-continue'),
@@ -180,10 +189,17 @@ class RewardPage extends StatelessWidget {
       children: [
         Text(
           unseen ? l.newPatch : sceneTitle(c.selectedScene),
+          textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
-        ScenePreview(scene: c.selectedScene, pieces: c.progress.pieces),
-        Text(l.addedCollection),
+        ScenePreview(
+          scene: c.selectedScene,
+          pieces: c.progress.pieces,
+          reveal: unseen ? int.parse(piece.split(':').last) : null,
+        ),
+        const SizedBox(height: 16),
+        Text(l.addedCollection, textAlign: TextAlign.center),
+        const SizedBox(height: 12),
         if (c.settlementKind == SettlementKind.finalStory) ...[
           FilledButton(
             key: const Key('daily-final'),
@@ -253,111 +269,182 @@ class CompletionPage extends StatelessWidget {
         kind = c.settlementKind;
     final finalStory = kind == SettlementKind.finalStory,
         patch = kind == SettlementKind.patch || kind == SettlementKind.chapter;
-    return Column(
+    final title = Text(
+      finalStory
+          ? l.storyComplete
+          : kind == SettlementKind.daily
+          ? l.dailyComplete
+          : kind == SettlementKind.replay
+          ? l.puzzleComplete
+          : l.beautifullySorted,
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.headlineMedium,
+    );
+    final content = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          finalStory
-              ? l.storyComplete
-              : kind == SettlementKind.daily
-              ? l.dailyComplete
-              : kind == SettlementKind.replay
-              ? l.puzzleComplete
-              : l.beautifullySorted,
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-        if (c.phase != SavePhase.clean || c.receipt == null)
-          Text(l.pendingCompletion)
-        else if (kind == SettlementKind.daily)
-          Text(s.isReplay ? l.dailyReplayComplete : l.stampSaved(s.puzzleDate!))
-        else
-          Text(
-            kind == SettlementKind.replay
-                ? l.replayComplete
-                : l.firstClearSaved,
-          ),
-        if ((kind == SettlementKind.chapter || finalStory) &&
-            c.phase == SavePhase.clean) ...[
-          Text(l.chapterComplete),
-          ScenePreview(
-            scene: sceneForLevel(s.puzzle.mainLevel!),
-            pieces: c.progress.pieces,
-          ),
-        ],
-        if (finalStory) ...[
-          Text(l.storyCompleteBody),
-          FilledButton(
-            key: const Key('daily-final'),
-            onPressed: c.busy ? null : () => _finalNavigate(c, GamePage.daily),
-            child: Text(l.dailyPuzzle),
-          ),
-          OutlinedButton(
-            key: const Key('view-collection'),
-            onPressed: c.busy
-                ? null
-                : () => _finalNavigate(c, GamePage.collection),
-            child: Text(l.viewCollection),
-          ),
-          OutlinedButton(
-            key: const Key('replay-levels'),
-            onPressed: c.busy
-                ? null
-                : () => _finalNavigate(c, GamePage.chapters),
-            child: Text(l.replayLevels),
-          ),
-        ] else if (kind == SettlementKind.chapter) ...[
-          FilledButton(
-            key: const Key('next'),
-            onPressed: c.busy ? null : c.nextLevel,
-            child: Text(l.continueChapter),
-          ),
-          OutlinedButton(
-            key: const Key('view-collection'),
-            onPressed: c.busy
-                ? null
-                : () => c.receipt?.piece == null
-                      ? c.navigate(
-                          GamePage.scene,
-                          scene: sceneForLevel(s.puzzle.mainLevel!),
-                        )
-                      : c.acknowledgeReveal(),
-            child: Text(l.viewCollection),
-          ),
-        ] else if (kind == SettlementKind.replay) ...[
-          FilledButton(
-            key: const Key('replay-again'),
-            onPressed: c.busy ? null : () => onPlay(s.puzzle.mainLevel!),
-            child: Text(l.replayAgain),
-          ),
-          OutlinedButton(
-            key: const Key('choose-level'),
-            onPressed: c.busy ? null : () => c.navigate(GamePage.chapters),
-            child: Text(l.chooseLevel),
-          ),
-        ] else if (kind == SettlementKind.daily)
-          FilledButton(
-            key: const Key('daily-calendar'),
-            onPressed: c.busy ? null : () => c.navigate(GamePage.daily),
-            child: Text(l.dailyPuzzle),
-          )
-        else if (patch)
-          FilledButton(
-            key: const Key('view-patch'),
-            onPressed: c.busy ? null : c.viewPatch,
-            child: Text(l.viewPatch),
+        if (c.phase == SavePhase.clean && c.receipt != null)
+          _CompletionFeedback(
+            key: Key('completion-feedback-${s.id}'),
+            child: Column(
+              children: [
+                title,
+                const SizedBox(height: 12),
+                Semantics(
+                  label: l.puzzleComplete,
+                  image: true,
+                  child: const KnitArt(name: 'success', width: 96, height: 96),
+                ),
+              ],
+            ),
           )
         else
-          FilledButton(
-            key: const Key('next'),
-            onPressed: c.busy ? null : c.nextLevel,
-            child: Text(l.nextLevel),
+          title,
+        const SizedBox(height: 12),
+        BoardView(state: s, selected: null, onTap: null, settings: c.settings),
+        KnitPanel(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (c.phase != SavePhase.clean || c.receipt == null)
+                Text(l.pendingCompletion)
+              else if (kind == SettlementKind.daily)
+                Text(
+                  s.isReplay
+                      ? l.dailyReplayComplete
+                      : l.stampSaved(s.puzzleDate!),
+                )
+              else
+                Text(
+                  kind == SettlementKind.replay
+                      ? l.replayComplete
+                      : l.firstClearSaved,
+                ),
+              if ((kind == SettlementKind.chapter || finalStory) &&
+                  c.phase == SavePhase.clean) ...[
+                Text(l.chapterComplete),
+                ScenePreview(
+                  scene: sceneForLevel(s.puzzle.mainLevel!),
+                  pieces: c.progress.pieces,
+                  reveal:
+                      c.receipt?.piece != null &&
+                          !c.progress.revealedPieces.contains(c.receipt!.piece)
+                      ? int.parse(c.receipt!.piece!.split(':').last)
+                      : null,
+                ),
+              ],
+              if (finalStory) ...[
+                Text(l.storyCompleteBody),
+                FilledButton(
+                  key: const Key('daily-final'),
+                  onPressed: c.busy
+                      ? null
+                      : () => _finalNavigate(c, GamePage.daily),
+                  child: Text(l.dailyPuzzle),
+                ),
+                OutlinedButton(
+                  key: const Key('view-collection'),
+                  onPressed: c.busy
+                      ? null
+                      : () => _finalNavigate(c, GamePage.collection),
+                  child: Text(l.viewCollection),
+                ),
+                OutlinedButton(
+                  key: const Key('replay-levels'),
+                  onPressed: c.busy
+                      ? null
+                      : () => _finalNavigate(c, GamePage.chapters),
+                  child: Text(l.replayLevels),
+                ),
+              ] else if (kind == SettlementKind.chapter) ...[
+                FilledButton(
+                  key: const Key('next'),
+                  onPressed: c.busy ? null : c.nextLevel,
+                  child: Text(l.continueChapter),
+                ),
+                OutlinedButton(
+                  key: const Key('view-collection'),
+                  onPressed: c.busy
+                      ? null
+                      : () => c.receipt?.piece == null
+                            ? c.navigate(
+                                GamePage.scene,
+                                scene: sceneForLevel(s.puzzle.mainLevel!),
+                              )
+                            : c.acknowledgeReveal(),
+                  child: Text(l.viewCollection),
+                ),
+              ] else if (kind == SettlementKind.replay) ...[
+                FilledButton(
+                  key: const Key('replay-again'),
+                  onPressed: c.busy ? null : () => onPlay(s.puzzle.mainLevel!),
+                  child: Text(l.replayAgain),
+                ),
+                OutlinedButton(
+                  key: const Key('choose-level'),
+                  onPressed: c.busy
+                      ? null
+                      : () => c.navigate(GamePage.chapters),
+                  child: Text(l.chooseLevel),
+                ),
+              ] else if (kind == SettlementKind.daily)
+                FilledButton(
+                  key: const Key('daily-calendar'),
+                  onPressed: c.busy ? null : () => c.navigate(GamePage.daily),
+                  child: Text(l.dailyPuzzle),
+                )
+              else if (patch)
+                FilledButton(
+                  key: const Key('view-patch'),
+                  onPressed: c.busy ? null : c.viewPatch,
+                  child: Text(l.viewPatch),
+                )
+              else
+                FilledButton(
+                  key: const Key('next'),
+                  onPressed: c.busy ? null : c.nextLevel,
+                  child: Text(l.nextLevel),
+                ),
+              OutlinedButton(
+                key: const Key('home'),
+                onPressed: c.busy ? null : c.goHome,
+                child: Text(l.home),
+              ),
+            ],
           ),
-        OutlinedButton(
-          key: const Key('home'),
-          onPressed: c.busy ? null : c.goHome,
-          child: Text(l.home),
         ),
       ],
+    );
+    return LayoutBuilder(
+      builder: (context, constraints) => constraints.hasBoundedHeight
+          ? SingleChildScrollView(child: content)
+          : content,
+    );
+  }
+}
+
+/// Pure presentation: rebuilding or finishing this animation never writes progress.
+class _CompletionFeedback extends StatelessWidget {
+  const _CompletionFeedback({super.key, required this.child});
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    final reduced = MediaQuery.disableAnimationsOf(context);
+    return TweenAnimationBuilder<double>(
+      duration: Duration(milliseconds: reduced ? 150 : 700),
+      tween: Tween(begin: 0, end: 1),
+      curve: Curves.easeOutCubic,
+      child: child,
+      builder: (_, value, child) => Opacity(
+        opacity: value,
+        child: reduced
+            ? child
+            : Transform.scale(
+                scale: .94 + .06 * value,
+                alignment: Alignment.centerLeft,
+                child: child,
+              ),
+      ),
     );
   }
 }

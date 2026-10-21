@@ -790,12 +790,6 @@ abstract class AppLocalizations {
   /// **'Stronger contrast'**
   String get strongContrast;
 
-  /// No description provided for @audioPending.
-  ///
-  /// In en, this message translates to:
-  /// **'Music and sound preferences are saved. Audio tracks are not included in this development build.'**
-  String get audioPending;
-
   /// No description provided for @privacyChoices.
   ///
   /// In en, this message translates to:
@@ -999,6 +993,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{moves, plural, =1{1 move} other{{moves} moves}}'**
   String moveCount(int moves);
+
+  /// No description provided for @audioInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Music and sound play offline. Pause or leave the app to stop audio.'**
+  String get audioInfo;
+
+  /// No description provided for @licenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Licenses'**
+  String get licenses;
+
+  /// No description provided for @gardenArch.
+  ///
+  /// In en, this message translates to:
+  /// **'Flower arch'**
+  String get gardenArch;
+
+  /// No description provided for @gardenTable.
+  ///
+  /// In en, this message translates to:
+  /// **'Garden table'**
+  String get gardenTable;
+
+  /// No description provided for @gardenChair.
+  ///
+  /// In en, this message translates to:
+  /// **'Chair'**
+  String get gardenChair;
+
+  /// No description provided for @gardenPlants.
+  ///
+  /// In en, this message translates to:
+  /// **'Potted plants'**
+  String get gardenPlants;
+
+  /// No description provided for @gardenTea.
+  ///
+  /// In en, this message translates to:
+  /// **'Tea and flowers'**
+  String get gardenTea;
+
+  /// No description provided for @seasideDock.
+  ///
+  /// In en, this message translates to:
+  /// **'Dock'**
+  String get seasideDock;
+
+  /// No description provided for @seasideCabana.
+  ///
+  /// In en, this message translates to:
+  /// **'Cabana'**
+  String get seasideCabana;
+
+  /// No description provided for @seasideRing.
+  ///
+  /// In en, this message translates to:
+  /// **'Life ring'**
+  String get seasideRing;
+
+  /// No description provided for @seasidePlant.
+  ///
+  /// In en, this message translates to:
+  /// **'Coastal plant'**
+  String get seasidePlant;
+
+  /// No description provided for @seasideGull.
+  ///
+  /// In en, this message translates to:
+  /// **'Seagull'**
+  String get seasideGull;
 }
 
 class _AppLocalizationsDelegate

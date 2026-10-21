@@ -49,7 +49,7 @@ UI 增量目录 `docs/design/ui-addendum/` 中的原型、截图和自查仅是�
 
 ## 验证与交付
 
-Flutter 应用位于 `app/`；纯 Dart 核心位于 `packages/pourlune_core/`。工具链固定 Flutter 3.47.2 / Dart 3.13.2（根目录 `.flutter-version`）；应用与核心的 `pubspec.lock` 均须保留。工程和运行说明见 `app/README.md`。B01/B02 默认仍是三份工程夹具＋开发绘制探针；B02 调试场景的关卡别名和测试时钟仅验证流程，不等于正式题库或生产视觉通过。
+Flutter 应用位于 `app/`；纯 Dart 核心位于 `packages/pourlune_core/`。工具链固定 Flutter 3.47.2 / Dart 3.13.2（根目录 `.flutter-version`）；应用与核心的 `pubspec.lock` 均须保留。工程和运行说明见 `app/README.md`。B03 默认读取 `app/assets/puzzles/` 的60主线＋30每日候选及 `app/assets/catalog/daily.json`，并使用独立运行美术层、Nunito与本地音频。候选资源不等于独立视觉或商业权属通过。B02 调试场景的别名和测试时钟仍仅用于隔离库；release入口忽略这些场景。
 
 目前已有独立 Git 仓库，origin 为 `https://github.com/wangyule0379-max/Pourlune.git`，主分支 `main`；Python 内容准备工具已建立。在项目根目录使用 Python 3.11+ 的 .venv，依赖固定在 `tools/content/requirements.txt`；命令为 `.venv/bin/python -m unittest discover -s tools/content -v` 和 `.venv/bin/python tools/content/validate.py docs/content/fixtures/*.json`。`--release --catalog ...` 用于正式内容完整性检查；当前工程夹具不能通过发布门槛。具体用法见 `tools/content/README.md`。这些检查不等于 Dart / Flutter 测试。
 
@@ -64,3 +64,7 @@ Flutter 应用位于 `app/`；纯 Dart 核心位于 `packages/pourlune_core/`。
 交付说明包含：改了什么、对应要求、实际运行的检查及结果、未验证范围。明确区分“文档确认”“静态设计通过”“运行测试通过”。未完成项保留真实状态，不以占位内容、模拟 SDK 或自查截图冒充正式通过。
 
 工程路径、构建命令和 CI 建立后更新本文，使约定与实际项目保持一致。
+
+B03资源与表现检查：候选题库须运行上述Python严格release＋catalog90检查与核心production_content_test；图像在根目录用带Pillow的Python运行 `tools/assets/visual_manifest.py --check`、`-m unittest discover -s tools/assets -v`，音频用 `.venv/bin/python tools/assets/audio_generate.py --check` 和 `audio_verify.py`。显式资源变更才可用visual_manifest `--write`刷新，不能用刷新掩盖漂移。B03原生无种子集成：`flutter test integration_test/b03_runtime_test.dart -d <id> --dart-define=POURLUNE_DATABASE=b03_runtime.sqlite`；仅清理该命名测试库。原生音频与校准命令分别为 `b03_audio_native_test.dart`、`b03_visual_calibration_test.dart`。运行器可能卸载测试App，截图须在结束前复制沙盒；它不构成进程恢复。最终证据／已知轻微待办／外部未验证范围见 `docs/development/deliveries/B03.md`，独立验收仍由架构方确认。
+
+B03-R01/R02修复：UI新增10图有独立命名空间与校验，根目录同时执行 `tools/assets/visual_manifest.py --check` 和 `tools/assets/ui_manifest.py --check`（带Pillow的Python），再运行assets单元检查。UI人工显示几何在 `knit_components.dart`，明确改变时才可刷新UI清单。原生配对命令为 `flutter test integration_test/b03_r01_design_test.dart -d <id> --dart-define=POURLUNE_DATABASE=b03_r01_runtime.sqlite`，只清理该命名测试库；七瓶为明确的核心权益QA状态，不是广告发奖或题库main021定义。成功音效必须等待本实例成功回执并通过前台／页面／动画／去重门控。最新执行边界、轻微待办见 `docs/development/evidence/B03-R01/repair-report.md`，整体通过仍由独立验收决定。

@@ -1,0 +1,104 @@
+test_accidental_duplicate_content_is_rejected (test_visual_manifest.VisualManifestTest.test_accidental_duplicate_content_is_rejected) ... FAIL
+test_changed_valid_png_bytes_cannot_silently_rebaseline_check (test_visual_manifest.VisualManifestTest.test_changed_valid_png_bytes_cannot_silently_rebaseline_check) ... FAIL
+test_flattened_transparency_is_rejected (test_visual_manifest.VisualManifestTest.test_flattened_transparency_is_rejected) ... FAIL
+test_geometry_change_requires_explicit_manifest_refresh (test_visual_manifest.VisualManifestTest.test_geometry_change_requires_explicit_manifest_refresh) ... FAIL
+test_inventory_covers_23_unique_ids_and_22_exact_runtime_copies (test_visual_manifest.VisualManifestTest.test_inventory_covers_23_unique_ids_and_22_exact_runtime_copies) ... FAIL
+test_missing_expected_png_is_rejected (test_visual_manifest.VisualManifestTest.test_missing_expected_png_is_rejected) ... FAIL
+test_opaque_front_window_pixel_is_rejected (test_visual_manifest.VisualManifestTest.test_opaque_front_window_pixel_is_rejected) ... FAIL
+test_runtime_copy_drift_is_rejected (test_visual_manifest.VisualManifestTest.test_runtime_copy_drift_is_rejected) ... FAIL
+test_unexpected_png_is_rejected (test_visual_manifest.VisualManifestTest.test_unexpected_png_is_rejected) ... FAIL
+test_wrong_dimensions_are_rejected_even_before_baseline (test_visual_manifest.VisualManifestTest.test_wrong_dimensions_are_rejected_even_before_baseline) ... FAIL
+
+======================================================================
+FAIL: test_accidental_duplicate_content_is_rejected (test_visual_manifest.VisualManifestTest.test_accidental_duplicate_content_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 87, in test_accidental_duplicate_content_is_rejected
+    with self.assertRaisesRegex(ValueError, "duplicate content"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_changed_valid_png_bytes_cannot_silently_rebaseline_check (test_visual_manifest.VisualManifestTest.test_changed_valid_png_bytes_cannot_silently_rebaseline_check)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 72, in test_changed_valid_png_bytes_cannot_silently_rebaseline_check
+    with self.assertRaisesRegex(ValueError, "manifest drift"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_flattened_transparency_is_rejected (test_visual_manifest.VisualManifestTest.test_flattened_transparency_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 96, in test_flattened_transparency_is_rejected
+    with self.assertRaisesRegex(ValueError, "RGBA"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_geometry_change_requires_explicit_manifest_refresh (test_visual_manifest.VisualManifestTest.test_geometry_change_requires_explicit_manifest_refresh)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 113, in test_geometry_change_requires_explicit_manifest_refresh
+    with self.assertRaisesRegex(ValueError, "manifest drift"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_inventory_covers_23_unique_ids_and_22_exact_runtime_copies (test_visual_manifest.VisualManifestTest.test_inventory_covers_23_unique_ids_and_22_exact_runtime_copies)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 46, in test_inventory_covers_23_unique_ids_and_22_exact_runtime_copies
+    self.assertEqual(len(result["assets"]), 23)
+AssertionError: 0 != 23
+
+======================================================================
+FAIL: test_missing_expected_png_is_rejected (test_visual_manifest.VisualManifestTest.test_missing_expected_png_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 53, in test_missing_expected_png_is_rejected
+    with self.assertRaisesRegex(ValueError, "inventory"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_opaque_front_window_pixel_is_rejected (test_visual_manifest.VisualManifestTest.test_opaque_front_window_pixel_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 106, in test_opaque_front_window_pixel_is_rejected
+    with self.assertRaisesRegex(ValueError, "front window"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_runtime_copy_drift_is_rejected (test_visual_manifest.VisualManifestTest.test_runtime_copy_drift_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 64, in test_runtime_copy_drift_is_rejected
+    with self.assertRaisesRegex(ValueError, "runtime copy"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_unexpected_png_is_rejected (test_visual_manifest.VisualManifestTest.test_unexpected_png_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 58, in test_unexpected_png_is_rejected
+    with self.assertRaisesRegex(ValueError, "inventory"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_wrong_dimensions_are_rejected_even_before_baseline (test_visual_manifest.VisualManifestTest.test_wrong_dimensions_are_rejected_even_before_baseline)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_visual_manifest.py", line 81, in test_wrong_dimensions_are_rejected_even_before_baseline
+    with self.assertRaisesRegex(ValueError, "dimensions"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.516s
+
+FAILED (failures=10)
