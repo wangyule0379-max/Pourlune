@@ -4,7 +4,7 @@
 
 **当前结论：B01-01～08 在已批准的工程与离线切片范围通过；B01-R01 已关闭，可以提交并推送开发分支，推进 B02。** 第一轮失败证据原样保留于下方及 `B01-evidence/`，本轮证据独立存放在 `B01-evidence-r2/`。
 
-实现与本报告已作为 `d15b5967e79bb394043eef45b647444ea704a040` 推送 `origin/codex/offline-foundation`。B02 九项整体执行包已派发，执行聊天已进入 active。首次远端 [CI](https://github.com/wangyule0379-max/Pourlune/actions/runs/39642700975) 当前 queued，尚无通过结论；后续按 tracking 继续核查。
+实现与本报告已作为 `d15b5967e79bb394043eef45b647444ea704a040` 推送 `origin/codex/offline-foundation`。B02 九项整体执行包已派发，执行聊天已进入 active。首次远端 [CI](https://github.com/wangyule0379-max/Pourlune/actions/runs/39642700975) 已于 2026-10-22 01:43（Asia/Taipei）核验 success：`ios-build` 与 `tests-and-android` 两个 job 及所有步骤成功，覆盖固定 SDK、核心／应用检查、Android debug 和 iOS simulator 构建。远端 CI 不包含设备交互或真实 SDK 联调。
 
 ## 本轮复验
 
@@ -22,7 +22,7 @@
 
 ## 逐项结论与边界
 
-- B01-01：工程、固定依赖、双端本机构建通过；CI 配置存在，远端运行结果另记。
+- B01-01：工程、固定依赖、双端本机构建及上述首次远端 CI 通过。
 - B01-02～04：样本解析与参考解、容量／标签规则、实例、撤销、额外瓶和旧定义通过；历史修复回归闭合。对应 AC-01～03/07/23 与 AC-35 样本部分。
 - B01-05～06：SQLite 槽隔离、备份、迁移、原子结算和幂等、失败阻断通过。本轮原生损坏恢复验证补充第一轮事务失败与重试实际操作。AC-09～11/24/33 为本批已执行部分，不扩称所有强退时间点穷举通过。
 - B01-07～08：真实切片操作、进程重启、自动检查与两平台构建通过；CI 实际运行、Android 运行、真机和最低系统仍独立记录。
