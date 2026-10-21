@@ -1,0 +1,629 @@
+{
+  "purpose": "Design example validation only; not a generated level library or application implementation",
+  "level": 12,
+  "capacity_per_bottle": 4,
+  "bottle_numbering": "1-3 top row; 4-6 bottom row, each left to right",
+  "color_legend": {
+    "O": "pale peach orange / circle",
+    "G": "pale green / triangle",
+    "P": "light purple / diamond",
+    "B": "light blue / square"
+  },
+  "initial_bottom_to_top": [
+    [
+      "B",
+      "P",
+      "G",
+      "O"
+    ],
+    [
+      "G",
+      "O",
+      "B",
+      "P"
+    ],
+    [
+      "P",
+      "B",
+      "O",
+      "G"
+    ],
+    [
+      "O",
+      "G",
+      "P",
+      "B"
+    ],
+    [],
+    []
+  ],
+  "target_bottles": {
+    "1": "O",
+    "2": "G",
+    "3": "P",
+    "4": "B",
+    "5": "empty",
+    "6": "empty"
+  },
+  "rules": {
+    "receive_if": "empty or matching top color",
+    "transfer": "maximum contiguous top-color units fitting remaining capacity",
+    "buffers_empty_at_completion": true
+  },
+  "solvable": true,
+  "move_count": 15,
+  "verified_replay": true,
+  "shortest_path_claim": false,
+  "moves": [
+    {
+      "step": 1,
+      "from_bottle": 1,
+      "to_bottle": 5,
+      "color": "O",
+      "units": 1,
+      "board_after_bottom_to_top": [
+        [
+          "B",
+          "P",
+          "G"
+        ],
+        [
+          "G",
+          "O",
+          "B",
+          "P"
+        ],
+        [
+          "P",
+          "B",
+          "O",
+          "G"
+        ],
+        [
+          "O",
+          "G",
+          "P",
+          "B"
+        ],
+        [
+          "O"
+        ],
+        []
+      ]
+    },
+    {
+      "step": 2,
+      "from_bottle": 3,
+      "to_bottle": 1,
+      "color": "G",
+      "units": 1,
+      "board_after_bottom_to_top": [
+        [
+          "B",
+          "P",
+          "G",
+          "G"
+        ],
+        [
+          "G",
+          "O",
+          "B",
+          "P"
+        ],
+        [
+          "P",
+          "B",
+          "O"
+        ],
+        [
+          "O",
+          "G",
+          "P",
+          "B"
+        ],
+        [
+          "O"
+        ],
+        []
+      ]
+    },
+    {
+      "step": 3,
+      "from_bottle": 3,
+      "to_bottle": 5,
+      "color": "O",
+      "units": 1,
+      "board_after_bottom_to_top": [
+        [
+          "B",
+          "P",
+          "G",
+          "G"
+        ],
+        [
+          "G",
+          "O",
+          "B",
+          "P"
+        ],
+        [
+          "P",
+          "B"
+        ],
+        [
+          "O",
+          "G",
+          "P",
+          "B"
+        ],
+        [
+          "O",
+          "O"
+        ],
+        []
+      ]
+    },
+    {
+      "step": 4,
+      "from_bottle": 4,
+      "to_bottle": 3,
+      "color": "B",
+      "units": 1,
+      "board_after_bottom_to_top": [
+        [
+          "B",
+          "P",
+          "G",
+          "G"
+        ],
+        [
+          "G",
+          "O",
+          "B",
+          "P"
+        ],
+        [
+          "P",
+          "B",
+          "B"
+        ],
+        [
+          "O",
+          "G",
+          "P"
+        ],
+        [
+          "O",
+          "O"
+        ],
+        []
+      ]
+    },
+    {
+      "step": 5,
+      "from_bottle": 2,
+      "to_bottle": 4,
+      "color": "P",
+      "units": 1,
+      "board_after_bottom_to_top": [
+        [
+          "B",
+          "P",
+          "G",
+          "G"
+        ],
+        [
+          "G",
+          "O",
+          "B"
+        ],
+        [
+          "P",
+          "B",
+          "B"
+        ],
+        [
+          "O",
+          "G",
+          "P",
+          "P"
+        ],
+        [
+          "O",
+          "O"
+        ],
+        []
+      ]
+    },
+    {
+      "step": 6,
+      "from_bottle": 2,
+      "to_bottle": 3,
+      "color": "B",
+      "units": 1,
+      "board_after_bottom_to_top": [
+        [
+          "B",
+          "P",
+          "G",
+          "G"
+        ],
+        [
+          "G",
+          "O"
+        ],
+        [
+          "P",
+          "B",
+          "B",
+          "B"
+        ],
+        [
+          "O",
+          "G",
+          "P",
+          "P"
+        ],
+        [
+          "O",
+          "O"
+        ],
+        []
+      ]
+    },
+    {
+      "step": 7,
+      "from_bottle": 2,
+      "to_bottle": 5,
+      "color": "O",
+      "units": 1,
+      "board_after_bottom_to_top": [
+        [
+          "B",
+          "P",
+          "G",
+          "G"
+        ],
+        [
+          "G"
+        ],
+        [
+          "P",
+          "B",
+          "B",
+          "B"
+        ],
+        [
+          "O",
+          "G",
+          "P",
+          "P"
+        ],
+        [
+          "O",
+          "O",
+          "O"
+        ],
+        []
+      ]
+    },
+    {
+      "step": 8,
+      "from_bottle": 1,
+      "to_bottle": 2,
+      "color": "G",
+      "units": 2,
+      "board_after_bottom_to_top": [
+        [
+          "B",
+          "P"
+        ],
+        [
+          "G",
+          "G",
+          "G"
+        ],
+        [
+          "P",
+          "B",
+          "B",
+          "B"
+        ],
+        [
+          "O",
+          "G",
+          "P",
+          "P"
+        ],
+        [
+          "O",
+          "O",
+          "O"
+        ],
+        []
+      ]
+    },
+    {
+      "step": 9,
+      "from_bottle": 4,
+      "to_bottle": 1,
+      "color": "P",
+      "units": 2,
+      "board_after_bottom_to_top": [
+        [
+          "B",
+          "P",
+          "P",
+          "P"
+        ],
+        [
+          "G",
+          "G",
+          "G"
+        ],
+        [
+          "P",
+          "B",
+          "B",
+          "B"
+        ],
+        [
+          "O",
+          "G"
+        ],
+        [
+          "O",
+          "O",
+          "O"
+        ],
+        []
+      ]
+    },
+    {
+      "step": 10,
+      "from_bottle": 4,
+      "to_bottle": 2,
+      "color": "G",
+      "units": 1,
+      "board_after_bottom_to_top": [
+        [
+          "B",
+          "P",
+          "P",
+          "P"
+        ],
+        [
+          "G",
+          "G",
+          "G",
+          "G"
+        ],
+        [
+          "P",
+          "B",
+          "B",
+          "B"
+        ],
+        [
+          "O"
+        ],
+        [
+          "O",
+          "O",
+          "O"
+        ],
+        []
+      ]
+    },
+    {
+      "step": 11,
+      "from_bottle": 4,
+      "to_bottle": 5,
+      "color": "O",
+      "units": 1,
+      "board_after_bottom_to_top": [
+        [
+          "B",
+          "P",
+          "P",
+          "P"
+        ],
+        [
+          "G",
+          "G",
+          "G",
+          "G"
+        ],
+        [
+          "P",
+          "B",
+          "B",
+          "B"
+        ],
+        [],
+        [
+          "O",
+          "O",
+          "O",
+          "O"
+        ],
+        []
+      ]
+    },
+    {
+      "step": 12,
+      "from_bottle": 3,
+      "to_bottle": 4,
+      "color": "B",
+      "units": 3,
+      "board_after_bottom_to_top": [
+        [
+          "B",
+          "P",
+          "P",
+          "P"
+        ],
+        [
+          "G",
+          "G",
+          "G",
+          "G"
+        ],
+        [
+          "P"
+        ],
+        [
+          "B",
+          "B",
+          "B"
+        ],
+        [
+          "O",
+          "O",
+          "O",
+          "O"
+        ],
+        []
+      ]
+    },
+    {
+      "step": 13,
+      "from_bottle": 1,
+      "to_bottle": 3,
+      "color": "P",
+      "units": 3,
+      "board_after_bottom_to_top": [
+        [
+          "B"
+        ],
+        [
+          "G",
+          "G",
+          "G",
+          "G"
+        ],
+        [
+          "P",
+          "P",
+          "P",
+          "P"
+        ],
+        [
+          "B",
+          "B",
+          "B"
+        ],
+        [
+          "O",
+          "O",
+          "O",
+          "O"
+        ],
+        []
+      ]
+    },
+    {
+      "step": 14,
+      "from_bottle": 1,
+      "to_bottle": 4,
+      "color": "B",
+      "units": 1,
+      "board_after_bottom_to_top": [
+        [],
+        [
+          "G",
+          "G",
+          "G",
+          "G"
+        ],
+        [
+          "P",
+          "P",
+          "P",
+          "P"
+        ],
+        [
+          "B",
+          "B",
+          "B",
+          "B"
+        ],
+        [
+          "O",
+          "O",
+          "O",
+          "O"
+        ],
+        []
+      ]
+    },
+    {
+      "step": 15,
+      "from_bottle": 5,
+      "to_bottle": 1,
+      "color": "O",
+      "units": 4,
+      "board_after_bottom_to_top": [
+        [
+          "O",
+          "O",
+          "O",
+          "O"
+        ],
+        [
+          "G",
+          "G",
+          "G",
+          "G"
+        ],
+        [
+          "P",
+          "P",
+          "P",
+          "P"
+        ],
+        [
+          "B",
+          "B",
+          "B",
+          "B"
+        ],
+        [],
+        []
+      ]
+    }
+  ],
+  "final_bottom_to_top": [
+    [
+      "O",
+      "O",
+      "O",
+      "O"
+    ],
+    [
+      "G",
+      "G",
+      "G",
+      "G"
+    ],
+    [
+      "P",
+      "P",
+      "P",
+      "P"
+    ],
+    [
+      "B",
+      "B",
+      "B",
+      "B"
+    ],
+    [],
+    []
+  ],
+  "search": {
+    "algorithm": "A*",
+    "expanded_states": 1795,
+    "elapsed_seconds": 0.067
+  }
+}
