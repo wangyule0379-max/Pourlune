@@ -6,6 +6,8 @@
 
 ## 开工入口
 
+- [正式开发批次与独立验收计划](docs/pmpowers/plans/2026-10-22-development-execution.md)：B01–B05 连续推进，当前状态见 [开发跟踪](docs/development/tracking.json)。
+
 - [协作约定](AGENTS.md)
 - [开发准备与真实缺口](docs/pmpowers/specs/development-readiness.md)
 - [产品规格](docs/pmpowers/specs/PRD-supplement-v1.1.md) · [技术方案](docs/pmpowers/specs/technical-architecture-v1.0.md) · [数据契约](docs/pmpowers/specs/data-contracts-v1.0.md)
