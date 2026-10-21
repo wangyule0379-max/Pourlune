@@ -4,7 +4,7 @@
 
 **当前结论：B02-01～09 在批准的离线流程／工程内容范围通过；B02-R01 已关闭。** 可以提交推送开发分支并派发 B03。第一轮原始失败程序与日志保留，第二轮新日志位于 `B02-evidence-r2/`，不以覆盖失败证据冒充初次通过。
 
-实现、交付和本报告已作为 `c5aa1514f2f02d6b298c7baeadd5873db01fbffe` 推送开发分支 `codex/offline-foundation`。B03八项工作包已派发，执行聊天active。B02 [远端CI](https://github.com/wangyule0379-max/Pourlune/actions/runs/39662730373) 当前in_progress，尚无通过结论，由tracking继续核查。
+实现、交付和本报告已作为 `c5aa1514f2f02d6b298c7baeadd5873db01fbffe` 推送开发分支 `codex/offline-foundation`。B03八项工作包已派发，执行聊天active。B02 [远端CI](https://github.com/wangyule0379-max/Pourlune/actions/runs/39662730373) 已于2026-10-22 03:45（Asia/Taipei）核验success：tests-and-android及ios-build两个job、所有步骤成功，含固定SDK、核心／应用检查与双端构建。此结论不包括远端设备交互／SDK联调。
 
 ## 第二轮独立检查
 
@@ -27,7 +27,7 @@
 - B02-07：收藏归属／揭示分离、三场景映射、单次导航与最终页通过本批检查；20/40分支保留作者原生日志来源及本聊天host验证，正式场景图层尚待B03。
 - B02-08/09：英文ARB、偏好持久化、真实基础语义与320px/2x host渲染检查、迁移与回归、iOS原生及双端构建通过；音乐音效尚未接实际音轨，正式隐私／反馈目的地仍待交接。
 
-仍待：完整60＋30内容、正式资源／声音／动画、SDK、正式身份／地址、Android实际运行、真机、读屏语音、最大支持字号设备矩阵及最差性能；远端B02 CI在推送后另核查。B02验收不是首版可发布结论。
+仍待：完整60＋30内容、正式资源／声音／动画、SDK、正式身份／地址、Android实际运行、真机、读屏语音、最大支持字号设备矩阵及最差性能；远端B02 CI结果已补录于上方。B02验收不是首版可发布结论。
 
 ---
 
