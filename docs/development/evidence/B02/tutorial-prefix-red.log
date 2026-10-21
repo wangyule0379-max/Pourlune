@@ -1,0 +1,30 @@
+00:00 +0: loading test/offline_contract_test.dart
+00:00 +0: B02-02 tutorial restricts moves, persists step, undo/restart and Skip preserve board
+00:00 +1: B02-02 completion and v1 compatibility are stable
+00:00 +2: B02-05 daily strict calendar mapping including pre-epoch/leap/offset independence
+00:00 +3: B02-02 active tutorial rejects board outside its short guided prefix (history=false)
+00:00 +3 -1: B02-02 active tutorial rejects board outside its short guided prefix (history=false) [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => GameInstance>
+     Which: returned <Instance of 'GameInstance'>
+  
+  package:matcher                        expect
+  test/offline_contract_test.dart 121:9  main.<fn>
+  
+00:00 +3 -1: B02-02 active tutorial rejects board outside its short guided prefix (history=true)
+00:00 +3 -2: B02-02 active tutorial rejects board outside its short guided prefix (history=true) [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => GameInstance>
+     Which: returned <Instance of 'GameInstance'>
+  
+  package:matcher                        expect
+  test/offline_contract_test.dart 121:9  main.<fn>
+  
+00:00 +3 -2: Some tests failed.
+
+Failing tests:
+  test/offline_contract_test.dart: B02-02 active tutorial rejects board outside its short guided prefix (history=false)
+  test/offline_contract_test.dart: B02-02 active tutorial rejects board outside its short guided prefix (history=true)
+
+Consider enabling the flag chain-stack-traces to receive more detailed exceptions.
+For example, 'dart test --chain-stack-traces'.

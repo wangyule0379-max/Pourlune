@@ -151,10 +151,7 @@ void main() {
             app.PourluneApp(controller: controller, puzzles: [p]),
           );
           await t.pumpAndSettle();
-          expect(
-            find.textContaining('ordinary save is unreadable'),
-            findsOneWidget,
-          );
+          expect(find.textContaining('cannot be restored'), findsOneWidget);
           expect(
             (await store.load('daily')).instance!.toJson(),
             daily.toJson(),

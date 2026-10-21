@@ -1,0 +1,113 @@
+00:00 +0: loading test/offline_contract_test.dart
+00:00 +0 -1: loading test/offline_contract_test.dart [E]
+  Failed to load "test/offline_contract_test.dart":
+  test/offline_contract_test.dart:13:7: Error: No named parameter with the name 'tutorial'.
+        tutorial: true,
+        ^^^^^^^^
+  lib/src/instance.dart:44:11: Context: Found this candidate, but the arguments don't match.
+    factory GameInstance.create({
+            ^^^^^^
+  test/offline_contract_test.dart:27:38: Error: Undefined name 'TutorialStatus'.
+      expect(skipped.tutorial!.status, TutorialStatus.skipped);
+                                       ^^^^^^^^^^^^^^
+  test/offline_contract_test.dart:29:48: Error: Undefined name 'TutorialStatus'.
+      expect(skipped.restart().tutorial!.status, TutorialStatus.skipped);
+                                                 ^^^^^^^^^^^^^^
+  test/offline_contract_test.dart:35:7: Error: No named parameter with the name 'tutorial'.
+        tutorial: true,
+        ^^^^^^^^
+  lib/src/instance.dart:44:11: Context: Found this candidate, but the arguments don't match.
+    factory GameInstance.create({
+            ^^^^^^
+  test/offline_contract_test.dart:40:32: Error: Undefined name 'TutorialStatus'.
+      expect(s.tutorial!.status, TutorialStatus.completed);
+                                 ^^^^^^^^^^^^^^
+  test/offline_contract_test.dart:41:42: Error: Undefined name 'TutorialStatus'.
+      expect(s.restart().tutorial!.status, TutorialStatus.completed);
+                                           ^^^^^^^^^^^^^^
+  test/offline_contract_test.dart:68:13: Error: Undefined name 'DailyCatalog'.
+        () => DailyCatalog.parse(source, definitions),
+              ^^^^^^^^^^^^
+  test/offline_contract_test.dart:71:21: Error: Undefined name 'DailyCatalog'.
+      final catalog = DailyCatalog.parse(source, definitions, engineering: true);
+                      ^^^^^^^^^^^^
+  test/offline_contract_test.dart:79:13: Error: Undefined name 'DailyCatalog'.
+        () => DailyCatalog.parse(
+              ^^^^^^^^^^^^
+  test/offline_contract_test.dart:87:13: Error: Undefined name 'DailyCatalog'.
+        () => DailyCatalog.parse(source, {}, engineering: true),
+              ^^^^^^^^^^^^
+  test/offline_contract_test.dart:91:13: Error: Undefined name 'DailyCatalog'.
+        () => DailyCatalog.parse(
+              ^^^^^^^^^^^^
+  test/offline_contract_test.dart:20:21: Error: The getter 'tutorial' isn't defined for the type 'GameInstance'.
+   - 'GameInstance' is from 'package:pourlune_core/src/instance.dart' ('lib/src/instance.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'tutorial'.
+      expect(restored.tutorial!.step, 1);
+                      ^^^^^^^^
+  test/offline_contract_test.dart:22:28: Error: The getter 'tutorial' isn't defined for the type 'GameInstance'.
+   - 'GameInstance' is from 'package:pourlune_core/src/instance.dart' ('lib/src/instance.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'tutorial'.
+      expect(restored.undo().tutorial!.step, 0);
+                             ^^^^^^^^
+  test/offline_contract_test.dart:23:31: Error: The getter 'tutorial' isn't defined for the type 'GameInstance'.
+   - 'GameInstance' is from 'package:pourlune_core/src/instance.dart' ('lib/src/instance.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'tutorial'.
+      expect(restored.restart().tutorial!.step, 0);
+                                ^^^^^^^^
+  test/offline_contract_test.dart:24:30: Error: The method 'skipTutorial' isn't defined for the type 'GameInstance'.
+   - 'GameInstance' is from 'package:pourlune_core/src/instance.dart' ('lib/src/instance.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'skipTutorial'.
+      final skipped = restored.skipTutorial();
+                               ^^^^^^^^^^^^
+  test/offline_contract_test.dart:45:39: Error: The getter 'tutorial' isn't defined for the type 'GameInstance'.
+   - 'GameInstance' is from 'package:pourlune_core/src/instance.dart' ('lib/src/instance.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'tutorial'.
+      expect(GameInstance.fromJson(old).tutorial, isNull);
+                                        ^^^^^^^^
+00:00 +0 -2: loading test/hint_test.dart [E]
+  Failed to load "test/hint_test.dart":
+  test/hint_test.dart:17:17: Error: Method not found: 'solveHint'.
+        final r = solveHint(p, board, extra: extra);
+                  ^^^^^^^^^
+  test/hint_test.dart:18:24: Error: Undefined name 'HintStatus'.
+        expect(r.status, HintStatus.found);
+                         ^^^^^^^^^^
+  test/hint_test.dart:21:22: Error: Method not found: 'pourBoard'.
+        final poured = pourBoard(board, r.move!.from, r.move!.to);
+                       ^^^^^^^^^
+  test/hint_test.dart:30:17: Error: Method not found: 'solveHint'.
+        final r = solveHint(p, [
+                  ^^^^^^^^^
+  test/hint_test.dart:36:24: Error: Undefined name 'HintStatus'.
+        expect(r.status, HintStatus.found);
+                         ^^^^^^^^^^
+  test/hint_test.dart:50:12: Error: Method not found: 'solveHint'.
+      expect(solveHint(p, dead).status, HintStatus.noMoves);
+             ^^^^^^^^^
+  test/hint_test.dart:50:39: Error: Undefined name 'HintStatus'.
+      expect(solveHint(p, dead).status, HintStatus.noMoves);
+                                        ^^^^^^^^^^
+  test/hint_test.dart:60:20: Error: Method not found: 'solveHint'.
+      final proven = solveHint(p, impossible, maxStates: 1000);
+                     ^^^^^^^^^
+  test/hint_test.dart:61:27: Error: Undefined name 'HintStatus'.
+      expect(proven.status, HintStatus.provenUnsolvable);
+                            ^^^^^^^^^^
+  test/hint_test.dart:63:12: Error: Method not found: 'solveHint'.
+      expect(solveHint(p, impossible, maxStates: 1).status, HintStatus.timeout);
+             ^^^^^^^^^
+  test/hint_test.dart:63:59: Error: Undefined name 'HintStatus'.
+      expect(solveHint(p, impossible, maxStates: 1).status, HintStatus.timeout);
+                                                            ^^^^^^^^^^
+  test/hint_test.dart:65:7: Error: Method not found: 'solveHint'.
+        solveHint(p, p.initial, budget: Duration.zero).status,
+        ^^^^^^^^^
+  test/hint_test.dart:66:7: Error: Undefined name 'HintStatus'.
+        HintStatus.timeout,
+        ^^^^^^^^^^
+00:00 +0 -2: Some tests failed.
+
+Failing tests:
+  test/hint_test.dart: loading test/hint_test.dart
+  test/offline_contract_test.dart: loading test/offline_contract_test.dart

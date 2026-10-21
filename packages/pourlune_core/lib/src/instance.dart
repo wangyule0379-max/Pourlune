@@ -1,4 +1,17 @@
 import 'puzzle.dart';
+import 'pour.dart';
+import 'tutorial.dart';
+
+bool _sameBoard(Board a, Board b) {
+  if (a.length != b.length) return false;
+  for (var i = 0; i < a.length; i++) {
+    if (a[i].length != b[i].length) return false;
+    for (var j = 0; j < a[i].length; j++) {
+      if (a[i][j] != b[i][j]) return false;
+    }
+  }
+  return true;
+}
 
 class UndoFrame {
   UndoFrame(Board board, this.moveCount) : board = freezeBoard(board);
@@ -31,6 +44,7 @@ class GameInstance {
     this.timeZone,
     this.offsetMinutes,
     this.catalogVersion,
+    this.tutorial,
   }) : board = freezeBoard(board),
        history = List.unmodifiable(history);
   final String id, slot;
@@ -41,6 +55,9 @@ class GameInstance {
   final List<UndoFrame> history;
   final String? puzzleDate, timeZone;
   final int? offsetMinutes, catalogVersion;
+  final Tutorial? tutorial;
+  int get tutorialLength =>
+      puzzle.referenceMoves.length < 3 ? puzzle.referenceMoves.length : 3;
   factory GameInstance.create({
     required String id,
     required Puzzle puzzle,
@@ -50,8 +67,9 @@ class GameInstance {
     String? timeZone,
     int? offsetMinutes,
     int? catalogVersion,
+    bool tutorial = false,
   }) => GameInstance.fromJson({
-    'instance_schema_version': 1,
+    'instance_schema_version': 2,
     'instance_id': id,
     'puzzle': puzzle.toJson(),
     'slot': slot,
@@ -66,28 +84,36 @@ class GameInstance {
     'time_zone': timeZone,
     'offset_minutes': offsetMinutes,
     'catalog_version': catalogVersion,
+    'tutorial': tutorial ? const Tutorial.start().toJson() : null,
   });
   factory GameInstance.parse(String source) =>
       GameInstance.fromJson(object(strictJson(source)));
   factory GameInstance.fromJson(Map<String, Object?> m) {
-    keys(m, {
-      'instance_schema_version',
-      'instance_id',
-      'puzzle',
-      'slot',
-      'is_replay',
-      'board',
-      'move_count',
-      'board_revision',
-      'undo_history',
-      'extra_bottle_granted',
-      'completed',
-      'puzzle_date',
-      'time_zone',
-      'offset_minutes',
-      'catalog_version',
-    });
-    if (integer(m['instance_schema_version']) != 1) {
+    keys(
+      m,
+      {
+        'instance_schema_version',
+        'instance_id',
+        'puzzle',
+        'slot',
+        'is_replay',
+        'board',
+        'move_count',
+        'board_revision',
+        'undo_history',
+        'extra_bottle_granted',
+        'completed',
+        'puzzle_date',
+        'time_zone',
+        'offset_minutes',
+        'catalog_version',
+      },
+      {'tutorial'},
+    );
+    final schema = integer(m['instance_schema_version']);
+    if (!{1, 2}.contains(schema) ||
+        (schema == 2 && !m.containsKey('tutorial')) ||
+        (schema == 1 && m.containsKey('tutorial'))) {
       invalid('Unknown instance schema');
     }
     final id = text(m['instance_id']),
@@ -136,6 +162,38 @@ class GameInstance {
       }
       history.add(UndoFrame(b, i));
     }
+    final lesson = m['tutorial'] == null
+        ? null
+        : Tutorial.fromJson(
+            m['tutorial'],
+            puzzle.referenceMoves.length < 3 ? puzzle.referenceMoves.length : 3,
+          );
+    if (lesson != null &&
+        (slot != 'ordinary' ||
+            puzzle.mainLevel != 1 ||
+            m['is_replay'] == true ||
+            (lesson.active && lesson.step != moves))) {
+      invalid('Tutorial instance mismatch');
+    }
+    if (lesson?.active ?? false) {
+      Board prefix = freezeBoard([...puzzle.initial, if (extra) <String>[]]);
+      for (var step = 0; step < lesson!.step; step++) {
+        final frame = history[step].board;
+        final normalized = frame.length < prefix.length
+            ? freezeBoard([...frame, <String>[]])
+            : frame;
+        if (!_sameBoard(normalized, prefix)) {
+          invalid('Tutorial history does not match guided step');
+        }
+        final move = puzzle.referenceMoves[step],
+            next = pourBoard(prefix, move.from, move.to);
+        if (next.units == 0) invalid('Invalid tutorial instruction');
+        prefix = next.board;
+      }
+      if (!_sameBoard(board, prefix)) {
+        invalid('Tutorial board does not match guided step');
+      }
+    }
     String? date, zone;
     int? offset, catalog;
     if (slot == 'daily') {
@@ -176,56 +234,52 @@ class GameInstance {
       timeZone: zone,
       offsetMinutes: offset,
       catalogVersion: catalog,
+      tutorial: lesson,
     );
   }
-  GameInstance _next(Board b, int moves, List<UndoFrame> undo, {bool? extra}) =>
-      GameInstance._(
-        id: id,
-        puzzle: puzzle,
-        slot: slot,
-        isReplay: isReplay,
-        board: b,
-        moveCount: moves,
-        revision: revision + 1,
-        history: undo,
-        extraBottleGranted: extra ?? extraBottleGranted,
-        completed: puzzle.isWon(b),
-        puzzleDate: puzzleDate,
-        timeZone: timeZone,
-        offsetMinutes: offsetMinutes,
-        catalogVersion: catalogVersion,
-      );
+  GameInstance _next(
+    Board b,
+    int moves,
+    List<UndoFrame> undo, {
+    bool? extra,
+    Tutorial? lesson,
+  }) => GameInstance._(
+    id: id,
+    puzzle: puzzle,
+    slot: slot,
+    isReplay: isReplay,
+    board: b,
+    moveCount: moves,
+    revision: revision + 1,
+    history: undo,
+    extraBottleGranted: extra ?? extraBottleGranted,
+    completed: puzzle.isWon(b),
+    puzzleDate: puzzleDate,
+    timeZone: timeZone,
+    offsetMinutes: offsetMinutes,
+    catalogVersion: catalogVersion,
+    tutorial: lesson ?? tutorial,
+  );
   PourResult pour(int from, int to) {
-    String? reason;
-    if (completed) {
-      reason = 'Puzzle complete';
-    } else if (from < 0 ||
-        to < 0 ||
-        from >= board.length ||
-        to >= board.length ||
-        from == to) {
-      reason = 'Choose another bottle';
-    } else if (board[from].isEmpty) {
-      reason = 'Choose a bottle with liquid';
-    } else if (board[to].length == 4) {
-      reason = 'That bottle is full';
-    } else if (board[to].isNotEmpty && board[to].last != board[from].last) {
-      reason = 'Empty or matching top color only';
+    if (completed) return PourResult(this, 0, 'Puzzle complete');
+    if (tutorial?.active ?? false) {
+      final expected = puzzle.referenceMoves[tutorial!.step];
+      if (from != expected.from || to != expected.to) {
+        return PourResult(this, 0, 'Follow the guided pour or Skip');
+      }
     }
-    if (reason != null) return PourResult(this, 0, reason);
-    final color = board[from].last;
-    var group = 0;
-    for (final c in board[from].reversed) {
-      if (c != color) break;
-      group++;
-    }
-    final room = 4 - board[to].length, units = group < room ? group : room;
-    final next = board.map((b) => b.toList()).toList();
-    next[from].removeRange(next[from].length - units, next[from].length);
-    next[to].addAll(List.filled(units, color));
+    final result = pourBoard(board, from, to);
+    if (result.units == 0) return PourResult(this, 0, result.rejection);
     return PourResult(
-      _next(next, moveCount + 1, [...history, UndoFrame(board, moveCount)]),
-      units,
+      _next(
+        result.board,
+        moveCount + 1,
+        [...history, UndoFrame(board, moveCount)],
+        lesson: (tutorial?.active ?? false)
+            ? tutorial!.advance(tutorialLength)
+            : null,
+      ),
+      result.units,
       null,
     );
   }
@@ -235,7 +289,14 @@ class GameInstance {
     final previous = history.last;
     final b = previous.board.map((b) => b.toList()).toList();
     if (extraBottleGranted && b.length == puzzle.initial.length) b.add([]);
-    return _next(b, previous.moveCount, history.sublist(0, history.length - 1));
+    return _next(
+      b,
+      previous.moveCount,
+      history.sublist(0, history.length - 1),
+      lesson: (tutorial?.active ?? false)
+          ? Tutorial(previous.moveCount, TutorialStatus.active)
+          : null,
+    );
   }
 
   GameInstance restart() {
@@ -244,7 +305,13 @@ class GameInstance {
       [...puzzle.initial, if (extraBottleGranted) <String>[]],
       0,
       [],
+      lesson: (tutorial?.active ?? false) ? const Tutorial.start() : null,
     );
+  }
+
+  GameInstance skipTutorial() {
+    if (completed || !(tutorial?.active ?? false)) return this;
+    return _next(board, moveCount, history, lesson: tutorial!.skip());
   }
 
   GameInstance grantExtraBottle() {
@@ -253,7 +320,7 @@ class GameInstance {
   }
 
   Map<String, Object?> toJson() => {
-    'instance_schema_version': 1,
+    'instance_schema_version': 2,
     'instance_id': id,
     'puzzle': puzzle.toJson(),
     'slot': slot,
@@ -268,5 +335,6 @@ class GameInstance {
     'time_zone': timeZone,
     'offset_minutes': offsetMinutes,
     'catalog_version': catalogVersion,
+    'tutorial': tutorial?.toJson(),
   };
 }

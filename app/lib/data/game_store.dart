@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:pourlune_core/pourlune_core.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'player_settings.dart';
+import 'scenes.dart';
+
 class LoadedInstance {
   const LoadedInstance(
     this.instance, {
@@ -18,22 +21,25 @@ class CompletionReceipt {
     this.instanceId,
     this.puzzleId,
     this.firstClear,
-    this.piece,
-  );
+    this.piece, {
+    this.nextInstanceId,
+  });
   final String instanceId, puzzleId;
   final bool firstClear;
-  final String? piece;
+  final String? piece, nextInstanceId;
   factory CompletionReceipt.row(Map<String, Object?> row) => CompletionReceipt(
     row['instance_id']! as String,
     row['puzzle_id']! as String,
     row['first_clear'] == 1,
     row['piece'] as String?,
+    nextInstanceId: row['next_instance_id'] as String?,
   );
   Map<String, Object?> toJson() => {
     'instance_id': instanceId,
     'puzzle_id': puzzleId,
     'first_clear': firstClear,
     'piece': piece,
+    'next_instance_id': nextInstanceId,
   };
 }
 
@@ -44,11 +50,22 @@ class LocalProgress {
     this.unlockedLevels,
     this.qualifyingClears,
     this.receipts,
-    this.dailyStamps,
-  );
+    this.dailyStamps, {
+    this.completedLevels = const [],
+    this.revealedPieces = const [],
+  });
   final int firstClears, qualifyingClears, receipts;
   final List<String> pieces, dailyStamps;
-  final List<int> unlockedLevels;
+  final List<int> unlockedLevels, completedLevels;
+  final List<String> revealedPieces;
+  bool get storyComplete =>
+      List.generate(60, (i) => i + 1).every(completedLevels.contains);
+  int? get nextUnfinished {
+    for (final level in unlockedLevels) {
+      if (!completedLevels.contains(level)) return level;
+    }
+    return null;
+  }
 }
 
 /// All mutating operations use one SQLite transaction; no UI owns reward writes.
@@ -62,17 +79,18 @@ class GameStore {
     final db = await (factory ?? databaseFactory).openDatabase(
       path,
       options: OpenDatabaseOptions(
-        version: 2,
+        version: 3,
         onCreate: (db, _) async {
           await _v1(db);
           await _v2(db);
+          await _v3(db);
         },
         onUpgrade: (db, old, version) async {
-          if (old == 1) {
-            await _v2(db);
-          } else {
+          if (!{1, 2}.contains(old)) {
             throw StateError('Unsupported schema $old');
           }
+          if (old == 1) await _v2(db);
+          await _v3(db);
         },
         onDowngrade: (db, old, version) async =>
             throw StateError('Cannot downgrade schema $old to $version'),
@@ -115,9 +133,32 @@ class GameStore {
     }
   }
 
+  static Future<void> _v3(DatabaseExecutor db) async {
+    await db.execute('ALTER TABLE receipts ADD COLUMN next_instance_id TEXT');
+    await db.execute(
+      'CREATE TABLE settings(key TEXT PRIMARY KEY,value INTEGER NOT NULL CHECK(value IN (0,1)))',
+    );
+    await db.execute('CREATE TABLE revealed_pieces(piece TEXT PRIMARY KEY)');
+    for (final entry in const PlayerSettings().toJson().entries) {
+      await db.insert('settings', {
+        'key': entry.key,
+        'value': entry.value ? 1 : 0,
+      });
+    }
+    final completed = await db.query(
+      'first_completions',
+      where: 'puzzle_id = ?',
+      whereArgs: ['main-001'],
+    );
+    await db.insert('metadata', {
+      'key': 'tutorial_done',
+      'value': completed.isEmpty ? 0 : 1,
+    }, conflictAlgorithm: ConflictAlgorithm.ignore);
+  }
+
   static String? _piece(int level) => level % 4 != 0
       ? null
-      : '${['color_studio', 'garden_nook', 'seaside_corner'][(level - 1) ~/ 20]}:${((level - 1) % 20) ~/ 4 + 1}';
+      : '${sceneIds[(level - 1) ~/ 20]}:${((level - 1) % 20) ~/ 4 + 1}';
   static Future<void> _awardMilestone(DatabaseExecutor db, int level) async {
     if (level < 60) {
       await db.insert('unlocks', {
@@ -198,7 +239,10 @@ class GameStore {
           if (json == row['payload'] &&
               (!s.extraBottleGranted ||
                   _decode(row['backup_payload'], s.slot)?.extraBottleGranted ==
-                      true)) {
+                      true) &&
+              (!(s.tutorial?.finished ?? false) ||
+                  (_decode(row['backup_payload'], s.slot)?.tutorial?.finished ??
+                      false))) {
             return;
           }
         }
@@ -207,8 +251,10 @@ class GameStore {
       }
     }
     // Recovery may roll back moves, but never an already committed entitlement.
-    if (s.extraBottleGranted &&
-        _decode(backup, s.slot)?.extraBottleGranted != true) {
+    if ((s.extraBottleGranted &&
+            _decode(backup, s.slot)?.extraBottleGranted != true) ||
+        ((s.tutorial?.finished ?? false) &&
+            !(_decode(backup, s.slot)?.tutorial?.finished ?? false))) {
       backup = json;
     }
     await tx.insert('active_slots', {
@@ -217,10 +263,65 @@ class GameStore {
       'backup_payload': backup,
     }, conflictAlgorithm: ConflictAlgorithm.replace);
     fault?.call('snapshot');
+    if ((s.tutorial?.finished ?? false) ||
+        (s.completed && s.puzzle.mainLevel == 1 && !s.isReplay)) {
+      await tx.rawUpdate(
+        "UPDATE metadata SET value = ? WHERE key = 'tutorial_done' AND value = 0",
+        [s.tutorial?.status == TutorialStatus.skipped ? 2 : 1],
+      );
+      fault?.call('tutorial');
+    }
   }
 
-  Future<void> save(GameInstance s, {bool replace = false}) =>
-      db.transaction((tx) => _write(tx, s, replace));
+  Future<void> save(
+    GameInstance s, {
+    bool replace = false,
+    String? afterCompletion,
+  }) => db.transaction((tx) async {
+    if (afterCompletion != null) {
+      final receipts = await tx.query(
+        'receipts',
+        where: 'instance_id = ?',
+        whereArgs: [afterCompletion],
+      );
+      if (receipts.isEmpty || receipts.single['first_clear'] != 1) {
+        throw StateError('No first-clear transition');
+      }
+      final previousTarget = receipts.single['next_instance_id'];
+      if (previousTarget != null) {
+        if (previousTarget == s.id) return;
+        throw StateError('Completion transition already consumed');
+      }
+      final sourceRows = await tx.query(
+        'active_slots',
+        where: 'slot = ?',
+        whereArgs: ['ordinary'],
+      );
+      final old = sourceRows.isEmpty
+          ? null
+          : (_decode(sourceRows.single['payload'], 'ordinary') ??
+                _decode(sourceRows.single['backup_payload'], 'ordinary'));
+      if (old == null ||
+          old.id != afterCompletion ||
+          !old.completed ||
+          old.isReplay ||
+          old.puzzle.mainLevel == 60 ||
+          s.slot != 'ordinary' ||
+          s.puzzle.mainLevel != old.puzzle.mainLevel! + 1) {
+        throw StateError('Invalid Next transition');
+      }
+    }
+    await _write(tx, s, replace);
+    if (afterCompletion != null) {
+      await tx.update(
+        'receipts',
+        {'next_instance_id': s.id},
+        where: 'instance_id = ?',
+        whereArgs: [afterCompletion],
+      );
+      fault?.call('transition');
+    }
+  });
   Future<CompletionReceipt> settle(
     GameInstance s, {
     bool replace = false,
@@ -283,6 +384,7 @@ class GameStore {
         await tx.insert('daily_stamps', {
           'puzzle_date': s.puzzleDate,
         }, conflictAlgorithm: ConflictAlgorithm.ignore);
+        fault?.call('stamp');
       }
       final r = CompletionReceipt(s.id, s.puzzle.id, first, piece);
       await tx.insert('receipts', {
@@ -330,7 +432,74 @@ class GameStore {
         'daily_stamps',
         orderBy: 'puzzle_date',
       )).map((r) => r['puzzle_date']! as String).toList(),
+      completedLevels: (await tx.query(
+        'first_completions',
+        orderBy: 'main_level',
+      )).map((r) => r['main_level']! as int).toList(),
+      revealedPieces: (await tx.query(
+        'revealed_pieces',
+        orderBy: 'piece',
+      )).map((r) => r['piece']! as String).toList(),
     ),
   );
+  Future<bool> tutorialDone() async =>
+      (await db.query(
+        'metadata',
+        where: 'key = ?',
+        whereArgs: ['tutorial_done'],
+      )).single['value'] !=
+      0;
+  Future<PlayerSettings> readSettings() async {
+    final values = const PlayerSettings().toJson();
+    for (final row in await db.query('settings')) {
+      final key = row['key']! as String, value = row['value'];
+      if (!values.containsKey(key)) continue;
+      if (value != 0 && value != 1) throw StateError('Unreadable settings');
+      values[key] = value == 1;
+    }
+    return PlayerSettings.fromJson(values);
+  }
+
+  Future<void> saveSettings(PlayerSettings settings) =>
+      db.transaction((tx) async {
+        for (final entry in settings.toJson().entries) {
+          await tx.insert('settings', {
+            'key': entry.key,
+            'value': entry.value ? 1 : 0,
+          }, conflictAlgorithm: ConflictAlgorithm.replace);
+        }
+        fault?.call('settings');
+      });
+  Future<void> markRevealed(String piece) => db.transaction((tx) async {
+    if ((await tx.query(
+      'pieces',
+      where: 'piece = ?',
+      whereArgs: [piece],
+    )).isEmpty) {
+      throw StateError('Unowned piece');
+    }
+    await tx.insert('revealed_pieces', {
+      'piece': piece,
+    }, conflictAlgorithm: ConflictAlgorithm.ignore);
+    fault?.call('reveal');
+  });
+  Future<void> resetProgress() => db.transaction((tx) async {
+    for (final table in [
+      'active_slots',
+      'first_completions',
+      'receipts',
+      'revealed_pieces',
+      'pieces',
+      'unlocks',
+      'daily_stamps',
+    ]) {
+      await tx.delete(table);
+    }
+    await tx.rawUpdate(
+      "UPDATE metadata SET value = 0 WHERE key IN ('tutorial_done','first_clears_since_interstitial')",
+    );
+    await tx.insert('unlocks', {'level': 1});
+    fault?.call('reset');
+  });
   Future<void> close() => db.close();
 }

@@ -1,0 +1,20 @@
+# B02 final fresh-context review and disposition
+
+One reviewer: `/root/b02_final_review`, gpt-6-astra/high, fresh context, read-only against accepted codebase d15b596 plus current B02 tracked/untracked working tree. Current owner HEAD401e170. Reviewer read whole new tree and independently ran core26/app50 green. No reviewer source/index/HEAD mutation; no sub-reviewers or re-review. This is implementer quality review, **not architecture acceptance**.
+
+Initial verdict: With fixes, no Critical, two Important, one Minor.
+
+1. Important/P2 — DailyPage `_date` used cached today while foreground spanned midnight, rejecting current day as future and allowing clicking old-today to start another date. Reviewer reproduced with injected clock. Fix: re-read clock on every calendar action; periodic1-minute refresh while DailyPage mounted, disposed with page. Test includes immediate midnight click, clock rollback with timezone change, and passive header refresh. No online clock or modification to active daily identity.
+2. Important/P2 — bootstrap removed second duplicate ID but re-added third, making malformed catalog depend on asset ordering. Fix: extract same loading parser, first reproduce actual toggle failure (not just missing API), then retain permanent seen-ID set for load duration; any duplicate remains excluded. Tests two/three/four definitions and different order, mixed malformed source and unrelated valid ID. Main IDs already determine level, no separate level-collision finding.
+3. Reviewer Minor/P3, **executor re-graded Important** — reveal write failed, Stay cancelled old Next, then enabled View collection or Next silently lost new action; Retry saved acknowledgement but did not honor destination. Player-facing enabled actions dropping intent violates first-navigation contract, so this is behavior repair. Fix only pending reveal case: accept first new destination/Next after Stay, preserve prior first intent, execute after successful Retry once. Both destination orderings are regression-tested. Stay with no new intent still stays (existing regression retained).
+
+Evidence: `final-review-red.log` shows all4 targeted cases FAIL on actual behavior (duplicate-ID helper initially extracted with behavior unchanged); `final-review-green.log` shows4/4 PASS. The first test invocation had a root-directory redirection error and was rerun from app; no test claim derives from that shell error. Full-suite/native/build results are in B02 delivery and ledger. No outstanding minor finding is deferred: the only proposed minor was re-graded and fixed. No claim of reviewer re-approval after fixes; assertions rely on observed tests.
+
+Declined-to-judge decisions, retained as explicit executor rulings:
+
+- Formal60+30 content difficulty/completeness/rights remain B03; loader invalid/unavailable behavior IS B02 and fixed. Cost if wrongly scoped: content issues need B03 work and cannot qualify release.
+- Production art/audio/full animations remain B03; probe rendering and persisted preferences are B02. Cost: current UI/audio cannot be shipped as accepted production presentation.
+- SDK/ad callbacks/authorization and actual privacy/support destinations remain B04/external handoff; structural eligibility/offline navigation are B02. Cost: monetization and real destinations remain unavailable until verified integration.
+- Whole-database/global metadata repair remains outside accepted local-slot recovery; unknown new schema never deletes data. Cost: unrecoverable whole file must show failure rather than recover every record automatically.
+- Real-device speech/minimum matrix/Android native execution/worst-case performance remain later device acceptance; this batch has host tests+iOS actual plugin+Android build only. Cost: those environments still need evidence before release.
+- No shortest-solution guarantee or IANA name guarantee; exact legal suggestions and pinned local timezone name+offset implement the contract. Cost: hints may be nonminimal and timezone abbreviation may be less specific than IANA, without changing pinned date/offset mapping.

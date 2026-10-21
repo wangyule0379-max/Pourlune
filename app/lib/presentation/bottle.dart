@@ -25,6 +25,10 @@ class BottleButton extends StatelessWidget {
     required this.selected,
     required this.width,
     required this.onTap,
+    this.semanticLabel,
+    this.showSymbols = true,
+    this.strongContrast = false,
+    this.suggested = false,
   });
   final int index;
   final List<String> liquid;
@@ -32,9 +36,12 @@ class BottleButton extends StatelessWidget {
   final bool selected;
   final double width;
   final VoidCallback? onTap;
+  final String? semanticLabel;
+  final bool showSymbols, strongContrast, suggested;
   @override
   Widget build(BuildContext context) => Semantics(
     label:
+        semanticLabel ??
         'Bottle ${index + 1}. ${target == null ? 'Buffer' : 'Target ${colorNames[target]}'}. ${liquid.isEmpty ? 'Empty' : 'Bottom to top: ${liquid.map((c) => colorNames[c]).join(', ')}'}. ${liquid.length} of 4.',
     button: true,
     enabled: onTap != null,
@@ -53,7 +60,13 @@ class BottleButton extends StatelessWidget {
                 height: 148,
                 width: width,
                 child: CustomPaint(
-                  painter: BottlePainter(liquid, target, selected),
+                  painter: BottlePainter(
+                    liquid,
+                    target,
+                    selected || suggested,
+                    showSymbols: showSymbols,
+                    strongContrast: strongContrast,
+                  ),
                 ),
               ),
               SizedBox(
@@ -61,7 +74,11 @@ class BottleButton extends StatelessWidget {
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    '${index + 1} · ${target == null ? '—' : symbols[target]}',
+                    '${index + 1} · ${target == null
+                        ? '—'
+                        : showSymbols
+                        ? symbols[target]
+                        : target}',
                     style: const TextStyle(
                       color: ink,
                       fontSize: 18,
@@ -79,7 +96,14 @@ class BottleButton extends StatelessWidget {
 }
 
 class BottlePainter extends CustomPainter {
-  BottlePainter(this.liquid, this.target, this.selected);
+  BottlePainter(
+    this.liquid,
+    this.target,
+    this.selected, {
+    this.showSymbols = true,
+    this.strongContrast = false,
+  });
+  final bool showSymbols, strongContrast;
   final List<String> liquid;
   final String? target;
   final bool selected;
@@ -96,7 +120,11 @@ class BottlePainter extends CustomPainter {
     final outline = Paint()
       ..color = ink
       ..style = PaintingStyle.stroke
-      ..strokeWidth = selected ? 4 : 2;
+      ..strokeWidth = selected
+          ? 4
+          : strongContrast
+          ? 3
+          : 2;
     canvas.drawRRect(
       bottle,
       Paint()..color = Colors.white.withValues(alpha: .4),
@@ -110,7 +138,9 @@ class BottlePainter extends CustomPainter {
         Rect.fromLTRB(left, y - unit, right, y),
         Paint()..color = liquidColors[liquid[i]]!,
       );
-      _shape(canvas, Offset(size.width / 2, y - unit / 2), liquid[i], 4);
+      if (showSymbols) {
+        _shape(canvas, Offset(size.width / 2, y - unit / 2), liquid[i], 4);
+      }
     }
     canvas.restore();
     canvas.drawRRect(bottle, outline);
@@ -125,7 +155,9 @@ class BottlePainter extends CustomPainter {
       );
     }
     canvas.drawLine(Offset(left - 2, top), Offset(right + 2, top), outline);
-    if (target != null) _shape(canvas, Offset(size.width / 2, 10), target!, 6);
+    if (target != null && showSymbols) {
+      _shape(canvas, Offset(size.width / 2, 10), target!, 6);
+    }
     if (selected) {
       canvas.drawCircle(
         Offset(size.width / 2, size.height - 2),
@@ -139,7 +171,7 @@ class BottlePainter extends CustomPainter {
     final p = Paint()
       ..color = ink
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
+      ..strokeWidth = strongContrast ? 2.2 : 1.5;
     switch (color) {
       case 'O':
         canvas.drawCircle(c, r, p);
@@ -172,5 +204,9 @@ class BottlePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant BottlePainter old) =>
-      old.liquid != liquid || old.target != target || old.selected != selected;
+      old.liquid != liquid ||
+      old.target != target ||
+      old.selected != selected ||
+      old.showSymbols != showSymbols ||
+      old.strongContrast != strongContrast;
 }

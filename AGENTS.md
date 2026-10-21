@@ -49,7 +49,7 @@ UI 增量目录 `docs/design/ui-addendum/` 中的原型、截图和自查仅是�
 
 ## 验证与交付
 
-Flutter 应用位于 `app/`；纯 Dart 核心位于 `packages/pourlune_core/`。工具链固定 Flutter 3.47.2 / Dart 3.13.2（根目录 `.flutter-version`）；应用与核心的 `pubspec.lock` 均须保留。工程和运行说明见 `app/README.md`。B01 是三份工程夹具＋开发绘制探针，不等于正式题库或生产视觉通过。
+Flutter 应用位于 `app/`；纯 Dart 核心位于 `packages/pourlune_core/`。工具链固定 Flutter 3.47.2 / Dart 3.13.2（根目录 `.flutter-version`）；应用与核心的 `pubspec.lock` 均须保留。工程和运行说明见 `app/README.md`。B01/B02 默认仍是三份工程夹具＋开发绘制探针；B02 调试场景的关卡别名和测试时钟仅验证流程，不等于正式题库或生产视觉通过。
 
 目前已有独立 Git 仓库，origin 为 `https://github.com/wangyule0379-max/Pourlune.git`，主分支 `main`；Python 内容准备工具已建立。在项目根目录使用 Python 3.11+ 的 .venv，依赖固定在 `tools/content/requirements.txt`；命令为 `.venv/bin/python -m unittest discover -s tools/content -v` 和 `.venv/bin/python tools/content/validate.py docs/content/fixtures/*.json`。`--release --catalog ...` 用于正式内容完整性检查；当前工程夹具不能通过发布门槛。具体用法见 `tools/content/README.md`。这些检查不等于 Dart / Flutter 测试。
 
@@ -57,7 +57,7 @@ Flutter 应用位于 `app/`；纯 Dart 核心位于 `packages/pourlune_core/`。
 
 在 `packages/pourlune_core/` 运行 `dart pub get --enforce-lockfile`、`dart format --output=none --set-exit-if-changed .`、`dart analyze`、`dart test`。在 `app/` 先运行 `flutter pub get --enforce-lockfile`，再运行与改动相关的检查。基础命令为 `dart format --output=none --set-exit-if-changed .`、`flutter analyze`、`flutter test`；明确工作目录和测试范围。平台构建、集成测试、真机或性能检查按改动风险增加，不把所有平台全量测试套在每次小修改上。
 
-B01 平台命令（工作目录 `app/`）：`flutter build apk --debug`、`flutter build ios --simulator --debug`；真实插件集成命令见 `app/README.md`。临时身份为 iOS `dev.pourlune.pourluneDev`、Android `dev.pourlune.pourlune_dev`；正式签名未建立。CI 配置位于 `.github/workflows/flutter.yml`，配置存在不等于远端运行通过。B01 执行证据见 `docs/development/deliveries/B01.md`，独立验收仍由验收方记录。
+平台命令（工作目录 `app/`）：`flutter build apk --debug`、`flutter build ios --simulator --debug`；真实插件集成命令见 `app/README.md`。临时身份为 iOS `dev.pourlune.pourluneDev`、Android `dev.pourlune.pourlune_dev`；正式签名未建立。CI 配置位于 `.github/workflows/flutter.yml`，配置存在不等于远端运行通过。B01/B02 执行证据见 `docs/development/deliveries/B01.md`、`B02.md`，独立验收由验收方记录。B02 真实插件集成使用 `flutter test integration_test/offline_flows_test.dart -d <device-id> --dart-define=POURLUNE_SCENARIO=flow --dart-define=POURLUNE_DATABASE=b02_native_flow.sqlite`；测试会清理自己的命名库。`milestone`/`final` 场景及普通 App 冷启动方法见 app/README，不能把测试运行器重装当进程恢复。SQLite 当前 schema3、快照 schema2，必须保留非空 B01 迁移测试。
 
 规则、参考解、撤销、事务、奖励幂等、迁移及异步过期结果必须有有效的自动验证；UI 则检查实际渲染、操作路径与适用设备条件。沿用 AC 编号记录证据，避免只镜像实现细节的测试。
 

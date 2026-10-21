@@ -1,0 +1,226 @@
+Resolving dependencies...
+Downloading packages...
+  code_assets 1.2.1 (2.1.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  record_use 0.6.0 (1.1.1 available)
+  sqlite3 3.5.2 (3.7.1 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+Got dependencies!
+9 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Volumes/data/App Development/Pourlune/app/test/offline_store_test.dart
+test/offline_store_test.dart:46:24: Error: The method 'tutorialDone' isn't defined for the type 'GameStore'.
+ - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'tutorialDone'.
+    expect(await store.tutorialDone(), isFalse);
+                       ^^^^^^^^^^^^
+test/offline_store_test.dart:50:24: Error: The method 'tutorialDone' isn't defined for the type 'GameStore'.
+ - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'tutorialDone'.
+    expect(await store.tutorialDone(), isTrue);
+                       ^^^^^^^^^^^^
+test/offline_store_test.dart:68:39: Error: No named parameter with the name 'afterCompletion'.
+      store.save(next, replace: true, afterCompletion: won.id),
+                                      ^^^^^^^^^^^^^^^
+test/offline_store_test.dart:73:43: Error: No named parameter with the name 'afterCompletion'.
+    await store.save(next, replace: true, afterCompletion: won.id);
+                                          ^^^^^^^^^^^^^^^
+test/offline_store_test.dart:75:43: Error: No named parameter with the name 'afterCompletion'.
+    await store.save(next, replace: true, afterCompletion: won.id);
+                                          ^^^^^^^^^^^^^^^
+test/offline_store_test.dart:80:9: Error: No named parameter with the name 'afterCompletion'.
+        afterCompletion: won.id,
+        ^^^^^^^^^^^^^^^
+test/offline_store_test.dart:124:37: Error: The getter 'revealedPieces' isn't defined for the type 'LocalProgress'.
+ - 'LocalProgress' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'revealedPieces'.
+    expect((await store.progress()).revealedPieces, isEmpty);
+                                    ^^^^^^^^^^^^^^
+test/offline_store_test.dart:128:29: Error: The method 'markRevealed' isn't defined for the type 'GameStore'.
+ - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'markRevealed'.
+    await expectLater(store.markRevealed('color_studio:1'), throwsStateError);
+                            ^^^^^^^^^^^^
+test/offline_store_test.dart:132:37: Error: The getter 'revealedPieces' isn't defined for the type 'LocalProgress'.
+ - 'LocalProgress' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'revealedPieces'.
+    expect((await store.progress()).revealedPieces, isEmpty);
+                                    ^^^^^^^^^^^^^^
+test/offline_store_test.dart:133:17: Error: The method 'markRevealed' isn't defined for the type 'GameStore'.
+ - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'markRevealed'.
+    await store.markRevealed('color_studio:1');
+                ^^^^^^^^^^^^
+test/offline_store_test.dart:134:17: Error: The method 'markRevealed' isn't defined for the type 'GameStore'.
+ - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'markRevealed'.
+    await store.markRevealed('color_studio:1');
+                ^^^^^^^^^^^^
+test/offline_store_test.dart:136:37: Error: The getter 'revealedPieces' isn't defined for the type 'LocalProgress'.
+ - 'LocalProgress' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'revealedPieces'.
+    expect((await store.progress()).revealedPieces, ['color_studio:1']);
+                                    ^^^^^^^^^^^^^^
+test/offline_store_test.dart:137:29: Error: The method 'markRevealed' isn't defined for the type 'GameStore'.
+ - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'markRevealed'.
+    await expectLater(store.markRevealed('garden_nook:1'), throwsStateError);
+                            ^^^^^^^^^^^^
+test/offline_store_test.dart:143:17: Error: The method 'saveSettings' isn't defined for the type 'GameStore'.
+ - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'saveSettings'.
+    await store.saveSettings(settings);
+                ^^^^^^^^^^^^
+test/offline_store_test.dart:147:25: Error: The method 'readSettings' isn't defined for the type 'GameStore'.
+ - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'readSettings'.
+    expect((await store.readSettings()).toJson(), settings.toJson());
+                        ^^^^^^^^^^^^
+test/offline_store_test.dart:151:29: Error: The method 'resetProgress' isn't defined for the type 'GameStore'.
+ - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'resetProgress'.
+    await expectLater(store.resetProgress(), throwsStateError);
+                            ^^^^^^^^^^^^^
+test/offline_store_test.dart:154:17: Error: The method 'resetProgress' isn't defined for the type 'GameStore'.
+ - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'resetProgress'.
+    await store.resetProgress();
+                ^^^^^^^^^^^^^
+test/offline_store_test.dart:159:25: Error: The method 'readSettings' isn't defined for the type 'GameStore'.
+ - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'readSettings'.
+    expect((await store.readSettings()).toJson(), settings.toJson());
+                        ^^^^^^^^^^^^
+test/offline_store_test.dart:222:14: Error: The getter 'completedLevels' isn't defined for the type 'LocalProgress'.
+ - 'LocalProgress' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'completedLevels'.
+    expect(p.completedLevels, [1, 4]);
+             ^^^^^^^^^^^^^^^
+test/offline_store_test.dart:226:14: Error: The getter 'revealedPieces' isn't defined for the type 'LocalProgress'.
+ - 'LocalProgress' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'revealedPieces'.
+    expect(p.revealedPieces, isEmpty);
+             ^^^^^^^^^^^^^^
+test/offline_store_test.dart:227:24: Error: The method 'tutorialDone' isn't defined for the type 'GameStore'.
+ - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'tutorialDone'.
+    expect(await store.tutorialDone(), isTrue);
+                       ^^^^^^^^^^^^
+test/offline_store_test.dart:228:25: Error: The method 'readSettings' isn't defined for the type 'GameStore'.
+ - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'readSettings'.
+    expect((await store.readSettings()).music, isTrue);
+                        ^^^^^^^^^^^^
+00:00 +0 -1: loading /Volumes/data/App Development/Pourlune/app/test/offline_store_test.dart [E]
+  Failed to load "/Volumes/data/App Development/Pourlune/app/test/offline_store_test.dart":
+  Compilation failed for testPath=/Volumes/data/App Development/Pourlune/app/test/offline_store_test.dart: test/offline_store_test.dart:46:24: Error: The method 'tutorialDone' isn't defined for the type 'GameStore'.
+   - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'tutorialDone'.
+      expect(await store.tutorialDone(), isFalse);
+                         ^^^^^^^^^^^^
+  test/offline_store_test.dart:50:24: Error: The method 'tutorialDone' isn't defined for the type 'GameStore'.
+   - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'tutorialDone'.
+      expect(await store.tutorialDone(), isTrue);
+                         ^^^^^^^^^^^^
+  test/offline_store_test.dart:68:39: Error: No named parameter with the name 'afterCompletion'.
+        store.save(next, replace: true, afterCompletion: won.id),
+                                        ^^^^^^^^^^^^^^^
+  test/offline_store_test.dart:73:43: Error: No named parameter with the name 'afterCompletion'.
+      await store.save(next, replace: true, afterCompletion: won.id);
+                                            ^^^^^^^^^^^^^^^
+  test/offline_store_test.dart:75:43: Error: No named parameter with the name 'afterCompletion'.
+      await store.save(next, replace: true, afterCompletion: won.id);
+                                            ^^^^^^^^^^^^^^^
+  test/offline_store_test.dart:80:9: Error: No named parameter with the name 'afterCompletion'.
+          afterCompletion: won.id,
+          ^^^^^^^^^^^^^^^
+  test/offline_store_test.dart:124:37: Error: The getter 'revealedPieces' isn't defined for the type 'LocalProgress'.
+   - 'LocalProgress' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'revealedPieces'.
+      expect((await store.progress()).revealedPieces, isEmpty);
+                                      ^^^^^^^^^^^^^^
+  test/offline_store_test.dart:128:29: Error: The method 'markRevealed' isn't defined for the type 'GameStore'.
+   - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'markRevealed'.
+      await expectLater(store.markRevealed('color_studio:1'), throwsStateError);
+                              ^^^^^^^^^^^^
+  test/offline_store_test.dart:132:37: Error: The getter 'revealedPieces' isn't defined for the type 'LocalProgress'.
+   - 'LocalProgress' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'revealedPieces'.
+      expect((await store.progress()).revealedPieces, isEmpty);
+                                      ^^^^^^^^^^^^^^
+  test/offline_store_test.dart:133:17: Error: The method 'markRevealed' isn't defined for the type 'GameStore'.
+   - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'markRevealed'.
+      await store.markRevealed('color_studio:1');
+                  ^^^^^^^^^^^^
+  test/offline_store_test.dart:134:17: Error: The method 'markRevealed' isn't defined for the type 'GameStore'.
+   - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'markRevealed'.
+      await store.markRevealed('color_studio:1');
+                  ^^^^^^^^^^^^
+  test/offline_store_test.dart:136:37: Error: The getter 'revealedPieces' isn't defined for the type 'LocalProgress'.
+   - 'LocalProgress' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'revealedPieces'.
+      expect((await store.progress()).revealedPieces, ['color_studio:1']);
+                                      ^^^^^^^^^^^^^^
+  test/offline_store_test.dart:137:29: Error: The method 'markRevealed' isn't defined for the type 'GameStore'.
+   - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'markRevealed'.
+      await expectLater(store.markRevealed('garden_nook:1'), throwsStateError);
+                              ^^^^^^^^^^^^
+  test/offline_store_test.dart:143:17: Error: The method 'saveSettings' isn't defined for the type 'GameStore'.
+   - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'saveSettings'.
+      await store.saveSettings(settings);
+                  ^^^^^^^^^^^^
+  test/offline_store_test.dart:147:25: Error: The method 'readSettings' isn't defined for the type 'GameStore'.
+   - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'readSettings'.
+      expect((await store.readSettings()).toJson(), settings.toJson());
+                          ^^^^^^^^^^^^
+  test/offline_store_test.dart:151:29: Error: The method 'resetProgress' isn't defined for the type 'GameStore'.
+   - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'resetProgress'.
+      await expectLater(store.resetProgress(), throwsStateError);
+                              ^^^^^^^^^^^^^
+  test/offline_store_test.dart:154:17: Error: The method 'resetProgress' isn't defined for the type 'GameStore'.
+   - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'resetProgress'.
+      await store.resetProgress();
+                  ^^^^^^^^^^^^^
+  test/offline_store_test.dart:159:25: Error: The method 'readSettings' isn't defined for the type 'GameStore'.
+   - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'readSettings'.
+      expect((await store.readSettings()).toJson(), settings.toJson());
+                          ^^^^^^^^^^^^
+  test/offline_store_test.dart:222:14: Error: The getter 'completedLevels' isn't defined for the type 'LocalProgress'.
+   - 'LocalProgress' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'completedLevels'.
+      expect(p.completedLevels, [1, 4]);
+               ^^^^^^^^^^^^^^^
+  test/offline_store_test.dart:226:14: Error: The getter 'revealedPieces' isn't defined for the type 'LocalProgress'.
+   - 'LocalProgress' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'revealedPieces'.
+      expect(p.revealedPieces, isEmpty);
+               ^^^^^^^^^^^^^^
+  test/offline_store_test.dart:227:24: Error: The method 'tutorialDone' isn't defined for the type 'GameStore'.
+   - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'tutorialDone'.
+      expect(await store.tutorialDone(), isTrue);
+                         ^^^^^^^^^^^^
+  test/offline_store_test.dart:228:25: Error: The method 'readSettings' isn't defined for the type 'GameStore'.
+   - 'GameStore' is from 'package:pourlune_dev/data/game_store.dart' ('lib/data/game_store.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'readSettings'.
+      expect((await store.readSettings()).music, isTrue);
+                          ^^^^^^^^^^^^
+  .
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Volumes/data/App Development/Pourlune/app/test/offline_store_test.dart: loading /Volumes/data/App Development/Pourlune/app/test/offline_store_test.dart

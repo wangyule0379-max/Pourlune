@@ -103,7 +103,7 @@ abstract class AppLocalizations {
   /// No description provided for @developmentNotice.
   ///
   /// In en, this message translates to:
-  /// **'Offline development slice · 3 engineering fixtures, not the full game'**
+  /// **'Engineering content · not the complete release catalog'**
   String get developmentNotice;
 
   /// No description provided for @drawingNotice.
@@ -115,7 +115,7 @@ abstract class AppLocalizations {
   /// No description provided for @chooseSample.
   ///
   /// In en, this message translates to:
-  /// **'Choose a sample'**
+  /// **'Engineering samples'**
   String get chooseSample;
 
   /// No description provided for @resume.
@@ -187,8 +187,818 @@ abstract class AppLocalizations {
   /// No description provided for @home.
   ///
   /// In en, this message translates to:
-  /// **'Sample menu'**
+  /// **'Home'**
   String get home;
+
+  /// No description provided for @start.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get start;
+
+  /// No description provided for @continueLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue · Level {level}'**
+  String continueLevel(int level);
+
+  /// No description provided for @continueReplay.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue replay · Level {level}'**
+  String continueReplay(int level);
+
+  /// No description provided for @playLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Play Level {level}'**
+  String playLevel(int level);
+
+  /// No description provided for @level.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {level}'**
+  String level(int level);
+
+  /// No description provided for @levelMoves.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {level} · {moves, plural, =1{1 move} other{{moves} moves}}'**
+  String levelMoves(int level, int moves);
+
+  /// No description provided for @replayLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Replay · Level {level}'**
+  String replayLevel(int level);
+
+  /// No description provided for @chapters.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapters'**
+  String get chapters;
+
+  /// No description provided for @collection.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection'**
+  String get collection;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @dailyPuzzle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily puzzle'**
+  String get dailyPuzzle;
+
+  /// No description provided for @storyComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Story complete'**
+  String get storyComplete;
+
+  /// No description provided for @storyCompleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your story is complete. Return for a daily puzzle, revisit levels or enjoy your collection.'**
+  String get storyCompleteBody;
+
+  /// No description provided for @contentUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This level is not available in this development catalog. Your saves and progress are kept.'**
+  String get contentUnavailable;
+
+  /// No description provided for @locked.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked'**
+  String get locked;
+
+  /// No description provided for @completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completed;
+
+  /// No description provided for @ready.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to play'**
+  String get ready;
+
+  /// No description provided for @missing.
+  ///
+  /// In en, this message translates to:
+  /// **'Content unavailable'**
+  String get missing;
+
+  /// No description provided for @viewResult.
+  ///
+  /// In en, this message translates to:
+  /// **'View saved result'**
+  String get viewResult;
+
+  /// No description provided for @keepPlaying.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep playing'**
+  String get keepPlaying;
+
+  /// No description provided for @replaceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace your unfinished puzzle?'**
+  String get replaceTitle;
+
+  /// No description provided for @replaceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting this level will replace your unfinished puzzle.'**
+  String get replaceBody;
+
+  /// No description provided for @replace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get replace;
+
+  /// No description provided for @pauseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Take your time.'**
+  String get pauseTitle;
+
+  /// No description provided for @pauseSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Your puzzle is saved.'**
+  String get pauseSaved;
+
+  /// No description provided for @pauseMemory.
+  ///
+  /// In en, this message translates to:
+  /// **'Some changes are only in memory. Resume and Retry before leaving.'**
+  String get pauseMemory;
+
+  /// No description provided for @resumeGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get resumeGame;
+
+  /// No description provided for @restartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start this level again?'**
+  String get restartTitle;
+
+  /// No description provided for @restartBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your board will reset.'**
+  String get restartBody;
+
+  /// No description provided for @extraBottleStays.
+  ///
+  /// In en, this message translates to:
+  /// **'Your extra bottle stays.'**
+  String get extraBottleStays;
+
+  /// No description provided for @lessonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'One pour at a time'**
+  String get lessonTitle;
+
+  /// No description provided for @lessonAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {step} of {total}: tap bottle {from}, then bottle {to}.'**
+  String lessonAction(int step, int total, int from, int to);
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @followGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow the guided pour or Skip.'**
+  String get followGuide;
+
+  /// No description provided for @howToPlay.
+  ///
+  /// In en, this message translates to:
+  /// **'How to play'**
+  String get howToPlay;
+
+  /// No description provided for @rulesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Match the color tags'**
+  String get rulesTitle;
+
+  /// No description provided for @rulesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Each bottle holds four units. Choose a bottle with liquid, then an empty bottle or a matching top color with room. The whole top group pours as far as it can. Fill every target with its own color and leave all buffers empty. Undo and restart are always free.'**
+  String get rulesBody;
+
+  /// No description provided for @demoNote.
+  ///
+  /// In en, this message translates to:
+  /// **'This demonstration uses a separate board. Your saved puzzle stays unchanged.'**
+  String get demoNote;
+
+  /// No description provided for @demoReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart demonstration'**
+  String get demoReset;
+
+  /// No description provided for @rulesBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to settings'**
+  String get rulesBack;
+
+  /// No description provided for @hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Hint'**
+  String get hint;
+
+  /// No description provided for @cancelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel hint'**
+  String get cancelHint;
+
+  /// No description provided for @searchingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking for a hint…'**
+  String get searchingHint;
+
+  /// No description provided for @hintFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Try bottle {from} → {to}. Tap the suggested destination to pour.'**
+  String hintFound(int from, int to);
+
+  /// No description provided for @hintReason.
+  ///
+  /// In en, this message translates to:
+  /// **'This moves the top {color} group along a solution for your current board.'**
+  String hintReason(String color);
+
+  /// No description provided for @hintTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'No hint found yet. You can keep playing.'**
+  String get hintTimeout;
+
+  /// No description provided for @hintUnsolvable.
+  ///
+  /// In en, this message translates to:
+  /// **'Try undoing a move or restarting.'**
+  String get hintUnsolvable;
+
+  /// No description provided for @noMoves.
+  ///
+  /// In en, this message translates to:
+  /// **'No moves available'**
+  String get noMoves;
+
+  /// No description provided for @noMovesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Try an earlier move. You can undo or restart.'**
+  String get noMovesBody;
+
+  /// No description provided for @matchLabels.
+  ///
+  /// In en, this message translates to:
+  /// **'Match each color to its label.'**
+  String get matchLabels;
+
+  /// No description provided for @chooseAnother.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose another bottle.'**
+  String get chooseAnother;
+
+  /// No description provided for @chooseLiquid.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a bottle with liquid.'**
+  String get chooseLiquid;
+
+  /// No description provided for @bottleFull.
+  ///
+  /// In en, this message translates to:
+  /// **'That bottle is full.'**
+  String get bottleFull;
+
+  /// No description provided for @matchingTop.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty or matching top color only.'**
+  String get matchingTop;
+
+  /// No description provided for @puzzleComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzle complete'**
+  String get puzzleComplete;
+
+  /// No description provided for @beautifullySorted.
+  ///
+  /// In en, this message translates to:
+  /// **'Beautifully sorted.'**
+  String get beautifullySorted;
+
+  /// No description provided for @pendingCompletion.
+  ///
+  /// In en, this message translates to:
+  /// **'Your board is complete. Retry saving before leaving.'**
+  String get pendingCompletion;
+
+  /// No description provided for @firstClearSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Your progress is saved on this device.'**
+  String get firstClearSaved;
+
+  /// No description provided for @replayComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Your collection and story progress are unchanged.'**
+  String get replayComplete;
+
+  /// No description provided for @viewPatch.
+  ///
+  /// In en, this message translates to:
+  /// **'View patch'**
+  String get viewPatch;
+
+  /// No description provided for @newPatch.
+  ///
+  /// In en, this message translates to:
+  /// **'New patch unlocked'**
+  String get newPatch;
+
+  /// No description provided for @addedCollection.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to your collection'**
+  String get addedCollection;
+
+  /// No description provided for @nextLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Next level'**
+  String get nextLevel;
+
+  /// No description provided for @replayAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Replay again'**
+  String get replayAgain;
+
+  /// No description provided for @chooseLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose level'**
+  String get chooseLevel;
+
+  /// No description provided for @viewCollection.
+  ///
+  /// In en, this message translates to:
+  /// **'View collection'**
+  String get viewCollection;
+
+  /// No description provided for @replayLevels.
+  ///
+  /// In en, this message translates to:
+  /// **'Replay levels'**
+  String get replayLevels;
+
+  /// No description provided for @chapterComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Scene complete'**
+  String get chapterComplete;
+
+  /// No description provided for @sceneCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{earned} / 5 patches'**
+  String sceneCount(int earned);
+
+  /// No description provided for @scenePendingArt.
+  ///
+  /// In en, this message translates to:
+  /// **'Development scene map · final artwork pending'**
+  String get scenePendingArt;
+
+  /// No description provided for @sceneLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked patch'**
+  String get sceneLocked;
+
+  /// No description provided for @sceneOwned.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocked patch'**
+  String get sceneOwned;
+
+  /// No description provided for @patchNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Patch {number}'**
+  String patchNumber(int number);
+
+  /// No description provided for @dailyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s puzzle'**
+  String get dailyTitle;
+
+  /// No description provided for @dailyUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s puzzle is unavailable. You can continue a saved daily puzzle or play the story.'**
+  String get dailyUnavailable;
+
+  /// No description provided for @dailyDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Today · {date}'**
+  String dailyDate(String date);
+
+  /// No description provided for @resumeDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume daily · {date}'**
+  String resumeDaily(String date);
+
+  /// No description provided for @continuePrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue puzzle from {date}'**
+  String continuePrevious(String date);
+
+  /// No description provided for @startToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Start today\'s puzzle'**
+  String get startToday;
+
+  /// No description provided for @dailyDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s puzzle is complete.'**
+  String get dailyDone;
+
+  /// No description provided for @replayToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Replay today\'s puzzle'**
+  String get replayToday;
+
+  /// No description provided for @dailyComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily puzzle complete'**
+  String get dailyComplete;
+
+  /// No description provided for @stampSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Stamp saved for {date}.'**
+  String stampSaved(String date);
+
+  /// No description provided for @dailyReplayComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'This replay adds no new stamp.'**
+  String get dailyReplayComplete;
+
+  /// No description provided for @replaceDailyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting today\'s puzzle will replace your unfinished puzzle from {date}.'**
+  String replaceDailyBody(String date);
+
+  /// No description provided for @calendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily calendar'**
+  String get calendar;
+
+  /// No description provided for @previousMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get previousMonth;
+
+  /// No description provided for @nextMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get nextMonth;
+
+  /// No description provided for @weekdays.
+  ///
+  /// In en, this message translates to:
+  /// **'Mon,Tue,Wed,Thu,Fri,Sat,Sun'**
+  String get weekdays;
+
+  /// No description provided for @historyReadOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'History is read-only. Past puzzles cannot be started.'**
+  String get historyReadOnly;
+
+  /// No description provided for @futureReadOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Future dates cannot be played.'**
+  String get futureReadOnly;
+
+  /// No description provided for @stampOwned.
+  ///
+  /// In en, this message translates to:
+  /// **'Stamp collected'**
+  String get stampOwned;
+
+  /// No description provided for @noStamp.
+  ///
+  /// In en, this message translates to:
+  /// **'No stamp for this date'**
+  String get noStamp;
+
+  /// No description provided for @dateState.
+  ///
+  /// In en, this message translates to:
+  /// **'{date} · {state}'**
+  String dateState(String date, String state);
+
+  /// No description provided for @music.
+  ///
+  /// In en, this message translates to:
+  /// **'Music'**
+  String get music;
+
+  /// No description provided for @sound.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound'**
+  String get sound;
+
+  /// No description provided for @haptics.
+  ///
+  /// In en, this message translates to:
+  /// **'Haptics'**
+  String get haptics;
+
+  /// No description provided for @reducedMotion.
+  ///
+  /// In en, this message translates to:
+  /// **'Reduced motion'**
+  String get reducedMotion;
+
+  /// No description provided for @colorSymbols.
+  ///
+  /// In en, this message translates to:
+  /// **'Color symbols'**
+  String get colorSymbols;
+
+  /// No description provided for @strongContrast.
+  ///
+  /// In en, this message translates to:
+  /// **'Stronger contrast'**
+  String get strongContrast;
+
+  /// No description provided for @audioPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Music and sound preferences are saved. Audio tracks are not included in this development build.'**
+  String get audioPending;
+
+  /// No description provided for @privacyChoices.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy choices'**
+  String get privacyChoices;
+
+  /// No description provided for @privacyUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy and advertising privacy controls are not connected in this development build. No placeholder form is used.'**
+  String get privacyUnavailable;
+
+  /// No description provided for @yourProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Your game progress'**
+  String get yourProgress;
+
+  /// No description provided for @localOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress is saved on this device. There is no account or cloud sync. Removing app data or changing devices can lose progress.'**
+  String get localOnly;
+
+  /// No description provided for @feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Send feedback'**
+  String get feedback;
+
+  /// No description provided for @supportUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The support address has not been configured. No message will be sent.'**
+  String get supportUnavailable;
+
+  /// No description provided for @versionInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Pourlune · {version} ({build})'**
+  String versionInfo(String version, String build);
+
+  /// No description provided for @resetProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset progress'**
+  String get resetProgress;
+
+  /// No description provided for @resetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset all progress?'**
+  String get resetTitle;
+
+  /// No description provided for @resetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This removes your levels, collection and daily stamps from this device. Saved puzzles will also be removed. Sound and accessibility choices stay.'**
+  String get resetBody;
+
+  /// No description provided for @keepProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep progress'**
+  String get keepProgress;
+
+  /// No description provided for @recoveredSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovered the last valid local snapshot.'**
+  String get recoveredSave;
+
+  /// No description provided for @unavailableSave.
+  ///
+  /// In en, this message translates to:
+  /// **'This saved puzzle cannot be restored. Other saves and local progress are kept.'**
+  String get unavailableSave;
+
+  /// No description provided for @settingsUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences could not be read. Defaults are being used; your game progress is kept.'**
+  String get settingsUnreadable;
+
+  /// No description provided for @viewPatchFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'View your new patch before continuing.'**
+  String get viewPatchFirst;
+
+  /// No description provided for @openFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open local data. Your files were kept.'**
+  String get openFailed;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @window.
+  ///
+  /// In en, this message translates to:
+  /// **'Window'**
+  String get window;
+
+  /// No description provided for @deskPaint.
+  ///
+  /// In en, this message translates to:
+  /// **'Desk & paint'**
+  String get deskPaint;
+
+  /// No description provided for @stool.
+  ///
+  /// In en, this message translates to:
+  /// **'Stool'**
+  String get stool;
+
+  /// No description provided for @plant.
+  ///
+  /// In en, this message translates to:
+  /// **'Plant'**
+  String get plant;
+
+  /// No description provided for @table.
+  ///
+  /// In en, this message translates to:
+  /// **'Table'**
+  String get table;
+
+  /// No description provided for @bottleSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottle {number}. {target}. {contents}. {units} of 4.'**
+  String bottleSemantics(int number, String target, String contents, int units);
+
+  /// No description provided for @targetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Target {color}'**
+  String targetLabel(String color);
+
+  /// No description provided for @bufferLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Buffer'**
+  String get bufferLabel;
+
+  /// No description provided for @emptyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty'**
+  String get emptyLabel;
+
+  /// No description provided for @contentsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottom to top: {colors}'**
+  String contentsLabel(String colors);
+
+  /// No description provided for @orangeCircle.
+  ///
+  /// In en, this message translates to:
+  /// **'Orange circle'**
+  String get orangeCircle;
+
+  /// No description provided for @greenTriangle.
+  ///
+  /// In en, this message translates to:
+  /// **'Green triangle'**
+  String get greenTriangle;
+
+  /// No description provided for @purpleDiamond.
+  ///
+  /// In en, this message translates to:
+  /// **'Purple diamond'**
+  String get purpleDiamond;
+
+  /// No description provided for @blueSquare.
+  ///
+  /// In en, this message translates to:
+  /// **'Blue square'**
+  String get blueSquare;
+
+  /// No description provided for @suggestedTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested destination'**
+  String get suggestedTarget;
+
+  /// No description provided for @continueChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueChapter;
+
+  /// No description provided for @moveCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{moves, plural, =1{1 move} other{{moves} moves}}'**
+  String moveCount(int moves);
 }
 
 class _AppLocalizationsDelegate

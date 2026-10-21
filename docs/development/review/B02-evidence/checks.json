@@ -1,0 +1,83 @@
+[
+  {
+    "name": "core-format",
+    "cwd": "packages/pourlune_core",
+    "command": [
+      "dart",
+      "format",
+      "--output=none",
+      "--set-exit-if-changed",
+      "."
+    ],
+    "exit_code": 0,
+    "seconds": 0.1
+  },
+  {
+    "name": "core-analyze",
+    "cwd": "packages/pourlune_core",
+    "command": [
+      "dart",
+      "analyze"
+    ],
+    "exit_code": 0,
+    "seconds": 0.5
+  },
+  {
+    "name": "core-tests",
+    "cwd": "packages/pourlune_core",
+    "command": [
+      "dart",
+      "test"
+    ],
+    "exit_code": 0,
+    "seconds": 0.6
+  },
+  {
+    "name": "app-format",
+    "cwd": "app",
+    "command": [
+      "dart",
+      "format",
+      "--output=none",
+      "--set-exit-if-changed",
+      "."
+    ],
+    "exit_code": 0,
+    "seconds": 0.2
+  },
+  {
+    "name": "app-analyze",
+    "cwd": "app",
+    "command": [
+      "flutter",
+      "analyze"
+    ],
+    "exit_code": 0,
+    "seconds": 1.7
+  },
+  {
+    "name": "app-tests",
+    "cwd": "app",
+    "command": [
+      "flutter",
+      "test"
+    ],
+    "exit_code": 0,
+    "seconds": 7.6
+  },
+  {
+    "name": "native-flow",
+    "cwd": "app",
+    "command": [
+      "flutter",
+      "test",
+      "integration_test/offline_flows_test.dart",
+      "-d",
+      "4DF92321-95EC-4C8E-849C-0CF0AA6FE1D2",
+      "--dart-define=POURLUNE_SCENARIO=flow",
+      "--dart-define=POURLUNE_DATABASE=b02_native_review.sqlite"
+    ],
+    "exit_code": 0,
+    "seconds": 59.9
+  }
+]

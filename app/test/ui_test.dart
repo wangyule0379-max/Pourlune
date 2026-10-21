@@ -49,11 +49,11 @@ void main() {
       await tap(const Key('bottle-0'));
       await tap(const Key('bottle-2'));
       await tap(const Key('restart'));
-      expect(find.text('Restart this sample?'), findsOneWidget);
+      expect(find.text('Start this level again?'), findsOneWidget);
       await tap(const Key('confirm-restart'));
       expect(c.current!.moveCount, 0);
       await tap(const Key('pause'));
-      expect(find.text('Paused'), findsOneWidget);
+      expect(find.text('Take your time.'), findsOneWidget);
       await tap(const Key('resume-pause'));
       c.failNextWrite();
       await tap(const Key('bottle-0'));
@@ -61,8 +61,11 @@ void main() {
       expect(find.byKey(const Key('save-failed')), findsOneWidget);
       await tap(const Key('pause'));
       expect(
-        find.text(
-          'Some changes are only in memory. Resume and Retry before leaving.',
+        find.descendant(
+          of: find.byType(AlertDialog),
+          matching: find.text(
+            'Some changes are only in memory. Resume and Retry before leaving.',
+          ),
         ),
         findsOneWidget,
       );
@@ -80,7 +83,7 @@ void main() {
         await tap(Key('bottle-${m.from}'));
         await tap(Key('bottle-${m.to}'));
       }
-      expect(find.text('Sample complete'), findsOneWidget);
+      expect(find.text('Beautifully sorted.'), findsOneWidget);
       expect(c.receipt, isNotNull);
       await tap(const Key('home'));
       await tap(const Key('progress'));

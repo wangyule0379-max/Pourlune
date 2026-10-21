@@ -62,7 +62,8 @@ void main() {
       final progress = await c.store.progress();
       expect(progress.firstClears, greaterThanOrEqualTo(1));
       await tap('home');
-      await tap('sample-main-012');
+      await tap('development-tools');
+      await tap('engineering-main-012');
       for (final m in c.current!.puzzle.referenceMoves.take(2)) {
         await tap('bottle-${m.from}');
         await tap('bottle-${m.to}');

@@ -1,0 +1,409 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:pourlune_core/pourlune_core.dart';
+
+import '../application/game_controller.dart';
+import '../data/content_library.dart';
+import '../l10n/app_localizations.dart';
+import 'board_page.dart';
+import 'collection_pages.dart';
+import 'navigation_pages.dart';
+import 'settings_page.dart';
+import 'labels.dart';
+
+class GameScreen extends StatefulWidget {
+  const GameScreen({
+    super.key,
+    required this.controller,
+    this.puzzles = const [],
+    this.advanceTestDay,
+  });
+  final GameController controller;
+  final List<Puzzle> puzzles;
+  final VoidCallback? advanceTestDay;
+  @override
+  State<GameScreen> createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
+  GameController get c => widget.controller;
+  AppLocalizations get l => AppLocalizations.of(context);
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    if (c.library.main.isEmpty && widget.puzzles.isNotEmpty) {
+      c.library = ContentLibrary(
+        main: {for (final p in widget.puzzles) p.mainLevel!: p},
+        engineering: true,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) =>
+      c.setForeground(state == AppLifecycleState.resumed);
+  Future<bool> _confirm(
+    String title,
+    String body,
+    String action,
+    String key,
+  ) async =>
+      await showDialog<bool>(
+        context: context,
+        animationStyle: c.settings.reducedMotion
+            ? AnimationStyle.noAnimation
+            : null,
+        builder: (context) => AlertDialog(
+          title: Text(title),
+          content: Text(body),
+          actions: key == 'confirm-reset'
+              ? [
+                  FilledButton(
+                    autofocus: true,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: const Color(0xffb9d89f),
+                      foregroundColor: const Color(0xff061b78),
+                    ),
+                    onPressed: () => Navigator.pop(context, false),
+                    child: Text(l.keepProgress),
+                  ),
+                  TextButton(
+                    key: Key(key),
+                    onPressed: () => Navigator.pop(context, true),
+                    child: Text(action),
+                  ),
+                ]
+              : [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: Text(l.keepPlaying),
+                  ),
+                  FilledButton(
+                    key: Key(key),
+                    onPressed: () => Navigator.pop(context, true),
+                    child: Text(action),
+                  ),
+                ],
+        ),
+      ) ??
+      false;
+  Future<void> _info(String title, String body) async {
+    await showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(body),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l.close),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _play(int level) async {
+    if (c.busy) return;
+    if (c.deferNavigationUntilSaved(() => _play(level))) return;
+    if (c.ordinary != null &&
+        !c.ordinary!.completed &&
+        c.ordinary!.puzzle.mainLevel == level) {
+      await c.resumeSlot('ordinary');
+      return;
+    }
+    if (!c.library.main.containsKey(level)) {
+      await _info(l.missing, l.contentUnavailable);
+      return;
+    }
+    var replace = false;
+    if (c.ordinary != null && !c.ordinary!.completed) {
+      replace = await _confirm(
+        l.replaceTitle,
+        l.replaceBody,
+        l.replace,
+        'confirm-replace',
+      );
+      if (!replace || !mounted) return;
+    }
+    await c.startLevel(level, replace: replace);
+  }
+
+  Future<void> _engineering(Puzzle puzzle) async {
+    if (!kDebugMode || c.busy) return;
+    if (c.deferNavigationUntilSaved(() => _engineering(puzzle))) return;
+    var replace = false;
+    if (c.ordinary != null && !c.ordinary!.completed) {
+      replace = await _confirm(
+        l.replaceTitle,
+        l.replaceBody,
+        l.replace,
+        'confirm-replace',
+      );
+      if (!replace || !mounted) return;
+    }
+    await c.start(
+      puzzle,
+      replace: replace,
+      replay: c.progress.completedLevels.contains(puzzle.mainLevel),
+    );
+  }
+
+  Future<void> _today() async {
+    if (c.busy) return;
+    if (c.deferNavigationUntilSaved(_today)) return;
+    final existing = c.daily;
+    var replace = false;
+    if (existing != null &&
+        !existing.completed &&
+        existing.puzzleDate != c.clock().date) {
+      replace = await _confirm(
+        l.replaceTitle,
+        l.replaceDailyBody(existing.puzzleDate!),
+        l.replace,
+        'confirm-daily-replace',
+      );
+      if (!replace || !mounted) return;
+    }
+    await c.startToday(replace: replace);
+  }
+
+  Future<void> _restart() async {
+    final extra = c.current?.extraBottleGranted ?? false;
+    if (await _confirm(
+      l.restartTitle,
+      '${l.restartBody}${extra ? '\n${l.extraBottleStays}' : ''}',
+      l.restart,
+      'confirm-restart',
+    )) {
+      await c.restart();
+    }
+  }
+
+  Future<void> _pause() async {
+    c.cancelHint();
+    await showDialog<void>(
+      context: context,
+      animationStyle: c.settings.reducedMotion
+          ? AnimationStyle.noAnimation
+          : null,
+      builder: (dialogContext) => ListenableBuilder(
+        listenable: c,
+        builder: (context, _) => AlertDialog(
+          title: Text(l.pauseTitle),
+          content: Text(
+            c.phase == SavePhase.clean ? l.pauseSaved : l.pauseMemory,
+          ),
+          actions: [
+            if (c.phase == SavePhase.failed) ...[
+              TextButton(
+                key: const Key('pause-retry'),
+                onPressed: c.retry,
+                child: Text(l.retry),
+              ),
+              TextButton(
+                key: const Key('pause-stay'),
+                onPressed: c.stayHere,
+                child: Text(l.stayHere),
+              ),
+            ],
+            TextButton(
+              key: const Key('resume-pause'),
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text(l.resumeGame),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+                _restart();
+              },
+              child: Text(l.restart),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+                c.goHome();
+              },
+              child: Text(l.home),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _reset() async {
+    if (await _confirm(
+      l.resetTitle,
+      l.resetBody,
+      l.resetProgress,
+      'confirm-reset',
+    )) {
+      await c.resetProgress();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => ListenableBuilder(
+    listenable: c,
+    builder: (context, _) {
+      final title = switch (c.page) {
+        GamePage.chapters => l.chapters,
+        GamePage.daily => l.dailyPuzzle,
+        GamePage.collection => l.collection,
+        GamePage.scene => sceneTitle(c.selectedScene),
+        GamePage.settings => l.settings,
+        GamePage.rules => l.howToPlay,
+        GamePage.progress => l.progress,
+        _ => l.appTitle,
+      };
+      final body = switch (c.page) {
+        GamePage.home => HomePage(
+          controller: c,
+          onPlay: _play,
+          onEngineering: _engineering,
+        ),
+        GamePage.chapters => ChaptersPage(controller: c, onPlay: _play),
+        GamePage.daily => DailyPage(controller: c, onToday: _today),
+        GamePage.collection => CollectionPage(controller: c),
+        GamePage.scene => ScenePage(controller: c, onPlay: _play),
+        GamePage.settings => SettingsPage(
+          controller: c,
+          onReset: _reset,
+          onPrivacy: () => _info(l.privacyChoices, l.privacyUnavailable),
+          onFeedback: () => _info(l.feedback, l.supportUnavailable),
+        ),
+        GamePage.rules => RulesPage(controller: c),
+        GamePage.board => BoardPage(
+          controller: c,
+          onRestart: _restart,
+          onPause: _pause,
+        ),
+        GamePage.completion => CompletionPage(controller: c, onPlay: _play),
+        GamePage.reward => RewardPage(controller: c),
+        GamePage.progress =>
+          kDebugMode
+              ? DevelopmentProgressPage(controller: c)
+              : HomePage(
+                  controller: c,
+                  onPlay: _play,
+                  onEngineering: _engineering,
+                ),
+      };
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (!didPop) {
+            if (c.page == GamePage.board && !c.busy) {
+              _pause();
+            } else if (c.page == GamePage.rules) {
+              c.navigate(GamePage.settings);
+            } else {
+              c.goHome();
+            }
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(title),
+            backgroundColor: const Color(0xff82dff1),
+            actions: [
+              if (c.page != GamePage.home && c.page != GamePage.completion)
+                IconButton(
+                  key: const Key('home'),
+                  tooltip: l.home,
+                  onPressed: c.busy ? null : c.goHome,
+                  icon: const Icon(Icons.home_outlined),
+                ),
+            ],
+          ),
+          body: SafeArea(
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: c.page == GamePage.board ? c.clearSelection : null,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (c.library.engineering)
+                      Text(
+                        l.developmentNotice,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                    if (c.recoveryNotice != null)
+                      Text(
+                        c.recoveryNotice == 'recovered'
+                            ? l.recoveredSave
+                            : l.unavailableSave,
+                      ),
+                    if (c.notice != null)
+                      Semantics(
+                        liveRegion: true,
+                        child: Text(noticeLabel(l, c.notice!)),
+                      ),
+                    if (c.phase == SavePhase.failed)
+                      Card(
+                        key: const Key('save-failed'),
+                        color: const Color(0xffffe2c3),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            children: [
+                              Text(l.saveFailed),
+                              Wrap(
+                                spacing: 8,
+                                children: [
+                                  FilledButton(
+                                    key: const Key('retry'),
+                                    onPressed: c.retry,
+                                    child: Text(l.retry),
+                                  ),
+                                  TextButton(
+                                    key: const Key('stay'),
+                                    onPressed: c.stayHere,
+                                    child: Text(l.stayHere),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    Text(
+                      c.phase == SavePhase.saving
+                          ? l.saving
+                          : c.phase == SavePhase.clean
+                          ? l.saved
+                          : l.pauseMemory,
+                      key: const Key('save-status'),
+                    ),
+                    const SizedBox(height: 12),
+                    body,
+                    if (kDebugMode &&
+                        widget.advanceTestDay != null &&
+                        c.page == GamePage.home)
+                      TextButton(
+                        key: const Key('advance-test-day'),
+                        onPressed: widget.advanceTestDay,
+                        child: const Text(
+                          'Development: advance local test day',
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}

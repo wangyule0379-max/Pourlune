@@ -1,0 +1,56 @@
+Resolving dependencies...
+Downloading packages...
+  code_assets 1.2.1 (2.1.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  record_use 0.6.0 (1.1.1 available)
+  sqlite3 3.5.2 (3.7.1 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+Got dependencies!
+9 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Volumes/data/App Development/Pourlune/app/test/offline_ui_test.dart
+00:00 +0: /Volumes/data/App Development/Pourlune/app/test/offline_controller_test.dart: B02 stale feedback is cleared when switching an engineering instance
+00:01 +0 -1: /Volumes/data/App Development/Pourlune/app/test/offline_ui_test.dart: B02 no legal moves offers free rescue before requesting hint
+00:01 +0 -1: /Volumes/data/App Development/Pourlune/app/test/offline_controller_test.dart: B02 stale feedback is cleared when switching an engineering instance [E]
+  Expected: null
+    Actual: 'That bottle is full'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/offline_controller_test.dart 433:7             main.<fn>
+  
+00:01 +0 -1: /Volumes/data/App Development/Pourlune/app/test/offline_ui_test.dart: B02 no legal moves offers free rescue before requesting hint
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "No moves available": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Volumes/data/App%20Development/Pourlune/app/test/offline_ui_test.dart:195:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Volumes/data/App%20Development/Pourlune/app/test/offline_ui_test.dart line 195
+The test description was:
+  B02 no legal moves offers free rescue before requesting hint
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -2: /Volumes/data/App Development/Pourlune/app/test/offline_ui_test.dart: B02 no legal moves offers free rescue before requesting hint [E]
+  Test failed. See exception logs above.
+  The test description was: B02 no legal moves offers free rescue before requesting hint
+  
+00:01 +0 -2: Some tests failed.
+
+Failing tests:
+  /Volumes/data/App Development/Pourlune/app/test/offline_controller_test.dart: B02 stale feedback is cleared when switching an engineering instance
+  /Volumes/data/App Development/Pourlune/app/test/offline_ui_test.dart: B02 no legal moves offers free rescue before requesting hint

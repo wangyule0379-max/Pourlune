@@ -1,6 +1,6 @@
 # Pourlune
 
-面向海外的离线单机解谜游戏。技术基线：Flutter、纯 Dart 核心、SQLite/sqflite；Firebase 与 AdMob 是可降级的外部服务。当前已建立 Flutter App 与纯 Dart 核心；B01 工程及离线切片通过独立验收，完整功能按 B02–B05 推进。
+面向海外的离线单机解谜游戏。技术基线：Flutter、纯 Dart 核心、SQLite/sqflite；Firebase 与 AdMob 是可降级的外部服务。当前已建立 Flutter App 与纯 Dart 核心；B01 工程及离线切片通过独立验收，B02 完整离线流程已通过限定范围的独立验收；正式内容、美术、SDK 和发布验证按 B03–B05 推进。
 
 代码仓库：[wangyule0379-max/Pourlune](https://github.com/wangyule0379-max/Pourlune)，主分支 `main`。包含产品文档、原设计档案、内容准备工具，以及已完成 D01–D09 静态设计和有限原型独立验收的 UI 增量、修复过程与验收证据。B01 已完成 iOS 实际操作、原生 SQLite 恢复和双端本机构建；详见 [B01 独立验收](docs/development/review/B01-acceptance.md)。
 
@@ -8,6 +8,7 @@
 
 - [正式开发批次与独立验收计划](docs/pmpowers/plans/2026-10-22-development-execution.md)：B01–B05 连续推进，当前状态见 [开发跟踪](docs/development/tracking.json)。
 
+- [B02 离线流程交付](docs/development/deliveries/B02.md)：实现与运行证据；[独立验收报告](docs/development/review/B02-acceptance.md)记录通过范围和后续依赖。
 - [协作约定](AGENTS.md)
 - [开发准备与真实缺口](docs/pmpowers/specs/development-readiness.md)
 - [产品规格](docs/pmpowers/specs/PRD-supplement-v1.1.md) · [技术方案](docs/pmpowers/specs/technical-architecture-v1.0.md) · [数据契约](docs/pmpowers/specs/data-contracts-v1.0.md)
