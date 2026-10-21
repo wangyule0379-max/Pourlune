@@ -4,6 +4,8 @@
 
 **当前结论：B01-01～08 在已批准的工程与离线切片范围通过；B01-R01 已关闭，可以提交并推送开发分支，推进 B02。** 第一轮失败证据原样保留于下方及 `B01-evidence/`，本轮证据独立存放在 `B01-evidence-r2/`。
 
+实现与本报告已作为 `d15b5967e79bb394043eef45b647444ea704a040` 推送 `origin/codex/offline-foundation`。B02 九项整体执行包已派发，执行聊天已进入 active。首次远端 [CI](https://github.com/wangyule0379-max/Pourlune/actions/runs/39642700975) 当前 queued，尚无通过结论；后续按 tracking 继续核查。
+
 ## 本轮复验
 
 | 项目 | 独立结果与证据 |
