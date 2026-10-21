@@ -1,0 +1,48 @@
+00:00 +0: loading test/history_validation_test.dart
+00:00 +0: B01-R01 rejects completed undo frame at index 0
+00:00 +0 -1: B01-R01 rejects completed undo frame at index 0 [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => GameInstance>
+     Which: returned <Instance of 'GameInstance'>
+  
+  package:matcher                         expect
+  test/history_validation_test.dart 27:7  main.<fn>
+  
+00:00 +0 -1: B01-R01 rejects completed undo frame at index 1
+00:00 +0 -2: B01-R01 rejects completed undo frame at index 1 [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => GameInstance>
+     Which: returned <Instance of 'GameInstance'>
+  
+  package:matcher                         expect
+  test/history_validation_test.dart 27:7  main.<fn>
+  
+00:00 +0 -2: B01-R01 rejects conserved non-original first frame (extra=false)
+00:00 +0 -3: B01-R01 rejects conserved non-original first frame (extra=false) [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => GameInstance>
+     Which: returned <Instance of 'GameInstance'>
+  
+  package:matcher                         expect
+  test/history_validation_test.dart 39:9  main.<fn>
+  
+00:00 +0 -3: B01-R01 rejects conserved non-original first frame (extra=true)
+00:00 +0 -4: B01-R01 rejects conserved non-original first frame (extra=true) [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => GameInstance>
+     Which: returned <Instance of 'GameInstance'>
+  
+  package:matcher                         expect
+  test/history_validation_test.dart 39:9  main.<fn>
+  
+00:00 +0 -4: B01-R01 valid history before/after extra, restart and old embedded definition remains compatible
+00:00 +1 -4: Some tests failed.
+
+Failing tests:
+  test/history_validation_test.dart: B01-R01 rejects completed undo frame at index 0
+  test/history_validation_test.dart: B01-R01 rejects completed undo frame at index 1
+  test/history_validation_test.dart: B01-R01 rejects conserved non-original first frame (extra=false)
+  test/history_validation_test.dart: B01-R01 rejects conserved non-original first frame (extra=true)
+
+Consider enabling the flag chain-stack-traces to receive more detailed exceptions.
+For example, 'dart test --chain-stack-traces'.
