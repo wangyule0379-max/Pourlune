@@ -44,3 +44,7 @@
 ## 提交边界
 
 只提交本批生产组件、BoardView/控制器及样板同步、相关测试/QA工具、已审阅交付与证据、本独立报告和tracking。页面转场源码/依赖锁/原始UI不重做；不夹带 `docs/development/evidence/motion-polish/` 未验内容。实现推送后记录精确CI，旧终态CI不复查。用户F9模拟器继续保留运行状态。
+
+## 推送记录
+
+实现 `3134637f91c0cb59c26ba6905b557f48f6179e5f` 已推送 `origin/codex/offline-foundation`。GitHub连接器独立回读精确CI [39788815925](https://github.com/wangyule0379-max/Pourlune/actions/runs/39788815925) 为 in_progress，尚未宣称远端通过。后续文档提交不另要求CI。架构独立255890/5588设备已关闭，CLI已释放，用户F9保持原样。
