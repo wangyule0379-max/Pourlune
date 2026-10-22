@@ -66,3 +66,5 @@ T-R01 P2 关闭；T06 的已有双端明暗模式正常主入口衔接通过。T
 独立证据：`page-transitions-r01-evidence/`；作者修复证据：`../evidence/page-transitions/T-R01/`。通过后精确实现 CI 需另核对，旧 CI 成功不能代替。
 
 提交回读：实现及证据 `3cc35011bb0dceff783043c91be2e03db3761a39` 已推送 origin/codex/offline-foundation；对应 push CI39764795397 在 2026-10-22T10:40:18Z 为 in_progress，尚未远端通过。完整棋盘工作树保持未提交状态。
+
+远端终态复核：2026-10-22T10:57:20Z 通过 GitHub 连接器回读精确实现提交 3cc3501 的 run39764795397，completed/success；tests-and-android 与 ios-build 均 success，最后完成于10:50:27Z。证据 page-transitions-r01-evidence/remote-ci-final.json；不再重复轮询，不为跟踪文档提交要求新 CI。
