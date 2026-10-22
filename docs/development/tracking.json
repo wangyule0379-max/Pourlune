@@ -7,8 +7,8 @@
   "branch": "codex/offline-foundation",
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "Firebase receipt + M01-M08",
-  "current_status": "receipt_diagnosis_active_motion_dispatched",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:73",
+  "current_status": "motion_in_progress_firebase_receipt_external_dependency",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:74",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
   "delivery_path": "docs/development/deliveries/firebase-integration.md",
@@ -24,7 +24,7 @@
   "blockers": [
     {
       "id": "FI-E01",
-      "description": "Analytics/Crashlytics console receipt not verified; Android transport TLS/connection errors, iOS root cause unproven"
+      "description": "Native dev SDK logs locate iOS Analytics/Crashlytics TLS failures and Android Analytics connection closure/Crashlytics TLS handshake failure; service receipt remains unverified. Network path root cause unproven."
     },
     {
       "id": "FI-E02",
@@ -40,13 +40,13 @@
   "last_accepted_push": "origin/codex/offline-foundation",
   "ci_followup": {
     "commit": "44353c95599f4fb236bda7002d9ca65c129c42e0",
-    "status": "in_progress",
-    "conclusion": null,
+    "status": "completed",
+    "conclusion": "success",
     "run_ids": [
       39720915730
     ],
     "url": "https://github.com/wangyule0379-max/Pourlune/actions/runs/39720915730",
-    "next_action": "Check only this exact Firebase implementation run; B05 CI already completed."
+    "next_action": "Terminal success recorded; do not poll this run again."
   },
   "deferred_minor_findings": [
     {
@@ -61,7 +61,7 @@
     "F01-F08": "Firebase registration/config implementation accepted; 24 Python/23 Flutter and both offline builds independently passed; real dev runtime inspected. Analytics/Crashlytics receipt and Apple registration NOT passed."
   },
   "external_dependencies_path": "docs/development/dependencies/user-handoff.md",
-  "next_action": "Independently review bounded receipt diagnosis and M01-M08 when delivered; check exact Firebase implementation CI. External receipt/login wait must not block motion work.",
+  "next_action": "Accept M01-M08 when delivered. Firebase bounded diagnosis accepted; await accessible approved network before new dev receipt verification, do not repeat crash experiments or completed CI.",
   "account_handoff": {
     "confirmed_at": "2026-10-22",
     "source": "explicit_user_message",
@@ -101,13 +101,14 @@
     }
   },
   "receipt_diagnosis": {
-    "status": "in_progress",
+    "status": "diagnostic_evidence_accepted_receipt_blocked",
     "delivery_path": "docs/development/deliveries/firebase-receipt-diagnosis.md",
     "evidence_path": "docs/development/evidence/firebase-receipt-diagnosis/",
-    "scope": "Bounded per-platform receipt diagnosis; no TLS/proxy changes, production actions or repeated failed polling"
+    "scope": "Bounded per-platform receipt diagnosis; no TLS/proxy changes, production actions or repeated failed polling",
+    "acceptance_path": "docs/development/review/firebase-receipt-diagnosis-acceptance.md"
   },
   "motion_polish": {
-    "status": "dispatched",
+    "status": "in_progress",
     "authorized_on": "2026-10-22",
     "plan": "docs/pmpowers/plans/2026-10-22-motion-polish-execution.md",
     "delivery_path": "docs/development/deliveries/motion-polish.md",

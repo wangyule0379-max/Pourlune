@@ -57,3 +57,10 @@ Firebase 与广告项目需明确区分开发、测试及正式环境。配置�
 ## 本批注册及接入验收进展（2026-10-22）
 
 Pourlune独立Firebase项目pourlune-dev / pourlune-prod及四个双端App已建立并由架构独立核验；四份配置已由执行方取得，无需用户下载搬运。配置实现、双端可用运行与安全RC恢复已按独立报告限定范围通过。Analytics/Crashlytics实际收件仍未通过；Android运输诊断有连接/TLS失败，iOS根因待补证。Apple Developer标识注册需要恢复[已有账号登录](https://developer.apple.com/account/resources/identifiers/list)，不是新开户。Firebase生产注册不能替代Apple/Play注册；正式签名与发布仍待办。详细见[本批独立验收](../review/firebase-integration-acceptance.md)。
+
+
+## 2026-10-22：Firebase 收件定位新增依赖
+
+注册配置已验收且实现CI成功。有限实验已记录双端原生连接失败，详见 `../review/firebase-receipt-diagnosis-acceptance.md`；不需要重新建账号/项目或下载配置。需要核查当前访问路径到 app-analytics-services.com、firebase-settings.crashlytics.com、crashlyticsreports-pa.googleapis.com 的正常TLS连接，或提供已有获准可用网络再做一次dev收件复验。不关闭证书验证，不自动更改代理/安全设置；现有证据未确定具体网络根因。Android Analytics日志未暴露目标主机，不将其误标为上述某一个。控制台实际收件及可读崩溃栈仍未通过。
+
+动效M01–M08继续执行，本外部依赖不阻塞。Apple登录等此前事项不重复列出。
