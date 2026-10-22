@@ -32,7 +32,9 @@ class PourMotion {
   final Board before, after;
   final String instanceId;
   final bool reducedMotion;
-  Duration get duration => Duration(milliseconds: reducedMotion ? 180 : 900);
+  Duration get duration => Duration(
+    milliseconds: reducedMotion ? 180 : 660 + 80 * units.clamp(1, 4),
+  );
 }
 
 enum GameFeedback { select, pour, error, complete }

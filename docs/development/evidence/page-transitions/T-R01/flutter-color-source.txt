@@ -1,0 +1,10 @@
+/Users/wangyule/development/flutter/bin/cache/pkg/sky_engine/lib/ui/painting.dart
+  /// > [!NOTE]
+  /// > Each color is stored as floating-point color components, where the final
+  /// > value of each component is approximated by storing `c / 255`, where `c`
+  /// is one of the four components (alpha, red, green, blue).
+  /// {@endtemplate}
+  const Color(int value)
+    : this._fromARGBC(value >> 24, value >> 16, value >> 8, value, ColorSpace.sRGB);
+
+  /// Construct a color with floating-point color components.

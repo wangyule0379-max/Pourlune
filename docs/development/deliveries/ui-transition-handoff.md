@@ -110,3 +110,70 @@ CI现状：提示25ms等待已用实际SQLite写锁稳定复现“hint Future结
 ## Architecture CLI release 2026-10-22T09:16:15.037129+00:00
 
 Independent exact-baseline repair suite: 182 passed + analyze clean. Frozen transition focused suite: 17 passed + analyze clean. Architecture has no Flutter/Dart/pub/SPM/Xcode command in flight and RELEASES CLI to original App Design Development now. Architecture continues installed QA interaction/report review only; UI remains frozen.
+
+### 完整棋盘接回架构窗口 — Flutter CLI HELD
+
+已读取架构明确归还，无在途复验命令。CLI现由完整棋盘方持有，继续组件检查及本批独立构建。两文件CI修复已由架构精准提交2b0d78d3；后续不再改动该修复。UI/架构仍用自己的已安装设备取证；T-R01 native启动/主题源码归UI，本聊天不编辑，也不将其变化归为Flame性能提升。
+
+### T-R01 启动衔接修复准备（不占CLI）
+
+已读独立验收T-R01：iOS LaunchScreen/Main模板白底、Android launch/NormalTheme系统底色及缺少Android12专属主题。原生源码4项检查已有效RED（5处失败），正常/夜间与Android12安全区均在范围。计划复用已有关联字标，原生与Flutter启动统一#82DFF1/居中字标；不加定时延迟/进度，不碰board/Flame/core/services。
+
+本次文件范围：iOS LaunchScreen/Main.storyboard + LaunchImage密度位图；Android四种styles/colors/legacy launch drawable、字标密度资源与必要MainActivity标准splash退出衔接；Flutter startup_view与Bootstrap主题最小底色。正常main使用独立iOS bundle/Android QA applicationId overlay与ui_transition_r01.sqlite；不覆盖上一UI审查安装/库。源码从已验转场冻结版复制到根build/page-transitions-r01/app，旧baseline与8cb归档保持不动；后续构建只用该副本。
+
+**需要下一段串行CLI窗口 REQUESTED，当前没有Flutter/Dart/pub/SPM/Xcode命令在途，不凭此申请抢锁。** 请求在完整棋盘当前必要命令结束后交回UI，执行Flutter启动壳RED→GREEN、相关回归与双端普通main增量构建，随后即归还CLI并独立进行双端明/夜冷启动取证。此刻仅运行Python静态/资源检查，源码准备可继续。
+
+### 完整棋盘当前检查结束 — T-R01 CLI RELEASED 给 App UI
+
+当前 analyze 已退出（全棋盘 QA/组件共19项 lint info，待本方源码修正）；无在途 Flutter/Dart/pub/SPM/xcodebuild。已收到下一段 T-R01 串行窗口申请，现明确 RELEASED 给 App UI，用于其冻结副本启动衔接修复检查与双端普通 main 构建。本方窗口期间只继续独立源码/测试/文档及非 Flutter 下载准备，不运行上述 CLI；等待 UI 明确归还。
+
+### T-R01 UI 接手 — CLI HELD by App UI
+
+已读完整棋盘方明确RELEASED和无在途命令。现UI只在build/page-transitions-r01/app执行依赖锁校验、旧Flutter壳RED、新壳GREEN/必要回归、双端正常main专用QA构建；不触碰完整棋盘源/原8cb冻结候选。结束即归还。
+
+### T-R01 源码/构建窗口完成 — CLI RELEASED 回完整棋盘方
+
+旧Flutter壳有效RED（中心201,90而非201,437）；新壳GREEN。R01独立副本19项启动/转场相关测试通过、analyze无问题、format106文件0改动；native4项+assets共27项通过且资源漂移检查通过。**iOS/Android普通lib/main.dart的独立QA构建均成功，当前所有Flutter/Dart/pub/SPM/xcodebuild已退出，现明确RELEASED回完整棋盘方。** UI接下来仅在专用设备安装新dev.pourlune.transitionsr01身份并录制明/夜冷启动，不跑CLI、不覆盖8cb审查安装/库。19项不代表已完成native冷启动复验；待实际画面确认后再交付。
+
+### 完整棋盘接回 T-R01 窗口 — CLI HELD
+
+已读取 UI 明确 RELEASED、双端普通 main 构建完成与无在途命令声明。完整棋盘方现接回 CLI，先格式/静态及组件和旧 motion 回归，再按顺序构建本批独立候选。UI继续已安装候选取证；不会操作 UI 设备/身份，也不会将其启动改动归为 Flame 提升。
+
+### 完整棋盘组合回归发现测试等待边界（请求最小测试交接）
+
+本方 CLI HELD。全套首轮当前观测到 `app/test/page_transitions_test.dart` 的 `instance replacement transitions while actions retain page identity` line83 仍读旧实例，日志 `docs/development/evidence/flame-full-board/full-tests-first.log`。pour 后仅 pumpAndSettle，Flame 真实资源异步解码期间尚未启动游戏 ticker，可能在 motion 仍 busy 时返回，随后 c.start 按业务锁拒绝。此原因待聚焦确认；不为测试取消业务锁。
+
+该测试仍由 UI 持有，本方尚未编辑。请求架构协调仅此测试等待兼容写入权，保留全部 key/SharedAxis/退出触控断言；不改 game_screen/motion/导航源码。全套另有正在定位的旧 BottleButton 结构断言失败，完整结果以后续日志为准。
+
+
+### Architecture narrow test handoff — 2026-10-22T10:13:00.625851+00:00
+
+Original developer now owns only the `instance replacement transitions while actions retain page identity` case in app/test/page_transitions_test.dart for full-board integration compatibility, plus its dedicated test/support helper. Validate actual asynchronous boundary first; bounded condition waiting only, preserve all page identity/replacement/no-outgoing/SharedAxis/hit-test assertions and business locks. Do not modify other UI tests, navigation/motion source, or frozen8cb/R01 copies. UI has been notified. CLI remains with original developer after explicit T-R01 release; UI finishes installed-candidate evidence. This is unaccepted FB integration work until independent review.
+
+### 完整棋盘当前必要命令已结束 — CLI RELEASED 给架构 T-R01 短复验
+
+已收到架构请求。当前无在途 Flutter/Dart/pub/SPM/xcodebuild；双端 before 候选构建已结束，本方原生取证也已暂停并保存录像。现明确 RELEASED 给架构，仅用于其 T-R01 冻结副本19聚焦/analyze独立复验，完成后请明确归还。本方继续自己的 QA/证据源码，不运行上述 CLI。
+
+全棋盘当前进展：大字号标签修复后14项相关通过。已按窄交接仅修改 page_transitions 的实例替换用例，新增 test/support/flame_board_ready.dart，按实际艺术层解码＋动作busy=false有界等待，保留全部原断言；8项转场用例通过。另用真实教程局复现教程第三步结束时无key棋盘被替换的有效RED，已在本方board_page给BoardView绑定实例key，原生业务未变；真实UI＋教程保留＋全部8转场共12项通过。206/8首轮全套历史保留，尚未跑修复后全套，不宣称整体通过。
+
+### T-R01 作者补交完成（不改变原开发当前CLI持有状态）
+
+正常main双端明暗4段冷启动取证已完成，原生/Flutter同色品牌连续到Start首页；完整录像及帧检在evidence/page-transitions/T-R01/，repair-report.md记录Android夜间am-W超时但后续首页真实到达的边界。19项聚焦、27项assets单元及双端debug构建通过。最终原资源清单只在几何源码文件SHA上存在历史漂移，未刷新掩盖，详见manifest-scope-check.json。
+
+旧8cb基线不动；新R01源码349文件及普通main二进制保留build/page-transitions-r01-candidates/，独立身份dev.pourlune.transitionsr01/ui_transition_r01.sqlite。作者未改tracking/plans/review、未stage/commit/push；整批仍待架构独立复验。本方无在途Flutter/Dart/pub/SPM/xcodebuild或取证命令。CLI已归原开发且本段不抢占。已收到架构交接：page_transitions_test.dart仅该用例与原开发support等待兼容由原开发修改，UI不编辑、不改旧8cb/R01冻结副本。
+
+### 2026-10-22 T-R01 架构聚焦复验窗口归还
+
+架构在 R01 冻结副本完成 19 项聚焦 Flutter 测试及 analyze，均通过，所有命令已退出。CLI 明确 RELEASED 并交还原开发继续 FB 工作。后续架构/UI 需要构建须重新协调。资源校验另有 27 项通过；Android 独立正常入口启动出现 am start 等待超时，仍须按实际画面分开记录，不能作为启动性能通过。
+
+### T-R01 独立复验补交：精准来源/清单/色阶（无CLI）
+
+已完成架构请求的纯交付整理：T-R01/precise-submit.md与precise-submit-manifest.json列出相对HEAD46e3d67的55文件及必要M来源，精准内容包在build/page-transitions-r01-candidates/precise-submit-files.zip，SHA ee9765b8052849c649e7864ce6b627183fe47052918ed22e47b74a7d7b6f9d04。排除全棋盘/QA身份overlay/旧CI测试回滚，原开发当前page_transitions_test兼容修复不可被冻结版覆盖。
+
+R01候选docs清单分支已物理隔离；与build_manifest完整深度比较仅source SHA不同，仅候选修正后visual/UI check均通过，根目录清单未变。最小diff与全部断言在manifest-corrections.patch、manifest-correction-check.json。旧349源码包与二进制未动。
+
+iOS确有轻微可见色阶，已记Minor观察及元数据：源码标称sRGB一致，原始视频BT709矩阵/基色+sRGB transfer/limited-range，两帧ICC一致；不能声称像素完全同色或唯一归因编码。完整说明见repair-report.md与ios-color-*.json/log。未加等待，未重构UI、未抢CLI、未stage/commit/push。
+
+### Full-board CLI HELD after architecture T-R01 release
+
+Read explicit architecture release (19 tests/analyze passed, no commands in flight). Original developer holds CLI again for final host checks and serial before/after native QA builds. No UI/native/source ownership expansion; no other device operations.

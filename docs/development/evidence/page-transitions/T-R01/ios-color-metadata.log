@@ -1,0 +1,40 @@
+/tmp/pourlune-startup-color.swift:8:66: warning: expression implicitly coerced from 'CFDictionary?' to 'Any'
+ 6 | let tracks = try await asset.loadTracks(withMediaType: .video)
+ 7 | for track in tracks {
+ 8 |  for format in try await track.load(.formatDescriptions) { print(CMFormatDescriptionGetExtensions(format)) }
+   |                                                                  |- warning: expression implicitly coerced from 'CFDictionary?' to 'Any'
+   |                                                                  |- note: provide a default value to avoid this warning
+   |                                                                  |- note: force-unwrap the value to avoid this warning
+   |                                                                  `- note: explicitly cast to 'Any' with 'as Any' to silence this warning
+ 9 | }
+10 | let generator = AVAssetImageGenerator(asset: asset)
+
+Optional({
+    CVFieldCount = 1;
+    CVImageBufferChromaLocationBottomField = Left;
+    CVImageBufferChromaLocationTopField = Left;
+    CVImageBufferColorPrimaries = "ITU_R_709_2";
+    CVImageBufferTransferFunction = "IEC_sRGB";
+    CVImageBufferYCbCrMatrix = "ITU_R_709_2";
+    Depth = 24;
+    FormatName = "H.264";
+    FullRangeVideo = 0;
+    RevisionLevel = 0;
+    SampleDescriptionExtensionAtoms =     {
+        avcC = {length = 36, bytes = 0x01640032 ffe10011 27640032 ac565013 ... 28ee3cb0 fdf8f800 };
+    };
+    SpatialQuality = 512;
+    TemporalQuality = 512;
+    VerbatimSampleDescription = {length = 152, bytes = 0x00000098 61766331 00000000 00000001 ... 000d0001 00000000 };
+    Version = 0;
+})
+requested=2.0 actual=1.9716666666666667 space=nil
+requested=3.2 actual=3.3866666666666667 space=nil
+
+PNG profiles:
+/private/tmp/pourlune-startup-r01-ios-light/02.00.png
+  profile: QuickTime 'nclc' Video (1,13,1)
+/private/tmp/pourlune-startup-r01-ios-light/03.20.png
+  profile: QuickTime 'nclc' Video (1,13,1)
+/Volumes/data/App Development/Pourlune/docs/development/evidence/page-transitions/T-R01/ios-light/home.png
+  profile: sRGB IEC61966-2.1

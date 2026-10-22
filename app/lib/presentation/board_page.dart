@@ -11,6 +11,7 @@ import '../l10n/app_localizations.dart';
 import 'bottle.dart';
 import 'labels.dart';
 import 'knit_components.dart';
+import 'motion.dart';
 
 bool _hasLegalMove(Board board) {
   for (var from = 0; from < board.length; from++) {
@@ -158,140 +159,166 @@ class _BoardViewState extends State<BoardView> with TickerProviderStateMixin {
               );
             }
           }
-          return AnimatedBuilder(
-            animation: Listenable.merge([_pour, _error]),
-            builder: (context, _) {
-              final m = w.motion, t = _pour.value;
-              final flow = ((t - .28) / .46).clamp(0.0, 1.0);
-              final returning = t < .78
-                  ? 1.0
-                  : 1 - Curves.easeInOut.transform((t - .78) / .22);
-              final envelope = t < .10
-                  ? 0.0
-                  : t < .28
-                  ? Curves.easeInOut.transform((t - .10) / .18)
-                  : returning;
-              final liftEnvelope = t < .10
-                  ? Curves.easeOut.transform(t / .10)
-                  : returning;
-              final direction =
-                  m == null || positions[m.to].dx >= positions[m.from].dx
-                  ? 1.0
-                  : -1.0;
-              final angle = m == null || _reduced
-                  ? 0.0
-                  : direction * 1.05 * envelope;
-              final travel = m == null || _reduced
-                  ? Offset.zero
-                  : (positions[m.to] -
-                            positions[m.from] +
-                            Offset(-direction * 52, -85)) *
-                        envelope;
-              final lift = m == null || _reduced ? 0.0 : 14 * liftEnvelope;
-              var offset = 0;
-              Widget bottle(int i) => AnimatedContainer(
-                duration: Duration(milliseconds: _reduced ? 80 : 140),
-                transform: Matrix4.translationValues(
-                  0,
-                  w.selected == i && !_reduced ? -8 : 0,
-                  0,
-                ),
-                margin: const EdgeInsets.symmetric(horizontal: 3),
-                child: Transform.translate(
-                  offset: Offset(
-                    w.rejectedBottle == i && !_reduced
-                        ? math.sin(_error.value * math.pi * 6) *
-                              4 *
-                              (1 - _error.value)
-                        : 0,
-                    0,
-                  ),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: w.rejectedBottle == i && _error.isAnimating
-                          ? Border.all(color: ink, width: 2)
-                          : null,
-                    ),
-                    child: BottleButton(
-                      key: Key('${w.keyPrefix}-$i'),
-                      index: i,
-                      liquid: board[i],
-                      visualLiquid: m == null
-                          ? null
-                          : _liquid(i, m.units * flow),
-                      angle: i == m?.from ? angle : 0,
-                      lift: i == m?.from ? lift : 0,
-                      target: i < w.state.puzzle.targets.length
-                          ? w.state.puzzle.targets[i]
-                          : null,
-                      selected:
-                          w.selected == i ||
-                          (m != null && _reduced && (i == m.from || i == m.to)),
-                      suggested: w.suggested == i,
-                      width: width,
-                      showSymbols: w.settings.colorSymbols,
-                      strongContrast: w.settings.strongContrast,
-                      semanticLabel:
-                          '${l.bottleSemantics(i + 1, i < w.state.puzzle.targets.length && w.state.puzzle.targets[i] != null ? l.targetLabel(colorLabel(l, w.state.puzzle.targets[i]!)) : l.bufferLabel, board[i].isEmpty ? l.emptyLabel : l.contentsLabel(board[i].map((c) => colorLabel(l, c)).join(', ')), board[i].length)}${w.suggested == i ? ' ${l.suggestedTarget}' : ''}',
-                      onTap: w.onTap == null
-                          ? null
-                          : () {
-                              if (w.settings.haptics) {
-                                HapticFeedback.selectionClick();
-                              }
-                              w.onTap!(i);
-                            },
-                    ),
-                  ),
-                ),
-              );
-              return Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Column(
-                    children: [
-                      for (final n in rows)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            for (final i in List.generate(n, (_) => offset++))
-                              if (i == m?.from)
-                                SizedBox(width: width + 6, height: 184)
-                              else
-                                bottle(i),
-                          ],
+          return TweenAnimationBuilder<double>(
+            key: ValueKey('arrival-${w.state.id}'),
+            duration: _reduced ? Duration.zero : KnitMotion.board,
+            tween: Tween(begin: 0, end: 1),
+            builder: (context, arrival, _) => AnimatedBuilder(
+              animation: Listenable.merge([_pour, _error]),
+              builder: (context, _) {
+                final m = w.motion, t = _pour.value;
+                final flow = ((t - .28) / .46).clamp(0.0, 1.0);
+                final returning = t < .78
+                    ? 1.0
+                    : 1 - Curves.easeInOut.transform((t - .78) / .22);
+                final envelope = t < .10
+                    ? 0.0
+                    : t < .28
+                    ? Curves.easeInOut.transform((t - .10) / .18)
+                    : returning;
+                final liftEnvelope = t < .10
+                    ? Curves.easeOut.transform(t / .10)
+                    : returning;
+                final direction =
+                    m == null || positions[m.to].dx >= positions[m.from].dx
+                    ? 1.0
+                    : -1.0;
+                final angle = m == null || _reduced
+                    ? 0.0
+                    : direction * 1.05 * envelope;
+                final travel = m == null || _reduced
+                    ? Offset.zero
+                    : (positions[m.to] -
+                              positions[m.from] +
+                              Offset(-direction * 52, -85)) *
+                          envelope;
+                final lift = m == null || _reduced ? 0.0 : 14 * liftEnvelope;
+                var offset = 0;
+                Widget bottle(int i) {
+                  final entered = _reduced
+                      ? 1.0
+                      : ((arrival * 290 - i * 35) / 80).clamp(0.0, 1.0);
+                  return Opacity(
+                    alwaysIncludeSemantics: true,
+                    opacity: entered,
+                    child: Transform.translate(
+                      offset: Offset(
+                        0,
+                        _reduced
+                            ? 0
+                            : 8 * (1 - KnitMotion.curve.transform(entered)),
+                      ),
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: _reduced ? 80 : 140),
+                        transform: Matrix4.translationValues(
+                          0,
+                          w.selected == i && !_reduced ? -8 : 0,
+                          0,
                         ),
-                    ],
-                  ),
-                  if (m != null && !_reduced && t > .28 && t < .76)
-                    Positioned.fill(
-                      child: IgnorePointer(
-                        child: CustomPaint(
-                          painter: _StreamPainter(
-                            from:
-                                positions[m.from] +
-                                travel +
-                                Offset(
-                                  width / 2 + math.sin(angle) * 60,
-                                  84 - math.cos(angle) * 60 - lift,
-                                ),
-                            to: positions[m.to] + Offset(width / 2, 24),
-                            color: liquidColors[m.before[m.from].last]!,
-                            progress: flow,
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        child: Transform.translate(
+                          offset: Offset(
+                            w.rejectedBottle == i && !_reduced
+                                ? math.sin(_error.value * math.pi * 6) *
+                                      4 *
+                                      (1 - _error.value)
+                                : 0,
+                            0,
+                          ),
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              border:
+                                  w.rejectedBottle == i && _error.isAnimating
+                                  ? Border.all(color: ink, width: 2)
+                                  : null,
+                            ),
+                            child: BottleButton(
+                              key: Key('${w.keyPrefix}-$i'),
+                              index: i,
+                              liquid: board[i],
+                              visualLiquid: m == null
+                                  ? null
+                                  : _liquid(i, m.units * flow),
+                              angle: i == m?.from ? angle : 0,
+                              lift: i == m?.from ? lift : 0,
+                              target: i < w.state.puzzle.targets.length
+                                  ? w.state.puzzle.targets[i]
+                                  : null,
+                              selected:
+                                  w.selected == i ||
+                                  (m != null &&
+                                      _reduced &&
+                                      (i == m.from || i == m.to)),
+                              suggested: w.suggested == i,
+                              width: width,
+                              showSymbols: w.settings.colorSymbols,
+                              strongContrast: w.settings.strongContrast,
+                              semanticLabel:
+                                  '${l.bottleSemantics(i + 1, i < w.state.puzzle.targets.length && w.state.puzzle.targets[i] != null ? l.targetLabel(colorLabel(l, w.state.puzzle.targets[i]!)) : l.bufferLabel, board[i].isEmpty ? l.emptyLabel : l.contentsLabel(board[i].map((c) => colorLabel(l, c)).join(', ')), board[i].length)}${w.suggested == i ? ' ${l.suggestedTarget}' : ''}',
+                              onTap: w.onTap == null
+                                  ? null
+                                  : () {
+                                      if (w.settings.haptics) {
+                                        HapticFeedback.selectionClick();
+                                      }
+                                      w.onTap!(i);
+                                    },
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  if (m != null)
-                    Positioned(
-                      left: positions[m.from].dx - 3 + travel.dx,
-                      top: positions[m.from].dy + travel.dy,
-                      child: bottle(m.from),
+                  );
+                }
+
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Column(
+                      children: [
+                        for (final n in rows)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              for (final i in List.generate(n, (_) => offset++))
+                                if (i == m?.from)
+                                  SizedBox(width: width + 6, height: 184)
+                                else
+                                  bottle(i),
+                            ],
+                          ),
+                      ],
                     ),
-                ],
-              );
-            },
+                    if (m != null && !_reduced && t > .28 && t < .76)
+                      Positioned.fill(
+                        child: IgnorePointer(
+                          child: CustomPaint(
+                            painter: _StreamPainter(
+                              from:
+                                  positions[m.from] +
+                                  travel +
+                                  Offset(
+                                    width / 2 + math.sin(angle) * 60,
+                                    84 - math.cos(angle) * 60 - lift,
+                                  ),
+                              to: positions[m.to] + Offset(width / 2, 24),
+                              color: liquidColors[m.before[m.from].last]!,
+                              progress: flow,
+                            ),
+                          ),
+                        ),
+                      ),
+                    if (m != null)
+                      Positioned(
+                        left: positions[m.from].dx - 3 + travel.dx,
+                        top: positions[m.from].dy + travel.dy,
+                        child: bottle(m.from),
+                      ),
+                  ],
+                );
+              },
+            ),
           );
         },
       ),
@@ -591,6 +618,7 @@ class _BoardPageState extends State<BoardPage> {
         ),
         if (kDebugMode)
           ExpansionTile(
+            key: const PageStorageKey('board-diagnostics-state'),
             title: const Text('Board diagnostics'),
             children: [
               Text(

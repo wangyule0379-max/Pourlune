@@ -1,0 +1,431 @@
+--- frozen/app/lib/presentation/motion.dart
++++ app/lib/presentation/motion.dart
+@@ -1,4 +1,5 @@
+ import 'package:flutter/material.dart';
++import 'package:animations/animations.dart';
+ 
+ /// Presentation only. These never gate a save or dispatch a game action.
+ abstract final class KnitMotion {
+@@ -12,6 +13,8 @@
+   static const curve = Curves.easeOutCubic;
+ }
+ 
++enum KnitPageTransition { fadeThrough, horizontal, scaled }
++
+ /// Two visual pages at most. The outgoing page cannot receive any input/focus
+ /// or contribute semantics. No animation callback performs navigation.
+ class PageMotion extends StatefulWidget {
+@@ -20,10 +23,14 @@
+     required this.page,
+     required this.child,
+     this.back = false,
++    this.transition = KnitPageTransition.fadeThrough,
++    this.animateInitial = false,
+     this.immediate = false,
+     this.retainPrevious = true,
+   });
+   final Object page;
++  final KnitPageTransition transition;
++  final bool animateInitial;
+   final Widget child;
+   final bool back, immediate, retainPrevious;
+   @override
+@@ -35,7 +42,8 @@
+   late final AnimationController _animation =
+       AnimationController(vsync: this, duration: KnitMotion.page, value: 1)
+         ..addStatusListener((status) {
+-          if (status == AnimationStatus.completed &&
++          if ((status == AnimationStatus.completed ||
++                  status == AnimationStatus.dismissed) &&
+               _outgoing != null &&
+               mounted) {
+             setState(() => _outgoing = null);
+@@ -43,11 +51,15 @@
+         });
+   Widget? _outgoing;
+   Object? _oldPage;
+-  bool _reduced = false;
++  bool _reduced = false, _back = false;
+   @override
+   void initState() {
+     super.initState();
+     WidgetsBinding.instance.addObserver(this);
++    if (widget.animateInitial) {
++      _animation.duration = KnitMotion.shortFade;
++      _animation.forward(from: 0);
++    }
+   }
+ 
+   @override
+@@ -59,7 +71,7 @@
+ 
+   void _finish() {
+     _outgoing = null;
+-    _animation.value = 1;
++    _animation.value = _back ? 0 : 1;
+   }
+ 
+   @override
+@@ -68,9 +80,16 @@
+     if (widget.immediate || _reduced) {
+       _finish();
+     } else if (oldWidget.page != widget.page) {
++      _outgoing = null;
++      _oldPage = oldWidget.page;
++      _back = widget.back;
++      _animation.duration = KnitMotion.page;
++      if (_back) {
++        _animation.reverse(from: 1);
++      } else {
++        _animation.forward(from: 0);
++      }
+       _outgoing = widget.retainPrevious ? oldWidget.child : null;
+-      _oldPage = oldWidget.page;
+-      _animation.forward(from: 0);
+     }
+   }
+ 
+@@ -86,71 +105,86 @@
+     super.dispose();
+   }
+ 
+-  @override
+-  Widget build(BuildContext context) {
+-    final ease = _animation.drive(CurveTween(curve: KnitMotion.curve));
+-    final direction = widget.back ? -1.0 : 1.0;
+-    return Stack(
+-      fit: StackFit.expand,
+-      children: [
+-        if (_outgoing != null)
+-          IgnorePointer(
+-            key: const Key('page-outgoing'),
+-            child: ExcludeSemantics(
+-              child: ExcludeFocus(
+-                child: TickerMode(
+-                  enabled: false,
+-                  child: FadeTransition(
+-                    opacity: ReverseAnimation(ease),
+-                    child: SlideTransition(
+-                      position: ease.drive(
+-                        Tween(
+-                          begin: Offset.zero,
+-                          end: Offset(-.025 * direction, 0),
+-                        ),
+-                      ),
+-                      child: KeyedSubtree(
+-                        key: ValueKey(_oldPage),
+-                        child: _outgoing!,
+-                      ),
+-                    ),
+-                  ),
++  Widget _transition(Widget child, {required bool incoming}) {
++    // Same primary/secondary contract as a pushed/popped PageRoute. We keep a
++    // bounded host because PageTransitionSwitcher may retain many old children.
++    final Animation<double> primary = _back
++        ? (incoming ? kAlwaysCompleteAnimation : _animation)
++        : (incoming ? _animation : kAlwaysCompleteAnimation);
++    final Animation<double> secondary = _back
++        ? (incoming ? _animation : kAlwaysDismissedAnimation)
++        : (incoming ? kAlwaysDismissedAnimation : _animation);
++    if (widget.transition == KnitPageTransition.fadeThrough) {
++      return FadeThroughTransition(
++        animation: primary,
++        secondaryAnimation: secondary,
++        fillColor: Colors.transparent,
++        child: child,
++      );
++    }
++    return SharedAxisTransition(
++      animation: primary,
++      secondaryAnimation: secondary,
++      transitionType: widget.transition == KnitPageTransition.horizontal
++          ? SharedAxisTransitionType.horizontal
++          : SharedAxisTransitionType.scaled,
++      fillColor: Colors.transparent,
++      child: child,
++    );
++  }
++
++  @override
++  Widget build(BuildContext context) => Stack(
++    fit: StackFit.expand,
++    children: [
++      if (_outgoing != null)
++        IgnorePointer(
++          key: const Key('page-outgoing'),
++          child: ExcludeSemantics(
++            child: ExcludeFocus(
++              child: TickerMode(
++                enabled: false,
++                child: _transition(
++                  KeyedSubtree(key: ValueKey(_oldPage), child: _outgoing!),
++                  incoming: false,
+                 ),
+               ),
+             ),
+           ),
+-        FocusScope(
+-          key: ValueKey(widget.page),
+-          autofocus: true,
+-          child: FadeTransition(
+-            key: const Key('page-enter'),
+-            opacity: ease,
+-            alwaysIncludeSemantics: true,
+-            child: SlideTransition(
+-              position: ease.drive(
+-                Tween(begin: Offset(.04 * direction, 0), end: Offset.zero),
+-              ),
+-              child: widget.child,
+-            ),
+-          ),
+         ),
+-      ],
+-    );
+-  }
+-}
++      FocusScope(
++        key: ValueKey(widget.page),
++        autofocus: true,
++        child: KeyedSubtree(
++          key: const Key('page-enter'),
++          child: _transition(widget.child, incoming: true),
++        ),
++      ),
++    ],
++  );
++}
++
++final _dialogOpen = Expando<bool>();
+ 
+ Future<T?> showKnitDialog<T>({
+   required BuildContext context,
+   required WidgetBuilder builder,
+-}) {
++}) async {
+   final navigator = Navigator.of(context, rootNavigator: true);
+-  return navigator.push<T>(
+-    _KnitDialogRoute<T>(
+-      context: context,
+-      builder: builder,
+-      themes: InheritedTheme.capture(from: context, to: navigator.context),
+-    ),
+-  );
++  // A repeated confirmation must not dispatch the same action twice.
++  if (_dialogOpen[navigator] == true) return null;
++  _dialogOpen[navigator] = true;
++  try {
++    return await navigator.push<T>(
++      _KnitDialogRoute<T>(
++        context: context,
++        builder: builder,
++        themes: InheritedTheme.capture(from: context, to: navigator.context),
++      ),
++    );
++  } finally {
++    _dialogOpen[navigator] = null;
++  }
+ }
+ 
+ class _KnitDialogRoute<T> extends DialogRoute<T> {
+@@ -177,13 +211,29 @@
+     Widget child,
+   ) {
+     if (MediaQuery.disableAnimationsOf(context)) return child;
+-    final eased = animation.drive(CurveTween(curve: KnitMotion.curve));
+-    return FadeTransition(
+-      opacity: eased,
+-      child: ScaleTransition(
+-        scale: eased.drive(Tween(begin: .96, end: 1.0)),
+-        child: child,
+-      ),
++    return FadeScaleTransition(animation: animation, child: child);
++  }
++}
++
++/// Covers framework-owned routes (licenses and license detail) without migrating
++/// the existing Material widgets to material_ui or adding a second navigation.
++class KnitRouteTransitions extends PageTransitionsBuilder {
++  const KnitRouteTransitions();
++  @override
++  Widget buildTransitions<T>(
++    PageRoute<T> route,
++    BuildContext context,
++    Animation<double> animation,
++    Animation<double> secondaryAnimation,
++    Widget child,
++  ) {
++    if (MediaQuery.disableAnimationsOf(context)) return child;
++    return SharedAxisTransition(
++      animation: animation,
++      secondaryAnimation: secondaryAnimation,
++      transitionType: SharedAxisTransitionType.horizontal,
++      fillColor: Colors.transparent,
++      child: child,
+     );
+   }
+ }
+--- frozen/app/lib/presentation/game_screen.dart
++++ app/lib/presentation/game_screen.dart
+@@ -40,6 +40,8 @@
+   bool _inForeground = true, _audioPaused = false;
+   bool _pauseOpen = false;
+   GamePage _motionPage = GamePage.home;
++  String? _motionInstance;
++  KnitPageTransition _transition = KnitPageTransition.fadeThrough;
+   bool _motionBack = false, _retainPrevious = true;
+   String? _warmedInstance;
+   void _warmUpcoming() {
+@@ -396,7 +398,31 @@
+   Widget build(BuildContext context) => ListenableBuilder(
+     listenable: c,
+     builder: (context, _) {
+-      if (_motionPage != c.page) {
++      final instance =
++          {
++            GamePage.board,
++            GamePage.completion,
++            GamePage.reward,
++          }.contains(c.page)
++          ? c.current?.id
++          : null;
++      if (_motionPage != c.page || _motionInstance != instance) {
++        final previous = _motionPage;
++        final related =
++            (previous == GamePage.settings && c.page == GamePage.rules) ||
++            (previous == GamePage.rules && c.page == GamePage.settings);
++        final detail =
++            (previous == GamePage.collection && c.page == GamePage.scene) ||
++            (previous == GamePage.scene && c.page == GamePage.collection);
++        _transition = c.page == GamePage.board || related
++            ? KnitPageTransition.horizontal
++            : detail ||
++                  c.page == GamePage.completion ||
++                  c.page == GamePage.reward ||
++                  (previous == GamePage.reward && c.page == GamePage.scene) ||
++                  (previous == GamePage.completion && c.page == GamePage.scene)
++            ? KnitPageTransition.scaled
++            : KnitPageTransition.fadeThrough;
+         _motionBack =
+             c.page == GamePage.home ||
+             (_motionPage == GamePage.rules && c.page == GamePage.settings) ||
+@@ -406,6 +432,7 @@
+         _retainPrevious =
+             _motionPage != GamePage.board && c.page != GamePage.board;
+         _motionPage = c.page;
++        _motionInstance = instance;
+       }
+       final title = switch (c.page) {
+         GamePage.chapters => l.chapters,
+@@ -483,8 +510,11 @@
+                     page: (
+                       c.page,
+                       c.page == GamePage.scene ? c.selectedScene : '',
++                      instance,
+                     ),
+                     back: _motionBack,
++                    transition: _transition,
++                    animateInitial: true,
+                     retainPrevious: _retainPrevious,
+                     immediate: c.phase == SavePhase.failed,
+                     child: SingleChildScrollView(
+--- frozen/app/lib/presentation/navigation_pages.dart
++++ app/lib/presentation/navigation_pages.dart
+@@ -2,6 +2,9 @@
+ 
+ import 'package:flutter/foundation.dart';
+ import 'package:flutter/material.dart';
++
++import 'motion.dart';
++
+ import 'package:intl/intl.dart';
+ import 'package:pourlune_core/pourlune_core.dart';
+ 
+@@ -369,7 +372,7 @@
+       widget.onToday();
+       return;
+     }
+-    await showDialog<void>(
++    await showKnitDialog<void>(
+       context: context,
+       builder: (context) => AlertDialog(
+         title: Text(date),
+--- frozen/app/lib/presentation/pourlune_app.dart
++++ app/lib/presentation/pourlune_app.dart
+@@ -5,6 +5,7 @@
+ import '../application/game_audio.dart';
+ import '../l10n/app_localizations.dart';
+ import 'bottle.dart';
++import 'motion.dart';
+ import 'game_screen.dart';
+ import 'knit_components.dart';
+ 
+@@ -42,6 +43,12 @@
+             ? Colors.white
+             : const Color(0xff82dff1),
+         useMaterial3: true,
++        pageTransitionsTheme: PageTransitionsTheme(
++          builders: {
++            for (final platform in TargetPlatform.values)
++              platform: const KnitRouteTransitions(),
++          },
++        ),
+         textTheme: ThemeData.light().textTheme.apply(
+           fontFamily: 'Nunito',
+           bodyColor: ink,
+--- frozen/app/pubspec.yaml
++++ app/pubspec.yaml
+@@ -22,6 +22,7 @@
+   firebase_remote_config: 7.0.0
+   url_launcher: 6.3.3
+   flame: 1.38.2
++  animations: 3.0.0
+ dev_dependencies:
+   flutter_test:
+     sdk: flutter
+--- frozen/app/pubspec.lock
++++ app/pubspec.lock
+@@ -9,6 +9,14 @@
+       url: "https://pub.dev"
+     source: hosted
+     version: "1.3.78"
++  animations:
++    dependency: "direct main"
++    description:
++      name: animations
++      sha256: "5ec868ffa78851e6f3f32e9377b780c7ae2087a5523d8b5e6df59bd8287ac5dd"
++      url: "https://pub.dev"
++    source: hosted
++    version: "3.0.0"
+   args:
+     dependency: transitive
+     description:
+@@ -129,6 +137,14 @@
+       url: "https://pub.dev"
+     source: hosted
+     version: "3.0.7"
++  cupertino_ui:
++    dependency: transitive
++    description:
++      name: cupertino_ui
++      sha256: a47c4e7c66fd7444a063a602597fceb238f705c3f6b1322bc0053d0a2638ee6e
++      url: "https://pub.dev"
++    source: hosted
++    version: "1.1.4"
+   fake_async:
+     dependency: transitive
+     description:
+@@ -428,6 +444,14 @@
+       url: "https://pub.dev"
+     source: hosted
+     version: "0.13.0"
++  material_ui:
++    dependency: transitive
++    description:
++      name: material_ui
++      sha256: e4031746f96c8316864d9b92bce375f1320a36ed56e166307e1e1bda9d90b4ab
++      url: "https://pub.dev"
++    source: hosted
++    version: "1.8.0"
+   meta:
+     dependency: transitive
+     description:

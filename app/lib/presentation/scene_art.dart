@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'motion.dart';
+
 /// Object rectangles are normalized to the square scene canvas; raw PNG alpha
 /// is retained. The same composition serves Home, collection and detail.
 const sceneObjectRects = <String, List<Rect>>{
@@ -43,13 +45,10 @@ class SceneArt extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, box) {
           final width = box.maxWidth;
-          Widget image(String name, double logicalWidth) => Image.asset(
-            'assets/art/scenes/$scene/$name.png',
+          Widget image(String name, double logicalWidth) => Image(
+            image: sceneImage(context, scene, name, logicalWidth),
             fit: BoxFit.contain,
             filterQuality: FilterQuality.medium,
-            cacheWidth: (logicalWidth * MediaQuery.devicePixelRatioOf(context))
-                .ceil()
-                .clamp(64, 1254),
           );
           return RepaintBoundary(
             key: Key('scene-$scene-composition'),
@@ -73,7 +72,7 @@ class SceneArt extends StatelessWidget {
                           ? TweenAnimationBuilder<double>(
                               duration: MediaQuery.disableAnimationsOf(context)
                                   ? const Duration(milliseconds: 150)
-                                  : const Duration(milliseconds: 700),
+                                  : KnitMotion.reveal,
                               tween: Tween(begin: 0, end: 1),
                               curve: Curves.easeOutCubic,
                               builder: (context, value, child) => Opacity(
@@ -102,4 +101,39 @@ class SceneArt extends StatelessWidget {
       ),
     ),
   );
+}
+
+ImageProvider<Object> sceneImage(
+  BuildContext context,
+  String scene,
+  String name,
+  double width,
+) => ResizeImage(
+  AssetImage('assets/art/scenes/$scene/$name.png'),
+  width: (width * MediaQuery.devicePixelRatioOf(context)).ceil().clamp(
+    64,
+    1254,
+  ),
+);
+Future<void> warmScene(
+  BuildContext context,
+  String scene,
+  List<String> pieces,
+  double width,
+) async {
+  final providers = <ImageProvider<Object>>[
+    sceneImage(context, scene, 'base', width),
+    for (var i = 1; i <= 5; i++)
+      if (pieces.contains('$scene:$i'))
+        sceneImage(
+          context,
+          scene,
+          'piece-$i',
+          width * sceneObjectRects[scene]![i - 1].width,
+        ),
+  ];
+  await Future.wait([
+    for (final image in providers)
+      precacheImage(image, context, onError: (_, _) {}),
+  ]);
 }

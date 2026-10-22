@@ -1,6 +1,6 @@
-# T01–T06 页面转场独立验收：首轮需修复
+# T01–T06 页面转场独立验收：当前环境通过
 
-2026-10-22。结论：页面内转场与保存/输入保护在当前冻结候选通过本轮检查；**整批尚未通过，T-R01 冷启动白屏衔接需修复后复验，因此不提交该批实现**。不将作者200项通过直接当架构验收。
+2026-10-22。最新结论：T01–T06 在当前模拟器/模拟设备范围通过；T-R01 白色原生启动阶段已关闭，保留轻微色阶与启动性能未验证。允许精准提交冻结候选及必要 M 依赖；完整 Flame 棋盘与组合回归仍未通过。以下保留首轮发现及复验记录。
 
 ## 精确候选与独立证据
 
@@ -36,3 +36,31 @@ iOS `ios/navigation.mp4` 在约2.6–3.8秒为白色启动页，4秒才出现蓝
 审查了冻结候选依赖的M启动资源预热、按钮反馈、成功入场、旧BoardView入场和单位相关倒水时长；本轮未把M01–M08整体标完成。T候选task-only.patch相对M检查点，并非可直接套HEAD。通过后需按冻结版本明确纳入必要已验依赖，不能git add整个app夹带原开发正在写的Flame全棋盘、容量修复或控制器变更。
 
 完整棋盘FB01–FB08、FS-M01容量同步与两批组合回归均仍待独立验收。模拟器debug不证明代表真机FPS、音触觉或读屏质量。受控进度/参考解/sqflite故障hook不等于自然通关、磁盘满、SDK成功或进程恢复。Firebase none与广告disabled；普通审查库、原UI及FirebaseQA未操作。
+
+
+## T-R01 独立复验（2026-10-22）
+
+### 实际范围与来源
+
+复验正常 `lib/main.dart`，源码归档 SHA256 `cc3be956884486381aab47208aa330b5becab67110882e46ab1ffb4f85113013`，在 R01 冻结副本运行检查。正常主入口仅通过独立 QA 身份 `dev.pourlune.transitionsr01` 和 `ui_transition_r01.sqlite` 隔离，不使用路线测试 runner 代替启动。源码校验发现的三个差异已解释：归档含 3.47.2 的 `.flutter-version`，展开构建目录遗漏该文件；两项 Android 文件是已记录的 QA applicationId/activity overlay，生产提交保持 HEAD 身份配置。没有凭差异列表直接宣称全源码一致。
+
+本聊天核对安装 iOS 346 个文件哈希均与交付候选一致；Android 已安装 base.apk SHA256 `6182ed96de58ca3e583276b36efb4954ed0ad1516bf5747bc44abda780e9591c` 与候选相符。独立 iOS 同安装 terminate/launch PID 54079 后实际点击 Start 进入 Level 1/tutorial，正常主入口可交互。独立 Android 同安装 force-stop/start 后 `am start -W` 超时（13231ms，UNKNOWN），当时仍显示蓝色品牌页；随后实际截图已进入 Start 首页。该异常未通过重跑覆盖，不作启动耗时达标结论；也不据此推断永久启动失败。
+
+### 检查结果
+
+- 本聊天在冻结副本独立运行 startup_shell、startup_motion、motion_primitives、motion_polish、page_transitions：**19 passed**；analyze 无问题。新增启动错误 Retry 在窄屏 2 倍字号可达，原转场输入/语义/返回和保存门控回归通过。
+- 独立资源/native 检查 **27 passed**，startup assets check 通过。两份清单与原清单逐字段核对，仅 scene_art/knit_components 源码 SHA 更新，资源、几何数字与原图保持一致；不会通过全量刷新掩盖漂移。
+- 本聊天检查双端明/暗四段完整冷启动录像及抽帧。白色原生阶段已被蓝色品牌页替代，接入 Flutter/Home；原生普通和夜间背景一致，无额外计时或假进度。Android API36、iOS Simulator 现有环境范围通过。录像为作者提供，本聊天独立审阅；iOS 额外关键帧由本聊天抽取。未重新尝试先前被权限拒绝的录屏。
+- Android 原生实现与 Flutter 官方启动文档的系统 splash 退出和 WindowCompat 接法一致；没有更改 SDK 安全设置。参考：https://docs.flutter.dev/platform-integration/android/splash-screen 。
+
+### 保留问题和结论边界
+
+**T-M01 / P3：iOS 原生→Flutter 蓝色仍有轻微色阶。** 同一录像独立抽帧的背景采样约 (81,223,245)→(118,219,239)，虽然源码都声明 RGB(130,223,241)，不能据此声称最终像素完全一致；合成/编码贡献尚未分离。此项不再是原来的白屏跨色闪跳，记录为后续打磨。Android 启动等待超时（作者暗色一次、本聊天亮色一次）保留为调试环境启动性能待定位，未宣称真机性能通过。
+
+T-R01 P2 关闭；T06 的已有双端明暗模式正常主入口衔接通过。T01–T05 沿用首轮独立 102 步/平台、11 页面及本次 19 项回归结果。API31 精确版本、Android12以前实际设备、代表真机启动时间/FPS、VoiceOver/TalkBack、真实音触觉不在本次通过范围。
+
+### 精准提交
+
+`T-R01/precise-submit-manifest.json` 的 55 个文件逐项哈希核对；生产实现来自冻结包，不覆盖原开发工作树。纳入 T 依赖的 M 资源预热、按钮/页面入场和倒水时长，不将 M01–M08 整批标完成。保留 HEAD 已修复的 b04_hint_events/b05_accessibility 测试；不纳入 QA 身份 overlay、完整 Flame 棋盘/样板容量修改、FB 测试或未验控制器改动。两批组合回归仍待完整棋盘交付。
+
+独立证据：`page-transitions-r01-evidence/`；作者修复证据：`../evidence/page-transitions/T-R01/`。通过后精确实现 CI 需另核对，旧 CI 成功不能代替。

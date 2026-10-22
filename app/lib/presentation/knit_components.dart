@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import 'bottle.dart';
 import 'labels.dart';
+import 'motion.dart';
 
 // Display bounds remove transparent canvas margins, without altering raw PNGs.
 const _art = <String, (Size, Rect)>{
@@ -47,16 +48,9 @@ class KnitArt extends StatelessWidget {
                     top: -bounds.top,
                     width: size.width,
                     height: size.height,
-                    child: Image.asset(
-                      'assets/art/ui/$name.png',
+                    child: Image(
+                      image: knitArtImage(context, name, width: width ?? 360),
                       fit: BoxFit.fill,
-                      cacheWidth:
-                          ((width ?? 360) *
-                                  MediaQuery.devicePixelRatioOf(context) *
-                                  size.width /
-                                  bounds.width)
-                              .ceil()
-                              .clamp(64, size.width.toInt()),
                       filterQuality: FilterQuality.medium,
                     ),
                   ),
@@ -76,20 +70,24 @@ Widget knitButtonBackground(
   Set<WidgetState> states,
   Widget? child, {
   required bool primary,
-}) => Stack(
-  fit: StackFit.passthrough,
-  children: [
-    Positioned.fill(
-      child: Opacity(
-        opacity: states.contains(WidgetState.disabled) ? .55 : 1,
-        child: KnitArt(
-          name: primary ? 'green-frame' : 'cream-frame',
-          fit: BoxFit.fill,
+}) => knitPressFeedback(
+  context,
+  states,
+  Stack(
+    fit: StackFit.passthrough,
+    children: [
+      Positioned.fill(
+        child: Opacity(
+          opacity: states.contains(WidgetState.disabled) ? .55 : 1,
+          child: KnitArt(
+            name: primary ? 'green-frame' : 'cream-frame',
+            fit: BoxFit.fill,
+          ),
         ),
       ),
-    ),
-    ?child,
-  ],
+      ?child,
+    ],
+  ),
 );
 
 class KnitPanel extends StatelessWidget {
@@ -319,3 +317,41 @@ class CalendarArt extends StatelessWidget {
     ),
   );
 }
+
+ImageProvider<Object> knitArtImage(
+  BuildContext context,
+  String name, {
+  double width = 360,
+}) {
+  final (size, bounds) = _art[name]!;
+  final cacheWidth =
+      (width *
+              MediaQuery.devicePixelRatioOf(context) *
+              size.width /
+              bounds.width)
+          .ceil()
+          .clamp(64, size.width.toInt());
+  return ResizeImage(AssetImage('assets/art/ui/$name.png'), width: cacheWidth);
+}
+
+Widget knitPressFeedback(
+  BuildContext context,
+  Set<WidgetState> states,
+  Widget? child,
+) => AnimatedScale(
+  scale:
+      !MediaQuery.disableAnimationsOf(context) &&
+          states.contains(WidgetState.pressed) &&
+          !states.contains(WidgetState.disabled)
+      ? .96
+      : 1,
+  duration: MediaQuery.disableAnimationsOf(context)
+      ? Duration.zero
+      : states.contains(WidgetState.pressed)
+      ? KnitMotion.press
+      : KnitMotion.release,
+  curve: states.contains(WidgetState.pressed)
+      ? Curves.easeOut
+      : Curves.easeOutBack,
+  child: child,
+);

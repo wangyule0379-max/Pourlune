@@ -6,6 +6,7 @@ import 'board_page.dart';
 import 'knit_components.dart';
 import 'labels.dart';
 import 'scene_art.dart';
+import 'motion.dart';
 
 Future<void> _finalNavigate(GameController c, GamePage target) async {
   final piece = c.receipt?.piece;
@@ -431,7 +432,9 @@ class _CompletionFeedback extends StatelessWidget {
   Widget build(BuildContext context) {
     final reduced = MediaQuery.disableAnimationsOf(context);
     return TweenAnimationBuilder<double>(
-      duration: Duration(milliseconds: reduced ? 150 : 700),
+      duration: reduced
+          ? const Duration(milliseconds: 150)
+          : KnitMotion.success,
       tween: Tween(begin: 0, end: 1),
       curve: Curves.easeOutCubic,
       child: child,

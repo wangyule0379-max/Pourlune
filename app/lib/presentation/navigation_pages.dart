@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import 'motion.dart';
+
 import 'package:intl/intl.dart';
 import 'package:pourlune_core/pourlune_core.dart';
 
@@ -221,24 +224,27 @@ class HomePage extends StatelessWidget {
               ),
             ],
             if (kDebugMode) ...[
-              ExpansionTile(
-                key: const Key('development-tools'),
-                title: const Text('Engineering tools'),
-                children: [
-                  const Text(
-                    'Debug-only fixture bypass. These samples are not a release catalog.',
-                  ),
-                  for (final p in c.library.main.values.where(
-                    (p) => [1, 12, 21].contains(p.mainLevel),
-                  ))
-                    TextButton(
-                      key: Key('engineering-${p.id}'),
-                      onPressed: c.busy ? null : () => onEngineering(p),
-                      child: Text(
-                        '${p.id} · ${p.initial.expand((b) => b).toSet().length} colors',
-                      ),
+              KeyedSubtree(
+                key: const PageStorageKey('engineering-expansion-state'),
+                child: ExpansionTile(
+                  key: const Key('development-tools'),
+                  title: const Text('Engineering tools'),
+                  children: [
+                    const Text(
+                      'Debug-only fixture bypass. These samples are not a release catalog.',
                     ),
-                ],
+                    for (final p in c.library.main.values.where(
+                      (p) => [1, 12, 21].contains(p.mainLevel),
+                    ))
+                      TextButton(
+                        key: Key('engineering-${p.id}'),
+                        onPressed: c.busy ? null : () => onEngineering(p),
+                        child: Text(
+                          '${p.id} · ${p.initial.expand((b) => b).toSet().length} colors',
+                        ),
+                      ),
+                  ],
+                ),
               ),
               TextButton(
                 key: const Key('progress'),
@@ -366,7 +372,7 @@ class _DailyPageState extends State<DailyPage> {
       widget.onToday();
       return;
     }
-    await showDialog<void>(
+    await showKnitDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(date),

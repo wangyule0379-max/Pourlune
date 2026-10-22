@@ -15,6 +15,8 @@ import 'settings_page.dart';
 import 'labels.dart';
 import 'knit_components.dart';
 import 'service_views.dart';
+import 'motion.dart';
+import 'scene_art.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({
@@ -36,6 +38,42 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   GameController get c => widget.controller;
   AppLocalizations get l => AppLocalizations.of(context);
   bool _inForeground = true, _audioPaused = false;
+  bool _pauseOpen = false;
+  GamePage _motionPage = GamePage.home;
+  String? _motionInstance;
+  KnitPageTransition _transition = KnitPageTransition.fadeThrough;
+  bool _motionBack = false, _retainPrevious = true;
+  String? _warmedInstance;
+  void _warmUpcoming() {
+    final state = c.current;
+    if (!mounted ||
+        c.page != GamePage.board ||
+        state == null ||
+        _warmedInstance == state.id) {
+      return;
+    }
+    _warmedInstance = state.id;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      unawaited(
+        precacheImage(
+          knitArtImage(context, 'success', width: 96),
+          context,
+          onError: (_, _) {},
+        ),
+      );
+      final level = state.puzzle.mainLevel;
+      if (level == null || level % 4 != 0) return;
+      final scene = sceneForLevel(level);
+      unawaited(
+        warmScene(context, scene, [
+          ...c.progress.pieces,
+          '$scene:${((level - 1) % 20) ~/ 4 + 1}',
+        ], (MediaQuery.sizeOf(context).width - 32).clamp(0.0, 1254.0)),
+      );
+    });
+  }
+
   final _presentedRevealSounds = <String>{};
   void _syncAudio() {
     final audio = widget.audio;
@@ -67,6 +105,8 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         WidgetsBinding.instance.lifecycleState == null ||
         WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
     c.addListener(_syncAudio);
+    c.addListener(_warmUpcoming);
+    _warmUpcoming();
     _syncAudio();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted && c.page == GamePage.home) {
@@ -85,6 +125,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     c.removeListener(_syncAudio);
+    c.removeListener(_warmUpcoming);
     super.dispose();
   }
 
@@ -101,12 +142,10 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     String action,
     String key,
   ) async =>
-      await showDialog<bool>(
+      await showKnitDialog<bool>(
         context: context,
-        animationStyle: c.settings.reducedMotion
-            ? AnimationStyle.noAnimation
-            : null,
         builder: (context) => AlertDialog(
+          scrollable: true,
           title: Text(title),
           content: Text(body),
           actions: key == 'confirm-reset'
@@ -141,9 +180,10 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       ) ??
       false;
   Future<void> _info(String title, String body) async {
-    await showDialog<void>(
+    await showKnitDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
+        scrollable: true,
         title: Text(title),
         content: Text(body),
         actions: [
@@ -234,6 +274,9 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _pause() async {
+    if (_pauseOpen || !mounted) return;
+    _pauseOpen = true;
+    String? action;
     if (c.motion != null) c.completeMotion(c.motion!.token);
     c.cancelHint();
     _audioPaused = true;
@@ -241,11 +284,8 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     c.setPaused(true);
     _syncAudio();
     try {
-      await showDialog<void>(
+      action = await showKnitDialog<String>(
         context: context,
-        animationStyle: c.settings.reducedMotion
-            ? AnimationStyle.noAnimation
-            : null,
         builder: (dialogContext) => ListenableBuilder(
           listenable: c,
           builder: (context, _) => Dialog(
@@ -313,8 +353,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                       OutlinedButton(
                         key: const Key('pause-restart'),
                         onPressed: () {
-                          Navigator.pop(dialogContext);
-                          _restart();
+                          Navigator.pop(dialogContext, 'restart');
                         },
                         child: Text(l.restart, textAlign: TextAlign.center),
                       ),
@@ -322,8 +361,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                       OutlinedButton(
                         key: const Key('pause-home'),
                         onPressed: () {
-                          Navigator.pop(dialogContext);
-                          c.goHome();
+                          Navigator.pop(dialogContext, 'home');
                         },
                         child: Text(l.home, textAlign: TextAlign.center),
                       ),
@@ -336,11 +374,15 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         ),
       );
     } finally {
+      _pauseOpen = false;
       _audioPaused = false;
       c.services?.ads.update(modal: false);
       c.setPaused(false);
       if (mounted) _syncAudio();
     }
+    if (!mounted) return;
+    if (action == 'restart') await _restart();
+    if (action == 'home') await c.goHome();
   }
 
   Future<void> _reset() async {
@@ -358,6 +400,42 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: c,
     builder: (context, _) {
+      final instance =
+          {
+            GamePage.board,
+            GamePage.completion,
+            GamePage.reward,
+          }.contains(c.page)
+          ? c.current?.id
+          : null;
+      if (_motionPage != c.page || _motionInstance != instance) {
+        final previous = _motionPage;
+        final related =
+            (previous == GamePage.settings && c.page == GamePage.rules) ||
+            (previous == GamePage.rules && c.page == GamePage.settings);
+        final detail =
+            (previous == GamePage.collection && c.page == GamePage.scene) ||
+            (previous == GamePage.scene && c.page == GamePage.collection);
+        _transition = c.page == GamePage.board || related
+            ? KnitPageTransition.horizontal
+            : detail ||
+                  c.page == GamePage.completion ||
+                  c.page == GamePage.reward ||
+                  (previous == GamePage.reward && c.page == GamePage.scene) ||
+                  (previous == GamePage.completion && c.page == GamePage.scene)
+            ? KnitPageTransition.scaled
+            : KnitPageTransition.fadeThrough;
+        _motionBack =
+            c.page == GamePage.home ||
+            (_motionPage == GamePage.rules && c.page == GamePage.settings) ||
+            (_motionPage == GamePage.scene && c.page == GamePage.collection);
+        // A live outgoing board would own a second motion presenter. Dispose it
+        // on departure; the incoming page still fades over the fixed background.
+        _retainPrevious =
+            _motionPage != GamePage.board && c.page != GamePage.board;
+        _motionPage = c.page;
+        _motionInstance = instance;
+      }
       final title = switch (c.page) {
         GamePage.chapters => l.chapters,
         GamePage.daily => l.dailyPuzzle,
@@ -430,101 +508,123 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                 child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: c.page == GamePage.board ? c.clearSelection : null,
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        if (c.page != GamePage.home && c.page != GamePage.board)
-                          KnitHeader(
-                            title:
-                                c.page == GamePage.completion ||
-                                    c.page == GamePage.reward
-                                ? (c.current?.slot == 'daily'
-                                      ? l.dailyPuzzle
-                                      : l.level(c.current!.puzzle.mainLevel!))
-                                : title,
-                            backLabel: c.page == GamePage.rules
-                                ? l.settings
-                                : l.home,
-                            backKey: Key(
-                              c.page == GamePage.completion
-                                  ? 'page-back'
-                                  : 'home',
+                  child: PageMotion(
+                    page: (
+                      c.page,
+                      c.page == GamePage.scene ? c.selectedScene : '',
+                      instance,
+                    ),
+                    back: _motionBack,
+                    transition: _transition,
+                    animateInitial: c.page == GamePage.home,
+                    retainPrevious: _retainPrevious,
+                    immediate: c.phase == SavePhase.failed,
+                    child: SingleChildScrollView(
+                      key: PageStorageKey(
+                        instance != null
+                            ? 'scroll-${c.page.name}-$instance'
+                            : c.page == GamePage.scene
+                            ? 'scroll-scene-${c.selectedScene}'
+                            : 'scroll-${c.page.name}',
+                      ),
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          if (c.page != GamePage.home &&
+                              c.page != GamePage.board)
+                            KnitHeader(
+                              title:
+                                  c.page == GamePage.completion ||
+                                      c.page == GamePage.reward
+                                  ? (c.current?.slot == 'daily'
+                                        ? l.dailyPuzzle
+                                        : l.level(c.current!.puzzle.mainLevel!))
+                                  : title,
+                              backLabel: c.page == GamePage.rules
+                                  ? l.settings
+                                  : l.home,
+                              backKey: Key(
+                                c.page == GamePage.completion
+                                    ? 'page-back'
+                                    : 'home',
+                              ),
+                              onBack: c.phase == SavePhase.saving
+                                  ? null
+                                  : c.page == GamePage.rules
+                                  ? () => c.navigate(GamePage.settings)
+                                  : c.goHome,
                             ),
-                            onBack: c.phase == SavePhase.saving
-                                ? null
-                                : c.page == GamePage.rules
-                                ? () => c.navigate(GamePage.settings)
-                                : c.goHome,
-                          ),
-                        if (c.library.engineering)
-                          Text(
-                            l.developmentNotice,
-                            style: const TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                        if (c.recoveryNotice != null)
-                          Text(
-                            c.recoveryNotice == 'recovered'
-                                ? l.recoveredSave
-                                : l.unavailableSave,
-                          ),
-                        if (c.notice != null)
-                          Semantics(
-                            liveRegion: true,
-                            child: Text(noticeLabel(l, c.notice!)),
-                          ),
-                        if (c.phase == SavePhase.failed)
-                          KnitPanel(
-                            key: const Key('save-failed'),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Column(
-                                children: [
-                                  Text(l.saveFailed),
-                                  Wrap(
-                                    spacing: 8,
-                                    children: [
-                                      FilledButton(
-                                        key: const Key('retry'),
-                                        onPressed: c.retry,
-                                        child: Text(l.retry),
-                                      ),
-                                      TextButton(
-                                        key: const Key('stay'),
-                                        onPressed: c.stayHere,
-                                        child: Text(l.stayHere),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                          if (c.library.engineering)
+                            Text(
+                              l.developmentNotice,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                          ),
-                        RewardStatus(controller: c),
-                        body,
-                        const SizedBox(height: 14),
-                        Text(
-                          c.phase == SavePhase.saving
-                              ? l.saving
-                              : c.phase == SavePhase.clean
-                              ? l.saved
-                              : l.pauseMemory,
-                          key: const Key('save-status'),
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        if (kDebugMode &&
-                            widget.advanceTestDay != null &&
-                            c.page == GamePage.home)
-                          TextButton(
-                            key: const Key('advance-test-day'),
-                            onPressed: widget.advanceTestDay,
-                            child: const Text(
-                              'Development: advance local test day',
+                          if (c.recoveryNotice != null)
+                            Text(
+                              c.recoveryNotice == 'recovered'
+                                  ? l.recoveredSave
+                                  : l.unavailableSave,
                             ),
+                          if (c.notice != null)
+                            Semantics(
+                              liveRegion: true,
+                              child: Text(noticeLabel(l, c.notice!)),
+                            ),
+                          if (c.phase == SavePhase.failed)
+                            KnitPanel(
+                              key: const Key('save-failed'),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Column(
+                                  children: [
+                                    Text(l.saveFailed),
+                                    Wrap(
+                                      spacing: 8,
+                                      children: [
+                                        FilledButton(
+                                          key: const Key('retry'),
+                                          onPressed: c.retry,
+                                          child: Text(l.retry),
+                                        ),
+                                        TextButton(
+                                          key: const Key('stay'),
+                                          onPressed: c.stayHere,
+                                          child: Text(l.stayHere),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          RewardStatus(controller: c),
+                          body,
+                          const SizedBox(height: 14),
+                          Text(
+                            c.phase == SavePhase.saving
+                                ? l.saving
+                                : c.phase == SavePhase.clean
+                                ? l.saved
+                                : l.pauseMemory,
+                            key: const Key('save-status'),
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
-                      ],
+                          if (kDebugMode &&
+                              widget.advanceTestDay != null &&
+                              c.page == GamePage.home)
+                            TextButton(
+                              key: const Key('advance-test-day'),
+                              onPressed: widget.advanceTestDay,
+                              child: const Text(
+                                'Development: advance local test day',
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

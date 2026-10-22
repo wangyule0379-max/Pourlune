@@ -8,6 +8,7 @@ import '../l10n/app_localizations.dart';
 import '../services/ad_coordinator.dart';
 import '../services/service_hub.dart';
 import 'knit_components.dart';
+import 'motion.dart';
 
 Future<void> openSupportEntry(
   BuildContext context,
@@ -27,7 +28,7 @@ Future<void> openSupportEntry(
 Future<void> showExtraBottle(BuildContext context, GameController c) async {
   final l = AppLocalizations.of(context), hub = c.services;
   // The first sheet explains the exchange; only its explicit Watch starts it.
-  final watch = await showDialog<bool>(
+  final watch = await showKnitDialog<bool>(
     context: context,
     builder: (context) => ListenableBuilder(
       listenable: c,
@@ -93,7 +94,7 @@ Future<void> showExtraBottle(BuildContext context, GameController c) async {
 
 Future<void> showPrivacyChoices(BuildContext context, GameController c) async {
   final l = AppLocalizations.of(context), hub = c.services;
-  await showDialog<void>(
+  await showKnitDialog<void>(
     context: context,
     builder: (context) => ListenableBuilder(
       listenable: c,
@@ -244,7 +245,7 @@ class RewardStatus extends StatelessWidget {
                           final replacement = attempt.origin.slot == 'ordinary'
                               ? c.ordinary?.id
                               : c.daily?.id;
-                          final yes = await showDialog<bool>(
+                          final yes = await showKnitDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
                               scrollable: true,

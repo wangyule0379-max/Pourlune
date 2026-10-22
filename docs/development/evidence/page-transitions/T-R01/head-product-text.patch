@@ -1,0 +1,3584 @@
+--- a/app/README.md
++++ b/app/README.md
+@@ -140,3 +140,24 @@
+ `integration_test/flame_sample_app.dart` is a separate standalone instrumentation entry with real Flutter pointer gestures, PNG/frame timing and file commands. It does not represent a passing DDS integration-test run. Root helper `tools/validation/flame_sample.py` is restricted to iOS `9B172C50-E5CB-4F3F-8F16-0A3DB04F495D` and Android `emulator-5584`; actions `state`, `route`, `capture`, `prepare-restore`, `startups`. Its command files stay inside the QA sandbox. Do not point it at an ordinary installation. Same-install termination/relaunch proves a different property from installing a new binary.
+ 
+ Independent acceptance and the user's approval of the sample's appearance are required before extending to the complete board. M01–M08 remains a separate, unfinished checkpoint. Evidence and actual run results belong in `../docs/development/deliveries/flame-sample.md`; source existence is not a performance, native-audio, physical-haptics or release conclusion.
++
++## Page transitions (T01–T06)
++
++The existing controller remains the navigation authority. `presentation/motion.dart` uses the exactly pinned official `animations 3.0.0`: FadeThrough for independent destinations, horizontal SharedAxis for play/next/rules, scaled SharedAxis for collection details and settlement, and FadeScale for all custom dialogs. Transparent fills preserve the knitted background. The bounded host retires older outgoing pages and immediately disposes departing boards; page identity includes instance ID, never move revision. Scroll storage is scoped to each instance and scene; returning to the same instance/destination restores its offset, while a new instance starts at the top. Framework license routes use the same SharedAxis through the existing Material theme. No Material widget library migration is required for these transition-only widgets.
++
++Focused host checks: `flutter test test/page_transitions_test.dart test/motion_primitives_test.dart test/motion_polish_test.dart test/startup_motion_test.dart`. Run Flutter CLI and native builds serially with `FIREBASE_ANALYTICS_WITHOUT_ADID=1`.
++
++`integration_test/page_transitions_app.dart` is an isolated standalone debug QA runner using actual Flutter pointer gestures, bundled formal content and sqflite. It requires `--dart-define=POURLUNE_DATABASE=page_transitions.sqlite --dart-define=POURLUNE_AD_MODE=disabled`; it clears only that database and writes `page-transitions/route.json` plus PNGs under `getDatabasesPath()`. Controlled progress prepares main002/004/020/060; it is not natural progression, real advertising evidence or a production entrypoint. Use the dedicated transition devices recorded in `docs/development/deliveries/ui-transition-handoff.md`; preserve the ordinary, Firebase and Flame installations. The iOS runner uses external `/tmp/pourlune-transitions.xcconfig` containing only `PRODUCT_BUNDLE_IDENTIFIER = dev.pourlune.transitionsValidation`. Commands from app/:
++
++```sh
++XCODE_XCCONFIG_FILE=/tmp/pourlune-transitions.xcconfig FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter build ios --simulator --debug -t integration_test/page_transitions_app.dart --dart-define=POURLUNE_DATABASE=page_transitions.sqlite --dart-define=POURLUNE_AD_MODE=disabled
++FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter build apk --debug -t integration_test/page_transitions_app.dart --dart-define=POURLUNE_DATABASE=page_transitions.sqlite --dart-define=POURLUNE_AD_MODE=disabled
++```
++
++Copy screenshots/reports before any runner replacement. Execution evidence and limits live in `../docs/development/deliveries/page-transitions.md`; architecture owns independent acceptance.
++
++### Native startup continuity (T-R01)
++
++Native iOS LaunchScreen/Main, Android legacy and API31+ light/night launch themes, and the Flutter initialization shell share #82DFF1 and the existing centered wordmark. Native density exports are checked with the bundled Pillow Python using `tools/assets/startup_assets.py`; `--write` is only for an intentional regeneration. No timed hold or simulated progress is added. Startup failure retains a real Retry control.
++
++`tools/validation/startup_capture.py ios|android light|dark` is restricted to the transition devices and `dev.pourlune.transitionsr01`; first install the isolated normal `lib/main.dart` candidate using `ui_transition_r01.sqlite`, Firebase none and ads disabled. The Android applicationId overlay exists only in the R01 source copy; iOS uses an external xcconfig. It force-stops/terminates only that identity, records actual native launch and checks the named database. Preserve all existing review installations. `startup_frames.swift <video> <frames-dir> [seconds-limit]` extracts actual recorded frames with timestamps; `startup_frame_check.py <frames-dir> <evidence-dir>` describes sampled colors, not startup or frame-rate performance. See `../docs/development/evidence/page-transitions/T-R01/repair-report.md` for results and limitations.
+--- a/app/android/app/src/main/kotlin/dev/pourlune/pourlune_dev/MainActivity.kt
++++ b/app/android/app/src/main/kotlin/dev/pourlune/pourlune_dev/MainActivity.kt
+@@ -1,5 +1,18 @@
+ package dev.pourlune.pourlune_dev
+ 
++import android.os.Build
++import android.os.Bundle
++import androidx.core.view.WindowCompat
+ import io.flutter.embedding.android.FlutterActivity
+ 
+-class MainActivity : FlutterActivity()
++class MainActivity : FlutterActivity() {
++    override fun onCreate(savedInstanceState: Bundle?) {
++        WindowCompat.setDecorFitsSystemWindows(window, false)
++        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
++            // The matching Flutter shell replaces the static system mark on readiness.
++            // No timer, retained splash or artificial initialization wait.
++            splashScreen.setOnExitAnimationListener { view -> view.remove() }
++        }
++        super.onCreate(savedInstanceState)
++    }
++}
+--- a/app/android/app/src/main/res/drawable-v21/launch_background.xml
++++ b/app/android/app/src/main/res/drawable-v21/launch_background.xml
+@@ -1,12 +1,7 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<!-- Modify this file to customize your launch splash screen -->
+ <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+-    <item android:drawable="?android:colorBackground" />
+-
+-    <!-- You can insert your own image assets here -->
+-    <!-- <item>
+-        <bitmap
+-            android:gravity="center"
+-            android:src="@mipmap/launch_image" />
+-    </item> -->
++    <item android:drawable="@color/startup_background" />
++    <item>
++        <bitmap android:gravity="center" android:src="@drawable/startup_wordmark" />
++    </item>
+ </layer-list>
+--- a/app/android/app/src/main/res/drawable/launch_background.xml
++++ b/app/android/app/src/main/res/drawable/launch_background.xml
+@@ -1,12 +1,7 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<!-- Modify this file to customize your launch splash screen -->
+ <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+-    <item android:drawable="@android:color/white" />
+-
+-    <!-- You can insert your own image assets here -->
+-    <!-- <item>
+-        <bitmap
+-            android:gravity="center"
+-            android:src="@mipmap/launch_image" />
+-    </item> -->
++    <item android:drawable="@color/startup_background" />
++    <item>
++        <bitmap android:gravity="center" android:src="@drawable/startup_wordmark" />
++    </item>
+ </layer-list>
+--- a/app/android/app/src/main/res/values-night-v31/styles.xml
++++ b/app/android/app/src/main/res/values-night-v31/styles.xml
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
++        <item name="android:windowBackground">@drawable/launch_background</item>
++        <item name="android:windowSplashScreenBackground">@color/startup_background</item>
++        <item name="android:windowSplashScreenAnimatedIcon">@drawable/startup_icon</item>
++        <item name="android:statusBarColor">@color/startup_background</item>
++        <item name="android:navigationBarColor">@color/startup_background</item>
++        <item name="android:windowLightStatusBar">true</item>
++    </style>
++</resources>
+--- a/app/android/app/src/main/res/values-night/styles.xml
++++ b/app/android/app/src/main/res/values-night/styles.xml
+@@ -1,18 +1,15 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+-    <!-- Theme applied to the Android Window while the process is starting when the OS's Dark Mode setting is on -->
+     <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
+-        <!-- Show a splash screen on the activity. Automatically removed when
+-             the Flutter engine draws its first frame -->
+         <item name="android:windowBackground">@drawable/launch_background</item>
++        <item name="android:statusBarColor">@color/startup_background</item>
++        <item name="android:navigationBarColor">@color/startup_background</item>
++        <item name="android:windowLightStatusBar">true</item>
+     </style>
+-    <!-- Theme applied to the Android Window as soon as the process has started.
+-         This theme determines the color of the Android Window while your
+-         Flutter UI initializes, as well as behind your Flutter UI while its
+-         running.
+-
+-         This Theme is only used starting with V2 of Flutter's Android embedding. -->
+     <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
+-        <item name="android:windowBackground">?android:colorBackground</item>
++        <item name="android:windowBackground">@color/startup_background</item>
++        <item name="android:statusBarColor">@color/startup_background</item>
++        <item name="android:navigationBarColor">@color/startup_background</item>
++        <item name="android:windowLightStatusBar">true</item>
+     </style>
+ </resources>
+--- a/app/android/app/src/main/res/values-v31/styles.xml
++++ b/app/android/app/src/main/res/values-v31/styles.xml
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
++        <item name="android:windowBackground">@drawable/launch_background</item>
++        <item name="android:windowSplashScreenBackground">@color/startup_background</item>
++        <item name="android:windowSplashScreenAnimatedIcon">@drawable/startup_icon</item>
++        <item name="android:statusBarColor">@color/startup_background</item>
++        <item name="android:navigationBarColor">@color/startup_background</item>
++        <item name="android:windowLightStatusBar">true</item>
++    </style>
++</resources>
+--- a/app/android/app/src/main/res/values/colors.xml
++++ b/app/android/app/src/main/res/values/colors.xml
+@@ -0,0 +1,5 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <!-- Fixed light woven palette, also during OS dark-mode launch. -->
++    <color name="startup_background">#82DFF1</color>
++</resources>
+--- a/app/android/app/src/main/res/values/styles.xml
++++ b/app/android/app/src/main/res/values/styles.xml
+@@ -1,18 +1,15 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+-    <!-- Theme applied to the Android Window while the process is starting when the OS's Dark Mode setting is off -->
+     <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
+-        <!-- Show a splash screen on the activity. Automatically removed when
+-             the Flutter engine draws its first frame -->
+         <item name="android:windowBackground">@drawable/launch_background</item>
++        <item name="android:statusBarColor">@color/startup_background</item>
++        <item name="android:navigationBarColor">@color/startup_background</item>
++        <item name="android:windowLightStatusBar">true</item>
+     </style>
+-    <!-- Theme applied to the Android Window as soon as the process has started.
+-         This theme determines the color of the Android Window while your
+-         Flutter UI initializes, as well as behind your Flutter UI while its
+-         running.
+-
+-         This Theme is only used starting with V2 of Flutter's Android embedding. -->
+     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
+-        <item name="android:windowBackground">?android:colorBackground</item>
++        <item name="android:windowBackground">@color/startup_background</item>
++        <item name="android:statusBarColor">@color/startup_background</item>
++        <item name="android:navigationBarColor">@color/startup_background</item>
++        <item name="android:windowLightStatusBar">true</item>
+     </style>
+ </resources>
+--- a/app/integration_test/motion_polish_app.dart
++++ b/app/integration_test/motion_polish_app.dart
+@@ -0,0 +1,153 @@
++// Isolated offline diagnostic. Product main/Bootstrap, real sqflite and formal
++// content; no test runner or shipping controls. Keep before/after build modes equal.
++import 'dart:async';
++import 'dart:convert';
++import 'dart:io';
++
++import 'package:flutter/foundation.dart';
++import 'package:flutter/widgets.dart';
++import 'package:pourlune_core/pourlune_core.dart';
++import 'package:pourlune_dev/application/game_controller.dart';
++import 'package:pourlune_dev/main.dart' as product;
++import 'package:sqflite/sqflite.dart';
++
++import 'support/b05_support.dart' show b05Seed, b05Finish;
++
++Future<void> main() async {
++  if (!kDebugMode ||
++      const String.fromEnvironment('POURLUNE_DATABASE') !=
++          'motion_polish.sqlite' ||
++      const String.fromEnvironment('POURLUNE_AD_MODE') != 'disabled' ||
++      const bool.fromEnvironment('POURLUNE_FIREBASE_NATIVE_READY')) {
++    throw StateError('Isolated offline motion diagnostic required');
++  }
++  const phase = String.fromEnvironment(
++    'POURLUNE_MOTION_PHASE',
++    defaultValue: 'before',
++  );
++  final startup = Stopwatch()..start();
++  final began = DateTime.now().toUtc().toIso8601String();
++  final frames = <Map<String, int>>[];
++  int? firstFrame;
++  product.main();
++  WidgetsBinding.instance.addPostFrameCallback((_) {
++    firstFrame = startup.elapsedMicroseconds;
++  });
++  WidgetsBinding.instance.addTimingsCallback((values) {
++    for (final f in values) {
++      if (frames.length < 20000) {
++        frames.add({
++          'build_us': f.buildDuration.inMicroseconds,
++          'raster_us': f.rasterDuration.inMicroseconds,
++          'total_us': f.totalSpan.inMicroseconds,
++        });
++      }
++    }
++  });
++  GameController? controller;
++  void locate(Element e) {
++    if (e.widget case final product.PourluneApp app) {
++      controller = app.controller;
++    }
++    e.visitChildElements(locate);
++  }
++
++  for (var n = 0; n < 3000 && controller == null; n++) {
++    await Future<void>.delayed(const Duration(milliseconds: 10));
++    WidgetsBinding.instance.rootElement?.visitChildElements(locate);
++  }
++  final c = controller;
++  if (c == null) throw StateError('Bootstrap did not mount');
++  await WidgetsBinding.instance.endOfFrame;
++  final interactive = startup.elapsedMicroseconds;
++  final out = Directory('${await getDatabasesPath()}/motion-polish');
++  await out.create(recursive: true);
++  Future<void> write(String name, Object value) async {
++    await File('${out.path}/$name.json')
++        .writeAsString(jsonEncode(value), flush: true);
++  }
++
++  Future<Map<String, Object?>> state() async {
++    final saved = (await c.store.load(c.current?.slot ?? 'ordinary')).instance;
++    return {
++      'pid': pid,
++      'phase_label': phase,
++      'mode': 'debug Simulator/AVD diagnostic',
++      'utc': DateTime.now().toUtc().toIso8601String(),
++      'page': c.page.name,
++      'save_phase': c.phase.name,
++      'busy': c.busy,
++      'motion': c.motion != null,
++      'instance_id': c.current?.id,
++      'revision': c.current?.revision,
++      'saved_instance_id': saved?.id,
++      'saved_revision': saved?.revision,
++      'first_clears': c.progress.firstClears,
++      'pieces': c.progress.pieces,
++      'revealed': c.progress.revealedPieces,
++      'receipts': c.progress.receipts,
++      'firebase': c.services?.firebaseStatus,
++      'reduced_motion': c.settings.reducedMotion,
++      'frames': frames.length,
++    };
++  }
++
++  await write('startup-$phase-$pid', {
++    'began_utc': began,
++    'dart_main_to_first_post_frame_us': firstFrame,
++    'dart_main_to_home_interactive_sample_us': interactive,
++    'interactive_sampling_resolution_us': 10000,
++    'excludes_native_pre_Dart_launch': true,
++    ...await state(),
++  });
++  var running = false;
++  Timer.periodic(const Duration(milliseconds: 50), (_) async {
++    final file = File('${out.path}/command.json');
++    if (running || !file.existsSync()) return;
++    running = true;
++    var id = 'invalid';
++    try {
++      final command = jsonDecode(await file.readAsString()) as Map;
++      await file.delete();
++      final candidate = command['id'] as String;
++      if (!RegExp(r'^[a-z0-9_-]+$').hasMatch(candidate)) {
++        throw StateError('Invalid ID');
++      }
++      id = candidate;
++      final action = command['action'];
++      if (action == 'sample-start') {
++        frames.clear();
++      } else if (action == 'sample-end') {
++        await write(id, {'frame_timings': frames, ...await state()});
++        return;
++      } else if (action == 'prepare-milestone') {
++        // Explicit setup only: real transactions, first3 reference clears and
++        // main004 before its last move. Never presented as ordinary progression.
++        await b05Seed(c.store, c.library, 3);
++        final puzzle = c.library.main[4]!;
++        final prepared = b05Finish(
++          GameInstance.create(id: 'motion-qa-main004', puzzle: puzzle),
++          take: puzzle.referenceMoves.length - 1,
++        );
++        await c.store.save(prepared, replace: true);
++        await c.initialize();
++        c.resume();
++      } else if (action == 'reduced') {
++        await c.updateSetting('reduced_motion', command['value'] == true);
++      } else if (action == 'state') {
++        // Read-only current state.
++      } else {
++        throw StateError('Unknown action');
++      }
++      await write(id, {'ok': true, ...await state()});
++    } catch (_) {
++      await write(id, {
++        'ok': false,
++        'category': 'motion_diagnostic_failed',
++        ...await state(),
++      });
++    } finally {
++      running = false;
++    }
++  });
++}
+--- a/app/integration_test/motion_route_app.dart
++++ b/app/integration_test/motion_route_app.dart
+@@ -0,0 +1,178 @@
++// Native widget gestures and real sqflite. Same deterministic route before/after;
++// milestone preparation is explicit test setup, not ordinary player progression.
++import 'dart:convert';
++import 'dart:io';
++
++import 'package:flutter/material.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:flutter/foundation.dart';
++import 'package:pourlune_core/pourlune_core.dart';
++import 'package:pourlune_dev/main.dart' as product;
++import 'package:sqflite/sqflite.dart';
++
++import 'support/b05_support.dart' show b05Seed, b05Finish;
++
++void qaExpect(Object? actual, Object? expected, {String? reason}) {
++  final matcher = expected is Matcher ? expected : equals(expected);
++  if (!matcher.matches(actual, <Object?, Object?>{})) {
++    throw StateError('Motion check failed: $reason; actual=$actual');
++  }
++}
++
++Future<void> main() async {
++  if (!kDebugMode ||
++      const String.fromEnvironment('POURLUNE_AD_MODE') != 'disabled') {
++    throw StateError('QA only');
++  }
++  final binding = WidgetsFlutterBinding.ensureInitialized();
++  final tester = LiveWidgetController(binding);
++  const database = String.fromEnvironment('POURLUNE_DATABASE');
++  const phase = String.fromEnvironment(
++    'POURLUNE_MOTION_PHASE',
++    defaultValue: 'before',
++  );
++  qaExpect(database, 'motion_runtime.sqlite');
++  final base = await getDatabasesPath();
++  await deleteDatabase(
++    '$base/$database',
++  ); // This isolated named test database only.
++  final out = Directory('$base/motion-runtime-$phase');
++  await out.create(recursive: true);
++  final frames = <Map<String, int>>[];
++  binding.addTimingsCallback((values) {
++    for (final f in values) {
++      frames.add({
++        'build_us': f.buildDuration.inMicroseconds,
++        'raster_us': f.rasterDuration.inMicroseconds,
++        'total_us': f.totalSpan.inMicroseconds,
++      });
++    }
++  });
++  final previousError = FlutterError.onError;
++  product.main();
++  FlutterError.onError = previousError;
++  await tester.pump(const Duration(milliseconds: 100));
++  for (
++    var i = 0;
++    i < 150 && find.byType(product.PourluneApp).evaluate().isEmpty;
++    i++
++  ) {
++    await tester.pump(const Duration(milliseconds: 100));
++  }
++  qaExpect(find.byType(product.PourluneApp), findsOneWidget);
++  final c = tester
++      .widget<product.PourluneApp>(find.byType(product.PourluneApp))
++      .controller;
++  final steps = <Map<String, Object?>>[];
++  Future<void> settled() async {
++    for (var n = 0; n < 200 && (n < 20 || c.busy); n++) {
++      await tester.pump(const Duration(milliseconds: 50));
++    }
++    // Test pacing for recorded comparison; not a product input delay.
++    await Future<void>.delayed(const Duration(milliseconds: 250));
++    await tester.pump();
++  }
++
++  Future<void> record(String name) async {
++    final saved = (await c.store.load(c.current?.slot ?? 'ordinary')).instance;
++    steps.add({
++      'name': name,
++      'utc': DateTime.now().toUtc().toIso8601String(),
++      'page': c.page.name,
++      'phase': c.phase.name,
++      'instance': c.current?.id,
++      'revision': c.current?.revision,
++      'saved_revision': saved?.revision,
++      'first_clears': c.progress.firstClears,
++      'pieces': c.progress.pieces,
++    });
++  }
++
++  Future<void> tap(String key) async {
++    // ignore: avoid_print
++    print('MOTION_TAP:$key');
++    final finder = find.byKey(Key(key));
++    await tester.ensureVisible(finder);
++    await tester.tap(finder);
++    await settled();
++  }
++
++  // ignore: avoid_print
++  print('MOTION_READY');
++  await settled();
++  await Future<void>.delayed(const Duration(seconds: 8));
++  frames.clear();
++  await tap('sample-main-001');
++  await tap('bottle-0');
++  await tap('bottle-2');
++  qaExpect(c.current!.revision, 1);
++  qaExpect((await c.store.load('ordinary')).instance!.revision, 1);
++  await record('legal-move-saved');
++  await tap('pause');
++  qaExpect(find.byKey(const Key('pause-card')), findsOneWidget);
++  await tap('pause-home');
++  await tap('chapters');
++  await tap('home');
++  await tap('settings');
++  await tap('rules');
++  await tap('home'); // Rules returns to Settings.
++  await tap('home');
++  await tap('daily');
++  await tap('home');
++  await tap('collection');
++  await tap('scene-color_studio');
++  await tap('collection-back');
++  await tap('home');
++  await tap('resume');
++  await tap('pause');
++  await tap('resume-pause');
++  await record('navigation-and-resume');
++
++  // Controlled existing-state setup, using actual settlement transactions.
++  await b05Seed(c.store, c.library, 3);
++  final puzzle = c.library.main[4]!;
++  final instance = b05Finish(
++    GameInstance.create(id: 'motion-native-main004', puzzle: puzzle),
++    take: puzzle.referenceMoves.length - 1,
++  );
++  await c.store.save(instance, replace: true);
++  await c.initialize();
++  c.resume();
++  await settled();
++  await record('controlled-main004-before-final-move');
++  final last = puzzle.referenceMoves.last;
++  await tap('bottle-${last.from}');
++  await tap('bottle-${last.to}');
++  qaExpect(c.progress.firstClears, 4);
++  qaExpect(c.progress.pieces, contains('color_studio:1'));
++  await record('saved-completion');
++  await tap('view-patch');
++  await record('patch-reveal');
++  await tap('next');
++  qaExpect(c.current!.puzzle.mainLevel, 5);
++  qaExpect(c.progress.firstClears, 4);
++  qaExpect(c.progress.pieces.where((p) => p == 'color_studio:1').length, 1);
++  await record('next-level-once');
++  final report = jsonEncode({
++    'phase_label': phase,
++    'platform': Platform.operatingSystem,
++    'mode': 'debug standalone LiveWidgetController native gestures',
++    'steps': steps,
++    'frame_timings': frames,
++    'physical_performance_pass': false,
++  });
++  // Host captures this before the native test runner may remove its container.
++  // ignore: avoid_print
++  print('MOTION_ROUTE_JSON:$report');
++  await File('${out.path}/route.json').writeAsString(
++    jsonEncode({
++      'phase_label': phase,
++      'mode': 'debug standalone LiveWidgetController native gestures',
++      'platform': Platform.operatingSystem,
++      'steps': steps,
++      'frame_timings': frames,
++      'physical_performance_pass': false,
++    }),
++    flush: true,
++  );
++}
+--- a/app/integration_test/page_transitions_app.dart
++++ b/app/integration_test/page_transitions_app.dart
+@@ -0,0 +1,314 @@
++// Standalone debug QA: actual Flutter gestures, bundled content and sqflite.
++// Only page_transitions.sqlite is disposable. No SDK rewards or business mocks.
++import 'dart:convert';
++import 'dart:io';
++
++import 'package:flutter/foundation.dart';
++import 'package:flutter/material.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:pourlune_core/pourlune_core.dart';
++import 'package:pourlune_dev/main.dart' as product;
++import 'package:pourlune_dev/application/game_controller.dart';
++import 'package:sqflite/sqflite.dart';
++
++import 'support/b05_support.dart' show b05Seed, b05Finish, b05Capture;
++
++void verify(bool condition, String message) {
++  if (!condition) throw StateError(message);
++}
++
++Future<void> main() async {
++  const database = String.fromEnvironment('POURLUNE_DATABASE');
++  if (!kDebugMode ||
++      database != 'page_transitions.sqlite' ||
++      const String.fromEnvironment('POURLUNE_AD_MODE') != 'disabled') {
++    throw StateError('Isolated transition QA only');
++  }
++  final binding = WidgetsFlutterBinding.ensureInitialized();
++  final tester = LiveWidgetController(binding);
++  final base = await getDatabasesPath();
++  await deleteDatabase('$base/$database');
++  final out = Directory('$base/page-transitions')..createSync(recursive: true);
++  final capture = GlobalKey();
++  final steps = <Map<String, Object?>>[];
++  final errors = <String>[];
++  final previousError = FlutterError.onError;
++  FlutterError.onError = (details) {
++    errors.add(details.exceptionAsString());
++    previousError?.call(details);
++  };
++  runApp(RepaintBoundary(key: capture, child: const product.Bootstrap()));
++  await tester.pump(const Duration(milliseconds: 100));
++  GameController? controller;
++  Future<void> settled() async {
++    for (var n = 0; n < 240 && (n < 10 || controller?.busy == true); n++) {
++      await tester.pump(const Duration(milliseconds: 40));
++    }
++    // A pour can finish on this very frame and only now start the page switch.
++    // This is QA observation time, never an input or product navigation delay.
++    await tester.pump(const Duration(milliseconds: 320));
++  }
++
++  Future<void> record(String name, {bool screenshot = false}) async {
++    final c = controller!;
++    steps.add({
++      'name': name,
++      'page': c.page.name,
++      'phase': c.phase.name,
++      'instance': c.current?.id,
++      'revision': c.current?.revision,
++      'first_clears': c.progress.firstClears,
++      'pieces': c.progress.pieces,
++    });
++    if (screenshot) await b05Capture(capture, '${out.path}/$name.png');
++  }
++
++  Future<void> tapFinder(Finder finder) async {
++    verify(finder.evaluate().length == 1, 'Unique pointer target: $finder');
++    await tester.ensureVisible(finder);
++    await tester.pump(const Duration(milliseconds: 100));
++    await tester.tap(finder);
++    await settled();
++  }
++
++  Future<void> tap(String key) async {
++    final from = controller?.page.name;
++    await tapFinder(find.byKey(Key(key)));
++    steps.add({
++      'action': key,
++      'from': from,
++      'page': controller?.page.name,
++      'phase': controller?.phase.name,
++      'instance': controller?.current?.id,
++    });
++  }
++
++  Future<void> close() => tapFinder(find.text('Close').last);
++  try {
++    for (
++      var n = 0;
++      n < 300 && find.byType(product.PourluneApp).evaluate().isEmpty;
++      n++
++    ) {
++      await tester.pump(const Duration(milliseconds: 50));
++    }
++    verify(
++      find.byType(product.PourluneApp).evaluate().length == 1,
++      'Offline bootstrap',
++    );
++    final c = controller = tester
++        .widget<product.PourluneApp>(find.byType(product.PourluneApp))
++        .controller;
++    await settled();
++    await record('startup-home', screenshot: true);
++    // Host starts recording before this bounded QA pacing, never product delay.
++    await Future<void>.delayed(const Duration(seconds: 3));
++    await tap('sample-main-001');
++    await record('welcome-start-board');
++    await tap('pause');
++    await tap('pause-home');
++    await tap('chapters');
++    await record('home-chapters');
++    await tap('level-1');
++    await record('chapters-board');
++    await tap('pause');
++    await record('pause', screenshot: true);
++    await tap('resume-pause');
++    await tap('restart');
++    await tap('confirm-restart');
++    await record('restart-same-instance');
++    await tap('pause');
++    await tap('pause-home');
++    await record('board-home');
++    await tap('settings');
++    await tap('rules');
++    await record('settings-rules', screenshot: true);
++    await tap('home');
++    verify(c.page == GamePage.settings, 'Rules back to Settings');
++    await tap('privacy');
++    await record('privacy', screenshot: true);
++    await close();
++    await tap('reset-progress');
++    await tapFinder(find.text('Keep progress'));
++    await record('reset-cancel');
++    await tap('licenses');
++    verify(
++      find.byType(LicensePage).evaluate().isNotEmpty,
++      'Actual license route',
++    );
++    await record('licenses', screenshot: true);
++    final package = find.text('animations');
++    if (package.evaluate().isNotEmpty) {
++      await tapFinder(package);
++      await record('license-detail', screenshot: true);
++      await tapFinder(find.byType(BackButton).last);
++      await settled();
++    }
++    // Framework route and detail return are exercised using actual native back.
++    await tapFinder(find.byType(BackButton).last);
++    await settled();
++    await tap('home');
++    await tap('progress');
++    await record('progress');
++    await tap('home');
++    await tap('collection');
++    await tap('scene-color_studio');
++    await record('scene', screenshot: true);
++    await tap('scene-continue');
++    await record('scene-continue-board');
++    await tap('pause');
++    await tap('pause-home');
++    await tap('collection');
++    await tap('scene-color_studio');
++    await tap('collection-back');
++    await record('scene-collection');
++    await tap('home');
++    await tap('daily');
++    final today = parseCalendarDate(c.today.date);
++    for (final delta in [-1, 1]) {
++      final date = calendarDate(today.add(Duration(days: delta)));
++      if (parseCalendarDate(date).month == today.month) {
++        await tap('date-$date');
++        await record(
++          delta < 0 ? 'daily-history' : 'daily-future',
++          screenshot: true,
++        );
++        await close();
++      }
++    }
++    await tap('today');
++    await record('daily-board');
++    await tap('pause');
++    await tap('pause-home');
++    await tap('resume');
++    await record('ordinary-resume');
++    // Full settlement transactions prepare formal content boundaries. These are
++    // controlled QA progress, not natural player progression or ad evidence.
++    for (final level in [2, 4, 20, 60]) {
++      await c.goHome();
++      await settled();
++      await b05Seed(c.store, c.library, level - 1);
++      final puzzle = c.library.main[level]!;
++      await c.store.save(
++        b05Finish(
++          GameInstance.create(id: 'transitions-main$level', puzzle: puzzle),
++          take: puzzle.referenceMoves.length - 1,
++        ),
++        replace: true,
++      );
++      await c.initialize();
++      c.resume();
++      await settled();
++      await record('controlled-main$level');
++      final move = puzzle.referenceMoves.last;
++      await tap('bottle-${move.from}');
++      await tap('bottle-${move.to}');
++      verify(
++        c.page == GamePage.completion && c.phase == SavePhase.clean,
++        'Saved completion $level',
++      );
++      await record('completion-$level', screenshot: true);
++      if (level == 2) {
++        await tap('next');
++        verify(c.current!.puzzle.mainLevel == 3, 'Ordinary next');
++        await record('ordinary-next');
++      } else if (level == 4) {
++        await tap('view-patch');
++        await record('reward', screenshot: true);
++        await tap('view-collection');
++        await record('reward-scene');
++        await c.resumeSlot('ordinary');
++        await settled();
++        await tap('view-patch');
++        await record('saved-patch-revisit');
++        await tap('next');
++        verify(c.current!.puzzle.mainLevel == 5, 'Next once');
++        await record('next-board');
++        await tap('extra-bottle');
++        await record('extra-explanation', screenshot: true);
++        await tapFinder(find.text('Not now'));
++      } else if (level == 20) {
++        await tap('view-collection');
++        await record('chapter-scene');
++      } else {
++        verify(
++          find.byKey(const Key('next')).evaluate().isEmpty,
++          'No final Next',
++        );
++        await tap('daily-final');
++        await record('final-daily');
++      }
++    }
++    // Daily completion and replay use their own slot and retain ordinary state.
++    await c.startToday();
++    await settled();
++    var state = c.current!;
++    for (final move in state.puzzle.referenceMoves) {
++      await c.pour(move.from, move.to);
++      await settled();
++    }
++    verify(c.current!.completed, 'Daily completed');
++    await record('daily-completion', screenshot: true);
++    await tap('daily-calendar');
++    await tap('today');
++    await record('daily-replay-board');
++    await c.goHome();
++    await settled();
++    await c.startLevel(1, replace: true);
++    await settled();
++    state = c.current!;
++    for (final move in state.puzzle.referenceMoves) {
++      await c.pour(move.from, move.to);
++      await settled();
++    }
++    await record('replay-completion');
++    await tap('replay-again');
++    await record('replay-new-instance');
++    // Actual SQLite failure hook: no navigation before successful retry.
++    c.store.fault = (stage) {
++      if (stage == 'snapshot') throw StateError('QA disk full');
++    };
++    final move = c.current!.puzzle.referenceMoves.first;
++    await c.pour(move.from, move.to);
++    await c.goHome();
++    await settled();
++    verify(
++      c.page == GamePage.board && c.phase == SavePhase.failed,
++      'Save failure blocks Home',
++    );
++    await record('save-failed', screenshot: true);
++    c.store.fault = null;
++    await tap('retry');
++    verify(
++      c.page == GamePage.home && c.phase == SavePhase.clean,
++      'Retry then Home',
++    );
++    await tap('settings');
++    await c.updateSetting('reduced_motion', true);
++    await settled();
++    await tap('rules');
++    await record('reduced-rules', screenshot: true);
++    await tap('home');
++    await tap('home');
++    verify(errors.isEmpty, 'No Flutter errors: $errors');
++  } catch (error, stack) {
++    errors.add('$error\n$stack');
++  } finally {
++    final report = {
++      'platform': Platform.operatingSystem,
++      'mode': 'debug standalone LiveWidgetController',
++      'database': database,
++      'controlled_progress': [2, 4, 20, 60],
++      'steps': steps,
++      'errors': errors,
++      'physical_performance_pass': false,
++    };
++    await File('${out.path}/route.json').writeAsString(
++      const JsonEncoder.withIndent('  ').convert(report),
++      flush: true,
++    );
++    // ignore: avoid_print
++    print('PAGE_TRANSITIONS_DONE:${errors.isEmpty}:${steps.length}');
++    FlutterError.onError = previousError;
++  }
++}
+--- a/app/ios/Runner/Base.lproj/LaunchScreen.storyboard
++++ b/app/ios/Runner/Base.lproj/LaunchScreen.storyboard
+@@ -16,11 +16,13 @@
+                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                         <subviews>
+-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="YRO-k0-Ey4">
++                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="YRO-k0-Ey4">
+                             </imageView>
+                         </subviews>
+-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
++                        <color key="backgroundColor" red="0.5098039215686274" green="0.8745098039215686" blue="0.9450980392156862" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                         <constraints>
++                            <constraint firstItem="YRO-k0-Ey4" firstAttribute="width" constant="176" id="startup-width"/>
++                            <constraint firstItem="YRO-k0-Ey4" firstAttribute="height" constant="70.2913" id="startup-height"/>
+                             <constraint firstItem="YRO-k0-Ey4" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="1a2-6s-vTC"/>
+                             <constraint firstItem="YRO-k0-Ey4" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="4X2-HB-R7a"/>
+                         </constraints>
+@@ -32,6 +34,6 @@
+         </scene>
+     </scenes>
+     <resources>
+-        <image name="LaunchImage" width="168" height="185"/>
++        <image name="LaunchImage" width="176" height="70"/>
+     </resources>
+ </document>
+--- a/app/ios/Runner/Base.lproj/Main.storyboard
++++ b/app/ios/Runner/Base.lproj/Main.storyboard
+@@ -16,7 +16,7 @@
+                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
++                        <color key="backgroundColor" red="0.5098039215686274" green="0.8745098039215686" blue="0.9450980392156862" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                     </view>
+                 </viewController>
+                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+--- a/app/lib/application/game_controller.dart
++++ b/app/lib/application/game_controller.dart
+@@ -32,7 +32,9 @@
+   final Board before, after;
+   final String instanceId;
+   final bool reducedMotion;
+-  Duration get duration => Duration(milliseconds: reducedMotion ? 180 : 900);
++  Duration get duration => Duration(
++    milliseconds: reducedMotion ? 180 : 660 + 80 * units.clamp(1, 4),
++  );
+ }
+ 
+ enum GameFeedback { select, pour, error, complete }
+--- a/app/lib/main.dart
++++ b/app/lib/main.dart
+@@ -15,6 +15,10 @@
+ import 'development/scenarios.dart';
+ import 'l10n/app_localizations.dart';
+ import 'presentation/pourlune_app.dart';
++import 'presentation/startup_view.dart';
++import 'presentation/knit_components.dart';
++import 'presentation/scene_art.dart';
++import 'data/scenes.dart';
+ export 'presentation/pourlune_app.dart' show PourluneApp;
+ export 'presentation/game_screen.dart' show GameScreen;
+ 
+@@ -68,7 +72,7 @@
+   DevelopmentScenario? development;
+   GameAudio? audio;
+   ServiceHub? services;
+-  bool failed = false;
++  bool failed = false, _opening = false;
+   @override
+   void initState() {
+     super.initState();
+@@ -76,6 +80,8 @@
+   }
+ 
+   Future<void> _open() async {
++    if (_opening) return;
++    _opening = true;
+     setState(() => failed = false);
+     GameStore? store;
+     GameAudio? pendingAudio;
+@@ -168,6 +174,43 @@
+         await store.close();
+         return;
+       }
++      // Decode only the shell and the Home scene which is about to be shown.
++      // SDK/network work is never awaited here.
++      final welcome =
++          c.ordinary == null &&
++          c.daily == null &&
++          c.progress.firstClears == 0 &&
++          !c.tutorialComplete;
++      final size = MediaQuery.sizeOf(context);
++      final scene = sceneForLevel(c.progress.nextUnfinished ?? 1);
++      await Future.wait([
++        precacheImage(
++          const AssetImage('assets/art/backgrounds/game.png'),
++          context,
++          onError: (_, _) {},
++        ),
++        for (final name in ['logo', 'green-frame', 'cream-frame'])
++          precacheImage(
++            knitArtImage(context, name),
++            context,
++            onError: (_, _) {},
++          ),
++        warmScene(
++          context,
++          scene,
++          welcome
++              ? [for (var i = 1; i <= 5; i++) '$scene:$i']
++              : c.progress.pieces,
++          (size.width - 32).clamp(0.0, size.height * (welcome ? .38 : .32)),
++        ),
++      ]);
++      if (!mounted) {
++        c.dispose();
++        hub.dispose();
++        await sounds.dispose();
++        await store.close();
++        return;
++      }
+       setState(() {
+         controller = c;
+         audio = sounds;
+@@ -179,6 +222,8 @@
+       await pendingAudio?.dispose();
+       await store?.close();
+       if (mounted) setState(() => failed = true);
++    } finally {
++      _opening = false;
+     }
+   }
+ 
+@@ -211,32 +256,13 @@
+       locale: const Locale('en'),
+       supportedLocales: AppLocalizations.supportedLocales,
+       localizationsDelegates: AppLocalizations.localizationsDelegates,
+-      home: Scaffold(
+-        body: SafeArea(
+-          child: Builder(
+-            builder: (context) {
+-              final l = AppLocalizations.of(context);
+-              return Center(
+-                child: Padding(
+-                  padding: const EdgeInsets.all(24),
+-                  child: failed
+-                      ? Column(
+-                          mainAxisSize: MainAxisSize.min,
+-                          children: [
+-                            Text(l.openFailed),
+-                            FilledButton(
+-                              onPressed: _open,
+-                              child: Text(l.retry),
+-                            ),
+-                          ],
+-                        )
+-                      : const CircularProgressIndicator(),
+-                ),
+-              );
+-            },
+-          ),
+-        ),
++      debugShowCheckedModeBanner: false,
++      theme: ThemeData(
++        scaffoldBackgroundColor: startupBackground,
++        fontFamily: 'Nunito',
++        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff061b78)),
+       ),
++      home: StartupView(failed: failed, onRetry: _open),
+     );
+   }
+ }
+--- a/app/lib/presentation/board_page.dart
++++ b/app/lib/presentation/board_page.dart
+@@ -11,6 +11,7 @@
+ import 'bottle.dart';
+ import 'labels.dart';
+ import 'knit_components.dart';
++import 'motion.dart';
+ 
+ bool _hasLegalMove(Board board) {
+   for (var from = 0; from < board.length; from++) {
+@@ -158,140 +159,166 @@
+               );
+             }
+           }
+-          return AnimatedBuilder(
+-            animation: Listenable.merge([_pour, _error]),
+-            builder: (context, _) {
+-              final m = w.motion, t = _pour.value;
+-              final flow = ((t - .28) / .46).clamp(0.0, 1.0);
+-              final returning = t < .78
+-                  ? 1.0
+-                  : 1 - Curves.easeInOut.transform((t - .78) / .22);
+-              final envelope = t < .10
+-                  ? 0.0
+-                  : t < .28
+-                  ? Curves.easeInOut.transform((t - .10) / .18)
+-                  : returning;
+-              final liftEnvelope = t < .10
+-                  ? Curves.easeOut.transform(t / .10)
+-                  : returning;
+-              final direction =
+-                  m == null || positions[m.to].dx >= positions[m.from].dx
+-                  ? 1.0
+-                  : -1.0;
+-              final angle = m == null || _reduced
+-                  ? 0.0
+-                  : direction * 1.05 * envelope;
+-              final travel = m == null || _reduced
+-                  ? Offset.zero
+-                  : (positions[m.to] -
+-                            positions[m.from] +
+-                            Offset(-direction * 52, -85)) *
+-                        envelope;
+-              final lift = m == null || _reduced ? 0.0 : 14 * liftEnvelope;
+-              var offset = 0;
+-              Widget bottle(int i) => AnimatedContainer(
+-                duration: Duration(milliseconds: _reduced ? 80 : 140),
+-                transform: Matrix4.translationValues(
+-                  0,
+-                  w.selected == i && !_reduced ? -8 : 0,
+-                  0,
+-                ),
+-                margin: const EdgeInsets.symmetric(horizontal: 3),
+-                child: Transform.translate(
+-                  offset: Offset(
+-                    w.rejectedBottle == i && !_reduced
+-                        ? math.sin(_error.value * math.pi * 6) *
+-                              4 *
+-                              (1 - _error.value)
+-                        : 0,
+-                    0,
+-                  ),
+-                  child: DecoratedBox(
+-                    decoration: BoxDecoration(
+-                      borderRadius: BorderRadius.circular(16),
+-                      border: w.rejectedBottle == i && _error.isAnimating
+-                          ? Border.all(color: ink, width: 2)
+-                          : null,
+-                    ),
+-                    child: BottleButton(
+-                      key: Key('${w.keyPrefix}-$i'),
+-                      index: i,
+-                      liquid: board[i],
+-                      visualLiquid: m == null
+-                          ? null
+-                          : _liquid(i, m.units * flow),
+-                      angle: i == m?.from ? angle : 0,
+-                      lift: i == m?.from ? lift : 0,
+-                      target: i < w.state.puzzle.targets.length
+-                          ? w.state.puzzle.targets[i]
+-                          : null,
+-                      selected:
+-                          w.selected == i ||
+-                          (m != null && _reduced && (i == m.from || i == m.to)),
+-                      suggested: w.suggested == i,
+-                      width: width,
+-                      showSymbols: w.settings.colorSymbols,
+-                      strongContrast: w.settings.strongContrast,
+-                      semanticLabel:
+-                          '${l.bottleSemantics(i + 1, i < w.state.puzzle.targets.length && w.state.puzzle.targets[i] != null ? l.targetLabel(colorLabel(l, w.state.puzzle.targets[i]!)) : l.bufferLabel, board[i].isEmpty ? l.emptyLabel : l.contentsLabel(board[i].map((c) => colorLabel(l, c)).join(', ')), board[i].length)}${w.suggested == i ? ' ${l.suggestedTarget}' : ''}',
+-                      onTap: w.onTap == null
+-                          ? null
+-                          : () {
+-                              if (w.settings.haptics) {
+-                                HapticFeedback.selectionClick();
+-                              }
+-                              w.onTap!(i);
+-                            },
+-                    ),
+-                  ),
+-                ),
+-              );
+-              return Stack(
+-                clipBehavior: Clip.none,
+-                children: [
+-                  Column(
+-                    children: [
+-                      for (final n in rows)
+-                        Row(
+-                          mainAxisAlignment: MainAxisAlignment.center,
+-                          children: [
+-                            for (final i in List.generate(n, (_) => offset++))
+-                              if (i == m?.from)
+-                                SizedBox(width: width + 6, height: 184)
+-                              else
+-                                bottle(i),
+-                          ],
++          return TweenAnimationBuilder<double>(
++            key: ValueKey('arrival-${w.state.id}'),
++            duration: _reduced ? Duration.zero : KnitMotion.board,
++            tween: Tween(begin: 0, end: 1),
++            builder: (context, arrival, _) => AnimatedBuilder(
++              animation: Listenable.merge([_pour, _error]),
++              builder: (context, _) {
++                final m = w.motion, t = _pour.value;
++                final flow = ((t - .28) / .46).clamp(0.0, 1.0);
++                final returning = t < .78
++                    ? 1.0
++                    : 1 - Curves.easeInOut.transform((t - .78) / .22);
++                final envelope = t < .10
++                    ? 0.0
++                    : t < .28
++                    ? Curves.easeInOut.transform((t - .10) / .18)
++                    : returning;
++                final liftEnvelope = t < .10
++                    ? Curves.easeOut.transform(t / .10)
++                    : returning;
++                final direction =
++                    m == null || positions[m.to].dx >= positions[m.from].dx
++                    ? 1.0
++                    : -1.0;
++                final angle = m == null || _reduced
++                    ? 0.0
++                    : direction * 1.05 * envelope;
++                final travel = m == null || _reduced
++                    ? Offset.zero
++                    : (positions[m.to] -
++                              positions[m.from] +
++                              Offset(-direction * 52, -85)) *
++                          envelope;
++                final lift = m == null || _reduced ? 0.0 : 14 * liftEnvelope;
++                var offset = 0;
++                Widget bottle(int i) {
++                  final entered = _reduced
++                      ? 1.0
++                      : ((arrival * 290 - i * 35) / 80).clamp(0.0, 1.0);
++                  return Opacity(
++                    alwaysIncludeSemantics: true,
++                    opacity: entered,
++                    child: Transform.translate(
++                      offset: Offset(
++                        0,
++                        _reduced
++                            ? 0
++                            : 8 * (1 - KnitMotion.curve.transform(entered)),
++                      ),
++                      child: AnimatedContainer(
++                        duration: Duration(milliseconds: _reduced ? 80 : 140),
++                        transform: Matrix4.translationValues(
++                          0,
++                          w.selected == i && !_reduced ? -8 : 0,
++                          0,
+                         ),
+-                    ],
+-                  ),
+-                  if (m != null && !_reduced && t > .28 && t < .76)
+-                    Positioned.fill(
+-                      child: IgnorePointer(
+-                        child: CustomPaint(
+-                          painter: _StreamPainter(
+-                            from:
+-                                positions[m.from] +
+-                                travel +
+-                                Offset(
+-                                  width / 2 + math.sin(angle) * 60,
+-                                  84 - math.cos(angle) * 60 - lift,
+-                                ),
+-                            to: positions[m.to] + Offset(width / 2, 24),
+-                            color: liquidColors[m.before[m.from].last]!,
+-                            progress: flow,
++                        margin: const EdgeInsets.symmetric(horizontal: 3),
++                        child: Transform.translate(
++                          offset: Offset(
++                            w.rejectedBottle == i && !_reduced
++                                ? math.sin(_error.value * math.pi * 6) *
++                                      4 *
++                                      (1 - _error.value)
++                                : 0,
++                            0,
++                          ),
++                          child: DecoratedBox(
++                            decoration: BoxDecoration(
++                              borderRadius: BorderRadius.circular(16),
++                              border:
++                                  w.rejectedBottle == i && _error.isAnimating
++                                  ? Border.all(color: ink, width: 2)
++                                  : null,
++                            ),
++                            child: BottleButton(
++                              key: Key('${w.keyPrefix}-$i'),
++                              index: i,
++                              liquid: board[i],
++                              visualLiquid: m == null
++                                  ? null
++                                  : _liquid(i, m.units * flow),
++                              angle: i == m?.from ? angle : 0,
++                              lift: i == m?.from ? lift : 0,
++                              target: i < w.state.puzzle.targets.length
++                                  ? w.state.puzzle.targets[i]
++                                  : null,
++                              selected:
++                                  w.selected == i ||
++                                  (m != null &&
++                                      _reduced &&
++                                      (i == m.from || i == m.to)),
++                              suggested: w.suggested == i,
++                              width: width,
++                              showSymbols: w.settings.colorSymbols,
++                              strongContrast: w.settings.strongContrast,
++                              semanticLabel:
++                                  '${l.bottleSemantics(i + 1, i < w.state.puzzle.targets.length && w.state.puzzle.targets[i] != null ? l.targetLabel(colorLabel(l, w.state.puzzle.targets[i]!)) : l.bufferLabel, board[i].isEmpty ? l.emptyLabel : l.contentsLabel(board[i].map((c) => colorLabel(l, c)).join(', ')), board[i].length)}${w.suggested == i ? ' ${l.suggestedTarget}' : ''}',
++                              onTap: w.onTap == null
++                                  ? null
++                                  : () {
++                                      if (w.settings.haptics) {
++                                        HapticFeedback.selectionClick();
++                                      }
++                                      w.onTap!(i);
++                                    },
++                            ),
+                           ),
+                         ),
+                       ),
+                     ),
+-                  if (m != null)
+-                    Positioned(
+-                      left: positions[m.from].dx - 3 + travel.dx,
+-                      top: positions[m.from].dy + travel.dy,
+-                      child: bottle(m.from),
++                  );
++                }
++
++                return Stack(
++                  clipBehavior: Clip.none,
++                  children: [
++                    Column(
++                      children: [
++                        for (final n in rows)
++                          Row(
++                            mainAxisAlignment: MainAxisAlignment.center,
++                            children: [
++                              for (final i in List.generate(n, (_) => offset++))
++                                if (i == m?.from)
++                                  SizedBox(width: width + 6, height: 184)
++                                else
++                                  bottle(i),
++                            ],
++                          ),
++                      ],
+                     ),
+-                ],
+-              );
+-            },
++                    if (m != null && !_reduced && t > .28 && t < .76)
++                      Positioned.fill(
++                        child: IgnorePointer(
++                          child: CustomPaint(
++                            painter: _StreamPainter(
++                              from:
++                                  positions[m.from] +
++                                  travel +
++                                  Offset(
++                                    width / 2 + math.sin(angle) * 60,
++                                    84 - math.cos(angle) * 60 - lift,
++                                  ),
++                              to: positions[m.to] + Offset(width / 2, 24),
++                              color: liquidColors[m.before[m.from].last]!,
++                              progress: flow,
++                            ),
++                          ),
++                        ),
++                      ),
++                    if (m != null)
++                      Positioned(
++                        left: positions[m.from].dx - 3 + travel.dx,
++                        top: positions[m.from].dy + travel.dy,
++                        child: bottle(m.from),
++                      ),
++                  ],
++                );
++              },
++            ),
+           );
+         },
+       ),
+@@ -591,6 +618,7 @@
+         ),
+         if (kDebugMode)
+           ExpansionTile(
++            key: const PageStorageKey('board-diagnostics-state'),
+             title: const Text('Board diagnostics'),
+             children: [
+               Text(
+--- a/app/lib/presentation/collection_pages.dart
++++ b/app/lib/presentation/collection_pages.dart
+@@ -6,6 +6,7 @@
+ import 'knit_components.dart';
+ import 'labels.dart';
+ import 'scene_art.dart';
++import 'motion.dart';
+ 
+ Future<void> _finalNavigate(GameController c, GamePage target) async {
+   final piece = c.receipt?.piece;
+@@ -431,7 +432,9 @@
+   Widget build(BuildContext context) {
+     final reduced = MediaQuery.disableAnimationsOf(context);
+     return TweenAnimationBuilder<double>(
+-      duration: Duration(milliseconds: reduced ? 150 : 700),
++      duration: reduced
++          ? const Duration(milliseconds: 150)
++          : KnitMotion.success,
+       tween: Tween(begin: 0, end: 1),
+       curve: Curves.easeOutCubic,
+       child: child,
+--- a/app/lib/presentation/game_screen.dart
++++ b/app/lib/presentation/game_screen.dart
+@@ -15,6 +15,8 @@
+ import 'labels.dart';
+ import 'knit_components.dart';
+ import 'service_views.dart';
++import 'motion.dart';
++import 'scene_art.dart';
+ 
+ class GameScreen extends StatefulWidget {
+   const GameScreen({
+@@ -36,6 +38,42 @@
+   GameController get c => widget.controller;
+   AppLocalizations get l => AppLocalizations.of(context);
+   bool _inForeground = true, _audioPaused = false;
++  bool _pauseOpen = false;
++  GamePage _motionPage = GamePage.home;
++  String? _motionInstance;
++  KnitPageTransition _transition = KnitPageTransition.fadeThrough;
++  bool _motionBack = false, _retainPrevious = true;
++  String? _warmedInstance;
++  void _warmUpcoming() {
++    final state = c.current;
++    if (!mounted ||
++        c.page != GamePage.board ||
++        state == null ||
++        _warmedInstance == state.id) {
++      return;
++    }
++    _warmedInstance = state.id;
++    WidgetsBinding.instance.addPostFrameCallback((_) {
++      if (!mounted) return;
++      unawaited(
++        precacheImage(
++          knitArtImage(context, 'success', width: 96),
++          context,
++          onError: (_, _) {},
++        ),
++      );
++      final level = state.puzzle.mainLevel;
++      if (level == null || level % 4 != 0) return;
++      final scene = sceneForLevel(level);
++      unawaited(
++        warmScene(context, scene, [
++          ...c.progress.pieces,
++          '$scene:${((level - 1) % 20) ~/ 4 + 1}',
++        ], (MediaQuery.sizeOf(context).width - 32).clamp(0.0, 1254.0)),
++      );
++    });
++  }
++
+   final _presentedRevealSounds = <String>{};
+   void _syncAudio() {
+     final audio = widget.audio;
+@@ -67,6 +105,8 @@
+         WidgetsBinding.instance.lifecycleState == null ||
+         WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
+     c.addListener(_syncAudio);
++    c.addListener(_warmUpcoming);
++    _warmUpcoming();
+     _syncAudio();
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+       if (mounted && c.page == GamePage.home) {
+@@ -85,6 +125,7 @@
+   void dispose() {
+     WidgetsBinding.instance.removeObserver(this);
+     c.removeListener(_syncAudio);
++    c.removeListener(_warmUpcoming);
+     super.dispose();
+   }
+ 
+@@ -101,12 +142,10 @@
+     String action,
+     String key,
+   ) async =>
+-      await showDialog<bool>(
++      await showKnitDialog<bool>(
+         context: context,
+-        animationStyle: c.settings.reducedMotion
+-            ? AnimationStyle.noAnimation
+-            : null,
+         builder: (context) => AlertDialog(
++          scrollable: true,
+           title: Text(title),
+           content: Text(body),
+           actions: key == 'confirm-reset'
+@@ -141,9 +180,10 @@
+       ) ??
+       false;
+   Future<void> _info(String title, String body) async {
+-    await showDialog<void>(
++    await showKnitDialog<void>(
+       context: context,
+       builder: (context) => AlertDialog(
++        scrollable: true,
+         title: Text(title),
+         content: Text(body),
+         actions: [
+@@ -234,6 +274,9 @@
+   }
+ 
+   Future<void> _pause() async {
++    if (_pauseOpen || !mounted) return;
++    _pauseOpen = true;
++    String? action;
+     if (c.motion != null) c.completeMotion(c.motion!.token);
+     c.cancelHint();
+     _audioPaused = true;
+@@ -241,11 +284,8 @@
+     c.setPaused(true);
+     _syncAudio();
+     try {
+-      await showDialog<void>(
++      action = await showKnitDialog<String>(
+         context: context,
+-        animationStyle: c.settings.reducedMotion
+-            ? AnimationStyle.noAnimation
+-            : null,
+         builder: (dialogContext) => ListenableBuilder(
+           listenable: c,
+           builder: (context, _) => Dialog(
+@@ -313,8 +353,7 @@
+                       OutlinedButton(
+                         key: const Key('pause-restart'),
+                         onPressed: () {
+-                          Navigator.pop(dialogContext);
+-                          _restart();
++                          Navigator.pop(dialogContext, 'restart');
+                         },
+                         child: Text(l.restart, textAlign: TextAlign.center),
+                       ),
+@@ -322,8 +361,7 @@
+                       OutlinedButton(
+                         key: const Key('pause-home'),
+                         onPressed: () {
+-                          Navigator.pop(dialogContext);
+-                          c.goHome();
++                          Navigator.pop(dialogContext, 'home');
+                         },
+                         child: Text(l.home, textAlign: TextAlign.center),
+                       ),
+@@ -336,11 +374,15 @@
+         ),
+       );
+     } finally {
++      _pauseOpen = false;
+       _audioPaused = false;
+       c.services?.ads.update(modal: false);
+       c.setPaused(false);
+       if (mounted) _syncAudio();
+     }
++    if (!mounted) return;
++    if (action == 'restart') await _restart();
++    if (action == 'home') await c.goHome();
+   }
+ 
+   Future<void> _reset() async {
+@@ -358,6 +400,42 @@
+   Widget build(BuildContext context) => ListenableBuilder(
+     listenable: c,
+     builder: (context, _) {
++      final instance =
++          {
++            GamePage.board,
++            GamePage.completion,
++            GamePage.reward,
++          }.contains(c.page)
++          ? c.current?.id
++          : null;
++      if (_motionPage != c.page || _motionInstance != instance) {
++        final previous = _motionPage;
++        final related =
++            (previous == GamePage.settings && c.page == GamePage.rules) ||
++            (previous == GamePage.rules && c.page == GamePage.settings);
++        final detail =
++            (previous == GamePage.collection && c.page == GamePage.scene) ||
++            (previous == GamePage.scene && c.page == GamePage.collection);
++        _transition = c.page == GamePage.board || related
++            ? KnitPageTransition.horizontal
++            : detail ||
++                  c.page == GamePage.completion ||
++                  c.page == GamePage.reward ||
++                  (previous == GamePage.reward && c.page == GamePage.scene) ||
++                  (previous == GamePage.completion && c.page == GamePage.scene)
++            ? KnitPageTransition.scaled
++            : KnitPageTransition.fadeThrough;
++        _motionBack =
++            c.page == GamePage.home ||
++            (_motionPage == GamePage.rules && c.page == GamePage.settings) ||
++            (_motionPage == GamePage.scene && c.page == GamePage.collection);
++        // A live outgoing board would own a second motion presenter. Dispose it
++        // on departure; the incoming page still fades over the fixed background.
++        _retainPrevious =
++            _motionPage != GamePage.board && c.page != GamePage.board;
++        _motionPage = c.page;
++        _motionInstance = instance;
++      }
+       final title = switch (c.page) {
+         GamePage.chapters => l.chapters,
+         GamePage.daily => l.dailyPuzzle,
+@@ -430,101 +508,123 @@
+                 child: GestureDetector(
+                   behavior: HitTestBehavior.translucent,
+                   onTap: c.page == GamePage.board ? c.clearSelection : null,
+-                  child: SingleChildScrollView(
+-                    padding: const EdgeInsets.all(16),
+-                    child: Column(
+-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+-                      children: [
+-                        if (c.page != GamePage.home && c.page != GamePage.board)
+-                          KnitHeader(
+-                            title:
+-                                c.page == GamePage.completion ||
+-                                    c.page == GamePage.reward
+-                                ? (c.current?.slot == 'daily'
+-                                      ? l.dailyPuzzle
+-                                      : l.level(c.current!.puzzle.mainLevel!))
+-                                : title,
+-                            backLabel: c.page == GamePage.rules
+-                                ? l.settings
+-                                : l.home,
+-                            backKey: Key(
+-                              c.page == GamePage.completion
+-                                  ? 'page-back'
+-                                  : 'home',
++                  child: PageMotion(
++                    page: (
++                      c.page,
++                      c.page == GamePage.scene ? c.selectedScene : '',
++                      instance,
++                    ),
++                    back: _motionBack,
++                    transition: _transition,
++                    animateInitial: c.page == GamePage.home,
++                    retainPrevious: _retainPrevious,
++                    immediate: c.phase == SavePhase.failed,
++                    child: SingleChildScrollView(
++                      key: PageStorageKey(
++                        instance != null
++                            ? 'scroll-${c.page.name}-$instance'
++                            : c.page == GamePage.scene
++                            ? 'scroll-scene-${c.selectedScene}'
++                            : 'scroll-${c.page.name}',
++                      ),
++                      padding: const EdgeInsets.all(16),
++                      child: Column(
++                        crossAxisAlignment: CrossAxisAlignment.stretch,
++                        children: [
++                          if (c.page != GamePage.home &&
++                              c.page != GamePage.board)
++                            KnitHeader(
++                              title:
++                                  c.page == GamePage.completion ||
++                                      c.page == GamePage.reward
++                                  ? (c.current?.slot == 'daily'
++                                        ? l.dailyPuzzle
++                                        : l.level(c.current!.puzzle.mainLevel!))
++                                  : title,
++                              backLabel: c.page == GamePage.rules
++                                  ? l.settings
++                                  : l.home,
++                              backKey: Key(
++                                c.page == GamePage.completion
++                                    ? 'page-back'
++                                    : 'home',
++                              ),
++                              onBack: c.phase == SavePhase.saving
++                                  ? null
++                                  : c.page == GamePage.rules
++                                  ? () => c.navigate(GamePage.settings)
++                                  : c.goHome,
+                             ),
+-                            onBack: c.phase == SavePhase.saving
+-                                ? null
+-                                : c.page == GamePage.rules
+-                                ? () => c.navigate(GamePage.settings)
+-                                : c.goHome,
+-                          ),
+-                        if (c.library.engineering)
+-                          Text(
+-                            l.developmentNotice,
+-                            style: const TextStyle(fontWeight: FontWeight.w600),
+-                          ),
+-                        if (c.recoveryNotice != null)
+-                          Text(
+-                            c.recoveryNotice == 'recovered'
+-                                ? l.recoveredSave
+-                                : l.unavailableSave,
+-                          ),
+-                        if (c.notice != null)
+-                          Semantics(
+-                            liveRegion: true,
+-                            child: Text(noticeLabel(l, c.notice!)),
+-                          ),
+-                        if (c.phase == SavePhase.failed)
+-                          KnitPanel(
+-                            key: const Key('save-failed'),
+-                            child: Padding(
+-                              padding: const EdgeInsets.all(12),
+-                              child: Column(
+-                                children: [
+-                                  Text(l.saveFailed),
+-                                  Wrap(
+-                                    spacing: 8,
+-                                    children: [
+-                                      FilledButton(
+-                                        key: const Key('retry'),
+-                                        onPressed: c.retry,
+-                                        child: Text(l.retry),
+-                                      ),
+-                                      TextButton(
+-                                        key: const Key('stay'),
+-                                        onPressed: c.stayHere,
+-                                        child: Text(l.stayHere),
+-                                      ),
+-                                    ],
+-                                  ),
+-                                ],
++                          if (c.library.engineering)
++                            Text(
++                              l.developmentNotice,
++                              style: const TextStyle(
++                                fontWeight: FontWeight.w600,
+                               ),
+                             ),
++                          if (c.recoveryNotice != null)
++                            Text(
++                              c.recoveryNotice == 'recovered'
++                                  ? l.recoveredSave
++                                  : l.unavailableSave,
++                            ),
++                          if (c.notice != null)
++                            Semantics(
++                              liveRegion: true,
++                              child: Text(noticeLabel(l, c.notice!)),
++                            ),
++                          if (c.phase == SavePhase.failed)
++                            KnitPanel(
++                              key: const Key('save-failed'),
++                              child: Padding(
++                                padding: const EdgeInsets.all(12),
++                                child: Column(
++                                  children: [
++                                    Text(l.saveFailed),
++                                    Wrap(
++                                      spacing: 8,
++                                      children: [
++                                        FilledButton(
++                                          key: const Key('retry'),
++                                          onPressed: c.retry,
++                                          child: Text(l.retry),
++                                        ),
++                                        TextButton(
++                                          key: const Key('stay'),
++                                          onPressed: c.stayHere,
++                                          child: Text(l.stayHere),
++                                        ),
++                                      ],
++                                    ),
++                                  ],
++                                ),
++                              ),
++                            ),
++                          RewardStatus(controller: c),
++                          body,
++                          const SizedBox(height: 14),
++                          Text(
++                            c.phase == SavePhase.saving
++                                ? l.saving
++                                : c.phase == SavePhase.clean
++                                ? l.saved
++                                : l.pauseMemory,
++                            key: const Key('save-status'),
++                            textAlign: TextAlign.center,
++                            style: Theme.of(context).textTheme.bodySmall,
+                           ),
+-                        RewardStatus(controller: c),
+-                        body,
+-                        const SizedBox(height: 14),
+-                        Text(
+-                          c.phase == SavePhase.saving
+-                              ? l.saving
+-                              : c.phase == SavePhase.clean
+-                              ? l.saved
+-                              : l.pauseMemory,
+-                          key: const Key('save-status'),
+-                          textAlign: TextAlign.center,
+-                          style: Theme.of(context).textTheme.bodySmall,
+-                        ),
+-                        if (kDebugMode &&
+-                            widget.advanceTestDay != null &&
+-                            c.page == GamePage.home)
+-                          TextButton(
+-                            key: const Key('advance-test-day'),
+-                            onPressed: widget.advanceTestDay,
+-                            child: const Text(
+-                              'Development: advance local test day',
++                          if (kDebugMode &&
++                              widget.advanceTestDay != null &&
++                              c.page == GamePage.home)
++                            TextButton(
++                              key: const Key('advance-test-day'),
++                              onPressed: widget.advanceTestDay,
++                              child: const Text(
++                                'Development: advance local test day',
++                              ),
+                             ),
+-                          ),
+-                      ],
++                        ],
++                      ),
+                     ),
+                   ),
+                 ),
+--- a/app/lib/presentation/knit_components.dart
++++ b/app/lib/presentation/knit_components.dart
+@@ -3,6 +3,7 @@
+ import '../l10n/app_localizations.dart';
+ import 'bottle.dart';
+ import 'labels.dart';
++import 'motion.dart';
+ 
+ // Display bounds remove transparent canvas margins, without altering raw PNGs.
+ const _art = <String, (Size, Rect)>{
+@@ -47,16 +48,9 @@
+                     top: -bounds.top,
+                     width: size.width,
+                     height: size.height,
+-                    child: Image.asset(
+-                      'assets/art/ui/$name.png',
++                    child: Image(
++                      image: knitArtImage(context, name, width: width ?? 360),
+                       fit: BoxFit.fill,
+-                      cacheWidth:
+-                          ((width ?? 360) *
+-                                  MediaQuery.devicePixelRatioOf(context) *
+-                                  size.width /
+-                                  bounds.width)
+-                              .ceil()
+-                              .clamp(64, size.width.toInt()),
+                       filterQuality: FilterQuality.medium,
+                     ),
+                   ),
+@@ -76,20 +70,24 @@
+   Set<WidgetState> states,
+   Widget? child, {
+   required bool primary,
+-}) => Stack(
+-  fit: StackFit.passthrough,
+-  children: [
+-    Positioned.fill(
+-      child: Opacity(
+-        opacity: states.contains(WidgetState.disabled) ? .55 : 1,
+-        child: KnitArt(
+-          name: primary ? 'green-frame' : 'cream-frame',
+-          fit: BoxFit.fill,
++}) => knitPressFeedback(
++  context,
++  states,
++  Stack(
++    fit: StackFit.passthrough,
++    children: [
++      Positioned.fill(
++        child: Opacity(
++          opacity: states.contains(WidgetState.disabled) ? .55 : 1,
++          child: KnitArt(
++            name: primary ? 'green-frame' : 'cream-frame',
++            fit: BoxFit.fill,
++          ),
+         ),
+       ),
+-    ),
+-    ?child,
+-  ],
++      ?child,
++    ],
++  ),
+ );
+ 
+ class KnitPanel extends StatelessWidget {
+@@ -319,3 +317,41 @@
+     ),
+   );
+ }
++
++ImageProvider<Object> knitArtImage(
++  BuildContext context,
++  String name, {
++  double width = 360,
++}) {
++  final (size, bounds) = _art[name]!;
++  final cacheWidth =
++      (width *
++              MediaQuery.devicePixelRatioOf(context) *
++              size.width /
++              bounds.width)
++          .ceil()
++          .clamp(64, size.width.toInt());
++  return ResizeImage(AssetImage('assets/art/ui/$name.png'), width: cacheWidth);
++}
++
++Widget knitPressFeedback(
++  BuildContext context,
++  Set<WidgetState> states,
++  Widget? child,
++) => AnimatedScale(
++  scale:
++      !MediaQuery.disableAnimationsOf(context) &&
++          states.contains(WidgetState.pressed) &&
++          !states.contains(WidgetState.disabled)
++      ? .96
++      : 1,
++  duration: MediaQuery.disableAnimationsOf(context)
++      ? Duration.zero
++      : states.contains(WidgetState.pressed)
++      ? KnitMotion.press
++      : KnitMotion.release,
++  curve: states.contains(WidgetState.pressed)
++      ? Curves.easeOut
++      : Curves.easeOutBack,
++  child: child,
++);
+--- a/app/lib/presentation/motion.dart
++++ b/app/lib/presentation/motion.dart
+@@ -0,0 +1,239 @@
++import 'package:flutter/material.dart';
++import 'package:animations/animations.dart';
++
++/// Presentation only. These never gate a save or dispatch a game action.
++abstract final class KnitMotion {
++  static const press = Duration(milliseconds: 75);
++  static const release = Duration(milliseconds: 150);
++  static const page = Duration(milliseconds: 260);
++  static const board = Duration(milliseconds: 290);
++  static const shortFade = Duration(milliseconds: 120);
++  static const reveal = Duration(milliseconds: 700);
++  static const success = Duration(milliseconds: 300);
++  static const curve = Curves.easeOutCubic;
++}
++
++enum KnitPageTransition { fadeThrough, horizontal, scaled }
++
++/// Two visual pages at most. The outgoing page cannot receive any input/focus
++/// or contribute semantics. No animation callback performs navigation.
++class PageMotion extends StatefulWidget {
++  const PageMotion({
++    super.key,
++    required this.page,
++    required this.child,
++    this.back = false,
++    this.transition = KnitPageTransition.fadeThrough,
++    this.animateInitial = false,
++    this.immediate = false,
++    this.retainPrevious = true,
++  });
++  final Object page;
++  final KnitPageTransition transition;
++  final bool animateInitial;
++  final Widget child;
++  final bool back, immediate, retainPrevious;
++  @override
++  State<PageMotion> createState() => _PageMotionState();
++}
++
++class _PageMotionState extends State<PageMotion>
++    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
++  late final AnimationController _animation =
++      AnimationController(vsync: this, duration: KnitMotion.page, value: 1)
++        ..addStatusListener((status) {
++          if ((status == AnimationStatus.completed ||
++                  status == AnimationStatus.dismissed) &&
++              _outgoing != null &&
++              mounted) {
++            setState(() => _outgoing = null);
++          }
++        });
++  Widget? _outgoing;
++  Object? _oldPage;
++  bool _reduced = false, _back = false;
++  @override
++  void initState() {
++    super.initState();
++    WidgetsBinding.instance.addObserver(this);
++    if (widget.animateInitial) {
++      _animation.duration = KnitMotion.shortFade;
++      _animation.forward(from: 0);
++    }
++  }
++
++  @override
++  void didChangeDependencies() {
++    super.didChangeDependencies();
++    _reduced = MediaQuery.disableAnimationsOf(context);
++    if (_reduced || widget.immediate) _finish();
++  }
++
++  void _finish() {
++    _outgoing = null;
++    _animation.value = _back ? 0 : 1;
++  }
++
++  @override
++  void didUpdateWidget(covariant PageMotion oldWidget) {
++    super.didUpdateWidget(oldWidget);
++    if (widget.immediate || _reduced) {
++      _finish();
++    } else if (oldWidget.page != widget.page) {
++      _outgoing = null;
++      _oldPage = oldWidget.page;
++      _back = widget.back;
++      _animation.duration = KnitMotion.page;
++      if (_back) {
++        _animation.reverse(from: 1);
++      } else {
++        _animation.forward(from: 0);
++      }
++      _outgoing = widget.retainPrevious ? oldWidget.child : null;
++    }
++  }
++
++  @override
++  void didChangeAppLifecycleState(AppLifecycleState state) {
++    if (state != AppLifecycleState.resumed) setState(_finish);
++  }
++
++  @override
++  void dispose() {
++    WidgetsBinding.instance.removeObserver(this);
++    _animation.dispose();
++    super.dispose();
++  }
++
++  Widget _transition(Widget child, {required bool incoming}) {
++    // Same primary/secondary contract as a pushed/popped PageRoute. We keep a
++    // bounded host because PageTransitionSwitcher may retain many old children.
++    final Animation<double> primary = _back
++        ? (incoming ? kAlwaysCompleteAnimation : _animation)
++        : (incoming ? _animation : kAlwaysCompleteAnimation);
++    final Animation<double> secondary = _back
++        ? (incoming ? _animation : kAlwaysDismissedAnimation)
++        : (incoming ? kAlwaysDismissedAnimation : _animation);
++    if (widget.transition == KnitPageTransition.fadeThrough) {
++      return FadeThroughTransition(
++        animation: primary,
++        secondaryAnimation: secondary,
++        fillColor: Colors.transparent,
++        child: child,
++      );
++    }
++    return SharedAxisTransition(
++      animation: primary,
++      secondaryAnimation: secondary,
++      transitionType: widget.transition == KnitPageTransition.horizontal
++          ? SharedAxisTransitionType.horizontal
++          : SharedAxisTransitionType.scaled,
++      fillColor: Colors.transparent,
++      child: child,
++    );
++  }
++
++  @override
++  Widget build(BuildContext context) => Stack(
++    fit: StackFit.expand,
++    children: [
++      if (_outgoing != null)
++        IgnorePointer(
++          key: const Key('page-outgoing'),
++          child: ExcludeSemantics(
++            child: ExcludeFocus(
++              child: TickerMode(
++                enabled: false,
++                child: _transition(
++                  KeyedSubtree(key: ValueKey(_oldPage), child: _outgoing!),
++                  incoming: false,
++                ),
++              ),
++            ),
++          ),
++        ),
++      FocusScope(
++        key: ValueKey(widget.page),
++        autofocus: true,
++        child: KeyedSubtree(
++          key: const Key('page-enter'),
++          child: _transition(widget.child, incoming: true),
++        ),
++      ),
++    ],
++  );
++}
++
++final _dialogOpen = Expando<bool>();
++
++Future<T?> showKnitDialog<T>({
++  required BuildContext context,
++  required WidgetBuilder builder,
++}) async {
++  final navigator = Navigator.of(context, rootNavigator: true);
++  // A repeated confirmation must not dispatch the same action twice.
++  if (_dialogOpen[navigator] == true) return null;
++  _dialogOpen[navigator] = true;
++  try {
++    return await navigator.push<T>(
++      _KnitDialogRoute<T>(
++        context: context,
++        builder: builder,
++        themes: InheritedTheme.capture(from: context, to: navigator.context),
++      ),
++    );
++  } finally {
++    _dialogOpen[navigator] = null;
++  }
++}
++
++class _KnitDialogRoute<T> extends DialogRoute<T> {
++  _KnitDialogRoute({
++    required super.context,
++    required super.builder,
++    required super.themes,
++  }) : super(
++         requestFocus: true,
++         traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop,
++         animationStyle: const AnimationStyle(
++           duration: Duration(milliseconds: 220),
++           reverseDuration: Duration(milliseconds: 150),
++         ),
++       );
++  @override
++  Duration get reverseTransitionDuration => const Duration(milliseconds: 150);
++
++  @override
++  Widget buildTransitions(
++    BuildContext context,
++    Animation<double> animation,
++    Animation<double> secondaryAnimation,
++    Widget child,
++  ) {
++    if (MediaQuery.disableAnimationsOf(context)) return child;
++    return FadeScaleTransition(animation: animation, child: child);
++  }
++}
++
++/// Covers framework-owned routes (licenses and license detail) without migrating
++/// the existing Material widgets to material_ui or adding a second navigation.
++class KnitRouteTransitions extends PageTransitionsBuilder {
++  const KnitRouteTransitions();
++  @override
++  Widget buildTransitions<T>(
++    PageRoute<T> route,
++    BuildContext context,
++    Animation<double> animation,
++    Animation<double> secondaryAnimation,
++    Widget child,
++  ) {
++    if (MediaQuery.disableAnimationsOf(context)) return child;
++    return SharedAxisTransition(
++      animation: animation,
++      secondaryAnimation: secondaryAnimation,
++      transitionType: SharedAxisTransitionType.horizontal,
++      fillColor: Colors.transparent,
++      child: child,
++    );
++  }
++}
+--- a/app/lib/presentation/navigation_pages.dart
++++ b/app/lib/presentation/navigation_pages.dart
+@@ -2,6 +2,9 @@
+ 
+ import 'package:flutter/foundation.dart';
+ import 'package:flutter/material.dart';
++
++import 'motion.dart';
++
+ import 'package:intl/intl.dart';
+ import 'package:pourlune_core/pourlune_core.dart';
+ 
+@@ -221,24 +224,27 @@
+               ),
+             ],
+             if (kDebugMode) ...[
+-              ExpansionTile(
+-                key: const Key('development-tools'),
+-                title: const Text('Engineering tools'),
+-                children: [
+-                  const Text(
+-                    'Debug-only fixture bypass. These samples are not a release catalog.',
+-                  ),
+-                  for (final p in c.library.main.values.where(
+-                    (p) => [1, 12, 21].contains(p.mainLevel),
+-                  ))
+-                    TextButton(
+-                      key: Key('engineering-${p.id}'),
+-                      onPressed: c.busy ? null : () => onEngineering(p),
+-                      child: Text(
+-                        '${p.id} · ${p.initial.expand((b) => b).toSet().length} colors',
++              KeyedSubtree(
++                key: const PageStorageKey('engineering-expansion-state'),
++                child: ExpansionTile(
++                  key: const Key('development-tools'),
++                  title: const Text('Engineering tools'),
++                  children: [
++                    const Text(
++                      'Debug-only fixture bypass. These samples are not a release catalog.',
++                    ),
++                    for (final p in c.library.main.values.where(
++                      (p) => [1, 12, 21].contains(p.mainLevel),
++                    ))
++                      TextButton(
++                        key: Key('engineering-${p.id}'),
++                        onPressed: c.busy ? null : () => onEngineering(p),
++                        child: Text(
++                          '${p.id} · ${p.initial.expand((b) => b).toSet().length} colors',
++                        ),
+                       ),
+-                    ),
+-                ],
++                  ],
++                ),
+               ),
+               TextButton(
+                 key: const Key('progress'),
+@@ -366,7 +372,7 @@
+       widget.onToday();
+       return;
+     }
+-    await showDialog<void>(
++    await showKnitDialog<void>(
+       context: context,
+       builder: (context) => AlertDialog(
+         title: Text(date),
+--- a/app/lib/presentation/pourlune_app.dart
++++ b/app/lib/presentation/pourlune_app.dart
+@@ -5,6 +5,7 @@
+ import '../application/game_audio.dart';
+ import '../l10n/app_localizations.dart';
+ import 'bottle.dart';
++import 'motion.dart';
+ import 'game_screen.dart';
+ import 'knit_components.dart';
+ 
+@@ -42,6 +43,12 @@
+             ? Colors.white
+             : const Color(0xff82dff1),
+         useMaterial3: true,
++        pageTransitionsTheme: PageTransitionsTheme(
++          builders: {
++            for (final platform in TargetPlatform.values)
++              platform: const KnitRouteTransitions(),
++          },
++        ),
+         textTheme: ThemeData.light().textTheme.apply(
+           fontFamily: 'Nunito',
+           bodyColor: ink,
+@@ -100,8 +107,12 @@
+                     ),
+               ),
+         ),
++        iconButtonTheme: const IconButtonThemeData(
++          style: ButtonStyle(backgroundBuilder: knitPressFeedback),
++        ),
+         textButtonTheme: TextButtonThemeData(
+-          style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
++          style: TextButton.styleFrom(minimumSize: const Size(48, 48))
++              .copyWith(backgroundBuilder: knitPressFeedback),
+         ),
+       ),
+       builder: (context, child) {
+--- a/app/lib/presentation/scene_art.dart
++++ b/app/lib/presentation/scene_art.dart
+@@ -1,4 +1,6 @@
+ import 'package:flutter/material.dart';
++
++import 'motion.dart';
+ 
+ /// Object rectangles are normalized to the square scene canvas; raw PNG alpha
+ /// is retained. The same composition serves Home, collection and detail.
+@@ -43,13 +45,10 @@
+       child: LayoutBuilder(
+         builder: (context, box) {
+           final width = box.maxWidth;
+-          Widget image(String name, double logicalWidth) => Image.asset(
+-            'assets/art/scenes/$scene/$name.png',
++          Widget image(String name, double logicalWidth) => Image(
++            image: sceneImage(context, scene, name, logicalWidth),
+             fit: BoxFit.contain,
+             filterQuality: FilterQuality.medium,
+-            cacheWidth: (logicalWidth * MediaQuery.devicePixelRatioOf(context))
+-                .ceil()
+-                .clamp(64, 1254),
+           );
+           return RepaintBoundary(
+             key: Key('scene-$scene-composition'),
+@@ -73,7 +72,7 @@
+                           ? TweenAnimationBuilder<double>(
+                               duration: MediaQuery.disableAnimationsOf(context)
+                                   ? const Duration(milliseconds: 150)
+-                                  : const Duration(milliseconds: 700),
++                                  : KnitMotion.reveal,
+                               tween: Tween(begin: 0, end: 1),
+                               curve: Curves.easeOutCubic,
+                               builder: (context, value, child) => Opacity(
+@@ -103,3 +102,38 @@
+     ),
+   );
+ }
++
++ImageProvider<Object> sceneImage(
++  BuildContext context,
++  String scene,
++  String name,
++  double width,
++) => ResizeImage(
++  AssetImage('assets/art/scenes/$scene/$name.png'),
++  width: (width * MediaQuery.devicePixelRatioOf(context)).ceil().clamp(
++    64,
++    1254,
++  ),
++);
++Future<void> warmScene(
++  BuildContext context,
++  String scene,
++  List<String> pieces,
++  double width,
++) async {
++  final providers = <ImageProvider<Object>>[
++    sceneImage(context, scene, 'base', width),
++    for (var i = 1; i <= 5; i++)
++      if (pieces.contains('$scene:$i'))
++        sceneImage(
++          context,
++          scene,
++          'piece-$i',
++          width * sceneObjectRects[scene]![i - 1].width,
++        ),
++  ];
++  await Future.wait([
++    for (final image in providers)
++      precacheImage(image, context, onError: (_, _) {}),
++  ]);
++}
+--- a/app/lib/presentation/service_views.dart
++++ b/app/lib/presentation/service_views.dart
+@@ -8,6 +8,7 @@
+ import '../services/ad_coordinator.dart';
+ import '../services/service_hub.dart';
+ import 'knit_components.dart';
++import 'motion.dart';
+ 
+ Future<void> openSupportEntry(
+   BuildContext context,
+@@ -27,7 +28,7 @@
+ Future<void> showExtraBottle(BuildContext context, GameController c) async {
+   final l = AppLocalizations.of(context), hub = c.services;
+   // The first sheet explains the exchange; only its explicit Watch starts it.
+-  final watch = await showDialog<bool>(
++  final watch = await showKnitDialog<bool>(
+     context: context,
+     builder: (context) => ListenableBuilder(
+       listenable: c,
+@@ -93,7 +94,7 @@
+ 
+ Future<void> showPrivacyChoices(BuildContext context, GameController c) async {
+   final l = AppLocalizations.of(context), hub = c.services;
+-  await showDialog<void>(
++  await showKnitDialog<void>(
+     context: context,
+     builder: (context) => ListenableBuilder(
+       listenable: c,
+@@ -244,7 +245,7 @@
+                           final replacement = attempt.origin.slot == 'ordinary'
+                               ? c.ordinary?.id
+                               : c.daily?.id;
+-                          final yes = await showDialog<bool>(
++                          final yes = await showKnitDialog<bool>(
+                             context: context,
+                             builder: (context) => AlertDialog(
+                               scrollable: true,
+--- a/app/lib/presentation/startup_view.dart
++++ b/app/lib/presentation/startup_view.dart
+@@ -0,0 +1,62 @@
++import 'package:flutter/material.dart';
++
++import '../l10n/app_localizations.dart';
++import 'bottle.dart';
++import 'knit_components.dart';
++
++// Also used by native Launch/Normal themes and the engine container storyboard.
++const startupBackground = Color(0xff82dff1);
++const startupMarkSize = Size(176, 176 * 776 / 1943);
++
++/// Matches the native static launch frame. Local readiness alone opens Home.
++class StartupView extends StatelessWidget {
++  const StartupView({super.key, required this.failed, required this.onRetry});
++  final bool failed;
++  final VoidCallback onRetry;
++  @override
++  Widget build(BuildContext context) {
++    final l = AppLocalizations.of(context);
++    final brand = Semantics(
++      label: 'Pourlune',
++      header: true,
++      child: KnitArt(
++        name: 'logo',
++        width: startupMarkSize.width,
++        height: startupMarkSize.height,
++      ),
++    );
++    return Scaffold(
++      backgroundColor: startupBackground,
++      body: failed
++          ? SafeArea(
++              child: Center(
++                child: SingleChildScrollView(
++                  padding: const EdgeInsets.all(16),
++                  child: Column(
++                    mainAxisSize: MainAxisSize.min,
++                    children: [
++                      brand,
++                      const SizedBox(height: 24),
++                      Semantics(
++                        liveRegion: true,
++                        child: Text(
++                          l.openFailed,
++                          textAlign: TextAlign.center,
++                          style: const TextStyle(color: ink, fontSize: 20),
++                        ),
++                      ),
++                      const SizedBox(height: 16),
++                      FilledButton(
++                        key: const Key('startup-retry'),
++                        onPressed: onRetry,
++                        child: Text(l.retry),
++                      ),
++                    ],
++                  ),
++                ),
++              ),
++            )
++          : Center(child: brand),
++    );
++  }
++}
+--- a/app/pubspec.lock
++++ b/app/pubspec.lock
+@@ -9,6 +9,14 @@
+       url: "https://pub.dev"
+     source: hosted
+     version: "1.3.78"
++  animations:
++    dependency: "direct main"
++    description:
++      name: animations
++      sha256: "5ec868ffa78851e6f3f32e9377b780c7ae2087a5523d8b5e6df59bd8287ac5dd"
++      url: "https://pub.dev"
++    source: hosted
++    version: "3.0.0"
+   args:
+     dependency: transitive
+     description:
+@@ -129,6 +137,14 @@
+       url: "https://pub.dev"
+     source: hosted
+     version: "3.0.7"
++  cupertino_ui:
++    dependency: transitive
++    description:
++      name: cupertino_ui
++      sha256: a47c4e7c66fd7444a063a602597fceb238f705c3f6b1322bc0053d0a2638ee6e
++      url: "https://pub.dev"
++    source: hosted
++    version: "1.1.4"
+   fake_async:
+     dependency: transitive
+     description:
+@@ -428,6 +444,14 @@
+       url: "https://pub.dev"
+     source: hosted
+     version: "0.13.0"
++  material_ui:
++    dependency: transitive
++    description:
++      name: material_ui
++      sha256: e4031746f96c8316864d9b92bce375f1320a36ed56e166307e1e1bda9d90b4ab
++      url: "https://pub.dev"
++    source: hosted
++    version: "1.8.0"
+   meta:
+     dependency: transitive
+     description:
+--- a/app/pubspec.yaml
++++ b/app/pubspec.yaml
+@@ -22,6 +22,7 @@
+   firebase_remote_config: 7.0.0
+   url_launcher: 6.3.3
+   flame: 1.38.2
++  animations: 3.0.0
+ dev_dependencies:
+   flutter_test:
+     sdk: flutter
+--- a/app/test/motion_arrival_test.dart
++++ b/app/test/motion_arrival_test.dart
+@@ -0,0 +1,35 @@
++import 'package:flutter/material.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:pourlune_core/pourlune_core.dart';
++import 'package:pourlune_dev/l10n/app_localizations.dart';
++import 'package:pourlune_dev/presentation/board_page.dart';
++
++import 'store_test.dart' show fixture;
++
++void main() {
++  testWidgets(
++    'board arrival animates but immediate first input remains enabled',
++    (t) async {
++      var taps = 0;
++      final state = GameInstance.create(id: 'arrival', puzzle: fixture());
++      await t.pumpWidget(
++        MaterialApp(
++          localizationsDelegates: AppLocalizations.localizationsDelegates,
++          supportedLocales: AppLocalizations.supportedLocales,
++          home: Scaffold(
++            body: BoardView(state: state, selected: null, onTap: (_) => taps++),
++          ),
++        ),
++      );
++      final bottle = find.byKey(const Key('bottle-0'));
++      final fades = find.ancestor(of: bottle, matching: find.byType(Opacity));
++      expect(fades, findsOneWidget);
++      expect(t.widget<Opacity>(fades).opacity, lessThan(1));
++      await t.tap(bottle);
++      expect(taps, 1);
++      await t.pump(const Duration(milliseconds: 300));
++      expect(t.widget<Opacity>(fades).opacity, 1);
++      await t.pumpWidget(const SizedBox());
++    },
++  );
++}
+--- a/app/test/motion_polish_test.dart
++++ b/app/test/motion_polish_test.dart
+@@ -0,0 +1,209 @@
++import 'dart:io';
++
++import 'package:flutter/material.dart';
++import 'package:animations/animations.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:pourlune_dev/application/game_controller.dart';
++import 'package:pourlune_dev/data/game_store.dart';
++import 'package:pourlune_dev/presentation/pourlune_app.dart';
++import 'package:sqflite_common_ffi/sqflite_ffi.dart';
++
++import 'offline_controller_test.dart' show testLibrary;
++
++void main() {
++  sqfliteFfiInit();
++  Future<void> appCase(
++    WidgetTester t,
++    Future<void> Function(GameController) check,
++  ) async {
++    final dir = Directory.systemTemp.createTempSync('motion-polish-');
++    final store = (await t.runAsync(
++      () => GameStore.open('${dir.path}/g.db', factory: databaseFactoryFfi),
++    ))!;
++    final c = GameController(store, library: testLibrary());
++    try {
++      await t.runAsync(c.initialize);
++      await t.pumpWidget(PourluneApp(controller: c));
++      await t.pumpAndSettle();
++      await check(c);
++    } finally {
++      await t.pumpWidget(const SizedBox());
++      c.dispose();
++      await t.runAsync(store.close);
++      dir.deleteSync(recursive: true);
++    }
++  }
++
++  testWidgets(
++    'native press shrinks visually and dragging outside cancels start',
++    (t) => appCase(t, (c) async {
++      final button = find.byKey(const Key('sample-main-001'));
++      await t.ensureVisible(button);
++      final bounds = t.getRect(button);
++      final gesture = await t.startGesture(bounds.center);
++      await t.pump(const Duration(milliseconds: 120));
++      final scale = find.descendant(
++        of: button,
++        matching: find.byType(AnimatedScale),
++      );
++      expect(scale, findsOneWidget);
++      expect(t.widget<AnimatedScale>(scale).scale, lessThan(1));
++      expect(
++        t.getRect(button),
++        bounds,
++        reason: 'native target must not shrink',
++      );
++      await gesture.moveTo(Offset(bounds.right + 100, bounds.top - 100));
++      await gesture.up();
++      await t.pumpAndSettle();
++      expect(c.current, isNull);
++      expect(t.widget<AnimatedScale>(scale).scale, 1);
++    }),
++  );
++
++  testWidgets(
++    'page entry remains interactive and rapid back retires outgoing page',
++    (t) => appCase(t, (c) async {
++      c.navigate(GamePage.chapters);
++      await t.pump();
++      final entry = find.byKey(const Key('page-enter'));
++      expect(entry, findsOneWidget);
++      expect(
++        t
++            .widget<FadeThroughTransition>(
++              find.descendant(
++                of: entry,
++                matching: find.byType(FadeThroughTransition),
++              ),
++            )
++            .animation
++            .value,
++        lessThan(1),
++      );
++      expect(find.byKey(const Key('home')).hitTestable(), findsOneWidget);
++      await t.tap(find.byKey(const Key('home')));
++      await t.pump();
++      c.navigate(GamePage.settings);
++      await t.pump(const Duration(milliseconds: 40));
++      expect(find.byKey(const Key('page-outgoing')), findsOneWidget);
++      expect(
++        find.byKey(const Key('level-1')),
++        findsNothing,
++        reason: 'rapid navigation retains at most one outgoing page',
++      );
++      await t.pumpAndSettle();
++      expect(find.byKey(const Key('page-outgoing')), findsNothing);
++      expect(c.page, GamePage.settings);
++    }),
++  );
++
++  testWidgets(
++    'duplicate pause requests open one modal and resume restores input',
++    (t) => appCase(t, (c) async {
++      await t.runAsync(() => c.startLevel(1));
++      await t.pumpAndSettle();
++      final pause = t
++          .widget<OutlinedButton>(
++            find.descendant(
++              of: find.byKey(const Key('pause')),
++              matching: find.byType(OutlinedButton),
++            ),
++          )
++          .onPressed!;
++      pause();
++      pause();
++      await t.pumpAndSettle();
++      expect(find.byKey(const Key('pause-card')), findsOneWidget);
++      await t.tap(find.byKey(const Key('resume-pause')));
++      await t.pumpAndSettle();
++      expect(find.byKey(const Key('pause-card')), findsNothing);
++      expect(c.busy, isFalse);
++      expect(find.byKey(const Key('bottle-0')).hitTestable(), findsOneWidget);
++    }),
++  );
++  testWidgets(
++    'failed save stays visible through attempted departure and Retry persists before Home',
++    (t) => appCase(t, (c) async {
++      await t.runAsync(() => c.startLevel(1));
++      await t.pumpAndSettle();
++      c.store.fault = (stage) {
++        if (stage == 'snapshot') throw StateError('test disk full');
++      };
++      await t.runAsync(() => c.pour(0, 2));
++      await t.pumpAndSettle();
++      await t.runAsync(c.goHome);
++      await t.pump();
++      expect(c.page, GamePage.board);
++      expect(find.byKey(const Key('save-failed')), findsOneWidget);
++      expect(
++        t
++            .widget<SharedAxisTransition>(
++              find.descendant(
++                of: find.byKey(const Key('page-enter')),
++                matching: find.byType(SharedAxisTransition),
++              ),
++            )
++            .animation
++            .value,
++        1,
++      );
++      final committed = c.current!.toJson();
++      c.store.fault = null;
++      await t.ensureVisible(find.byKey(const Key('retry')));
++      await t.tap(find.byKey(const Key('retry')));
++      await t.runAsync(() async {
++        for (var n = 0; n < 400 && c.phase != SavePhase.clean; n++) {
++          await Future<void>.delayed(const Duration(milliseconds: 5));
++        }
++      });
++      await t.pumpAndSettle();
++      expect(c.phase, SavePhase.clean);
++      expect(c.page, GamePage.home);
++      expect(
++        (await t.runAsync(() => c.store.load('ordinary')))!.instance!.toJson(),
++        committed,
++      );
++    }),
++  );
++
++  testWidgets(
++    'chapters restores its own scroll position after settings navigation',
++    (t) => appCase(t, (c) async {
++      await t.binding.setSurfaceSize(const Size(360, 568));
++      addTearDown(() => t.binding.setSurfaceSize(null));
++      c.navigate(GamePage.chapters);
++      await t.pumpAndSettle();
++      final scroll = find.byKey(const PageStorageKey('scroll-chapters'));
++      await t.drag(scroll, const Offset(0, -600));
++      await t.pumpAndSettle();
++      double offset() => t
++          .state<ScrollableState>(
++            find.descendant(of: scroll, matching: find.byType(Scrollable)),
++          )
++          .position
++          .pixels;
++      final before = offset();
++      expect(before, greaterThan(0));
++      c.navigate(GamePage.settings);
++      await t.pumpAndSettle();
++      c.navigate(GamePage.chapters);
++      await t.pumpAndSettle();
++      expect(offset(), closeTo(before, 1));
++    }),
++  );
++
++  testWidgets(
++    'pause closes faster than entry without leaving a modal barrier',
++    (t) => appCase(t, (c) async {
++      await t.runAsync(() => c.startLevel(1));
++      await t.pumpAndSettle();
++      await t.tap(find.byKey(const Key('pause')));
++      await t.pumpAndSettle();
++      await t.tap(find.byKey(const Key('resume-pause')));
++      await t.pump();
++      await t.pump(const Duration(milliseconds: 160));
++      expect(find.byKey(const Key('pause-card')), findsNothing);
++      expect(find.byKey(const Key('bottle-0')).hitTestable(), findsOneWidget);
++    }),
++  );
++}
+--- a/app/test/motion_primitives_test.dart
++++ b/app/test/motion_primitives_test.dart
+@@ -0,0 +1,109 @@
++import 'package:flutter/material.dart';
++import 'package:animations/animations.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:pourlune_dev/presentation/motion.dart';
++
++void main() {
++  testWidgets(
++    'outgoing visual rejects touches, focus and semantics; reduction snaps mid-flight',
++    (t) async {
++      final oldFocus = FocusNode(), newFocus = FocusNode();
++      var oldTaps = 0, newTaps = 0;
++      var page = 0;
++      var reduced = false;
++      Widget content(int n) => Column(
++        children: [
++          SizedBox(height: n == 0 ? 200 : 20),
++          TextButton(
++            focusNode: n == 0 ? oldFocus : newFocus,
++            onPressed: () {
++              if (n == 0) {
++                oldTaps++;
++              } else {
++                newTaps++;
++              }
++            },
++            child: Text(n == 0 ? 'Old action' : 'Current action'),
++          ),
++        ],
++      );
++      Future<void> show() => t.pumpWidget(
++        MaterialApp(
++          home: MediaQuery(
++            data: MediaQueryData(disableAnimations: reduced),
++            child: PageMotion(page: page, child: content(page)),
++          ),
++        ),
++      );
++      final semantics = t.ensureSemantics();
++      await show();
++      final oldPoint = t.getCenter(find.text('Old action'));
++      page = 1;
++      await show();
++      await t.pump(const Duration(milliseconds: 40));
++      expect(find.byKey(const Key('page-outgoing')), findsOneWidget);
++      await t.tapAt(oldPoint);
++      expect(oldTaps, 0);
++      expect(find.bySemanticsLabel('Old action'), findsNothing);
++      oldFocus.requestFocus();
++      await t.pump();
++      expect(oldFocus.hasFocus, isFalse);
++      await t.tap(find.text('Current action'));
++      expect(newTaps, 1);
++      reduced = true;
++      await show();
++      expect(find.byKey(const Key('page-outgoing')), findsNothing);
++      expect(
++        t
++            .widget<FadeThroughTransition>(
++              find.descendant(
++                of: find.byKey(const Key('page-enter')),
++                matching: find.byType(FadeThroughTransition),
++              ),
++            )
++            .animation
++            .value,
++        1,
++      );
++      await t.pumpWidget(const SizedBox());
++      semantics.dispose();
++      oldFocus.dispose();
++      newFocus.dispose();
++      expect(t.takeException(), isNull);
++    },
++  );
++
++  testWidgets(
++    'backgrounding and destruction cancel a pending page transition',
++    (t) async {
++      Future<void> show(int page) => t.pumpWidget(
++        MaterialApp(
++          home: PageMotion(page: page, child: Text('$page')),
++        ),
++      );
++      await show(0);
++      await show(1);
++      await t.pump(const Duration(milliseconds: 30));
++      t.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
++      await t.pump();
++      expect(find.byKey(const Key('page-outgoing')), findsNothing);
++      expect(
++        t
++            .widget<FadeThroughTransition>(
++              find.descendant(
++                of: find.byKey(const Key('page-enter')),
++                matching: find.byType(FadeThroughTransition),
++              ),
++            )
++            .animation
++            .value,
++        1,
++      );
++      t.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
++      await show(2);
++      await t.pumpWidget(const SizedBox());
++      await t.pump(const Duration(seconds: 1));
++      expect(t.takeException(), isNull);
++    },
++  );
++}
+--- a/app/test/page_transitions_test.dart
++++ b/app/test/page_transitions_test.dart
+@@ -0,0 +1,281 @@
++import 'dart:io';
++
++import 'package:animations/animations.dart';
++import 'package:pourlune_dev/presentation/motion.dart';
++
++import 'package:flutter/material.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:pourlune_dev/application/game_controller.dart';
++import 'package:pourlune_dev/data/game_store.dart';
++import 'package:pourlune_dev/presentation/pourlune_app.dart';
++import 'package:sqflite_common_ffi/sqflite_ffi.dart';
++
++import 'offline_controller_test.dart' show testLibrary;
++
++void main() {
++  sqfliteFfiInit();
++  Future<void> appCase(
++    WidgetTester t,
++    Future<void> Function(GameController) check,
++  ) async {
++    final dir = Directory.systemTemp.createTempSync('motion-polish-');
++    final store = (await t.runAsync(
++      () => GameStore.open('${dir.path}/g.db', factory: databaseFactoryFfi),
++    ))!;
++    final c = GameController(store, library: testLibrary());
++    try {
++      await t.runAsync(c.initialize);
++      await t.pumpWidget(PourluneApp(controller: c));
++      await t.pumpAndSettle();
++      await check(c);
++    } finally {
++      await t.pumpWidget(const SizedBox());
++      c.dispose();
++      await t.runAsync(store.close);
++      dir.deleteSync(recursive: true);
++    }
++  }
++
++  testWidgets(
++    'official page patterns retain transparent woven background',
++    (t) => appCase(t, (c) async {
++      await c.navigate(GamePage.chapters);
++      await t.pump();
++      expect(find.byType(FadeThroughTransition), findsWidgets);
++      expect(
++        t
++            .widgetList<FadeThroughTransition>(
++              find.byType(FadeThroughTransition),
++            )
++            .every((w) => w.fillColor == Colors.transparent),
++        isTrue,
++      );
++      await t.pumpAndSettle();
++      await c.navigate(GamePage.settings);
++      await t.pumpAndSettle();
++      await c.navigate(GamePage.rules);
++      await t.pump();
++      expect(find.byType(SharedAxisTransition), findsWidgets);
++      await t.pumpAndSettle();
++      await t.tap(find.byKey(const Key('home')));
++      await t.pump();
++      final shared = t.widgetList<SharedAxisTransition>(
++        find.byType(SharedAxisTransition),
++      );
++      expect(shared, isNotEmpty);
++      expect(shared.every((w) => w.fillColor == Colors.transparent), isTrue);
++      await t.pumpAndSettle();
++      expect(c.page, GamePage.settings);
++    }),
++  );
++  testWidgets(
++    'instance replacement transitions while actions retain page identity',
++    (t) => appCase(t, (c) async {
++      await t.runAsync(() => c.startLevel(1));
++      await t.pumpAndSettle();
++      Object key() => t.widget<PageMotion>(find.byType(PageMotion)).page;
++      final first = key();
++      await t.runAsync(() => c.pour(0, 2));
++      await t.pumpAndSettle();
++      expect(key(), first);
++      await t.runAsync(() => c.start(c.library.main[1]!, replace: true));
++      await t.pump();
++      expect(key(), isNot(first));
++      expect(find.byKey(const Key('page-outgoing')), findsNothing);
++      expect(find.byType(SharedAxisTransition), findsWidgets);
++      await t.pumpAndSettle();
++      expect(find.byKey(const Key('bottle-0')).hitTestable(), findsOneWidget);
++    }),
++  );
++  testWidgets(
++    'pause uses official modal and returns focus and board input',
++    (t) => appCase(t, (c) async {
++      await t.runAsync(() => c.startLevel(1));
++      await t.pumpAndSettle();
++      await t.tap(find.byKey(const Key('pause')));
++      await t.pump(const Duration(milliseconds: 50));
++      expect(find.byType(FadeScaleTransition), findsOneWidget);
++      await t.pumpAndSettle();
++      await t.tap(find.byKey(const Key('resume-pause')));
++      await t.pumpAndSettle();
++      expect(find.byKey(const Key('bottle-0')).hitTestable(), findsOneWidget);
++    }),
++  );
++  testWidgets(
++    'one active modal rejects a repeated request without duplicating actions',
++    (t) async {
++      late BuildContext context;
++      await t.pumpWidget(
++        MaterialApp(
++          home: Builder(
++            builder: (c) {
++              context = c;
++              return const SizedBox();
++            },
++          ),
++        ),
++      );
++      var confirmations = 0;
++      Future<void> request() async {
++        final yes = await showKnitDialog<bool>(
++          context: context,
++          builder: (c) => AlertDialog(
++            actions: [
++              TextButton(
++                onPressed: () => Navigator.pop(c, true),
++                child: const Text('Confirm once'),
++              ),
++            ],
++          ),
++        );
++        if (yes == true) confirmations++;
++      }
++
++      final first = request(), duplicate = request();
++      await t.pumpAndSettle();
++      expect(find.byType(AlertDialog), findsOneWidget);
++      await t.tap(find.text('Confirm once'));
++      await t.pumpAndSettle();
++      await Future.wait([first, duplicate]);
++      expect(confirmations, 1);
++    },
++  );
++
++  testWidgets(
++    'license route and date dialogs use shared official transitions',
++    (t) => appCase(t, (c) async {
++      await c.navigate(GamePage.settings);
++      await t.pumpAndSettle();
++      await t.ensureVisible(find.byKey(const Key('licenses')));
++      await t.tap(find.byKey(const Key('licenses')));
++      await t.pump();
++      await t.pump(const Duration(milliseconds: 60));
++      expect(find.byType(LicensePage), findsOneWidget);
++      expect(find.byType(SharedAxisTransition), findsWidgets);
++      await t.pumpAndSettle();
++      await t.pageBack();
++      await t.pumpAndSettle();
++      expect(c.page, GamePage.settings);
++      await c.navigate(GamePage.daily);
++      await t.pumpAndSettle();
++      final dates = find.byWidgetPredicate(
++        (w) =>
++            w is TextButton &&
++            w.key is ValueKey<String> &&
++            (w.key! as ValueKey<String>).value.startsWith('date-'),
++      );
++      final other = dates
++          .evaluate()
++          .map((e) => (e.widget.key! as ValueKey<String>).value)
++          .firstWhere((key) => key != 'date-${c.today.date}');
++      await t.ensureVisible(find.byKey(Key(other)));
++      await t.tap(find.byKey(Key(other)));
++      await t.pump();
++      await t.pump(const Duration(milliseconds: 60));
++      expect(find.byType(FadeScaleTransition), findsOneWidget);
++      await t.pumpAndSettle();
++      await t.tap(find.text('Close'));
++      await t.pumpAndSettle();
++      expect(c.current, isNull);
++    }),
++  );
++  testWidgets(
++    'application reduced motion removes route animation and rapid returns keep one old view',
++    (t) => appCase(t, (c) async {
++      await t.runAsync(() => c.updateSetting('reduced_motion', true));
++      await t.pumpAndSettle();
++      await c.navigate(GamePage.settings);
++      await t.pump();
++      expect(find.byKey(const Key('page-outgoing')), findsNothing);
++      await t.ensureVisible(find.byKey(const Key('licenses')));
++      await t.tap(find.byKey(const Key('licenses')));
++      await t.pump();
++      expect(find.byType(SharedAxisTransition), findsNothing);
++      await t.pumpAndSettle();
++      await t.pageBack();
++      await t.pumpAndSettle();
++      expect(c.page, GamePage.settings);
++    }),
++  );
++  testWidgets(
++    'narrow large text keeps destinations and modal controls usable',
++    (t) => appCase(t, (c) async {
++      await t.binding.setSurfaceSize(const Size(360, 568));
++      addTearDown(() => t.binding.setSurfaceSize(null));
++      await t.pumpWidget(
++        PourluneApp(controller: c, textScaler: TextScaler.linear(2)),
++      );
++      for (final page in [
++        GamePage.home,
++        GamePage.chapters,
++        GamePage.daily,
++        GamePage.collection,
++        GamePage.scene,
++        GamePage.settings,
++        GamePage.rules,
++      ]) {
++        await c.navigate(page);
++        await t.pumpAndSettle();
++        expect(t.takeException(), isNull, reason: page.name);
++      }
++      await c.navigate(GamePage.settings);
++      await t.pumpAndSettle();
++      await t.ensureVisible(find.byKey(const Key('reset-progress')));
++      await t.tap(find.byKey(const Key('reset-progress')));
++      await t.pumpAndSettle();
++      await t.ensureVisible(find.text('Keep progress'));
++      await t.tap(find.text('Keep progress'));
++      await t.pumpAndSettle();
++      expect(c.page, GamePage.settings);
++      expect(t.takeException(), isNull);
++    }),
++  );
++  testWidgets(
++    'new board instance and different scene start at top; returning keeps scroll',
++    (t) => appCase(t, (c) async {
++      await t.binding.setSurfaceSize(const Size(360, 568));
++      addTearDown(() => t.binding.setSurfaceSize(null));
++      await t.runAsync(() => c.startLevel(1));
++      await t.pumpAndSettle();
++      Finder scroll() => find.descendant(
++        of: find.byType(PageMotion),
++        matching: find.byType(SingleChildScrollView),
++      );
++      double offset() => t
++          .state<ScrollableState>(
++            find.descendant(of: scroll(), matching: find.byType(Scrollable)),
++          )
++          .position
++          .pixels;
++      await t.drag(scroll(), const Offset(0, -600));
++      await t.pumpAndSettle();
++      final previous = offset();
++      expect(previous, greaterThan(0));
++      await c.goHome();
++      await t.pumpAndSettle();
++      await c.resumeSlot('ordinary');
++      await t.pumpAndSettle();
++      expect(offset(), closeTo(previous, 1));
++      await t.runAsync(() => c.start(c.library.main[1]!, replace: true));
++      await t.pumpAndSettle();
++      debugPrint('SCROLL_CHECK previous=$previous, newInstance=${offset()}');
++      expect(
++        offset(),
++        0,
++        reason: 'New instance must not inherit another board scroll',
++      );
++      await c.navigate(GamePage.scene, scene: 'color_studio');
++      await t.pumpAndSettle();
++      await t.drag(scroll(), const Offset(0, -600));
++      await t.pumpAndSettle();
++      final sceneOffset = offset();
++      expect(sceneOffset, greaterThan(0));
++      await c.navigate(GamePage.scene, scene: 'garden_nook');
++      await t.pumpAndSettle();
++      expect(offset(), 0);
++      await c.navigate(GamePage.scene, scene: 'color_studio');
++      await t.pumpAndSettle();
++      expect(offset(), closeTo(sceneOffset, 1));
++    }),
++  );
++}
+--- a/app/test/startup_motion_test.dart
++++ b/app/test/startup_motion_test.dart
+@@ -0,0 +1,89 @@
++import 'dart:io';
++import 'dart:ui' show PlatformDispatcher;
++
++import 'package:flutter/material.dart';
++import 'package:flutter/services.dart';
++import 'package:pourlune_dev/data/game_store.dart';
++import 'package:pourlune_dev/data/player_settings.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:pourlune_dev/main.dart';
++import 'package:pourlune_dev/presentation/knit_components.dart';
++import 'package:sqflite/sqflite.dart' as sql;
++import 'package:sqflite_common_ffi/sqflite_ffi.dart';
++
++void main() {
++  sqfliteFfiInit();
++  testWidgets(
++    'local initialization failure retains branded shell and Retry opens real database',
++    (t) async {
++      final oldFactory = sql.databaseFactoryOrNull;
++      final dir = Directory.systemTemp.createTempSync('startup-motion-');
++      sql.databaseFactory = databaseFactoryFfi;
++      await databaseFactoryFfi.setDatabasesPath(dir.path);
++      final blocked = Directory('${dir.path}/pourlune_dev.sqlite')
++        ..createSync();
++      final flutterHandler = FlutterError.onError;
++      final platformHandler = PlatformDispatcher.instance.onError;
++      final messenger =
++          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
++      // The host has no UMP plugin: report an actual platform failure to exercise
++      // the offline fallback, rather than claim a native SDK result.
++      messenger.setMockMessageHandler(
++        'plugins.flutter.io/google_mobile_ads/ump',
++        (_) async => const StandardMethodCodec().encodeErrorEnvelope(
++          code: 'offline',
++          message: 'host test offline',
++        ),
++      );
++      try {
++        await t.pumpWidget(const Bootstrap());
++        expect(find.byType(CircularProgressIndicator), findsNothing);
++        expect(
++          find.byWidgetPredicate((w) => w is KnitArt && w.name == 'logo'),
++          findsOneWidget,
++        );
++        Future<void> until(bool Function() ready) async {
++          for (var i = 0; i < 500 && !ready(); i++) {
++            await t.runAsync(
++              () => Future<void>.delayed(const Duration(milliseconds: 10)),
++            );
++            await t.pump(const Duration(milliseconds: 20));
++          }
++          expect(ready(), isTrue);
++        }
++
++        await until(
++          () => find.byKey(const Key('startup-retry')).evaluate().isNotEmpty,
++        );
++        blocked.deleteSync();
++        await t.runAsync(() async {
++          final store = await GameStore.open(
++            '${dir.path}/pourlune_dev.sqlite',
++            factory: databaseFactoryFfi,
++          );
++          await store.saveSettings(
++            const PlayerSettings(music: false, sound: false),
++          );
++          await store.close();
++        });
++        await t.tap(find.byKey(const Key('startup-retry')));
++        await until(() => find.byType(PourluneApp).evaluate().isNotEmpty);
++        expect(find.byKey(const Key('sample-main-001')), findsOneWidget);
++        expect(File('${dir.path}/pourlune_dev.sqlite').existsSync(), isTrue);
++      } finally {
++        await t.pumpWidget(const SizedBox());
++        FlutterError.onError = flutterHandler;
++        PlatformDispatcher.instance.onError = platformHandler;
++        await t.runAsync(
++          () => Future<void>.delayed(const Duration(milliseconds: 20)),
++        );
++        messenger.setMockMessageHandler(
++          'plugins.flutter.io/google_mobile_ads/ump',
++          null,
++        );
++        sql.databaseFactoryOrNull = oldFactory;
++        dir.deleteSync(recursive: true);
++      }
++    },
++  );
++}
+--- a/app/test/startup_shell_test.dart
++++ b/app/test/startup_shell_test.dart
+@@ -0,0 +1,58 @@
++import 'package:flutter/material.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:pourlune_dev/l10n/app_localizations.dart';
++import 'package:pourlune_dev/presentation/knit_components.dart';
++import 'package:pourlune_dev/presentation/startup_view.dart';
++
++void main() {
++  testWidgets(
++    'initial Flutter shell matches centered native wordmark on blue',
++    (t) async {
++      await t.binding.setSurfaceSize(const Size(402, 874));
++      addTearDown(() => t.binding.setSurfaceSize(null));
++      await t.pumpWidget(
++        MaterialApp(
++          localizationsDelegates: AppLocalizations.localizationsDelegates,
++          supportedLocales: AppLocalizations.supportedLocales,
++          home: StartupView(failed: false, onRetry: () {}),
++        ),
++      );
++      final brand = find.byWidgetPredicate(
++        (w) => w is KnitArt && w.name == 'logo',
++      );
++      expect(t.getCenter(brand), const Offset(201, 437));
++      expect(t.getSize(brand).width, 176);
++      expect(
++        t.widget<Scaffold>(find.byType(Scaffold)).backgroundColor,
++        const Color(0xff82dff1),
++      );
++      expect(find.byType(CircularProgressIndicator), findsNothing);
++    },
++  );
++
++  testWidgets(
++    'small large-text startup failure keeps real retry action usable',
++    (t) async {
++      await t.binding.setSurfaceSize(const Size(320, 568));
++      addTearDown(() => t.binding.setSurfaceSize(null));
++      var retries = 0;
++      await t.pumpWidget(
++        MaterialApp(
++          localizationsDelegates: AppLocalizations.localizationsDelegates,
++          supportedLocales: AppLocalizations.supportedLocales,
++          builder: (context, child) => MediaQuery(
++            data: MediaQuery.of(context)
++                .copyWith(textScaler: TextScaler.linear(2)),
++            child: child!,
++          ),
++          home: StartupView(failed: true, onRetry: () => retries++),
++        ),
++      );
++      await t.pumpAndSettle();
++      await t.ensureVisible(find.byKey(const Key('startup-retry')));
++      await t.tap(find.byKey(const Key('startup-retry')));
++      expect(retries, 1);
++      expect(t.takeException(), isNull);
++    },
++  );
++}
+--- a/docs/design/production-candidates/runtime/manifest.json
++++ b/docs/design/production-candidates/runtime/manifest.json
+@@ -12,7 +12,7 @@
+     },
+     {
+       "path": "app/lib/presentation/scene_art.dart",
+-      "sha256": "585d4d6e38936b98768d325bff39cb692c2a9889cbcaf96aeba72be8623f8e3d"
++      "sha256": "cfa9541e9b7066fb2a475924ecd76622e9d510c0c7ec7be466121d3fdd064c6f"
+     }
+   ],
+   "generation_records": [
+--- a/docs/design/production-candidates/runtime/ui/manifest.json
++++ b/docs/design/production-candidates/runtime/ui/manifest.json
+@@ -8,7 +8,7 @@
+   "acceptance_limits": "No independent visual, text/semantics, Flutter rendering, device, audio, performance or rights acceptance asserted.",
+   "geometry_source": {
+     "path": "app/lib/presentation/knit_components.dart",
+-    "sha256": "6a8d3b30876a7dc7316ced4efeef732f1106d8b12a5a07e1590de899a26d124d"
++    "sha256": "a50e520930a9f523b47194bfadca7d38378a2d0219e8419f5aefbc45b32dd6e7"
+   },
+   "provenance_records": [
+     {
+--- a/tools/assets/README.md
++++ b/tools/assets/README.md
+@@ -32,3 +32,12 @@
+ ```
+ 
+ `audio_generate.py` 不带 `--check` 会生成音频，`export_icons.py` 会导出平台图标；只有明确资源变更任务才使用这些写入路径。
++
++T-R01 native launch resources reuse `assets/art/ui/logo.png` with KnitArt's existing display bounds. `startup_assets.py` only crops/resizes/pads density outputs; it does not redraw art or change rights status. Use the bundled Pillow Python above:
++
++```sh
++python3 tools/assets/startup_assets.py          # exact output drift check
++python3 -m unittest discover -s tools/assets -p test_startup_native.py -v
++```
++
++`--write` is only for an explicitly intended native startup resource update. It writes iOS 1x/2x/3x launch wordmarks and Android density wordmarks plus transparent 288dp system-icon canvases with a 176dp mark inside the 192dp safety circle. Existing Flutter UI art/manifests remain unchanged.
+--- a/tools/assets/startup_assets.py
++++ b/tools/assets/startup_assets.py
+@@ -0,0 +1,59 @@
++"""Density packaging only: reuse the existing Pourlune wordmark, never redraw it."""
++from pathlib import Path
++import argparse
++import io
++import json
++import hashlib
++
++from PIL import Image
++
++ROOT = Path(__file__).resolve().parents[2]
++SOURCE = Path('app/assets/art/ui/logo.png')
++# Same display bounds as KnitArt('logo'); raw source art stays unchanged.
++BOUNDS = (15, 23, 1958, 799)
++DENSITIES = [('mdpi', 1), ('hdpi', 1.5), ('xhdpi', 2), ('xxhdpi', 3), ('xxxhdpi', 4)]
++
++
++def outputs(root):
++    source = Image.open(root / SOURCE).convert('RGBA').crop(BOUNDS)
++    files = {}
++    def encode(image):
++        stream = io.BytesIO()
++        image.save(stream, format='PNG', optimize=True)
++        return stream.getvalue()
++    def mark(scale):
++        width = round(176 * scale)
++        return source.resize((width, round(width * source.height / source.width)), Image.Resampling.LANCZOS)
++    for name, scale in DENSITIES:
++        folder = Path(f'app/android/app/src/main/res/drawable-{name}')
++        wordmark = mark(scale)
++        files[folder / 'startup_wordmark.png'] = encode(wordmark)
++        icon = Image.new('RGBA', (round(288 * scale),) * 2)
++        icon.alpha_composite(wordmark, ((icon.width-wordmark.width)//2, (icon.height-wordmark.height)//2))
++        files[folder / 'startup_icon.png'] = encode(icon)
++    for scale in [1, 2, 3]:
++        suffix = '' if scale == 1 else f'@{scale}x'
++        files[Path(f'app/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage{suffix}.png')] = encode(mark(scale))
++    return files
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--write', action='store_true')
++    args = parser.parse_args()
++    files = outputs(ROOT)
++    drift = []
++    for rel, data in files.items():
++        path = ROOT / rel
++        if args.write:
++            path.parent.mkdir(parents=True, exist_ok=True)
++            path.write_bytes(data)
++        elif not path.exists() or path.read_bytes() != data:
++            drift.append(str(rel))
++    if drift:
++        raise SystemExit('Startup asset drift: ' + ', '.join(drift))
++    print(json.dumps({'ok': True, 'count': len(files), 'source_sha256': hashlib.sha256((ROOT/SOURCE).read_bytes()).hexdigest(), 'bounds': BOUNDS}))
++
++
++if __name__ == '__main__':
++    main()
+--- a/tools/assets/test_startup_native.py
++++ b/tools/assets/test_startup_native.py
+@@ -0,0 +1,66 @@
++"""Native pre-engine launch contract; independent of Flutter/SDK execution."""
++from pathlib import Path
++import unittest
++import xml.etree.ElementTree as ET
++
++from PIL import Image
++
++ROOT = Path(__file__).resolve().parents[2]
++RES = ROOT / 'app/android/app/src/main/res'
++BLUE = (130, 223, 241)
++
++
++class StartupNativeTest(unittest.TestCase):
++    def test_ios_launch_and_engine_container_have_same_opaque_blue(self):
++        for name in ['LaunchScreen', 'Main']:
++            with self.subTest(storyboard=name):
++                xml = ET.parse(ROOT / f'app/ios/Runner/Base.lproj/{name}.storyboard')
++                color = xml.find('.//view/color[@key="backgroundColor"]')
++                rgb = tuple(round(float(color.get(k, color.get('white', '0'))) * 255)
++                            for k in ['red', 'green', 'blue'])
++                self.assertEqual(rgb, BLUE)
++                self.assertEqual(color.get('alpha'), '1')
++
++    def test_legacy_normal_day_and_night_never_use_system_surface_color(self):
++        for folder in ['values', 'values-night']:
++            xml = ET.parse(RES / folder / 'styles.xml')
++            self.assertEqual(xml.findtext("style[@name='NormalTheme']/item[@name='android:windowBackground']"),
++                             '@color/startup_background')
++            self.assertEqual(xml.findtext("style[@name='LaunchTheme']/item[@name='android:windowBackground']"),
++                             '@drawable/launch_background')
++        for folder in ['drawable', 'drawable-v21']:
++            xml = ET.parse(RES / folder / 'launch_background.xml')
++            self.assertEqual(xml.find('item').get('{http://schemas.android.com/apk/res/android}drawable'),
++                             '@color/startup_background')
++
++    def test_android_12_light_and_night_explicitly_brand_system_splash(self):
++        for folder in ['values-v31', 'values-night-v31']:
++            path = RES / folder / 'styles.xml'
++            self.assertTrue(path.exists(), f'{folder} must cover Android12 system splash')
++            xml = ET.parse(path)
++            self.assertEqual(xml.findtext("style[@name='LaunchTheme']/item[@name='android:windowSplashScreenBackground']"),
++                             '@color/startup_background')
++            self.assertEqual(xml.findtext("style[@name='LaunchTheme']/item[@name='android:windowSplashScreenAnimatedIcon']"),
++                             '@drawable/startup_icon')
++
++    def test_native_wordmark_is_not_empty_or_clipped_by_android_icon_mask(self):
++        for scale in [1, 2, 3]:
++            suffix = '' if scale == 1 else f'@{scale}x'
++            im = Image.open(ROOT / f'app/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage{suffix}.png')
++            self.assertEqual(im.width, 176 * scale)
++            self.assertTrue(im.convert('RGBA').getchannel('A').getbbox())
++        for folder, scale in [('mdpi', 1), ('hdpi', 1.5), ('xhdpi', 2), ('xxhdpi', 3), ('xxxhdpi', 4)]:
++            path = RES / f'drawable-{folder}/startup_icon.png'
++            self.assertTrue(path.exists())
++            im = Image.open(path).convert('RGBA')
++            self.assertEqual(im.size, (round(288 * scale), round(288 * scale)))
++            alpha = im.getchannel('A')
++            bounds = alpha.getbbox()
++            self.assertIsNotNone(bounds)
++            cx = cy = im.width / 2
++            for x, y in [(bounds[0], bounds[1]), (bounds[2], bounds[3])]:
++                self.assertLessEqual((x-cx)**2 + (y-cy)**2, (96 * scale)**2)
++
++
++if __name__ == '__main__':
++    unittest.main()
+--- a/tools/validation/startup_capture.py
++++ b/tools/validation/startup_capture.py
+@@ -0,0 +1,92 @@
++"""T-R01 normal-main cold-launch capture; isolated identity only, no Dart hooks."""
++from pathlib import Path
++import argparse
++import json
++import signal
++import subprocess
++import time
++
++ROOT = Path(__file__).resolve().parents[2]
++APP = 'dev.pourlune.transitionsr01'
++SIM = '3497E78D-608C-415C-8326-26E46F1B6E29'
++ADB = ['/Users/wangyule/Library/Android/sdk/platform-tools/adb', '-s', 'emulator-5586']
++
++
++def call(args, check=True):
++    return subprocess.run(args, capture_output=True, check=check).stdout
++
++
++def capture(platform, appearance):
++    out = ROOT / f'docs/development/evidence/page-transitions/T-R01/{platform}-{appearance}'
++    out.mkdir(parents=True, exist_ok=True)
++    raw = ROOT / 'build/page-transitions-r01-candidates'
++    raw.mkdir(exist_ok=True)
++    name = f'cold-{platform}-{appearance}'
++    video = Path('/tmp') / (name + ('.mov' if platform == 'ios' else '.mp4'))
++    report = {'platform': platform, 'appearance': appearance, 'identity': APP,
++              'target': 'lib/main.dart', 'database': 'ui_transition_r01.sqlite',
++              'mode': 'debug process cold start, same install', 'artificial_product_delay': False,
++              'performance_pass': False, 'recorded_audio': False}
++    log = (out / 'recorder.log').open('wb')
++    if platform == 'ios':
++        container = Path(call(['xcrun', 'simctl', 'get_app_container', SIM, APP, 'data']).decode().strip())
++        stopped = subprocess.run(['xcrun', 'simctl', 'terminate', SIM, APP], capture_output=True)
++        report['terminate_exit'] = stopped.returncode
++        call(['xcrun', 'simctl', 'ui', SIM, 'appearance', appearance])
++        recorder = subprocess.Popen(['xcrun', 'simctl', 'io', SIM, 'recordVideo', '--codec=h264', '--force', str(video)], stdout=log, stderr=log)
++        time.sleep(.8)  # Host recorder preparation, never app code.
++        report['launch_epoch'] = time.time()
++        report['launch_output'] = call(['xcrun', 'simctl', 'launch', SIM, APP]).decode().strip()
++        time.sleep(12)  # Observation only: do not delay or drive the app.
++        shot = Path('/tmp') / (name + '-home.png')
++        call(['xcrun', 'simctl', 'io', SIM, 'screenshot', str(shot)])
++        import shutil
++        shutil.copy2(shot, out / 'home.png')
++        report['database_present'] = (container / 'Documents/ui_transition_r01.sqlite').exists()
++        recorder.send_signal(signal.SIGINT)
++        recorder.wait(timeout=15)
++        report['recorder_exit'] = recorder.returncode
++    else:
++        if not call([*ADB, 'shell', 'pm', 'path', APP]).decode().strip().startswith('package:'):
++            raise RuntimeError('Install the dedicated normal-main R01 candidate first')
++        call([*ADB, 'shell', 'am', 'force-stop', APP])
++        call([*ADB, 'shell', 'cmd', 'uimode', 'night', 'yes' if appearance == 'dark' else 'no'])
++        report['pid_before'] = call([*ADB, 'shell', 'pidof', APP], check=False).decode().strip()
++        before = set(call([*ADB, 'shell', 'pidof', 'screenrecord'], check=False).decode().split())
++        remote = f'/sdcard/{name}.mp4'
++        recorder = subprocess.Popen([*ADB, 'shell', 'screenrecord', '--bit-rate', '2000000', '--time-limit', '30', remote], stdout=log, stderr=log)
++        time.sleep(.8)
++        owned = set(call([*ADB, 'shell', 'pidof', 'screenrecord'], check=False).decode().split()) - before
++        report['launch_epoch'] = time.time()
++        report['launch_output'] = call([*ADB, 'shell', 'am', 'start', '-W', '-n', f'{APP}/dev.pourlune.pourlune_dev.MainActivity']).decode().strip()
++        time.sleep(12)
++        (out / 'home.png').write_bytes(call([*ADB, 'exec-out', 'screencap', '-p']))
++        report['pid_after'] = call([*ADB, 'shell', 'pidof', APP], check=False).decode().strip()
++        report['database_present'] = 'ui_transition_r01.sqlite' in call([*ADB, 'exec-out', 'run-as', APP, 'ls', 'databases']).decode().split()
++        for pid in owned:
++            if not pid.isdigit():
++                raise RuntimeError('Unexpected recorder PID')
++            call([*ADB, 'shell', 'kill', '-2', pid], check=False)
++        recorder.wait(timeout=35)
++        report['recorder_exit'] = recorder.returncode
++        call([*ADB, 'pull', remote, str(video)])
++    log.close()
++    import shutil
++    target = raw / video.name
++    shutil.copy2(video, target)
++    report['raw_video'] = str(target)
++    report['capture_end_epoch'] = time.time()
++    (out / 'capture.json').write_text(json.dumps(report, indent=2) + '\n')
++    if not report['database_present']:
++        raise RuntimeError('Normal main did not create its isolated database')
++    if platform == 'android' and (report['pid_before'] or not report['pid_after']):
++        raise RuntimeError('Cold process identity check failed')
++    print(json.dumps(report))
++
++
++if __name__ == '__main__':
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('platform', choices=['ios', 'android'])
++    parser.add_argument('appearance', choices=['light', 'dark'])
++    args = parser.parse_args()
++    capture(args.platform, args.appearance)
+--- a/tools/validation/startup_frame_check.py
++++ b/tools/validation/startup_frame_check.py
+@@ -0,0 +1,45 @@
++"""Describe launch video samples; a color check, never a startup/FPS benchmark."""
++from pathlib import Path
++import argparse
++import json
++from PIL import Image, ImageDraw
++
++
++def inspect(folder, output):
++    data = json.loads((folder / 'samples.json').read_text())
++    results = []
++    for row in data['frames']:
++        image = Image.open(folder / row['file']).convert('RGB')
++        # Exclude system bars; the old failure occupied the whole app window.
++        image = image.crop((round(image.width*.02), round(image.height*.08),
++                            round(image.width*.98), round(image.height*.96))).resize((100, 200))
++        pixels = list(image.getdata())
++        white = sum(min(rgb) >= 240 and max(rgb)-min(rgb) <= 15 for rgb in pixels) / len(pixels)
++        blue = sum(abs(r-130) <= 30 and abs(g-223) <= 30 and abs(b-241) <= 30
++                   for r,g,b in pixels) / len(pixels)
++        results.append({**row, 'white_fraction': round(white, 4), 'blue_fraction': round(blue, 4)})
++    report = {key:value for key,value in data.items() if key != 'frames'}
++    report.update({'method':'100x200 app-interior sample; white RGB>=240 and channel spread<=15',
++                   'white_dominant_threshold': .7, 'performance_claim':False,
++                   'white_dominant_samples':[x['requested_seconds'] for x in results if x['white_fraction'] >= .7],
++                   'samples':results})
++    output.mkdir(parents=True, exist_ok=True)
++    (output / 'frame-check.json').write_text(json.dumps(report, indent=2)+'\n')
++    selected = results[::4]
++    w,h = 156,370
++    sheet = Image.new('RGB',(w*10,h*((len(selected)+9)//10)),'#e8dfcf')
++    draw = ImageDraw.Draw(sheet)
++    for n,row in enumerate(selected):
++        image=Image.open(folder/row['file']).convert('RGB');image.thumbnail((150,340))
++        x=(n%10)*w+(w-image.width)//2;y=(n//10)*h
++        sheet.paste(image,(x,y));draw.text(((n%10)*w+4,y+344),f"{row['requested_seconds']:.1f}s w={row['white_fraction']:.2f}",fill='black')
++    sheet.save(output/'launch-frames.jpg',quality=90)
++    print(json.dumps({'frames':len(results),'white_dominant_samples':report['white_dominant_samples']}))
++
++
++if __name__ == '__main__':
++    parser=argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('frames', type=Path)
++    parser.add_argument('output', type=Path)
++    args=parser.parse_args()
++    inspect(args.frames,args.output)
+--- a/tools/validation/startup_frames.swift
++++ b/tools/validation/startup_frames.swift
+@@ -0,0 +1,32 @@
++import Foundation
++import AVFoundation
++import AppKit
++
++// Sample actual recorded launch frames. No app hooks, interpolation or timing claims.
++let input = URL(fileURLWithPath: CommandLine.arguments[1])
++let out = URL(fileURLWithPath: CommandLine.arguments[2])
++try FileManager.default.createDirectory(at: out, withIntermediateDirectories: true)
++let asset = AVURLAsset(url: input)
++let duration = CMTimeGetSeconds(try await asset.load(.duration))
++let generator = AVAssetImageGenerator(asset: asset)
++generator.appliesPreferredTrackTransform = true
++generator.maximumSize = CGSize(width: 390, height: 860)
++generator.requestedTimeToleranceBefore = .zero
++generator.requestedTimeToleranceAfter = .zero
++var samples = [[String: Any]]()
++let limit = CommandLine.arguments.count > 3 ? min(Double(CommandLine.arguments[3])!, duration) : duration
++for index in 0..<Int(limit * 10) {
++    let seconds = Double(index) / 10
++    var actual = CMTime.zero
++    let frame = try generator.copyCGImage(at: CMTime(seconds: seconds, preferredTimescale: 600), actualTime: &actual)
++    let data = NSBitmapImageRep(cgImage: frame).representation(using: .png, properties: [:])!
++    let filename = String(format: "%05.2f.png", seconds)
++    try data.write(to: out.appendingPathComponent(filename))
++    samples.append(["file": filename, "requested_seconds": seconds,
++                    "actual_seconds": CMTimeGetSeconds(actual)])
++}
++let report: [String: Any] = ["source": input.path, "duration_seconds": duration,
++                           "sample_interval_seconds": 0.1, "frames": samples]
++try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys])
++    .write(to: out.appendingPathComponent("samples.json"))
++print("Sampled \(samples.count) launch frames; duration \(duration)")

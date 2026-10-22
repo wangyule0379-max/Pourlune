@@ -32,3 +32,12 @@
 ```
 
 `audio_generate.py` 不带 `--check` 会生成音频，`export_icons.py` 会导出平台图标；只有明确资源变更任务才使用这些写入路径。
+
+T-R01 native launch resources reuse `assets/art/ui/logo.png` with KnitArt's existing display bounds. `startup_assets.py` only crops/resizes/pads density outputs; it does not redraw art or change rights status. Use the bundled Pillow Python above:
+
+```sh
+python3 tools/assets/startup_assets.py          # exact output drift check
+python3 -m unittest discover -s tools/assets -p test_startup_native.py -v
+```
+
+`--write` is only for an explicitly intended native startup resource update. It writes iOS 1x/2x/3x launch wordmarks and Android density wordmarks plus transparent 288dp system-icon canvases with a 176dp mark inside the 192dp safety circle. Existing Flutter UI art/manifests remain unchanged.

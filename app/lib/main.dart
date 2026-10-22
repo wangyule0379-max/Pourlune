@@ -15,6 +15,10 @@ import 'services/service_config.dart';
 import 'development/scenarios.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/pourlune_app.dart';
+import 'presentation/startup_view.dart';
+import 'presentation/knit_components.dart';
+import 'presentation/scene_art.dart';
+import 'data/scenes.dart';
 export 'presentation/pourlune_app.dart' show PourluneApp;
 export 'presentation/game_screen.dart' show GameScreen;
 
@@ -68,7 +72,7 @@ class _BootstrapState extends State<Bootstrap> {
   DevelopmentScenario? development;
   GameAudio? audio;
   ServiceHub? services;
-  bool failed = false;
+  bool failed = false, _opening = false;
   @override
   void initState() {
     super.initState();
@@ -76,6 +80,8 @@ class _BootstrapState extends State<Bootstrap> {
   }
 
   Future<void> _open() async {
+    if (_opening) return;
+    _opening = true;
     setState(() => failed = false);
     GameStore? store;
     GameAudio? pendingAudio;
@@ -168,6 +174,43 @@ class _BootstrapState extends State<Bootstrap> {
         await store.close();
         return;
       }
+      // Decode only the shell and the Home scene which is about to be shown.
+      // SDK/network work is never awaited here.
+      final welcome =
+          c.ordinary == null &&
+          c.daily == null &&
+          c.progress.firstClears == 0 &&
+          !c.tutorialComplete;
+      final size = MediaQuery.sizeOf(context);
+      final scene = sceneForLevel(c.progress.nextUnfinished ?? 1);
+      await Future.wait([
+        precacheImage(
+          const AssetImage('assets/art/backgrounds/game.png'),
+          context,
+          onError: (_, _) {},
+        ),
+        for (final name in ['logo', 'green-frame', 'cream-frame'])
+          precacheImage(
+            knitArtImage(context, name),
+            context,
+            onError: (_, _) {},
+          ),
+        warmScene(
+          context,
+          scene,
+          welcome
+              ? [for (var i = 1; i <= 5; i++) '$scene:$i']
+              : c.progress.pieces,
+          (size.width - 32).clamp(0.0, size.height * (welcome ? .38 : .32)),
+        ),
+      ]);
+      if (!mounted) {
+        c.dispose();
+        hub.dispose();
+        await sounds.dispose();
+        await store.close();
+        return;
+      }
       setState(() {
         controller = c;
         audio = sounds;
@@ -179,6 +222,8 @@ class _BootstrapState extends State<Bootstrap> {
       await pendingAudio?.dispose();
       await store?.close();
       if (mounted) setState(() => failed = true);
+    } finally {
+      _opening = false;
     }
   }
 
@@ -211,32 +256,13 @@ class _BootstrapState extends State<Bootstrap> {
       locale: const Locale('en'),
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
-      home: Scaffold(
-        body: SafeArea(
-          child: Builder(
-            builder: (context) {
-              final l = AppLocalizations.of(context);
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: failed
-                      ? Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(l.openFailed),
-                            FilledButton(
-                              onPressed: _open,
-                              child: Text(l.retry),
-                            ),
-                          ],
-                        )
-                      : const CircularProgressIndicator(),
-                ),
-              );
-            },
-          ),
-        ),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        scaffoldBackgroundColor: startupBackground,
+        fontFamily: 'Nunito',
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff061b78)),
       ),
+      home: StartupView(failed: failed, onRetry: _open),
     );
   }
 }

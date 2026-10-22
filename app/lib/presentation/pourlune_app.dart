@@ -5,6 +5,7 @@ import '../application/game_controller.dart';
 import '../application/game_audio.dart';
 import '../l10n/app_localizations.dart';
 import 'bottle.dart';
+import 'motion.dart';
 import 'game_screen.dart';
 import 'knit_components.dart';
 
@@ -42,6 +43,12 @@ class PourluneApp extends StatelessWidget {
             ? Colors.white
             : const Color(0xff82dff1),
         useMaterial3: true,
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            for (final platform in TargetPlatform.values)
+              platform: const KnitRouteTransitions(),
+          },
+        ),
         textTheme: ThemeData.light().textTheme.apply(
           fontFamily: 'Nunito',
           bodyColor: ink,
@@ -100,8 +107,12 @@ class PourluneApp extends StatelessWidget {
                     ),
               ),
         ),
+        iconButtonTheme: const IconButtonThemeData(
+          style: ButtonStyle(backgroundBuilder: knitPressFeedback),
+        ),
         textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
+          style: TextButton.styleFrom(minimumSize: const Size(48, 48))
+              .copyWith(backgroundBuilder: knitPressFeedback),
         ),
       ),
       builder: (context, child) {
