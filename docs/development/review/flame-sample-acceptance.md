@@ -51,3 +51,7 @@ Flame 专属实现、交付及本报告已在 `c529e8e2cac8afa8266cfd7a3a1b98394
 ## 后续用户确认与扩展授权（2026-10-22）
 
 用户明确表示“样板效果可以”，并授权完整棋盘扩展及容量数字/动画同步修复。此前效果确认门槛现已满足；执行按 `docs/pmpowers/plans/2026-10-22-flame-full-board.md` FB01–FB08 推进。FS-M01 转入该批必修事项，尚未复验关闭。本记录不把后续完整棋盘或真机性能提前视为通过。
+
+## 远端 CI 收尾（2026-10-22 08:19 UTC）
+
+精确提交 c529e8e 的 run 39743348698 终态 failure：iOS 构建成功，Ubuntu Flutter 测试 181 通过、1 失败（b04_hint_events_test.dart:65，预期两条提示结果事件，观察到一条），Android APK 构建未执行。证据 `flame-sample-evidence/remote-ci-final.json`。FS-CI01 已派原开发定位修复；25ms 固定等待是待验证时序假设，不认定网络问题或简单重跑。此前独立样板运行结论保留，远端整体验证尚未通过，修复需独立复验及新提交 CI。

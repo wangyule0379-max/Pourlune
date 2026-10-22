@@ -1,0 +1,78 @@
+{
+  "checked_at": "2026-10-22T08:19:39Z",
+  "run_id": 39743348698,
+  "commit": "c529e8e2cac8afa8266cfd7a3a1b983946fcbc69",
+  "status": "completed",
+  "conclusion": "failure",
+  "url": "https://github.com/wangyule0379-max/Pourlune/actions/runs/39743348698",
+  "jobs": [
+    {
+      "id": 119705709938,
+      "name": "tests-and-android",
+      "conclusion": "failure",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install fixed Flutter SDK",
+          "conclusion": "success"
+        },
+        {
+          "name": "Core",
+          "conclusion": "success"
+        },
+        {
+          "name": "Flutter",
+          "conclusion": "failure"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 119705710137,
+      "name": "ios-build",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install fixed Flutter SDK",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run flutter pub get --enforce-lockfile && flutter build ios --simulator --debug",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "failure_excerpt": "2026-10-22T07:52:11.0287087Z ##[group]❌ /home/runner/work/Pourlune/Pourlune/app/test/b04_hint_events_test.dart: AC36 cancel emits once; same saved instance after controller restart retains distinct hint request identities (failed)\n2026-10-22T07:52:11.0288516Z Expected: an object with length of <2>\n2026-10-22T07:52:11.0289041Z   Actual: WhereIterable<String>:['pl_hint_result']\n2026-10-22T07:52:11.0289554Z    Which: has length of <1>\n2026-10-22T07:52:11.0289808Z \n2026-10-22T07:52:11.0305293Z package:matcher                                     expect\n2026-10-22T07:52:11.0305996Z package:flutter_test/src/widget_tester.dart 473:18  expect\n2026-10-22T07:52:11.0306625Z test/b04_hint_events_test.dart 65:7                 main.<fn>\n2026-10-22T07:52:11.0307523Z ##[endgroup]\n2",
+  "interpretation": "iOS build succeeded; Ubuntu Flutter test failed at b04_hint_events_test.dart:65 (expected two hint events, observed one); 181 tests passed, one failed. Android build not reached. Fixed 25ms wait is a race hypothesis, not a confirmed root cause. No blind rerun."
+}
