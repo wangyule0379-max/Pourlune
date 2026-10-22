@@ -78,3 +78,7 @@ H=本轮host全回归；C=本轮core；N=本轮原生五流程/大字号；L=本
 ## 外部门槛
 
 用户交接以 [一次性交接清单](../dependencies/user-handoff.md) 为准：正式身份/账号和签名、Firebase项目与客户端配置、AdMob/UMP、iPhone与Android代表真机、真实支持/隐私URL和邮箱、商用权属与内容/商店素材确认。源码提交不关闭这些门槛，不合并main，不上传商店或发布。
+
+## 提交与远端状态
+
+实现、交付、独立证据和交接清单已在 be25ca064ddf48f647e46af22c552d6821dc4f78 推送 origin/codex/offline-foundation。GitHub 对该精确提交返回 run39707677612（in_progress）和39707683317（queued）；此时未完成，不写CI通过。后续状态以tracking及独立CI记录为准。没有合并main或发布。

@@ -7,7 +7,7 @@
   "branch": "codex/offline-foundation",
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "B05",
-  "current_status": "accepted_internal_pending_push",
+  "current_status": "accepted_internal_pushed_pending_ci",
   "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:58",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
@@ -27,16 +27,18 @@
   "user_authorization": "Start approved first-release development in the existing execution chat, assign substantial batches, independently accept and continue without repeated reminders. No production release or account/legal authorization implied.",
   "review_round": 1,
   "current_batch_plan": "docs/pmpowers/plans/2026-10-22-B05-release-candidate-validation.md",
-  "last_accepted_commit": "ba78a62726754634788f9b3a70f90acf0eefeb33",
+  "last_accepted_commit": "be25ca064ddf48f647e46af22c552d6821dc4f78",
   "last_accepted_push": "origin/codex/offline-foundation",
   "ci_followup": {
-    "commit": "ba78a62726754634788f9b3a70f90acf0eefeb33",
-    "status": "completed",
-    "conclusion": "success",
-    "next_action": "B04 pushed commit CI independently verified successful; no further polling for this run. Continue B05 delivery follow-up.",
-    "run_id": 39698416205,
-    "url": "https://github.com/wangyule0379-max/Pourlune/actions/runs/39698416205",
-    "last_checked_at": "2026-10-22T00:31:37Z"
+    "commit": "be25ca064ddf48f647e46af22c552d6821dc4f78",
+    "status": "in_progress",
+    "conclusion": null,
+    "run_ids": [
+      39707683317,
+      39707677612
+    ],
+    "url": "https://github.com/wangyule0379-max/Pourlune/actions/runs/39707683317",
+    "next_action": "Check both exact B05 commit runs to terminal outcome. Then pause automation until external handoff; never treat B04 success as B05 CI."
   },
   "deferred_minor_findings": [
     {
@@ -50,5 +52,5 @@
     "B05": "Eight internal tasks accepted in available environment; independent165 Flutter/30core, five native flows,12 SIGKILL and ordinary main restart; external services/devices/identity/support/rights not passed"
   },
   "external_dependencies_path": "docs/development/dependencies/user-handoff.md",
-  "next_action": "Commit and push accepted B05, verify exact pushed commit CI, then pause repeated checks until user handoff. No main merge or release."
+  "next_action": "B05 accepted and pushed. Follow exact commit CI; fix actionable CI defect if any. Once terminal, pause idle external-dependency polling. User handoff consolidated."
 }
