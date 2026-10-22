@@ -176,3 +176,15 @@ FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter build apk --debug -t integration_test/
 ```
 
 Root `tools/validation/flame_full_board.py ios|android <action> --phase before|after` checks its exact dedicated device: iOS `F9C16DE7-01D8-4740-B796-A3A2DB8C3265`, Android `emulator-5588` / `Pourlune_FullBoard_API36`. Actions include `route`, `capture`, `timed-moves`, `prepare-startup`, `startups`, `restore`, `background`, `state`. The recovery action abruptly kills and relaunches the same installed candidate, checks both saved slots/receipts/settings/entitlement/history, then uses native Undo. Android snapshots and pre/post force-stop dates share the device clock; dispatch/completion must be nonnegative and under250ms. Native lifecycle freshness uses event sequence counts. Never run it with Python `-O` or on an ordinary/review installation. JSON/PNG evidence is separate per platform, phase and command ID under `../docs/development/evidence/flame-full-board/`. Debug emulator timings and a standalone instrumented binary do not establish physical-device performance or a passing DDS integration runner.
+
+
+### Beta packaging (BR01)
+
+Current local candidate version is **0.5.0+5**. Explicit validated Firebase `prod`
+builds use `com.pourlune.app` and display **Pourlune** on both platforms; default
+none/dev builds retain development IDs and **Pourlune Dev**. No SDK upgrades or
+collection/advertising defaults were changed. Use the compile-only immutable
+candidate commands in `tools/validation/README.md`; they produce unsigned release
+checks by default, with an explicit existing-profile local IPA export option.
+A successful local signature does not clear store/legal/device gates. Support URLs, store legal forms,
+signing and commercial-rights gates stay explicit in the BR01 delivery.

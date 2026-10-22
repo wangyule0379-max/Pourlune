@@ -374,7 +374,8 @@ class FirebaseConfigTest(unittest.TestCase):
             self.assertEqual(r.returncode, 0, r.stderr)
             sent = json.loads((self.root / "flutter-input.json").read_text())
             self.assertEqual(sent["gradle_env"], env)
-            self.assertIn(f"PRODUCT_BUNDLE_IDENTIFIER = {native}", sent["xcconfig"])
+            self.assertIn(f"POURLUNE_BUNDLE_IDENTIFIER = {native}", sent["xcconfig"])
+            self.assertNotIn("\nPRODUCT_BUNDLE_IDENTIFIER =", sent["xcconfig"])
             self.assertEqual(json.loads(sent["defines"]["POURLUNE_FIREBASE_OPTIONS"])["projectId"], f"pourlune-{env}-fixture")
             self.assertNotIn(FAKE_KEY, r.stdout + r.stderr)
         for name, content in before.items():

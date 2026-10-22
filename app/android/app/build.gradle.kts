@@ -57,6 +57,8 @@ android {
         applicationId = pourluneApplicationId
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
+        manifestPlaceholders["POURLUNE_DISPLAY_NAME"] =
+            if (firebaseEnvironment == "prod") "Pourlune" else "Pourlune Dev"
         manifestPlaceholders["POURLUNE_ADMOB_APP_ID"] =
             providers.gradleProperty("POURLUNE_ADMOB_APP_ID").getOrElse("ca-app-pub-3940256099942544~3347511713")
         minSdk = 24

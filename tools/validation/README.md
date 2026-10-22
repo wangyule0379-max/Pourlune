@@ -125,3 +125,103 @@ The Python runner copies JSON/PNG evidence and command results. Choose a fresh -
 `app/integration_test/b05_candidate_test.dart` is the separate actual Flutter/sqflite five-flow/short-screen suite. It uses formal bundled60+30 puzzles, explicitly seeded prior progress and controlled ad callbacks. Run with the same QA identity override, then copy `Documents/b05-candidate-evidence/` before teardown. Its12 branch is transaction-failure/Retry; the standalone lifecycle runner supplies actual process-death coverage. Never label either controlled callback test as a real SDK ad reward.
 
 Focused regression: add `--reveal-only` to run just the reveal interruption/acknowledgment chain; it writes reveal-only.json and B05_REVEAL_ONLY_PASS, never the full lifecycle success marker. The final B05 run uses the complete matrix.
+
+
+## BR01 compile-only beta candidates
+
+`beta_build.py` freezes current main-entrypoint production-ID release outputs in a
+new ignored `build/` subfolder; it refuses to replace candidates or write outside
+that tree. It uses validated existing **prod** Firebase client config through
+`firebase_build.py`, never runs production, uploads symbols, installs, uploads to
+stores, registers keys, or enables ads. Analytics/crash choices remain separately
+off by default; Remote Config and embedded SDK infrastructure can still process
+data. This is the existing production compile selection, not a zero-data build.
+No private client files belong in Git or logs.
+
+From root, after obtaining the serial Flutter/SPM CLI window:
+
+```sh
+cd app
+FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter pub get --enforce-lockfile
+cd ..
+.venv/bin/python tools/validation/beta_build.py --platform ios --output build/beta-candidates/0.5.0-5/ios --flutter /Users/wangyule/development/flutter/bin/flutter
+.venv/bin/python tools/validation/beta_build.py --platform android --output build/beta-candidates/0.5.0-5/android --flutter /Users/wangyule/development/flutter/bin/flutter
+```
+
+Use a fresh output path on retry; failed directories retain redacted build logs.
+The version comes from `app/pubspec.yaml`; before future distribution compare the
+number to actual uploaded builds and increment it, never overwrite a frozen pack.
+`candidate.json` plus `sources.json` pin the artifact, build number and dirty source
+bytes, including locks. By default the tool demands unsigned outputs. The explicit iOS profile option
+reuses an existing verified identity for local export; neither mode submits. The iOS device app is not an IPA or a Simulator app. AAB needs a
+real upload-key JAR signature, not APK `apksigner`; debug signing does not qualify.
+
+For iOS signing, reuse the authorized Team T7U878Z8H6 distribution identity in
+Keychain with a **Pourlune-only** App Store profile for com.pourlune.app. Do not use
+FishPilot/GetDoneFrame profiles, create private keys, revoke certificates or ask
+Xcode to create missing signing assets automatically. Once profile/account/legal
+requirements are verified, prepare an archive with the same production selection,
+identity, source version and no-AdID environment; archive/export is an explicit, separately
+recorded local operation, using the optional existing-profile argument below. Preserve the
+archive, dSYM, export options, actual codesign/entitlements and IPA SHA; inspect
+before upload. A matching profile and an existing certificate are prerequisites,
+not proof that an archive/export succeeds.
+
+For Android signing, the owner selects an existing authorized upload key **locally**
+and unlocks it without posting passwords, keystores or service-account JSON in
+chat/Git. Keep signing outside the repo; use Java `jarsigner` password environment
+or protected password-file options, never a literal secret argument or shell
+trace. Copy the unsigned AAB to a new named signed path, verify its signer SHA256
+against the intended upload key/Play record, validate with official bundletool,
+and freeze a new manifest. Existing app-signing keys belonging to FishPilot are
+not to be reset or repurposed silently. No key generation is part of BR01.
+
+`bundletool-all-1.18.3.jar` was downloaded from Google's official GitHub release to
+`/Users/wangyule/.cache/pourlune-tools/`; its SHA256 matches the release digest in
+`docs/development/evidence/beta-readiness/BR01/bundletool-download.json`.
+`java -jar <jar> validate --bundle=<aab>` and `dump manifest --bundle=<aab>` inspect
+an unsigned bundle without making or installing a debug-signed APK. `asc 5.16.0`
+was installed via Homebrew; its auth doctor found no API profile, so read-only
+account verification used the existing browser login. Do not create an API key just
+to satisfy the CLI; browser registration can reuse the existing owner session.
+
+CI runs stdlib Python configuration/immutability guard tests without private
+configs, then the existing fixed Flutter/core/test/debug-build matrix. Local
+production compile and future signing remain separate; CI presence is not a
+passing run or store processing evidence.
+
+
+A downloaded/installed Pourlune-only App Store profile now exists and was matched
+to the existing distribution identity. Explicit local IPA preparation:
+
+```sh
+.venv/bin/python tools/validation/beta_build.py --platform ios --output build/beta-candidates/0.5.0-5/ios-signed --ios-profile "/Users/wangyule/Library/Developer/Xcode/UserData/Provisioning Profiles/74a202b2-3b25-4e31-8fd4-0413bf15d486.mobileprovision" --flutter /Users/wangyule/development/flutter/bin/flutter
+```
+
+`ios_signing.py` checks current Pourlune/team/App Store/beta distribution metadata
+and an exactly matching existing local certificate/private-key identity. It reads
+public CMS/Keychain metadata in memory, never exports a key. `firebase_build.py`
+prepares unsigned with Flutter, then invokes manual `xcodebuild archive` and
+`-exportArchive` to an explicit new ignored output. It never passes
+`-allowProvisioningUpdates` or `-allowProvisioningDeviceRegistration`, never
+chooses an automatic signing style, and fixes export destination to `export` and
+symbol upload to false. Caller export/provisioning options are rejected. Existing
+account/legal/content gates remain even if local export succeeds. A Keychain
+access prompt or missing asset is a concrete interruption, not permission to
+create or revoke signing credentials. The final IPA is independently unpacked for
+codesign deep/strict, identity/version, entitlements and embedded-profile checks;
+archive/dSYM/IPA hashes are frozen together. Do not substitute an unsigned device
+compile for that successful export evidence.
+
+Release candidate builds intentionally allow Flutter's normal pub/tooling refresh
+after an explicit enforce-lockfile check. `--no-pub` can retain a dev-mode native
+GeneratedPluginRegistrant containing integration_test while Gradle excludes that
+dev plugin in release. The candidate source/lock hashes must still remain unchanged.
+Manual profile variables are consumed only by Runner target build settings, not
+global PROVISIONING_PROFILE_SPECIFIER on SPM framework/resource targets.
+
+Firebase-selected bundle identity is also a Runner-only variable
+`POURLUNE_BUNDLE_IDENTIFIER`; global PRODUCT_BUNDLE_IDENTIFIER would incorrectly
+rename SPM resource bundles. The final IPA inspection rejects that leakage.
+QA-only external raw identity overrides remain historical QA scope; the official
+candidate uses the scoped selection and keeps SDK bundle identifiers distinct.

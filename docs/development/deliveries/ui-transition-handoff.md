@@ -191,3 +191,22 @@ after iOS构建48.4秒成功，但安装时 F9C16DE7 返回 Shutdown/code405。�
 Full-board final-review P2 repair coordination: loading/failed art now correctly disables transparent board input. Full219 first run exposed8 pre-art synthetic taps in ui_test.dart, motion_arrival_test.dart, replay_navigation_test.dart, offline_ui_test.dart (no production rule failure). These four tests will use bounded actual decoded-art readiness before native bottle taps; arrival still must be animating when first ready input is accepted. No shared production UI, page_transitions_test scope or timing delay is widened. Existing exact readiness helper extended; full suite rerun. CLI remains HELD by full-board.
 
 2026-10-22T13:13:43.253350+00:00 — CLI RELEASED by full-board. FB01–FB08实施/自测交付完成；最终源码115哈希与候选/录像校验通过，应用219、核心30、双端route-fixed各43步＋真实OS后台＋同安装早期流水强退/Undo均通过。一次最终只读审查3个P2已在一次修复pass验证；Minor并行解码/静态刻度缓存保留。最终报告 docs/development/deliveries/flame-full-board.md 可开始架构独立验收；整体视觉与FS-M01关闭仍由验收决定。当前独立F9/5588均装修复版7瓶；仅停本任务caffeinate，不关闭设备。未暂存、提交、推送，未改tracking/计划/独立review及共享production UI。
+
+2026-10-22T14:16:55.099141+00:00 — MS01–MS03有界补证 CLI HELD by原开发，架构已明确交还且无UI在途构建。仅新QA/test/工具/证据；255890与5588头less独立设备、新motion_supplement.sqlite/身份；用户F9和窗口完全不操作。串行NoAdID，禁止屏幕采集限制重试。结束显式释放。
+
+2026-10-22T14:37:54.960417+00:00 — MS01–03安全检查点完成，CLI RELEASED。新4项键盘测试/analyze/双端debug与各3次同安装正常main真实首次点击/SQLite通过；MS03实际音触觉保留未验，无采集重试。delivery motion-polish-supplement.md已可复核；未stage/commit/push，未动F9及窗口。BR01原开发连续推进，后续CLI将另记领取。
+
+2026-10-22T14:44:57.151089+00:00 — BR01 CLI HELD by原开发，MS命令已全部结束。只做Beta身份/构建/资料必要差异，NoAdID串行；架构暂无CLI占用。用户F9不操作、禁止采集重试。
+
+2026-10-22T14:45:48.335511+00:00 — BR01当前无Flutter/Dart/pub/SPM/xcodebuild在途；CLI明确RELEASED给架构MS短复验（新增4项及已安装255890/5588）。本方仅继续非CLI BR01工具/资料/浏览器核查，不动MS新增源码/冻结候选、专属设备或F9。架构结束请在本交接明确归还。
+
+2026-10-22T14:51:02.515103+00:00 — 已读架构MS-R01精确RED及CLI归还；CLI HELD由原开发先诊断新键盘测试冻结副本4失败，保留旧冻结文件/报告，不动生产或F9。BR01非依赖项继续。
+
+2026-10-22T14:59:53.804535+00:00 — MS-R01执行修复交付，CLI RELEASED给架构短复验。报告evidence/motion-polish-supplement/MS-R01/repair-report.md；新冻结build/motion-supplement-r01-source，旧冻结不覆盖。根/隔离各4键盘通过；根因实测31次16ms帧仅推进不足完成预算，宿主wall3s先到，改同3s Flutter测试时钟pumpAndSettle且显式motion=null/busy=false；无生产改动/加sleep/弱化once持久化。原开发继续BR01非CLI资料/工具，待明确归还再构建。
+
+2026-10-22T15:01:27.440780+00:00 — 对架构最新MS-R01短窗请求的明确确认：本方无Flutter/Dart/pub/SPM/xcodebuild或原生在途，前条RELEASED继续有效，CLI现交架构在build/motion-supplement-r01-source/app复跑4项/必要格式分析。本方只做Python签名门控工具/BR01文档，无设备动作，收到归还前不启Flutter构建。
+
+BR01已读架构MS-R01独立4项/analyze/format通过及CLI归还；现CLI HELD by原开发用于串行root pubget/analyze与正式身份候选编译/本机既有证书手动archive/export。没有allowProvisioningUpdates，不创建私钥、不上传/运行生产，不动设备/F9。
+
+
+2026-10-22T15:39:44.556033+00:00 — BR01 CLI RELEASED by原开发。全部Flutter/Dart/pub/SPM/Xcode/原生及设备命令已结束；本批无在途命令。最终ios-br01-3签名IPA与android-br01-3 unsigned AAB及394项来源已冻结核验；一次fresh作者终审Critical0/Important0，架构可开始独立验收。报告beta-readiness-BR01.md；尚不具备商店提交结论，未上传/邀请/生产运行。F9及窗口完全未操作，无采集限制重试。未stage/commit/push，tracking/plans/独立review归架构。后续占用CLI须重新协调。
