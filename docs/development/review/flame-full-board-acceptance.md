@@ -48,3 +48,5 @@
 ## 推送记录
 
 实现 `3134637f91c0cb59c26ba6905b557f48f6179e5f` 已推送 `origin/codex/offline-foundation`。GitHub连接器独立回读精确CI [39788815925](https://github.com/wangyule0379-max/Pourlune/actions/runs/39788815925) 为 in_progress，尚未宣称远端通过。后续文档提交不另要求CI。架构独立255890/5588设备已关闭，CLI已释放，用户F9保持原样。
+
+2026-10-22 收尾更新：同一精确提交的 CI 于 13:49:00 UTC 更新为 `completed/success`，本聊天通过 GitHub 连接器独立回读。`ios-build` 与 `tests-and-android` 均成功，精简原始字段保存于 `flame-full-board-evidence/remote-ci-final.json`。本批远端验证完成，不再轮询该 run。此更新仅为 CI 与文档收尾，未操作用户 F9，也不扩大真机或服务验收结论。
