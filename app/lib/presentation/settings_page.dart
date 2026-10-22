@@ -72,11 +72,11 @@ class SettingsPage extends StatelessWidget {
           l.versionInfo(
             const String.fromEnvironment(
               'FLUTTER_BUILD_NAME',
-              defaultValue: '0.3.0',
+              defaultValue: '0.4.0',
             ),
             const String.fromEnvironment(
               'FLUTTER_BUILD_NUMBER',
-              defaultValue: '3',
+              defaultValue: '4',
             ),
           ),
         ),

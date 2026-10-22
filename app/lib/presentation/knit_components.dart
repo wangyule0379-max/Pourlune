@@ -157,9 +157,11 @@ class KnitHeader extends StatelessWidget {
     required this.title,
     this.onBack,
     this.backKey,
+    this.backLabel,
     this.trailing,
   });
   final String title;
+  final String? backLabel;
   final VoidCallback? onBack;
   final Key? backKey;
   final Widget? trailing;
@@ -173,7 +175,7 @@ class KnitHeader extends StatelessWidget {
           KnitIconButton(
             key: backKey,
             icon: Icons.arrow_back_rounded,
-            label: AppLocalizations.of(context).home,
+            label: backLabel ?? AppLocalizations.of(context).home,
             onPressed: onBack,
           )
         else

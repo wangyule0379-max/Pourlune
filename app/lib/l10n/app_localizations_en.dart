@@ -575,4 +575,114 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get seasideGull => 'Seagull';
+
+  @override
+  String get extraBottle => 'Extra bottle';
+
+  @override
+  String get extraExplain =>
+      'Watch an optional ad to add one empty bottle to this puzzle. It stays through Undo and Restart. You can add one per puzzle. Hint, Undo and Restart remain free.';
+
+  @override
+  String get watchAd => 'Watch ad';
+
+  @override
+  String get notNow => 'Not now';
+
+  @override
+  String get extraUsed => 'This puzzle already has its extra bottle.';
+
+  @override
+  String get adLoading => 'Preparing an optional ad… You can keep playing.';
+
+  @override
+  String get adUnavailable =>
+      'An ad is not available. Keep playing with free Hint, Undo or Restart, or try again later.';
+
+  @override
+  String adCooldown(int seconds) {
+    return 'Another ad was shown recently. Please wait $seconds seconds.';
+  }
+
+  @override
+  String get adRetry => 'Try loading an ad';
+
+  @override
+  String get rewardSavingFailed =>
+      'A reward confirmation was received, but could not be saved. Retry while this app remains open. Closing the app may lose an unsaved confirmation. Free tools still work.';
+
+  @override
+  String get rewardUnconfirmed =>
+      'An earlier ad request was interrupted. This device has no saved reward confirmation; the SDK cannot verify it now. End this request to try again. No bottle will be added.';
+
+  @override
+  String get endRequest => 'End interrupted request';
+
+  @override
+  String get rewardRestore =>
+      'An extra bottle belongs to an earlier puzzle. Resume that puzzle to use it.';
+
+  @override
+  String get resumeReward => 'Resume rewarded puzzle';
+
+  @override
+  String get restoreRewardTitle => 'Resume the earlier puzzle?';
+
+  @override
+  String get restoreRewardBody =>
+      'This replaces the current puzzle in the same slot with the saved earlier puzzle and its extra bottle. Progress in the other slot is kept.';
+
+  @override
+  String get rewardOperationFailed =>
+      'The reward request could not be saved or restored. No new bottle was added. Please retry.';
+
+  @override
+  String get analyticsChoice => 'Share gameplay analytics';
+
+  @override
+  String get analyticsDetails =>
+      'Optional gameplay events. Turning this off stops new app events; it cannot recall data already sent.';
+
+  @override
+  String get crashChoice => 'Share crash reports';
+
+  @override
+  String get crashDetails =>
+      'Optional technical diagnostics, including crash reports stored on this device before you enabled sharing. The SDK may store crashes locally while sharing is off. Turning this off stops new app upload requests; queued reports cannot be recalled.';
+
+  @override
+  String get privacySaveProblem =>
+      'Privacy choices could not be saved or synchronized. Sharing is blocked by the app until Retry succeeds.';
+
+  @override
+  String get adPrivacyOptions => 'Advertising privacy options';
+
+  @override
+  String get adPrivacyRetry => 'Check advertising privacy';
+
+  @override
+  String get adPrivacyChecking =>
+      'Checking the advertising privacy service… Core play remains available.';
+
+  @override
+  String get adPrivacyProblem =>
+      'Advertising privacy is unavailable. Ads stay unavailable until the SDK permits requests.';
+
+  @override
+  String get privacyPolicy => 'Privacy policy';
+
+  @override
+  String get supportWebsite => 'Help website';
+
+  @override
+  String get servicesDisabled =>
+      'Optional diagnostics are unavailable in this build. Choices are saved locally.';
+
+  @override
+  String get adNetwork =>
+      'The ad network could not be reached. Free tools still work. Try again when connected.';
+
+  @override
+  String get adNoFill =>
+      'No ad is available from the service right now. Free tools still work. Please try later.';
 }

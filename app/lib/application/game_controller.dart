@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -7,6 +8,11 @@ import '../data/game_store.dart';
 import '../data/content_library.dart';
 import '../data/player_settings.dart';
 import '../data/scenes.dart';
+import '../data/reward_attempt.dart';
+import '../services/service_hub.dart';
+import '../services/ad_coordinator.dart';
+import '../services/telemetry.dart';
+import '../services/play_metrics.dart';
 import 'hint_worker.dart';
 
 /// A presentation of one already committed move. Never serialized or settled.
@@ -68,9 +74,13 @@ class GameController extends ChangeNotifier {
     LocalClock? clock,
     HintLauncher? hintLauncher,
     this.onFeedback,
+    this.services,
   }) : library = library ?? ContentLibrary(main: {}),
        clock = clock ?? LocalDay.now,
-       _launchHint = hintLauncher ?? runHint;
+       _launchHint = hintLauncher ?? runHint {
+    services?.addListener(_notify);
+  }
+  final ServiceHub? services;
   final GameStore store;
   final void Function(GameFeedback)? onFeedback;
   PourMotion? motion;
@@ -156,7 +166,91 @@ class GameController extends ChangeNotifier {
   Future<void> Function()? _afterWrite;
   _Write _write = _Write.snapshot;
   bool _alive = true, _navigating = false, _foreground = true;
-  bool get busy => phase == SavePhase.saving || _navigating || motion != null;
+  final _metrics = <String, PlayMetrics>{};
+  bool _paused = false;
+  final _tutorialEvents = <String, ({TutorialStatus status, int step})>{};
+  String? _failedSaveId;
+  void setPaused(bool value) {
+    _paused = value;
+    _notify();
+  }
+
+  PlayMetrics _metric(GameInstance s) =>
+      _metrics.putIfAbsent(s.id, PlayMetrics.new);
+  void _syncMetrics() {
+    for (final entry in _metrics.entries) {
+      entry.value.sync(
+        entry.key == current?.id &&
+            _foreground &&
+            !_paused &&
+            !_adFlow &&
+            !hintSearching &&
+            page == GamePage.board &&
+            current?.completed == false,
+      );
+    }
+  }
+
+  Map<String, Object> _eventPuzzle(GameInstance s) => {
+    'instance_id': s.id,
+    'puzzle_id': s.puzzle.id,
+    'version': s.puzzle.contentVersion,
+    'mode': s.slot == 'daily'
+        ? 'daily'
+        : s.isReplay
+        ? 'replay'
+        : 'main',
+    'first': s.isReplay ? 0 : 1,
+    'replay': s.isReplay ? 1 : 0,
+  };
+  void _event(ProductEvent e, String identity, Map<String, Object> fields) {
+    final telemetry = services?.telemetry;
+    if (telemetry != null) unawaited(telemetry.log(e, identity, fields));
+  }
+
+  Future<void> _saveMetrics() async {
+    final s = current;
+    if (s == null || services == null) return;
+    try {
+      await store.writeServiceValue('metrics:${s.id}', _metric(s).toJson());
+    } catch (_) {}
+  }
+
+  bool _adFlow = false,
+      _rewardSaving = false,
+      _rewardDrainScheduled = false,
+      _initialized = false;
+  bool rewardSaveFailed = false;
+  String? rewardIssue;
+  final _rewardConfirmations = <String, String>{};
+  final _rewardCloses = <String>{};
+  final _checkedInterstitial = <String>{};
+  List<RewardAttempt> pendingRewards = [];
+  Future<void> Function()? _afterForeground;
+  bool get busy =>
+      phase == SavePhase.saving ||
+      _navigating ||
+      motion != null ||
+      _adFlow ||
+      _rewardSaving ||
+      (services?.ads.showing ?? false);
+  bool get offersExtraBottle =>
+      current != null &&
+      !current!.completed &&
+      (current!.slot == 'daily' || current!.puzzle.mainLevel! >= 4);
+  bool get canWatchExtraBottle =>
+      offersExtraBottle &&
+      !busy &&
+      phase == SavePhase.clean &&
+      _foreground &&
+      !current!.extraBottleGranted &&
+      !rewardSaveFailed &&
+      !pendingRewards.any((r) => r.origin.slot == current!.slot) &&
+      services != null &&
+      services!.ads.ready(AdKind.rewarded) &&
+      services!.ads.cooldown == Duration.zero &&
+      !services!.ads.timingSaveFailed;
+
   bool get continueLabelIsReplay =>
       ordinary != null && !ordinary!.completed && ordinary!.isReplay;
   bool get canContinueOrdinary => ordinary != null && !ordinary!.completed;
@@ -175,6 +269,7 @@ class GameController extends ChangeNotifier {
       canNext &&
       (page == GamePage.completion || page == GamePage.reward) &&
       _freshCompletions.contains(current!.id) &&
+      !_checkedInterstitial.contains(current!.id) &&
       progress.qualifyingClears >= 3 &&
       !{20, 40}.contains(current!.puzzle.mainLevel) &&
       library.main.containsKey(current!.puzzle.mainLevel! + 1);
@@ -202,8 +297,36 @@ class GameController extends ChangeNotifier {
   bool hintSearching = false;
   int _hintGeneration = 0;
   HintTask? _hintTask;
+  ({String request, String instance, Stopwatch timer})? _hintEvent;
+  void _finishHintEvent(String result) {
+    final event = _hintEvent;
+    _hintEvent = null;
+    if (event == null) return;
+    _event(ProductEvent.hintResult, event.request, {
+      'instance_id': event.instance,
+      'result': result,
+      'duration_ms': event.timer.elapsedMilliseconds,
+    });
+    unawaited(_saveMetrics());
+  }
+
   void _notify() {
-    if (_alive) notifyListeners();
+    if (!_alive) return;
+    _syncMetrics();
+    notifyListeners();
+    if (_rewardConfirmations.isNotEmpty &&
+        !rewardSaveFailed &&
+        !_rewardSaving &&
+        phase == SavePhase.clean &&
+        !_navigating &&
+        motion == null &&
+        !_rewardDrainScheduled) {
+      _rewardDrainScheduled = true;
+      scheduleMicrotask(() {
+        _rewardDrainScheduled = false;
+        unawaited(_drainRewards());
+      });
+    }
   }
 
   Future<void> _refresh() async {
@@ -212,9 +335,21 @@ class GameController extends ChangeNotifier {
   }
 
   Future<void> initialize() async {
+    if (!_initialized) {
+      await store.recoverRewardIntents();
+      _initialized = true;
+    }
+    pendingRewards = await store.pendingRewards();
     for (final slot in ['ordinary', 'daily']) {
       final saved = await store.load(slot);
       _slots[slot] = saved.instance;
+      if (saved.instance != null && services != null) {
+        try {
+          _metrics[saved.instance!.id] = PlayMetrics.parse(
+            await store.readServiceValue('metrics:${saved.instance!.id}'),
+          );
+        } catch (_) {}
+      }
       if (saved.recovered) recoveryNotices[slot] = 'recovered';
       if (saved.unavailable) recoveryNotices[slot] = 'unavailable';
     }
@@ -279,7 +414,8 @@ class GameController extends ChangeNotifier {
       return false;
     }
     final puzzle = library.main[level];
-    if (puzzle == null) {
+    if (puzzle == null ||
+        (services?.policy.disabledPuzzleIds.contains(puzzle.id) ?? false)) {
       notice = FlowNotice.unavailable;
       _notify();
       return false;
@@ -320,10 +456,16 @@ class GameController extends ChangeNotifier {
       _notify();
       return false;
     }
+    final puzzle = catalog.forDate(today.date);
+    if (services?.policy.disabledPuzzleIds.contains(puzzle.id) ?? false) {
+      notice = FlowNotice.unavailable;
+      _notify();
+      return false;
+    }
     await _startNew(
       GameInstance.create(
         id: _id(),
-        puzzle: catalog.forDate(today.date),
+        puzzle: puzzle,
         slot: 'daily',
         isReplay: progress.dailyStamps.contains(today.date),
         puzzleDate: today.date,
@@ -337,6 +479,7 @@ class GameController extends ChangeNotifier {
 
   Future<void> _startNew(GameInstance s, {String? afterCompletion}) async {
     _cancelHint();
+    _metric(s);
     _candidate = s;
     _afterCompletion = afterCompletion;
     _write = _Write.candidate;
@@ -368,6 +511,7 @@ class GameController extends ChangeNotifier {
   /// UI actions that need validation/confirmation after a failed save share the
   /// same first-intent queue as page navigation. Stay cancels either kind.
   bool deferNavigationUntilSaved(Future<void> Function() action) {
+    if (_adFlow || _rewardSaving) return true;
     _pendingCompletionFeedback = null;
     _finishMotion();
     if (!busy && phase != SavePhase.failed) return false;
@@ -377,6 +521,7 @@ class GameController extends ChangeNotifier {
   }
 
   Future<void> navigate(GamePage target, {String? slot, String? scene}) async {
+    if (_adFlow || _rewardSaving) return;
     _pendingCompletionFeedback = null;
     _finishMotion();
     _cancelHint();
@@ -448,6 +593,7 @@ class GameController extends ChangeNotifier {
     final result = current!.pour(from, to);
     rejection = result.rejection;
     if (result.changed) {
+      services?.recordLegalMove();
       if (_motionPresenter && _foreground && page == GamePage.board) {
         motion = PourMotion(
           token: ++_motionToken,
@@ -472,20 +618,35 @@ class GameController extends ChangeNotifier {
   }
 
   Future<void> undo() async {
-    if (_canMutate && current != null) await _change(current!.undo());
+    if (_canMutate && current != null) {
+      final next = current!.undo();
+      if (!identical(next, current)) _metric(current!).undos++;
+      await _change(next);
+    }
   }
 
   Future<void> restart() async {
-    if (_canMutate && current != null) await _change(current!.restart());
+    if (_canMutate && current != null) {
+      _metric(current!).restarts++;
+      await _change(current!.restart());
+    }
   }
 
   Future<void> skipTutorial() async {
-    if (_canMutate && current != null) await _change(current!.skipTutorial());
+    if (_canMutate && current != null) {
+      await _change(current!.skipTutorial());
+    }
   }
 
   Future<void> _change(GameInstance state) async {
     if (identical(current, state)) return;
     _cancelHint();
+    if (current?.tutorial?.active == true && state.tutorial?.finished == true) {
+      _tutorialEvents[state.id] = (
+        status: state.tutorial!.status,
+        step: state.tutorial!.step,
+      );
+    }
     current = state;
     _slots[state.slot] = state;
     receipt = null;
@@ -560,6 +721,14 @@ class GameController extends ChangeNotifier {
         _slots.clear();
         _receipts.clear();
         _freshCompletions.clear();
+        pendingRewards = [];
+        _rewardConfirmations.clear();
+        _rewardCloses.clear();
+        rewardSaveFailed = false;
+        rewardIssue = null;
+        _tutorialEvents.clear();
+        _metrics.clear();
+        services?.continuation.clear();
         current = null;
         receipt = null;
         recoveryNotices.clear();
@@ -577,6 +746,48 @@ class GameController extends ChangeNotifier {
       }
       _write = _Write.snapshot;
       _navigating = false;
+      if (_failedSaveId != null) {
+        _event(ProductEvent.saveRecovered, _failedSaveId!, {
+          'operation': operation.name,
+          'error_category': 'storage',
+        });
+        _failedSaveId = null;
+      }
+      final saved = current;
+      if (saved != null &&
+          (operation == _Write.candidate || operation == _Write.snapshot)) {
+        if (operation == _Write.candidate) {
+          _event(ProductEvent.puzzleStart, saved.id, _eventPuzzle(saved));
+        }
+        if (saved.completed && completion != null) {
+          final metrics = _metric(saved)..sync(false);
+          _event(ProductEvent.puzzleComplete, saved.id, {
+            ..._eventPuzzle(saved),
+            ...metrics.toJson(),
+            'moves': saved.moveCount,
+            'extra_bottles': saved.extraBottleGranted ? 1 : 0,
+          });
+          if (completion.piece != null && completion.firstClear) {
+            _event(ProductEvent.pieceGranted, completion.piece!, {
+              'scene_id': completion.piece!.split(':').first,
+              'piece_id': completion.piece!,
+              'first': 1,
+            });
+          }
+        }
+        final tutorialEvent = _tutorialEvents.remove(saved.id);
+        if (tutorialEvent != null &&
+            saved.tutorial?.status == tutorialEvent.status) {
+          _event(
+            tutorialEvent.status == TutorialStatus.completed
+                ? ProductEvent.tutorialComplete
+                : ProductEvent.tutorialSkip,
+            'v1',
+            {'tutorial_version': 1, 'step': tutorialEvent.step},
+          );
+        }
+        await _saveMetrics();
+      }
       phase = SavePhase.clean;
       final intent = _pendingNav;
       _pendingNav = null;
@@ -593,6 +804,15 @@ class GameController extends ChangeNotifier {
       phase = SavePhase.failed;
       _navigating = false;
       error = e.toString();
+      _failedSaveId ??= _id();
+      _event(ProductEvent.saveFailed, _failedSaveId!, {
+        'operation': operation.name,
+        'error_category': 'storage',
+      });
+      unawaited(
+        services?.recordError('storage', StackTrace.current) ??
+            Future<void>.value(),
+      );
       _notify();
     }
   }
@@ -685,19 +905,220 @@ class GameController extends ChangeNotifier {
     final source = current!,
         level = source.puzzle.mainLevel! + 1,
         puzzle = library.main[level];
-    if (puzzle == null || !progress.unlockedLevels.contains(level)) {
+    if (puzzle == null ||
+        !progress.unlockedLevels.contains(level) ||
+        (services?.policy.disabledPuzzleIds.contains(puzzle.id) ?? false)) {
       notice = FlowNotice.unavailable;
       _notify();
       return;
     }
-    await _startNew(
-      GameInstance.create(
-        id: _id(),
-        puzzle: puzzle,
-        isReplay: progress.completedLevels.contains(level),
-      ),
-      afterCompletion: source.id,
-    );
+    _adFlow = true;
+    _notify();
+    // A delayed fullscreen write may consume an older boundary after this
+    // settlement was rendered. Never qualify a new show using that cached count.
+    var check = false;
+    try {
+      await _refresh();
+      check = canCheckInterstitialOnNext;
+    } catch (_) {
+      // An optional ad check cannot block free navigation. The next snapshot
+      // still uses the existing save-failure handling if persistence fails.
+    }
+    _checkedInterstitial.add(source.id);
+    Future<void> advance() async {
+      if (!_alive) return;
+      try {
+        if (current?.id == source.id && canNext) {
+          await _startNew(
+            GameInstance.create(
+              id: _id(),
+              puzzle: puzzle,
+              isReplay: progress.completedLevels.contains(level),
+            ),
+            afterCompletion: source.id,
+          );
+        }
+      } finally {
+        _adFlow = false;
+        _notify();
+      }
+    }
+
+    if (check && services != null) {
+      final result = await services!.ads.show(AdKind.interstitial, _id());
+      _event(ProductEvent.interstitialCheck, source.id, {
+        'completion_id': source.id,
+        'qualifying': progress.qualifyingClears,
+        'result': result.shown ? 'shown' : result.reason,
+      });
+      await services!.ads.retryTiming();
+      try {
+        await _refresh();
+      } catch (_) {
+        // Optional ad statistics must not strand the navigation lock. Advance
+        // still persists the next snapshot through the normal Retry flow.
+      }
+    }
+    if (!_alive) return;
+    if (!_foreground) {
+      _afterForeground = advance;
+    } else {
+      await advance();
+    }
+  }
+
+  Future<void> watchExtraBottle() async {
+    if (!canWatchExtraBottle) return;
+    final origin = current!, id = _id();
+    _adFlow = true;
+    rewardIssue = null;
+    _cancelHint();
+    _notify();
+    var prepared = false;
+    try {
+      await store.beginReward(id, origin);
+      prepared = true;
+      final result = await services!.ads.show(
+        AdKind.rewarded,
+        id,
+        onReward: () {
+          if (!_alive) return;
+          _event(ProductEvent.rewardConfirmed, id, {
+            'request_id': id,
+            'instance_id': origin.id,
+          });
+          _rewardConfirmations[id] = origin.id;
+          _notify();
+        },
+      );
+      if (!result.shown) rewardIssue = result.reason;
+    } catch (_) {
+      rewardIssue = 'prepare_failed';
+    } finally {
+      if (prepared) {
+        try {
+          await store.closeReward(id);
+        } catch (_) {
+          _rewardCloses.add(id);
+          rewardIssue = 'close_failed';
+          rewardSaveFailed = true;
+        }
+      }
+      _adFlow = false;
+      if (_alive) {
+        pendingRewards = await store.pendingRewards();
+        _notify();
+        await _drainRewards();
+      }
+    }
+  }
+
+  Future<void> _reloadRewardSlots() async {
+    for (final slot in ['ordinary', 'daily']) {
+      _slots[slot] = (await store.load(slot)).instance;
+    }
+    final s = current;
+    if (s != null && _slots[s.slot]?.id == s.id) current = _slots[s.slot];
+    pendingRewards = await store.pendingRewards();
+    await _refresh();
+  }
+
+  Future<void> _drainRewards() async {
+    if (!_alive ||
+        _rewardSaving ||
+        rewardSaveFailed ||
+        phase != SavePhase.clean ||
+        _navigating ||
+        motion != null ||
+        _rewardConfirmations.isEmpty) {
+      return;
+    }
+    _rewardSaving = true;
+    _notify();
+    try {
+      for (final id in _rewardConfirmations.keys.toList()) {
+        final result = await store.confirmReward(id);
+        if (result != null && !result.needsRestore) {
+          _event(ProductEvent.rewardGranted, result.origin.id, {
+            'request_id': id,
+            'instance_id': result.origin.id,
+            'result': result.origin.completed
+                ? 'satisfied_completed'
+                : 'granted',
+          });
+        }
+        _rewardConfirmations.remove(id);
+      }
+      await _reloadRewardSlots();
+      rewardIssue = null;
+    } catch (_) {
+      rewardSaveFailed = true;
+      rewardIssue = 'confirmation_save_failed';
+    } finally {
+      _rewardSaving = false;
+      _notify();
+    }
+  }
+
+  Future<void> retryReward() async {
+    if (busy || phase != SavePhase.clean) return;
+    _rewardSaving = true;
+    try {
+      for (final id in _rewardCloses.toList()) {
+        await store.closeReward(id);
+        _rewardCloses.remove(id);
+      }
+      rewardSaveFailed = false;
+      rewardIssue = null;
+    } catch (_) {
+      rewardSaveFailed = true;
+    } finally {
+      _rewardSaving = false;
+    }
+    await _drainRewards();
+    _notify();
+  }
+
+  Future<void> dismissUnconfirmedReward(String id) async {
+    if (busy || phase != SavePhase.clean) return;
+    _rewardSaving = true;
+    try {
+      await store.dismissUnconfirmedReward(id);
+      pendingRewards = await store.pendingRewards();
+    } catch (_) {
+      rewardIssue = 'close_failed';
+    } finally {
+      _rewardSaving = false;
+      _notify();
+    }
+  }
+
+  Future<void> resumeRewardedPuzzle(
+    String id, {
+    required String? replacingInstance,
+  }) async {
+    if (busy || phase != SavePhase.clean) return;
+    _rewardSaving = true;
+    try {
+      final attempt = await store.rewardAttempt(id);
+      if (attempt == null || !attempt.needsRestore) return;
+      await store.restoreReward(id, replacingInstance: replacingInstance);
+      await _reloadRewardSlots();
+      current = _slots[attempt.origin.slot];
+      _event(ProductEvent.rewardGranted, attempt.origin.id, {
+        'request_id': id,
+        'instance_id': attempt.origin.id,
+        'result': 'restored',
+      });
+      receipt = current == null ? null : _receipts[current!.id];
+      page = current?.completed == true ? GamePage.completion : GamePage.board;
+      rewardIssue = null;
+    } catch (_) {
+      rewardIssue = 'restore_failed';
+    } finally {
+      _rewardSaving = false;
+      _notify();
+    }
   }
 
   void failNextWrite() {
@@ -723,6 +1144,12 @@ class GameController extends ChangeNotifier {
     }
     _cancelHint();
     final generation = _hintGeneration;
+    _hintEvent = (
+      request: _id(),
+      instance: state.id,
+      timer: Stopwatch()..start(),
+    );
+    _metric(state).hints++;
     hintSearching = true;
     _notify();
     final task = _launchHint(state);
@@ -741,6 +1168,7 @@ class GameController extends ChangeNotifier {
         current!.completed ||
         page != GamePage.board ||
         !_foreground) {
+      _finishHintEvent('cancelled');
       hint = null;
       selectedSource = null;
       _notify();
@@ -751,12 +1179,14 @@ class GameController extends ChangeNotifier {
             !current!.pour(result.move!.from, result.move!.to).changed)) {
       result = const HintResult(HintStatus.timeout);
     }
+    _finishHintEvent(result.status.name);
     hint = result;
     if (result.status == HintStatus.found) selectedSource = result.move!.from;
     _notify();
   }
 
   void _cancelHint({bool clearSelection = true}) {
+    _finishHintEvent('cancelled');
     rejection = null;
     rejectedBottle = null;
     _hintGeneration++;
@@ -774,18 +1204,25 @@ class GameController extends ChangeNotifier {
 
   void setForeground(bool value) {
     _foreground = value;
+    services?.setForeground(value);
+    _syncMetrics();
+    if (!value) unawaited(_saveMetrics());
     if (!value) {
       _pendingCompletionFeedback = null;
       _finishMotion();
       _cancelHint();
     } else {
       refreshToday();
+      final continuation = _afterForeground;
+      _afterForeground = null;
+      if (continuation != null) unawaited(continuation());
     }
     _notify();
   }
 
   @override
   void dispose() {
+    services?.removeListener(_notify);
     _alive = false;
     _pendingCompletionFeedback = null;
     _finishMotion();

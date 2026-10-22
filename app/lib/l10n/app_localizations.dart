@@ -1065,6 +1065,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Seagull'**
   String get seasideGull;
+
+  /// No description provided for @extraBottle.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra bottle'**
+  String get extraBottle;
+
+  /// No description provided for @extraExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch an optional ad to add one empty bottle to this puzzle. It stays through Undo and Restart. You can add one per puzzle. Hint, Undo and Restart remain free.'**
+  String get extraExplain;
+
+  /// No description provided for @watchAd.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch ad'**
+  String get watchAd;
+
+  /// No description provided for @notNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get notNow;
+
+  /// No description provided for @extraUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'This puzzle already has its extra bottle.'**
+  String get extraUsed;
+
+  /// No description provided for @adLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing an optional ad… You can keep playing.'**
+  String get adLoading;
+
+  /// No description provided for @adUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'An ad is not available. Keep playing with free Hint, Undo or Restart, or try again later.'**
+  String get adUnavailable;
+
+  /// No description provided for @adCooldown.
+  ///
+  /// In en, this message translates to:
+  /// **'Another ad was shown recently. Please wait {seconds} seconds.'**
+  String adCooldown(int seconds);
+
+  /// No description provided for @adRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try loading an ad'**
+  String get adRetry;
+
+  /// No description provided for @rewardSavingFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'A reward confirmation was received, but could not be saved. Retry while this app remains open. Closing the app may lose an unsaved confirmation. Free tools still work.'**
+  String get rewardSavingFailed;
+
+  /// No description provided for @rewardUnconfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'An earlier ad request was interrupted. This device has no saved reward confirmation; the SDK cannot verify it now. End this request to try again. No bottle will be added.'**
+  String get rewardUnconfirmed;
+
+  /// No description provided for @endRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'End interrupted request'**
+  String get endRequest;
+
+  /// No description provided for @rewardRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'An extra bottle belongs to an earlier puzzle. Resume that puzzle to use it.'**
+  String get rewardRestore;
+
+  /// No description provided for @resumeReward.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume rewarded puzzle'**
+  String get resumeReward;
+
+  /// No description provided for @restoreRewardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume the earlier puzzle?'**
+  String get restoreRewardTitle;
+
+  /// No description provided for @restoreRewardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This replaces the current puzzle in the same slot with the saved earlier puzzle and its extra bottle. Progress in the other slot is kept.'**
+  String get restoreRewardBody;
+
+  /// No description provided for @rewardOperationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The reward request could not be saved or restored. No new bottle was added. Please retry.'**
+  String get rewardOperationFailed;
+
+  /// No description provided for @analyticsChoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Share gameplay analytics'**
+  String get analyticsChoice;
+
+  /// No description provided for @analyticsDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional gameplay events. Turning this off stops new app events; it cannot recall data already sent.'**
+  String get analyticsDetails;
+
+  /// No description provided for @crashChoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Share crash reports'**
+  String get crashChoice;
+
+  /// No description provided for @crashDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional technical diagnostics, including crash reports stored on this device before you enabled sharing. The SDK may store crashes locally while sharing is off. Turning this off stops new app upload requests; queued reports cannot be recalled.'**
+  String get crashDetails;
+
+  /// No description provided for @privacySaveProblem.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy choices could not be saved or synchronized. Sharing is blocked by the app until Retry succeeds.'**
+  String get privacySaveProblem;
+
+  /// No description provided for @adPrivacyOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Advertising privacy options'**
+  String get adPrivacyOptions;
+
+  /// No description provided for @adPrivacyRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Check advertising privacy'**
+  String get adPrivacyRetry;
+
+  /// No description provided for @adPrivacyChecking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking the advertising privacy service… Core play remains available.'**
+  String get adPrivacyChecking;
+
+  /// No description provided for @adPrivacyProblem.
+  ///
+  /// In en, this message translates to:
+  /// **'Advertising privacy is unavailable. Ads stay unavailable until the SDK permits requests.'**
+  String get adPrivacyProblem;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @supportWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'Help website'**
+  String get supportWebsite;
+
+  /// No description provided for @servicesDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional diagnostics are unavailable in this build. Choices are saved locally.'**
+  String get servicesDisabled;
+
+  /// No description provided for @adNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'The ad network could not be reached. Free tools still work. Try again when connected.'**
+  String get adNetwork;
+
+  /// No description provided for @adNoFill.
+  ///
+  /// In en, this message translates to:
+  /// **'No ad is available from the service right now. Free tools still work. Please try later.'**
+  String get adNoFill;
 }
 
 class _AppLocalizationsDelegate

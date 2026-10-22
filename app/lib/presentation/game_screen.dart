@@ -14,6 +14,7 @@ import 'navigation_pages.dart';
 import 'settings_page.dart';
 import 'labels.dart';
 import 'knit_components.dart';
+import 'service_views.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({
@@ -67,6 +68,11 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
     c.addListener(_syncAudio);
     _syncAudio();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && c.page == GamePage.home) {
+        unawaited(c.services?.prepareAdsPrivacy());
+      }
+    });
     if (c.library.main.isEmpty && widget.puzzles.isNotEmpty) {
       c.library = ContentLibrary(
         main: {for (final p in widget.puzzles) p.mainLevel!: p},
@@ -231,6 +237,8 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     if (c.motion != null) c.completeMotion(c.motion!.token);
     c.cancelHint();
     _audioPaused = true;
+    c.services?.ads.update(modal: true);
+    c.setPaused(true);
     _syncAudio();
     try {
       await showDialog<void>(
@@ -329,6 +337,8 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       );
     } finally {
       _audioPaused = false;
+      c.services?.ads.update(modal: false);
+      c.setPaused(false);
       if (mounted) _syncAudio();
     }
   }
@@ -371,14 +381,15 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         GamePage.settings => SettingsPage(
           controller: c,
           onReset: _reset,
-          onPrivacy: () => _info(l.privacyChoices, l.privacyUnavailable),
-          onFeedback: () => _info(l.feedback, l.supportUnavailable),
+          onPrivacy: () => showPrivacyChoices(context, c),
+          onFeedback: () => openSupportEntry(context, c, feedback: true),
         ),
         GamePage.rules => RulesPage(controller: c),
         GamePage.board => BoardPage(
           controller: c,
           onRestart: _restart,
           onPause: _pause,
+          onExtra: () => showExtraBottle(context, c),
         ),
         GamePage.completion => CompletionPage(controller: c, onPlay: _play),
         GamePage.reward => RewardPage(controller: c),
@@ -433,6 +444,9 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                                       ? l.dailyPuzzle
                                       : l.level(c.current!.puzzle.mainLevel!))
                                 : title,
+                            backLabel: c.page == GamePage.rules
+                                ? l.settings
+                                : l.home,
                             backKey: Key(
                               c.page == GamePage.completion
                                   ? 'page-back'
@@ -487,6 +501,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                               ),
                             ),
                           ),
+                        RewardStatus(controller: c),
                         body,
                         const SizedBox(height: 14),
                         Text(

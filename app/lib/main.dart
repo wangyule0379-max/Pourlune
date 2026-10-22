@@ -10,12 +10,15 @@ import 'application/game_controller.dart';
 import 'application/game_audio.dart';
 import 'data/game_store.dart';
 import 'data/content_library.dart';
+import 'services/service_hub.dart';
+import 'services/service_config.dart';
 import 'development/scenarios.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/pourlune_app.dart';
 export 'presentation/pourlune_app.dart' show PourluneApp;
 export 'presentation/game_screen.dart' show GameScreen;
 
+ServiceHub? _errorServices;
 bool _fontLicenseRegistered = false;
 
 void main() {
@@ -28,6 +31,29 @@ void main() {
       ], await rootBundle.loadString('assets/fonts/nunito/OFL.txt'));
     });
   }
+  final previousFlutter = FlutterError.onError;
+  FlutterError.onError = (details) {
+    if (previousFlutter != null) {
+      previousFlutter(details);
+    } else {
+      FlutterError.presentError(details);
+    }
+    unawaited(
+      _errorServices?.recordError(
+            'flutter',
+            details.stack ?? StackTrace.current,
+          ) ??
+          Future<void>.value(),
+    );
+  };
+  final previousPlatform = PlatformDispatcher.instance.onError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    unawaited(
+      _errorServices?.recordError('unhandled', stack, fatal: true) ??
+          Future<void>.value(),
+    );
+    return previousPlatform?.call(error, stack) ?? false;
+  };
   runApp(const Bootstrap());
 }
 
@@ -41,6 +67,7 @@ class _BootstrapState extends State<Bootstrap> {
   GameController? controller;
   DevelopmentScenario? development;
   GameAudio? audio;
+  ServiceHub? services;
   bool failed = false;
   @override
   void initState() {
@@ -113,9 +140,15 @@ class _BootstrapState extends State<Bootstrap> {
         library = development!.library;
       }
       final sounds = pendingAudio = GameAudio();
+      final hub = services = ServiceHub(
+        store: store,
+        config: ServiceConfig.environment(),
+        knownPuzzleIds: definitions.keys.toSet(),
+      );
       final c = GameController(
         store,
         library: library,
+        services: hub,
         clock: development?.now,
         onFeedback: (feedback) => unawaited(
           sounds.play(switch (feedback) {
@@ -127,8 +160,10 @@ class _BootstrapState extends State<Bootstrap> {
         ),
       );
       await c.initialize();
+      await hub.initializeLocal().catchError((_) {});
       if (!mounted) {
         c.dispose();
+        hub.dispose();
         await sounds.dispose();
         await store.close();
         return;
@@ -137,7 +172,10 @@ class _BootstrapState extends State<Bootstrap> {
         controller = c;
         audio = sounds;
       });
+      _errorServices = hub;
     } catch (_) {
+      services?.dispose();
+      services = null;
       await pendingAudio?.dispose();
       await store?.close();
       if (mounted) setState(() => failed = true);
@@ -147,6 +185,8 @@ class _BootstrapState extends State<Bootstrap> {
   @override
   void dispose() {
     controller?.dispose();
+    if (identical(_errorServices, services)) _errorServices = null;
+    services?.dispose();
     if (audio != null) unawaited(audio!.dispose());
     controller?.store.close();
     super.dispose();

@@ -27,12 +27,14 @@ jobs:
         working-directory: app
         run: |
           flutter pub get --enforce-lockfile
-          dart format --output=none --set-exit-if-changed .
+          dart format --output=none --set-exit-if-changed lib test integration_test
           flutter analyze
           flutter test
           flutter build apk --debug
   ios-build:
     runs-on: macos-latest
+    env:
+      FIREBASE_ANALYTICS_WITHOUT_ADID: "1"
     steps:
       - uses: actions/checkout@v4
       - name: Install fixed Flutter SDK

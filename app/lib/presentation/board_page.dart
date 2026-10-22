@@ -343,9 +343,11 @@ class BoardPage extends StatefulWidget {
     required this.controller,
     required this.onRestart,
     required this.onPause,
+    this.onExtra,
   });
   final GameController controller;
   final VoidCallback onRestart, onPause;
+  final VoidCallback? onExtra;
   @override
   State<BoardPage> createState() => _BoardPageState();
 }
@@ -513,6 +515,13 @@ class _BoardPageState extends State<BoardPage> {
             onPressed: c.busy ? null : c.skipTutorial,
             child: Text(l.skip),
           ),
+        if (c.offersExtraBottle)
+          OutlinedButton.icon(
+            key: const Key('extra-bottle'),
+            onPressed: c.busy ? null : widget.onExtra,
+            icon: const Icon(Icons.add_circle_outline),
+            label: Text(l.extraBottle, textAlign: TextAlign.center),
+          ),
         const SizedBox(height: 12),
         LayoutBuilder(
           builder: (context, box) {
@@ -546,7 +555,9 @@ class _BoardPageState extends State<BoardPage> {
               children: [
                 for (final item in labels)
                   SizedBox(
-                    width: (box.maxWidth - (columns - 1) * 8) / columns,
+                    width: largeText && item.$1 == 'restart'
+                        ? box.maxWidth
+                        : (box.maxWidth - (columns - 1) * 8) / columns,
                     child: OutlinedButton(
                       key: Key(item.$1),
                       onPressed: item.$4,

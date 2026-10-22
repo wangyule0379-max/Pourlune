@@ -5,6 +5,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'player_settings.dart';
 import 'scenes.dart';
+import 'reward_attempt.dart';
 
 class LoadedInstance {
   const LoadedInstance(
@@ -79,18 +80,22 @@ class GameStore {
     final db = await (factory ?? databaseFactory).openDatabase(
       path,
       options: OpenDatabaseOptions(
-        version: 3,
+        version: 5,
         onCreate: (db, _) async {
           await _v1(db);
           await _v2(db);
           await _v3(db);
+          await _v4(db);
+          await _v5(db);
         },
         onUpgrade: (db, old, version) async {
-          if (!{1, 2}.contains(old)) {
+          if (!{1, 2, 3, 4}.contains(old)) {
             throw StateError('Unsupported schema $old');
           }
           if (old == 1) await _v2(db);
-          await _v3(db);
+          if (old <= 2) await _v3(db);
+          if (old <= 3) await _v4(db);
+          await _v5(db);
         },
         onDowngrade: (db, old, version) async =>
             throw StateError('Cannot downgrade schema $old to $version'),
@@ -154,6 +159,40 @@ class GameStore {
       'key': 'tutorial_done',
       'value': completed.isEmpty ? 0 : 1,
     }, conflictAlgorithm: ConflictAlgorithm.ignore);
+  }
+
+  static Future<void> _v4(DatabaseExecutor db) async {
+    await db.execute(
+      "CREATE TABLE reward_attempts(attempt_id TEXT PRIMARY KEY,instance_id TEXT NOT NULL,slot TEXT NOT NULL CHECK(slot IN ('ordinary','daily')),snapshot TEXT NOT NULL,status TEXT NOT NULL CHECK(status IN ('open','closed','unconfirmed','pending_restore','done')),confirmed INTEGER NOT NULL DEFAULT 0 CHECK(confirmed IN (0,1)))",
+    );
+    await db.execute(
+      "CREATE UNIQUE INDEX one_reward_intent_per_slot ON reward_attempts(slot) WHERE status IN ('open','unconfirmed')",
+    );
+    await db.execute(
+      'CREATE TABLE reward_entitlements(instance_id TEXT PRIMARY KEY,attempt_id TEXT NOT NULL)',
+    );
+    await db.execute(
+      "CREATE TABLE fullscreen_shows(show_id TEXT PRIMARY KEY,kind TEXT NOT NULL CHECK(kind IN ('interstitial','rewarded')),shown_at INTEGER NOT NULL)",
+    );
+    await db.execute(
+      'CREATE TABLE service_values(key TEXT PRIMARY KEY,value TEXT NOT NULL)',
+    );
+    await db.execute('CREATE TABLE service_events(event_id TEXT PRIMARY KEY)');
+  }
+
+  static Future<void> _v5(DatabaseExecutor db) async {
+    await db.execute(
+      "CREATE TABLE fullscreen_attempts(show_id TEXT PRIMARY KEY,kind TEXT NOT NULL CHECK(kind IN ('interstitial','rewarded')),qualifying_boundary INTEGER NOT NULL CHECK(qualifying_boundary >= 0))",
+    );
+    // Keep the exact legacy outstanding count as the initial ordinal. Previously
+    // consumed clears need not be reconstructed. Ordinals never rewind on Reset.
+    await db.rawInsert(
+      "INSERT INTO metadata(key,value) SELECT 'qualifying_clear_total',value FROM metadata WHERE key='first_clears_since_interstitial'",
+    );
+    await db.insert('metadata', {
+      'key': 'qualifying_consumed_total',
+      'value': 0,
+    });
   }
 
   static String? _piece(int level) => level % 4 != 0
@@ -250,6 +289,12 @@ class GameStore {
         if (old.id == s.id) backup = jsonEncode(old.toJson());
       }
     }
+    await tx.update(
+      'reward_attempts',
+      {'snapshot': json},
+      where: 'instance_id = ?',
+      whereArgs: [s.id],
+    );
     // Recovery may roll back moves, but never an already committed entitlement.
     if ((s.extraBottleGranted &&
             _decode(backup, s.slot)?.extraBottleGranted != true) ||
@@ -350,9 +395,6 @@ class GameStore {
           whereArgs: [s.puzzle.id],
         );
         if (prior.isEmpty) {
-          final count = Sqflite.firstIntValue(
-            await tx.rawQuery('SELECT COUNT(*) FROM first_completions'),
-          )!;
           final level = s.puzzle.mainLevel!;
           await tx.insert('first_completions', {
             'puzzle_id': s.puzzle.id,
@@ -373,9 +415,9 @@ class GameStore {
             }, conflictAlgorithm: ConflictAlgorithm.ignore);
           }
           fault?.call('piece');
-          if (count >= 10) {
+          if (level >= 11) {
             await tx.rawUpdate(
-              "UPDATE metadata SET value = value + 1 WHERE key = 'first_clears_since_interstitial'",
+              "UPDATE metadata SET value = value + 1 WHERE key IN ('first_clears_since_interstitial','qualifying_clear_total')",
             );
           }
           fault?.call('counter');
@@ -492,14 +534,353 @@ class GameStore {
       'pieces',
       'unlocks',
       'daily_stamps',
+      'reward_attempts',
+      'reward_entitlements',
     ]) {
       await tx.delete(table);
     }
     await tx.rawUpdate(
       "UPDATE metadata SET value = 0 WHERE key IN ('tutorial_done','first_clears_since_interstitial')",
     );
+    await tx.rawUpdate(
+      "UPDATE metadata SET value = (SELECT value FROM metadata WHERE key='qualifying_clear_total') WHERE key='qualifying_consumed_total'",
+    );
     await tx.insert('unlocks', {'level': 1});
     fault?.call('reset');
   });
+  Future<RewardAttempt> beginReward(String attemptId, GameInstance origin) =>
+      db.transaction((tx) async {
+        if (attemptId.isEmpty ||
+            origin.completed ||
+            origin.extraBottleGranted) {
+          throw StateError('Reward unavailable');
+        }
+        final slot = await tx.query(
+          'active_slots',
+          where: 'slot = ?',
+          whereArgs: [origin.slot],
+        );
+        final saved = slot.isEmpty
+            ? null
+            : _decode(slot.single['payload'], origin.slot);
+        if (saved == null ||
+            jsonEncode(saved.toJson()) != jsonEncode(origin.toJson())) {
+          throw StateError('Origin must be saved');
+        }
+        if ((await tx.query(
+          'reward_entitlements',
+          where: 'instance_id = ?',
+          whereArgs: [origin.id],
+        )).isNotEmpty) {
+          throw StateError('Already entitled');
+        }
+        if ((await tx.query(
+          'reward_attempts',
+          where: "slot = ? AND status = 'pending_restore'",
+          whereArgs: [origin.slot],
+        )).isNotEmpty) {
+          throw StateError('Resolve the confirmed original reward first');
+        }
+        final attempt = RewardAttempt(
+          id: attemptId,
+          origin: origin,
+          status: 'open',
+          confirmed: false,
+        );
+        await tx.insert('reward_attempts', attempt.toRow());
+        fault?.call('reward_intent');
+        return attempt;
+      });
+
+  Future<void> closeReward(String attemptId) => db.transaction((tx) async {
+    await tx.update(
+      'reward_attempts',
+      {'status': 'closed'},
+      where: "attempt_id = ? AND status = 'open' AND confirmed = 0",
+      whereArgs: [attemptId],
+    );
+    fault?.call('reward_close');
+  });
+
+  /// No historical reward query exists in GMA. An interrupted intent is never proof.
+  Future<void> recoverRewardIntents() async {
+    await db.update('reward_attempts', {
+      'status': 'unconfirmed',
+    }, where: "status = 'open' AND confirmed = 0");
+  }
+
+  Future<List<RewardAttempt>> pendingRewards() async => (await db.query(
+    'reward_attempts',
+    where: "status IN ('unconfirmed','pending_restore')",
+    orderBy: 'attempt_id',
+  )).map(RewardAttempt.row).toList();
+
+  Future<RewardAttempt?> rewardAttempt(String id) async {
+    final rows = await db.query(
+      'reward_attempts',
+      where: 'attempt_id = ?',
+      whereArgs: [id],
+    );
+    return rows.isEmpty ? null : RewardAttempt.row(rows.single);
+  }
+
+  Future<void> dismissUnconfirmedReward(String id) async {
+    await db.update(
+      'reward_attempts',
+      {'status': 'closed'},
+      where: "attempt_id = ? AND status = 'unconfirmed' AND confirmed = 0",
+      whereArgs: [id],
+    );
+  }
+
+  /// Confirmation, unique entitlement and any active-board grant commit together.
+  /// Callers serialize this with gameplay writes; retries use the same attempt ID.
+  Future<RewardAttempt?> confirmReward(String id) => db.transaction((tx) async {
+    final rows = await tx.query(
+      'reward_attempts',
+      where: 'attempt_id = ?',
+      whereArgs: [id],
+    );
+    if (rows.isEmpty) return null; // Reset or an unrelated/stale SDK callback.
+    final attempt = RewardAttempt.row(rows.single);
+    if (attempt.confirmed) return attempt;
+    final slot = await tx.query(
+      'active_slots',
+      where: 'slot = ?',
+      whereArgs: [attempt.origin.slot],
+    );
+    final active = slot.isEmpty
+        ? null
+        : (_decode(slot.single['payload'], attempt.origin.slot) ??
+              _decode(slot.single['backup_payload'], attempt.origin.slot));
+    var origin = active?.id == attempt.origin.id ? active! : attempt.origin;
+    final existing = await tx.query(
+      'reward_entitlements',
+      where: 'instance_id = ?',
+      whereArgs: [origin.id],
+    );
+    var status = 'done';
+    if (existing.isEmpty) {
+      await tx.insert('reward_entitlements', {
+        'instance_id': origin.id,
+        'attempt_id': id,
+      });
+      fault?.call('reward_confirmation');
+      final completed =
+          origin.completed ||
+          (await tx.query(
+            'receipts',
+            where: 'instance_id = ?',
+            whereArgs: [origin.id],
+          )).isNotEmpty;
+      if (!completed) {
+        origin = origin.grantExtraBottle();
+        if (active?.id == origin.id) {
+          await _write(tx, origin, false);
+        } else {
+          status = 'pending_restore';
+        }
+      }
+    }
+    // Other attempts may have a callback later; they cannot grant a second bottle.
+    await tx.update(
+      'reward_attempts',
+      {'snapshot': jsonEncode(origin.toJson())},
+      where: 'instance_id = ?',
+      whereArgs: [origin.id],
+    );
+    await tx.update(
+      'reward_attempts',
+      {'confirmed': 1, 'status': status},
+      where: 'attempt_id = ?',
+      whereArgs: [id],
+    );
+    fault?.call('reward_grant');
+    return RewardAttempt(
+      id: id,
+      origin: origin,
+      status: status,
+      confirmed: true,
+    );
+  });
+
+  Future<void> restoreReward(
+    String id, {
+    required String? replacingInstance,
+  }) => db.transaction((tx) async {
+    final rows = await tx.query(
+      'reward_attempts',
+      where: 'attempt_id = ?',
+      whereArgs: [id],
+    );
+    if (rows.isEmpty) throw StateError('Unknown reward');
+    final attempt = RewardAttempt.row(rows.single);
+    if (!attempt.needsRestore || !attempt.confirmed) return;
+    final slot = await tx.query(
+      'active_slots',
+      where: 'slot = ?',
+      whereArgs: [attempt.origin.slot],
+    );
+    final active = slot.isEmpty
+        ? null
+        : (_decode(slot.single['payload'], attempt.origin.slot) ??
+              _decode(slot.single['backup_payload'], attempt.origin.slot));
+    if (active?.id != replacingInstance) {
+      throw StateError('Replacement changed; confirm again');
+    }
+    await _write(tx, attempt.origin, true);
+    await tx.update(
+      'reward_attempts',
+      {'status': 'done'},
+      where: "instance_id = ? AND status = 'pending_restore' AND confirmed = 1",
+      whereArgs: [attempt.origin.id],
+    );
+    fault?.call('reward_restore');
+  });
+
+  Future<int?> lastFullscreenMillis() async {
+    final raw = await readServiceValue('last_fullscreen_ms');
+    return raw is int && raw >= 0 ? raw : null;
+  }
+
+  /// Durable qualification boundary while gameplay is locked, before SDK show.
+  /// Preparing is not evidence of display and never consumes qualification.
+  Future<void> prepareFullscreen(String showId, String kind) =>
+      db.transaction((tx) async {
+        if (showId.isEmpty || !{'interstitial', 'rewarded'}.contains(kind)) {
+          throw ArgumentError('Invalid fullscreen request');
+        }
+        final total =
+            (await tx.query(
+                  'metadata',
+                  where: 'key=?',
+                  whereArgs: ['qualifying_clear_total'],
+                )).single['value']!
+                as int;
+        await tx.rawInsert(
+          'INSERT OR IGNORE INTO fullscreen_attempts(show_id,kind,qualifying_boundary) VALUES(?,?,?)',
+          [showId, kind, total],
+        );
+        final attempt = (await tx.query(
+          'fullscreen_attempts',
+          where: 'show_id=?',
+          whereArgs: [showId],
+        )).single;
+        if (attempt['kind'] != kind) {
+          throw StateError('Fullscreen identity conflict');
+        }
+        await tx.insert('service_values', {
+          'key': 'fullscreen_intent',
+          'value': jsonEncode({'id': showId, 'kind': kind}),
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
+        fault?.call('service_value');
+        fault?.call('fullscreen_prepare');
+      });
+
+  Future<void> recordFullscreen(String showId, String kind, int millis) =>
+      db.transaction((tx) async {
+        if (millis < 0) throw ArgumentError.value(millis);
+        await tx.rawInsert(
+          'INSERT OR IGNORE INTO fullscreen_shows(show_id,kind,shown_at) VALUES(?,?,?)',
+          [showId, kind, millis],
+        );
+        final changed =
+            Sqflite.firstIntValue(await tx.rawQuery('SELECT changes()')) == 1;
+        if (!changed) return;
+        final attempt = await tx.query(
+          'fullscreen_attempts',
+          where: 'show_id=?',
+          whereArgs: [showId],
+        );
+        if (attempt.isEmpty || attempt.single['kind'] != kind) {
+          throw StateError('Fullscreen request was not prepared');
+        }
+        final previous = await tx.query(
+          'service_values',
+          where: 'key=?',
+          whereArgs: ['last_fullscreen_ms'],
+        );
+        final oldTime = previous.isEmpty
+            ? null
+            : jsonDecode(previous.single['value']! as String);
+        await tx.insert('service_values', {
+          'key': 'last_fullscreen_ms',
+          'value': jsonEncode(
+            oldTime is int && oldTime > millis ? oldTime : millis,
+          ),
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
+        if (kind == 'interstitial') {
+          await tx.rawUpdate(
+            "UPDATE metadata SET value = MAX(value,?) WHERE key='qualifying_consumed_total'",
+            [attempt.single['qualifying_boundary']],
+          );
+          await tx.rawUpdate(
+            "UPDATE metadata SET value = (SELECT value FROM metadata WHERE key='qualifying_clear_total') - (SELECT value FROM metadata WHERE key='qualifying_consumed_total') WHERE key='first_clears_since_interstitial'",
+          );
+        }
+        final intent = await tx.query(
+          'service_values',
+          where: 'key=?',
+          whereArgs: ['fullscreen_intent'],
+        );
+        if (intent.isNotEmpty) {
+          final value = jsonDecode(intent.single['value']! as String);
+          if (value is Map && value['id'] == showId) {
+            await tx.delete('service_values', where: "key='fullscreen_intent'");
+          }
+        }
+        fault?.call('fullscreen');
+      });
+
+  Future<void> clearFullscreenIntent(String id) => db.transaction((tx) async {
+    final rows = await tx.query(
+      'service_values',
+      where: 'key = ?',
+      whereArgs: ['fullscreen_intent'],
+    );
+    if (rows.isNotEmpty) {
+      final value = jsonDecode(rows.single['value']! as String);
+      if (value is Map && value['id'] == id) {
+        await tx.delete(
+          'service_values',
+          where: 'key = ?',
+          whereArgs: ['fullscreen_intent'],
+        );
+      }
+    }
+  });
+
+  Future<Object?> readServiceValue(String key) async {
+    final rows = await db.query(
+      'service_values',
+      where: 'key = ?',
+      whereArgs: [key],
+    );
+    if (rows.isEmpty) return null;
+    try {
+      return jsonDecode(rows.single['value']! as String);
+    } on FormatException {
+      return null;
+    }
+  }
+
+  Future<void> writeServiceValue(String key, Object? value) =>
+      db.transaction((tx) async {
+        await tx.insert('service_values', {
+          'key': key,
+          'value': jsonEncode(value),
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
+        fault?.call('service_value');
+      });
+
+  /// Claim before best-effort dispatch. Analytics is never a player entitlement.
+  Future<bool> claimServiceEvent(String id) => db.transaction((tx) async {
+    await tx.rawInsert(
+      'INSERT OR IGNORE INTO service_events(event_id) VALUES(?)',
+      [id],
+    );
+    return Sqflite.firstIntValue(await tx.rawQuery('SELECT changes()')) == 1;
+  });
+
   Future<void> close() => db.close();
 }

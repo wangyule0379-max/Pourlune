@@ -236,9 +236,17 @@ class BottlePainter extends CustomPainter {
     canvas.rotate(-angle);
     canvas.translate(-size.width / 2, -84);
 
-    final bands =
-        visualLiquid ??
-        [for (final color in liquid) (color: color, units: 1.0)];
+    final bands = <LiquidBand>[];
+    for (final band
+        in visualLiquid ??
+            [for (final color in liquid) (color: color, units: 1.0)]) {
+      if (bands.isNotEmpty && bands.last.color == band.color) {
+        final previous = bands.removeLast();
+        bands.add((color: band.color, units: previous.units + band.units));
+      } else {
+        bands.add(band);
+      }
+    }
     var filled = 0.0;
     final cumulative = <double>[0];
     for (final band in bands) {

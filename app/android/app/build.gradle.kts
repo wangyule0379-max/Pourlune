@@ -4,6 +4,12 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Native config belongs to the matching owned Firebase application. No fake JSON.
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+    apply(plugin = "com.google.firebase.crashlytics")
+}
+
 android {
     namespace = "dev.pourlune.pourlune_dev"
     compileSdk = flutter.compileSdkVersion
@@ -19,6 +25,8 @@ android {
         applicationId = "dev.pourlune.pourlune_dev"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
+        manifestPlaceholders["POURLUNE_ADMOB_APP_ID"] =
+            providers.gradleProperty("POURLUNE_ADMOB_APP_ID").getOrElse("ca-app-pub-3940256099942544~3347511713")
         minSdk = 24
         targetSdk = flutter.targetSdkVersion
         // Uses the version code from pubspec.yaml. When using split APKs, 1000 * ABI_VERSION

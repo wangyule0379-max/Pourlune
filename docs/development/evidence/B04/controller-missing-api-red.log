@@ -1,0 +1,110 @@
+00:00 +0: loading /Volumes/data/App Development/Pourlune/app/test/b04_controller_ads_test.dart
+test/b04_controller_ads_test.dart:75:55: Error: No named parameter with the name 'services'.
+    c = GameController(store, library: testLibrary(), services: hub);
+                                                      ^^^^^^^^
+lib/application/game_controller.dart:65:3: Context: Found this candidate, but the arguments don't match.
+  GameController(
+  ^^^^^^^^^^^^^^
+test/b04_controller_ads_test.dart:144:21: Error: The method 'watchExtraBottle' isn't defined for the type 'GameController'.
+ - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'watchExtraBottle'.
+    final watch = c.watchExtraBottle();
+                    ^^^^^^^^^^^^^^^^
+test/b04_controller_ads_test.dart:151:25: Error: The getter 'rewardSaveFailed' isn't defined for the type 'GameController'.
+ - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'rewardSaveFailed'.
+    await until(() => c.rewardSaveFailed);
+                        ^^^^^^^^^^^^^^^^
+test/b04_controller_ads_test.dart:156:14: Error: The getter 'canWatchExtraBottle' isn't defined for the type 'GameController'.
+ - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'canWatchExtraBottle'.
+    expect(c.canWatchExtraBottle, isFalse);
+             ^^^^^^^^^^^^^^^^^^^
+test/b04_controller_ads_test.dart:160:13: Error: The method 'retryReward' isn't defined for the type 'GameController'.
+ - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'retryReward'.
+    await c.retryReward();
+            ^^^^^^^^^^^
+test/b04_controller_ads_test.dart:161:26: Error: The getter 'rewardSaveFailed' isn't defined for the type 'GameController'.
+ - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'rewardSaveFailed'.
+    await until(() => !c.rewardSaveFailed && c.current!.extraBottleGranted);
+                         ^^^^^^^^^^^^^^^^
+test/b04_controller_ads_test.dart:173:21: Error: The method 'watchExtraBottle' isn't defined for the type 'GameController'.
+ - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'watchExtraBottle'.
+    final watch = c.watchExtraBottle();
+                    ^^^^^^^^^^^^^^^^
+test/b04_controller_ads_test.dart:180:25: Error: The getter 'pendingRewards' isn't defined for the type 'GameController'.
+ - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'pendingRewards'.
+    await until(() => c.pendingRewards.isNotEmpty);
+                        ^^^^^^^^^^^^^^
+test/b04_controller_ads_test.dart:184:9: Error: The getter 'pendingRewards' isn't defined for the type 'GameController'.
+ - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'pendingRewards'.
+      c.pendingRewards.single.id,
+        ^^^^^^^^^^^^^^
+test/b04_controller_ads_test.dart:183:13: Error: The method 'resumeRewardedPuzzle' isn't defined for the type 'GameController'.
+ - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'resumeRewardedPuzzle'.
+    await c.resumeRewardedPuzzle(
+            ^^^^^^^^^^^^^^^^^^^^
+00:00 +0 -1: loading /Volumes/data/App Development/Pourlune/app/test/b04_controller_ads_test.dart [E]
+  Failed to load "/Volumes/data/App Development/Pourlune/app/test/b04_controller_ads_test.dart":
+  Compilation failed for testPath=/Volumes/data/App Development/Pourlune/app/test/b04_controller_ads_test.dart: test/b04_controller_ads_test.dart:75:55: Error: No named parameter with the name 'services'.
+      c = GameController(store, library: testLibrary(), services: hub);
+                                                        ^^^^^^^^
+  lib/application/game_controller.dart:65:3: Context: Found this candidate, but the arguments don't match.
+    GameController(
+    ^^^^^^^^^^^^^^
+  test/b04_controller_ads_test.dart:144:21: Error: The method 'watchExtraBottle' isn't defined for the type 'GameController'.
+   - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'watchExtraBottle'.
+      final watch = c.watchExtraBottle();
+                      ^^^^^^^^^^^^^^^^
+  test/b04_controller_ads_test.dart:151:25: Error: The getter 'rewardSaveFailed' isn't defined for the type 'GameController'.
+   - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'rewardSaveFailed'.
+      await until(() => c.rewardSaveFailed);
+                          ^^^^^^^^^^^^^^^^
+  test/b04_controller_ads_test.dart:156:14: Error: The getter 'canWatchExtraBottle' isn't defined for the type 'GameController'.
+   - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'canWatchExtraBottle'.
+      expect(c.canWatchExtraBottle, isFalse);
+               ^^^^^^^^^^^^^^^^^^^
+  test/b04_controller_ads_test.dart:160:13: Error: The method 'retryReward' isn't defined for the type 'GameController'.
+   - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'retryReward'.
+      await c.retryReward();
+              ^^^^^^^^^^^
+  test/b04_controller_ads_test.dart:161:26: Error: The getter 'rewardSaveFailed' isn't defined for the type 'GameController'.
+   - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'rewardSaveFailed'.
+      await until(() => !c.rewardSaveFailed && c.current!.extraBottleGranted);
+                           ^^^^^^^^^^^^^^^^
+  test/b04_controller_ads_test.dart:173:21: Error: The method 'watchExtraBottle' isn't defined for the type 'GameController'.
+   - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'watchExtraBottle'.
+      final watch = c.watchExtraBottle();
+                      ^^^^^^^^^^^^^^^^
+  test/b04_controller_ads_test.dart:180:25: Error: The getter 'pendingRewards' isn't defined for the type 'GameController'.
+   - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'pendingRewards'.
+      await until(() => c.pendingRewards.isNotEmpty);
+                          ^^^^^^^^^^^^^^
+  test/b04_controller_ads_test.dart:184:9: Error: The getter 'pendingRewards' isn't defined for the type 'GameController'.
+   - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'pendingRewards'.
+        c.pendingRewards.single.id,
+          ^^^^^^^^^^^^^^
+  test/b04_controller_ads_test.dart:183:13: Error: The method 'resumeRewardedPuzzle' isn't defined for the type 'GameController'.
+   - 'GameController' is from 'package:pourlune_dev/application/game_controller.dart' ('lib/application/game_controller.dart').
+  Try correcting the name to the name of an existing method, or defining a method named 'resumeRewardedPuzzle'.
+      await c.resumeRewardedPuzzle(
+              ^^^^^^^^^^^^^^^^^^^^
+  .
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Volumes/data/App Development/Pourlune/app/test/b04_controller_ads_test.dart: loading /Volumes/data/App Development/Pourlune/app/test/b04_controller_ads_test.dart
