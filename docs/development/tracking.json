@@ -6,11 +6,11 @@
   "review_thread_id": "01a15eaf-f58d-74d2-90d8-0f64bb28ddce",
   "branch": "codex/offline-foundation",
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
-  "current_batch": "Beta readiness BR02 candidate validation and BR03 handoff",
-  "current_status": "br01_scope_accepted_br02_br03_in_progress",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:135",
+  "current_batch": "Beta readiness: owner inputs and eligible device conditions",
+  "current_status": "br02_preparation_br03_handoff_accepted_external_dependencies",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:137",
   "automation_id": "pourlune",
-  "automation_status": "ACTIVE",
+  "automation_status": "PAUSED",
   "delivery_path": "docs/development/deliveries/beta-readiness-BR02.md",
   "acceptance_path": "docs/development/review/beta-readiness-BR02-acceptance.md",
   "accepted_batches": [
@@ -55,8 +55,9 @@
     }
   ],
   "future_batches": [
-    "BR02 candidate device validation",
-    "BR03 submission-readiness acceptance"
+    "Conditional final support configuration and authorized Android signing",
+    "Formal candidate device validation with eligible conditions",
+    "Submission readiness re-review before any separately authorized distribution"
   ],
   "prior_ui_acceptance": "D01-D09 static design and bounded HTML prototype only; not App runtime acceptance",
   "user_authorization": "2026-10-22: User accepts current visual effects; original development chat continuously implements through TestFlight and Google Play closed-test readiness; architecture supervises and independently verifies. Existing accepted-scope commit/push authorization continues. Actual store upload, beta review submission, track rollout and invitations remain a subsequent concrete handoff; no legal signing, purchases, IAM expansion, signing-key creation/reset or production release.",
@@ -69,12 +70,12 @@
     "run_ids": [
       39809177137
     ],
-    "status": "in_progress",
-    "conclusion": null,
+    "status": "completed",
+    "conclusion": "success",
     "url": "https://github.com/wangyule0379-max/Pourlune/actions/runs/39809177137",
-    "last_checked_at": "2026-10-22T15:56:25.656395+00:00",
-    "evidence_path": "docs/development/review/beta-readiness-BR01-evidence/remote-ci-pending.json",
-    "next_action": "Read this exact run to terminal; do not repoll any older terminal run."
+    "last_checked_at": "2026-10-22T16:22:30.704616+00:00",
+    "evidence_path": "docs/development/review/beta-readiness-BR01-evidence/remote-ci-final.json",
+    "next_action": "Terminal success. Do not repoll; documentation-only handoff needs no new CI."
   },
   "deferred_minor_findings": [
     {
@@ -87,10 +88,12 @@
     "B04": "Implementation and available environment acceptance only; real ad display/earned, Firebase console, production identity/support/rights and representative devices remain pending",
     "B05": "Eight internal tasks accepted in available environment; independent165 Flutter/30core, five native flows,12 SIGKILL and ordinary main restart; external services/devices/identity/support/rights not passed",
     "F01-F08": "Firebase registration/config implementation accepted; 24 Python/23 Flutter and both offline builds independently passed; real dev runtime inspected. Analytics/Crashlytics receipt and Apple registration NOT passed.",
-    "FB01-FB08": "Available-platform production board/capacity/motion/navigation/save recovery accepted; physical performance, spoken accessibility and external services excluded."
+    "FB01-FB08": "Available-platform production board/capacity/motion/navigation/save recovery accepted; physical performance, spoken accessibility and external services excluded.",
+    "BR02": "Device-condition preparation, candidate applicability and reusable verification contract accepted; formal runtime and same-signature upgrade NOT executed.",
+    "BR03": "Exact artifact/symbol/document handoff independently accepted; TestFlight internal/external and Play closed remain not ready."
   },
   "external_dependencies_path": "docs/development/dependencies/user-handoff.md",
-  "next_action": "Review BR02/BR03 delivery immediately when available; follow exact BR01 CI39809177137 to terminal. CLI released to original developer.",
+  "next_action": "Await consolidated owner inputs in beta-readiness-user-actions.md; then original developer implements approved destinations/signing and candidate verification, architecture reviews. No active polling or pending CI.",
   "account_handoff": {
     "confirmed_at": "2026-10-22",
     "source": "explicit_user_message",
@@ -109,7 +112,7 @@
     "formal_identity": {
       "ios_bundle_id": "com.pourlune.app",
       "android_application_id": "com.pourlune.app",
-      "status": "firebase_production_registered_apple_play_unverified",
+      "status": "firebase_registered_apple_identifier_profile_and_local_signature_verified_store_records_pending",
       "confirmed_on": "2026-10-22",
       "source": "explicit_user_confirmation",
       "supersedes": "com.fishtk.pourlune proposal",
@@ -195,7 +198,7 @@
     "acceptance_path": "docs/development/review/flame-full-board-acceptance.md",
     "scope": "FB01-FB08 production board integration, 4-7 bottles, capacity/liquid synchronization, behavior and native regression; no product-rule or physics-engine expansion",
     "shared_files": "Architecture handed board_page.dart and bottle.dart write ownership to original execution after explicit UI release and matching SHA256; game_screen/motion/startup/navigation/pubspec remain UI-owned. UI native verification uses frozen build/page-transitions-baseline/app.",
-    "cli_owner": "Original developer BR01: architecture MS review completed and explicitly released CLI/devices; no in-flight review commands",
+    "cli_owner": "Released; no developer or architecture command in flight after BR02/BR03 read-only review.",
     "visual_gate": "satisfied; no repeated approval required",
     "board_write_release": "2026-10-22; SHA256 board_page fc7a0250945e5d02a58357ef3b8baa1f0b7d9226d766068d7901905fbd8cb7ad; bottle 4c57b41d574651efd1f6e4bfac999bc5f81c7aa9f0b62031486bf9a136feb61f",
     "cli_schedule": "UI installed-candidate evidence only; original runs necessary FB checks/builds. Narrow single page_transitions_test instance replacement case delegated to original for FB compatibility; all assertions retained, frozen UI copies unchanged.",
@@ -204,7 +207,7 @@
     "commit": "3134637f91c0cb59c26ba6905b557f48f6179e5f",
     "user_preview_protection": "F9 remains user-owned; do not relaunch/install/stop/reset/send input until user explicitly releases it."
   },
-  "last_checked_at": "2026-10-22T15:53:32.992503+00:00",
+  "last_checked_at": "2026-10-22T16:22:30.704616+00:00",
   "test_sync_repair": {
     "status": "accepted_pushed_remote_ci_success",
     "commit": "2b0d78d3ddb0448b59d77b3a19681f068649e3d9",
@@ -212,13 +215,13 @@
     "scope": "two tests only; independent182 tests/analyze passed"
   },
   "beta_readiness": {
-    "status": "br01_scope_accepted_pushed_br02_br03_in_progress",
+    "status": "internal_preparation_accepted_external_conditions_pending",
     "plan": "docs/pmpowers/plans/2026-10-22-beta-readiness.md",
     "execution_thread_id": "01a15eca-2b7f-70c1-978d-45dd735765f1",
     "implementation_owner": "Pourlune ｜ App 设计 开发",
     "architecture_role": "assign, supervise, independently verify, commit and push accepted scope",
     "user_visual_acceptance": "2026-10-22 explicit current-effects acceptance; no further cosmetic expansion",
-    "current_batch": "BR02 / BR03 remaining permissible work",
+    "current_batch": "Owner actions before final candidates and formal device validation",
     "user_actions_path": "docs/development/dependencies/beta-readiness-user-actions.md",
     "target": "separate iOS TestFlight and Android closed-testing submission readiness, not production release",
     "device_protection": "F9 and its window remain user-owned and untouched until explicit release",
@@ -229,6 +232,19 @@
       "android": "unsigned AAB verified; signing and other gates remain"
     },
     "resolved_dependency": "FI-E02 old Apple login blocker superseded by dedicated current profile and independently verified local signature; app record/legal status still separate",
-    "br01_commit": "33433c76cd6c97338f0016815208999832050cfb"
+    "br01_commit": "33433c76cd6c97338f0016815208999832050cfb",
+    "br02_acceptance": "docs/development/review/beta-readiness-BR02-acceptance.md",
+    "br03_acceptance": "docs/development/review/beta-readiness-BR03-acceptance.md",
+    "br02_status": "preparation_accepted_runtime_not_executed",
+    "br03_status": "handoff_accepted_three_submission_routes_not_ready",
+    "cli_status": "released_no_inflight_commands",
+    "user_action_groups": [
+      "Publishing/contact/audience/region/SKU and image rights decisions",
+      "Account-holder legal declarations in consoles",
+      "Authorized Android upload signing assets selected and unlocked locally",
+      "Eligible independent devices and explicit production runtime/observation scope"
+    ],
+    "automation_pause_reason": "All currently permissible internal work reviewed; only named owner inputs and external device/runtime conditions remain.",
+    "paused_at": "2026-10-22T16:22:30.704616+00:00"
   }
 }
