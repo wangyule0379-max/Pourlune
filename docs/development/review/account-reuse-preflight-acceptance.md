@@ -23,4 +23,4 @@
 
 ## 后续用户决定（2026-10-22）
 
-用户已明确确认双端正式应用ID改为 `com.pourlune.app`，取代上文预检阶段的 `com.fishtk.pourlune` 候选建议。上文及执行方冻结证据反映当时审查对象，不再作为当前身份决策。当前权威值同步至production-handoff、user-handoff和tracking；未执行注册、查重、签名或原生工程身份切换。Firebase项目隔离方案仍单独待确认。
+用户已明确确认双端正式应用ID改为 `com.pourlune.app`，取代上文预检阶段的 `com.fishtk.pourlune` 候选建议。上文及执行方冻结证据反映当时审查对象，不再作为当前身份决策。当前权威值同步至production-handoff、user-handoff和tracking；未执行注册、查重、签名或原生工程身份切换。随后用户已确认Firebase开发/生产项目隔离，并授权原执行聊天完成注册与配置接入；本报告只读验收结论不自动扩展为注册或SDK通过。

@@ -44,8 +44,12 @@ Firebase 与广告项目需明确区分开发、测试及正式环境。配置�
 
 架构已独立确认Apple/Play/Firebase现有会话及FishPilot对象可见；无需重复新开户或当前重新登录。详见[预检验收](../review/account-reuse-preflight-acceptance.md)。Pourlune专属注册、Firebase文件、iOS资源/符号上传、签名和真机仍未完成。
 
-当前需要收束的选择：正式双端应用ID已由用户确认改为 `com.pourlune.app`；同账号下建立独立开发/生产Firebase项目（候选 `pourlune-dev` / `pourlune-prod`，未查重/未注册）。应用ID命名已确认；Firebase项目隔离方案仍待确认，实际应用/项目注册未执行。Apple控制台另有Paid Applications Schedule待持有人核对处理；不代签。AdMob归属因连接失败未知，需恢复可读访问；当前无连接真机。其他原有门槛不变。
+当前需要收束的选择：正式双端应用ID已由用户确认改为 `com.pourlune.app`；同账号下建立独立开发/生产Firebase项目（候选 `pourlune-dev` / `pourlune-prod`，未查重/未注册）。应用ID与Firebase开发/生产项目隔离均已确认；用户已授权执行聊天完成注册和配置接入，实际结果以本批交付及独立验收为准。Apple控制台另有Paid Applications Schedule待持有人核对处理；不代签。AdMob归属因连接失败未知，需恢复可读访问；当前无连接真机。其他原有门槛不变。
 
 ## 正式应用 ID 确认（2026-10-22）
 
 用户明确确认 iOS Bundle ID 和 Android applicationId 均使用 `com.pourlune.app`。该决定取代预检报告中的 `com.fishtk.pourlune` 建议；预检报告及冻结证据保留为历史记录。身份命名确认不代表已完成Apple/Google/Firebase/AdMob注册或查重。开发身份 `dev.pourlune.pourluneDev`、`dev.pourlune.pourlune_dev` 与隔离QA身份保持现状，正式配置接入时按环境核对，不直接替换现有测试安装。
+
+## Firebase 注册与接入授权（2026-10-22）
+
+用户已确认按建议分开发、生产项目，并授权「Pourlune ｜ App 设计 开发」完成注册与配置接入，由架构独立验收。开发项目绑定现有两端开发ID；生产项目两端均绑定 `com.pourlune.app`。优先project ID为 `pourlune-dev` / `pourlune-prod`，如已被占用可使用保留产品及环境标识的唯一后缀，以实际回读值为准。无需再请用户确认环境分离或自己代办全部注册；仅在必需登录、持有人协议、未知必填信息、权限或设备操作时反馈具体缺口。执行计划见[本批任务](../../pmpowers/plans/2026-10-22-firebase-registration-and-integration.md)。注册与接入尚待执行验收，生产发布未授权。

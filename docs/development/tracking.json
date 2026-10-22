@@ -6,13 +6,13 @@
   "review_thread_id": "01a15eaf-f58d-74d2-90d8-0f64bb28ddce",
   "branch": "codex/offline-foundation",
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
-  "current_batch": "B05",
-  "current_status": "internal_complete_waiting_external_handoff",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:61",
+  "current_batch": "F01-F08",
+  "current_status": "registration_integration_in_progress",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:62",
   "automation_id": "pourlune",
-  "automation_status": "PAUSED",
-  "delivery_path": "docs/development/deliveries/B05.md",
-  "acceptance_path": "docs/development/review/B05-acceptance.md",
+  "automation_status": "ACTIVE",
+  "delivery_path": "docs/development/deliveries/firebase-integration.md",
+  "acceptance_path": "docs/development/review/firebase-integration-acceptance.md",
   "accepted_batches": [
     "B01",
     "B02",
@@ -26,7 +26,7 @@
   "prior_ui_acceptance": "D01-D09 static design and bounded HTML prototype only; not App runtime acceptance",
   "user_authorization": "Start approved first-release development in the existing execution chat, assign substantial batches, independently accept and continue without repeated reminders. No production release or account/legal authorization implied.",
   "review_round": 1,
-  "current_batch_plan": "docs/pmpowers/plans/2026-10-22-B05-release-candidate-validation.md",
+  "current_batch_plan": "docs/pmpowers/plans/2026-10-22-firebase-registration-and-integration.md",
   "last_accepted_commit": "be25ca064ddf48f647e46af22c552d6821dc4f78",
   "last_accepted_push": "origin/codex/offline-foundation",
   "ci_followup": {
@@ -38,7 +38,7 @@
       39707677612
     ],
     "url": "https://github.com/wangyule0379-max/Pourlune/actions/runs/39707683317",
-    "next_action": "Both exact B05 commit runs succeeded; no further CI polling for these runs. Account-reuse preflight is still active, keep follow-up until independently reviewed.",
+    "next_action": "B05 exact commit runs succeeded; do not poll again. New implementation CI only after acceptance and push.",
     "last_checked_at": "2026-10-22T02:03:37.742Z",
     "evidence_path": "docs/development/review/B05-evidence/remote-ci-final.json"
   },
@@ -54,14 +54,14 @@
     "B05": "Eight internal tasks accepted in available environment; independent165 Flutter/30core, five native flows,12 SIGKILL and ordinary main restart; external services/devices/identity/support/rights not passed"
   },
   "external_dependencies_path": "docs/development/dependencies/user-handoff.md",
-  "next_action": "Formal iOS/Android ID com.pourlune.app explicitly confirmed; documents updated, not registered. Await Firebase project separation decision and external configuration/device handoff. Preserve development/QA IDs; no repeated CI or account polls.",
+  "next_action": "F01-F08 dispatched and execution confirmed active. Follow compact cursor; independently review delivery and real service evidence when available. No further identity/environment confirmation needed.",
   "account_handoff": {
     "confirmed_at": "2026-10-22",
     "source": "explicit_user_message",
     "apple": "reuse FishPilot existing account",
     "google": "reuse FishPilot existing account",
     "firebase": "reuse FishPilot existing account; Pourlune project/app registrations not yet verified",
-    "status": "preflight_accepted_identity_confirmed_pending_external_configuration",
+    "status": "firebase_environment_split_confirmed_registration_integration_authorized",
     "no_inferred_reuse": [
       "FishPilot app identity",
       "FishPilot Firebase project",
@@ -78,6 +78,19 @@
       "source": "explicit_user_confirmation",
       "supersedes": "com.fishtk.pourlune proposal",
       "development_ids_unchanged": true
+    },
+    "firebase_environment_decision": {
+      "confirmed_on": "2026-10-22",
+      "separate_projects": true,
+      "preferred_dev_project_id": "pourlune-dev",
+      "preferred_prod_project_id": "pourlune-prod",
+      "project_id_availability": "unverified",
+      "registration_status": "pending_execution",
+      "development_ios_id": "dev.pourlune.pourluneDev",
+      "development_android_id": "dev.pourlune.pourlune_dev",
+      "production_ios_id": "com.pourlune.app",
+      "production_android_id": "com.pourlune.app",
+      "scope": "register and integrate using existing accounts; no billing, legal acceptance or production release"
     }
   }
 }
