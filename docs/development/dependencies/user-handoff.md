@@ -53,3 +53,7 @@ Firebase 与广告项目需明确区分开发、测试及正式环境。配置�
 ## Firebase 注册与接入授权（2026-10-22）
 
 用户已确认按建议分开发、生产项目，并授权「Pourlune ｜ App 设计 开发」完成注册与配置接入，由架构独立验收。开发项目绑定现有两端开发ID；生产项目两端均绑定 `com.pourlune.app`。优先project ID为 `pourlune-dev` / `pourlune-prod`，如已被占用可使用保留产品及环境标识的唯一后缀，以实际回读值为准。无需再请用户确认环境分离或自己代办全部注册；仅在必需登录、持有人协议、未知必填信息、权限或设备操作时反馈具体缺口。执行计划见[本批任务](../../pmpowers/plans/2026-10-22-firebase-registration-and-integration.md)。注册与接入尚待执行验收，生产发布未授权。
+
+## 本批注册及接入验收进展（2026-10-22）
+
+Pourlune独立Firebase项目pourlune-dev / pourlune-prod及四个双端App已建立并由架构独立核验；四份配置已由执行方取得，无需用户下载搬运。配置实现、双端可用运行与安全RC恢复已按独立报告限定范围通过。Analytics/Crashlytics实际收件仍未通过；Android运输诊断有连接/TLS失败，iOS根因待补证。Apple Developer标识注册需要恢复[已有账号登录](https://developer.apple.com/account/resources/identifiers/list)，不是新开户。Firebase生产注册不能替代Apple/Play注册；正式签名与发布仍待办。详细见[本批独立验收](../review/firebase-integration-acceptance.md)。

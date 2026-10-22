@@ -1,0 +1,67 @@
+test_bad_selection_does_not_overwrite_previous_native_resource (test_firebase_config.FirebaseConfigTest.test_bad_selection_does_not_overwrite_previous_native_resource) ... ok
+test_build_defines_and_actual_native_id_must_match_selected_environment (test_firebase_config.FirebaseConfigTest.test_build_defines_and_actual_native_id_must_match_selected_environment) ... ok
+test_dev_prod_dev_and_offline_restage_resource_without_stale_plist (test_firebase_config.FirebaseConfigTest.test_dev_prod_dev_and_offline_restage_resource_without_stale_plist) ... ok
+test_four_matching_native_configs_pass_and_output_only_public_summary (test_firebase_config.FirebaseConfigTest.test_four_matching_native_configs_pass_and_output_only_public_summary) ... ok
+test_malformed_native_xml_is_a_redacted_failure_not_a_traceback (test_firebase_config.FirebaseConfigTest.test_malformed_native_xml_is_a_redacted_failure_not_a_traceback) ... ok
+test_missing_fields_or_service_account_shapes_are_rejected (test_firebase_config.FirebaseConfigTest.test_missing_fields_or_service_account_shapes_are_rejected) ... ok
+test_missing_or_malformed_files_fail_without_echoing_contents (test_firebase_config.FirebaseConfigTest.test_missing_or_malformed_files_fail_without_echoing_contents) ... ok
+test_native_bundle_and_android_client_must_match_registration (test_firebase_config.FirebaseConfigTest.test_native_bundle_and_android_client_must_match_registration) ... ok
+test_native_project_sender_and_app_are_checked_even_if_options_agree (test_firebase_config.FirebaseConfigTest.test_native_project_sender_and_app_are_checked_even_if_options_agree) ... ok
+test_native_ready_alone_cannot_enable_an_unconfigured_build (test_firebase_config.FirebaseConfigTest.test_native_ready_alone_cannot_enable_an_unconfigured_build) ... ok
+test_options_cannot_choose_another_project_platform_app_or_bundle (test_firebase_config.FirebaseConfigTest.test_options_cannot_choose_another_project_platform_app_or_bundle) ... ok
+test_registration_cannot_rebind_pourlune_to_foreign_project_or_identity (test_firebase_config.FirebaseConfigTest.test_registration_cannot_rebind_pourlune_to_foreign_project_or_identity) ... ok
+test_symbols_explicit_dev_upload_receipt_binds_target_binary_and_uuid (test_firebase_config.FirebaseConfigTest.test_symbols_explicit_dev_upload_receipt_binds_target_binary_and_uuid) ... ERROR
+test_symbols_failure_never_reprints_uploader_output (test_firebase_config.FirebaseConfigTest.test_symbols_failure_never_reprints_uploader_output) ... ERROR
+test_symbols_off_skips_and_production_upload_rejects_before_process (test_firebase_config.FirebaseConfigTest.test_symbols_off_skips_and_production_upload_rejects_before_process) ... ERROR
+test_symbols_reject_different_binary_uuid_before_upload (test_firebase_config.FirebaseConfigTest.test_symbols_reject_different_binary_uuid_before_upload) ... ERROR
+test_wrapper_does_not_run_production_or_accept_overriding_firebase_defines (test_firebase_config.FirebaseConfigTest.test_wrapper_does_not_run_production_or_accept_overriding_firebase_defines) ... ok
+test_wrapper_offline_omits_options_and_does_not_require_local_configs (test_firebase_config.FirebaseConfigTest.test_wrapper_offline_omits_options_and_does_not_require_local_configs) ... ok
+test_wrapper_rejects_bad_config_before_invoking_flutter (test_firebase_config.FirebaseConfigTest.test_wrapper_rejects_bad_config_before_invoking_flutter) ... ok
+test_wrapper_selects_dev_prod_dev_and_keeps_source_configs_unchanged (test_firebase_config.FirebaseConfigTest.test_wrapper_selects_dev_prod_dev_and_keeps_source_configs_unchanged) ... ok
+
+======================================================================
+ERROR: test_symbols_explicit_dev_upload_receipt_binds_target_binary_and_uuid (test_firebase_config.FirebaseConfigTest.test_symbols_explicit_dev_upload_receipt_binds_target_binary_and_uuid)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_firebase_config.py", line 239, in test_symbols_explicit_dev_upload_receipt_binds_target_binary_and_uuid
+    receipt = upload_symbols(env, run)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/data/App Development/Pourlune/tools/validation/firebase_symbols.py", line 5, in upload_symbols
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_symbols_failure_never_reprints_uploader_output (test_firebase_config.FirebaseConfigTest.test_symbols_failure_never_reprints_uploader_output)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_firebase_config.py", line 275, in test_symbols_failure_never_reprints_uploader_output
+    upload_symbols(env, run)
+  File "/Volumes/data/App Development/Pourlune/tools/validation/firebase_symbols.py", line 5, in upload_symbols
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_symbols_off_skips_and_production_upload_rejects_before_process (test_firebase_config.FirebaseConfigTest.test_symbols_off_skips_and_production_upload_rejects_before_process)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_firebase_config.py", line 251, in test_symbols_off_skips_and_production_upload_rejects_before_process
+    self.assertEqual(upload_symbols({}, forbidden), {'status': 'disabled'})
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/data/App Development/Pourlune/tools/validation/firebase_symbols.py", line 5, in upload_symbols
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_symbols_reject_different_binary_uuid_before_upload (test_firebase_config.FirebaseConfigTest.test_symbols_reject_different_binary_uuid_before_upload)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_firebase_config.py", line 264, in test_symbols_reject_different_binary_uuid_before_upload
+    upload_symbols(env, run)
+  File "/Volumes/data/App Development/Pourlune/tools/validation/firebase_symbols.py", line 5, in upload_symbols
+    raise NotImplementedError
+NotImplementedError
+
+----------------------------------------------------------------------
+Ran 20 tests in 1.831s
+
+FAILED (errors=4)

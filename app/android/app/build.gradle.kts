@@ -1,13 +1,45 @@
+import com.google.gms.googleservices.GoogleServicesTask
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+    id("com.google.gms.google-services") apply false
+    id("com.google.firebase.crashlytics") apply false
 }
 
-// Native config belongs to the matching owned Firebase application. No fake JSON.
-if (file("google-services.json").exists()) {
+// Selection is per invocation. A leftover JSON cannot silently enable Firebase.
+val pourluneRepo = rootProject.projectDir.parentFile.parentFile
+val firebaseEnvironment = providers.gradleProperty("POURLUNE_FIREBASE_ENV").getOrElse("none")
+val firebaseDirectory = file(providers.gradleProperty("POURLUNE_FIREBASE_CONFIG_DIR")
+    .getOrElse(pourluneRepo.resolve("app/config/firebase").path))
+val firebaseRegistry = providers.gradleProperty("POURLUNE_FIREBASE_REGISTRY")
+    .getOrElse(pourluneRepo.resolve("docs/development/evidence/firebase-integration/registration.json").path)
+val pourluneApplicationId = if (firebaseEnvironment == "prod") "com.pourlune.app" else "dev.pourlune.pourlune_dev"
+val pourlunePython = System.getenv("POURLUNE_PYTHON")
+    ?: pourluneRepo.resolve(".venv/bin/python").takeIf { it.exists() }?.path ?: "python3"
+val firebaseCheck = providers.exec {
+    commandLine(pourlunePython, pourluneRepo.resolve("tools/validation/firebase_config.py").path,
+        "--environment", firebaseEnvironment, "--platform", "android",
+        "--config-dir", firebaseDirectory.path, "--registry", firebaseRegistry,
+        "--check-build", "--native-id", pourluneApplicationId)
+    environment("DART_DEFINES", providers.gradleProperty("dart-defines").getOrElse(""))
+    isIgnoreExitValue = true
+}
+check(firebaseCheck.result.get().exitValue == 0) {
+    "Pourlune Firebase selection rejected. Run firebase_config.py; no config contents are logged."
+}
+if (firebaseEnvironment != "none") {
     apply(plugin = "com.google.gms.google-services")
     apply(plugin = "com.google.firebase.crashlytics")
+    // The plugin assigns its default search paths when variants register tasks.
+    // Apply our validated file after those registration actions.
+    afterEvaluate {
+        tasks.withType<GoogleServicesTask>().configureEach {
+            googleServicesJsonFiles.set(listOf(firebaseDirectory.resolve("$firebaseEnvironment/android/google-services.json")))
+        }
+    }
 }
 
 android {
@@ -21,8 +53,8 @@ android {
     }
 
     defaultConfig {
-        // Temporary development identity; production identity is a later handoff.
-        applicationId = "dev.pourlune.pourlune_dev"
+        // Default/QA installs keep the development identity; prod is explicit.
+        applicationId = pourluneApplicationId
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         manifestPlaceholders["POURLUNE_ADMOB_APP_ID"] =
@@ -37,7 +69,17 @@ android {
         versionName = flutter.versionName
     }
 
-    // Release signing is intentionally unconfigured; B01 builds debug only.
+    buildTypes.configureEach {
+        if (firebaseEnvironment != "none") {
+            extensions.configure<CrashlyticsExtension> {
+                // Production is compile-only in this batch, with no uploads.
+                mappingFileUploadEnabled = firebaseEnvironment == "dev"
+                nativeSymbolUploadEnabled = false
+            }
+        }
+    }
+
+    // Release signing is intentionally unconfigured.
 
 }
 

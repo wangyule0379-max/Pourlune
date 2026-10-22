@@ -7,8 +7,8 @@
   "branch": "codex/offline-foundation",
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "F01-F08",
-  "current_status": "registration_integration_in_progress",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:62",
+  "current_status": "firebase_implementation_accepted_service_receipt_pending",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:70",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
   "delivery_path": "docs/development/deliveries/firebase-integration.md",
@@ -21,7 +21,16 @@
     "B05"
   ],
   "open_findings": [],
-  "blockers": [],
+  "blockers": [
+    {
+      "id": "FI-E01",
+      "description": "Analytics/Crashlytics console receipt not verified; Android transport TLS/connection errors, iOS root cause unproven"
+    },
+    {
+      "id": "FI-E02",
+      "description": "Apple Developer identity registration requires restored account session"
+    }
+  ],
   "future_batches": [],
   "prior_ui_acceptance": "D01-D09 static design and bounded HTML prototype only; not App runtime acceptance",
   "user_authorization": "Start approved first-release development in the existing execution chat, assign substantial batches, independently accept and continue without repeated reminders. No production release or account/legal authorization implied.",
@@ -51,17 +60,18 @@
   ],
   "acceptance_scope": {
     "B04": "Implementation and available environment acceptance only; real ad display/earned, Firebase console, production identity/support/rights and representative devices remain pending",
-    "B05": "Eight internal tasks accepted in available environment; independent165 Flutter/30core, five native flows,12 SIGKILL and ordinary main restart; external services/devices/identity/support/rights not passed"
+    "B05": "Eight internal tasks accepted in available environment; independent165 Flutter/30core, five native flows,12 SIGKILL and ordinary main restart; external services/devices/identity/support/rights not passed",
+    "F01-F08": "Firebase registration/config implementation accepted; 24 Python/23 Flutter and both offline builds independently passed; real dev runtime inspected. Analytics/Crashlytics receipt and Apple registration NOT passed."
   },
   "external_dependencies_path": "docs/development/dependencies/user-handoff.md",
-  "next_action": "F01-F08 dispatched and execution confirmed active. Follow compact cursor; independently review delivery and real service evidence when available. No further identity/environment confirmation needed.",
+  "next_action": "Push accepted implementation, verify exact new CI, perform bounded service-receipt diagnosis in existing execution chat; no duplicate B05 polls.",
   "account_handoff": {
     "confirmed_at": "2026-10-22",
     "source": "explicit_user_message",
     "apple": "reuse FishPilot existing account",
     "google": "reuse FishPilot existing account",
     "firebase": "reuse FishPilot existing account; Pourlune project/app registrations not yet verified",
-    "status": "firebase_environment_split_confirmed_registration_integration_authorized",
+    "status": "firebase_registered_configuration_accepted_receipt_pending",
     "no_inferred_reuse": [
       "FishPilot app identity",
       "FishPilot Firebase project",
@@ -73,7 +83,7 @@
     "formal_identity": {
       "ios_bundle_id": "com.pourlune.app",
       "android_application_id": "com.pourlune.app",
-      "status": "user_confirmed_not_registered",
+      "status": "firebase_production_registered_apple_play_unverified",
       "confirmed_on": "2026-10-22",
       "source": "explicit_user_confirmation",
       "supersedes": "com.fishtk.pourlune proposal",
@@ -85,7 +95,7 @@
       "preferred_dev_project_id": "pourlune-dev",
       "preferred_prod_project_id": "pourlune-prod",
       "project_id_availability": "unverified",
-      "registration_status": "pending_execution",
+      "registration_status": "firebase_four_apps_independently_verified",
       "development_ios_id": "dev.pourlune.pourluneDev",
       "development_android_id": "dev.pourlune.pourlune_dev",
       "production_ios_id": "com.pourlune.app",
