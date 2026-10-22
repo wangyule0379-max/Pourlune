@@ -64,3 +64,5 @@ T-R01 P2 关闭；T06 的已有双端明暗模式正常主入口衔接通过。T
 `T-R01/precise-submit-manifest.json` 的 55 个文件逐项哈希核对；生产实现来自冻结包，不覆盖原开发工作树。纳入 T 依赖的 M 资源预热、按钮/页面入场和倒水时长，不将 M01–M08 整批标完成。保留 HEAD 已修复的 b04_hint_events/b05_accessibility 测试；不纳入 QA 身份 overlay、完整 Flame 棋盘/样板容量修改、FB 测试或未验控制器改动。两批组合回归仍待完整棋盘交付。
 
 独立证据：`page-transitions-r01-evidence/`；作者修复证据：`../evidence/page-transitions/T-R01/`。通过后精确实现 CI 需另核对，旧 CI 成功不能代替。
+
+提交回读：实现及证据 `3cc35011bb0dceff783043c91be2e03db3761a39` 已推送 origin/codex/offline-foundation；对应 push CI39764795397 在 2026-10-22T10:40:18Z 为 in_progress，尚未远端通过。完整棋盘工作树保持未提交状态。

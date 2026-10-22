@@ -8,7 +8,7 @@
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "Flame full board FB01-FB08 + page transitions T01-T06",
   "current_status": "full_board_in_progress_ui_launch_repair_assigned",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:109",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:110",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
   "delivery_path": "docs/development/deliveries/page-transitions.md",
@@ -59,16 +59,16 @@
   "last_accepted_commit": "c529e8e2cac8afa8266cfd7a3a1b983946fcbc69",
   "last_accepted_push": "origin/codex/offline-foundation",
   "ci_followup": {
-    "commit": "2b0d78d3ddb0448b59d77b3a19681f068649e3d9",
-    "status": "completed",
-    "conclusion": "success",
+    "commit": "3cc35011bb0dceff783043c91be2e03db3761a39",
+    "status": "in_progress",
+    "conclusion": null,
     "run_ids": [
-      39754368999
+      39764795397
     ],
-    "url": "https://github.com/wangyule0379-max/Pourlune/actions/runs/39754368999",
-    "last_checked_at": "2026-10-22T09:27:32.067427+00:00",
-    "next_action": "Terminal success; do not repoll. Continue full-board and T-R01 acceptance.",
-    "evidence_path": "docs/development/review/flame-sample-ci-repair-evidence/remote-ci-final.json"
+    "url": "https://github.com/wangyule0379-max/Pourlune/actions/runs/39764795397",
+    "last_checked_at": "2026-10-22T10:40:18.762Z",
+    "next_action": "Check exact transition implementation run to terminal. No need for CI on documentation commits.",
+    "evidence_path": "docs/development/review/page-transitions-r01-evidence/remote-ci-pending.json"
   },
   "deferred_minor_findings": [
     {
@@ -83,7 +83,7 @@
     "F01-F08": "Firebase registration/config implementation accepted; 24 Python/23 Flutter and both offline builds independently passed; real dev runtime inspected. Analytics/Crashlytics receipt and Apple registration NOT passed."
   },
   "external_dependencies_path": "docs/development/dependencies/user-handoff.md",
-  "next_action": "Precisely push accepted T/M prerequisite snapshot, track exact implementation CI; original continues FB, then independent FB and combined acceptance.",
+  "next_action": "Follow exact T implementation CI39764795397; original continues FB dual-platform evidence, independently accept delivery and combined regression. No repeated T or old CI checks.",
   "account_handoff": {
     "confirmed_at": "2026-10-22",
     "source": "explicit_user_message",
@@ -152,7 +152,7 @@
     "user_visual_approved_on": "2026-10-22"
   },
   "page_transitions": {
-    "status": "accepted_available_environment_preparing_precise_push",
+    "status": "accepted_pushed_ci_in_progress",
     "thread_id": "01a16272-63c8-76d3-bcdb-e2b012feab05",
     "host_id": "local",
     "title": "Pourlune ｜ App UI",
@@ -168,7 +168,10 @@
       "T-M01 P3 visible iOS blue shade step remains; no pixel-exact claim",
       "Android debug am start wait timeout; later Home visible; representative launch performance not passed"
     ],
-    "review_evidence": "docs/development/review/page-transitions-r01-evidence/"
+    "review_evidence": "docs/development/review/page-transitions-r01-evidence/",
+    "accepted_commit": "3cc35011bb0dceff783043c91be2e03db3761a39",
+    "push": "origin/codex/offline-foundation confirmed",
+    "ci_run": 39764795397
   },
   "flame_full_board": {
     "status": "in_progress_isolated_components",
@@ -186,7 +189,7 @@
     "board_write_release": "2026-10-22; SHA256 board_page fc7a0250945e5d02a58357ef3b8baa1f0b7d9226d766068d7901905fbd8cb7ad; bottle 4c57b41d574651efd1f6e4bfac999bc5f81c7aa9f0b62031486bf9a136feb61f",
     "cli_schedule": "UI installed-candidate evidence only; original runs necessary FB checks/builds. Narrow single page_transitions_test instance replacement case delegated to original for FB compatibility; all assertions retained, frozen UI copies unchanged."
   },
-  "last_checked_at": "2026-10-22T10:38:26.618148+00:00",
+  "last_checked_at": "2026-10-22T10:41:14.070252+00:00",
   "test_sync_repair": {
     "status": "accepted_pushed_remote_ci_success",
     "commit": "2b0d78d3ddb0448b59d77b3a19681f068649e3d9",
