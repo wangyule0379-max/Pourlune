@@ -7,10 +7,10 @@
   "branch": "codex/offline-foundation",
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "B05",
-  "current_status": "accepted_internal_ci_passed",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:60",
+  "current_status": "internal_complete_waiting_external_handoff",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:61",
   "automation_id": "pourlune",
-  "automation_status": "ACTIVE",
+  "automation_status": "PAUSED",
   "delivery_path": "docs/development/deliveries/B05.md",
   "acceptance_path": "docs/development/review/B05-acceptance.md",
   "accepted_batches": [
@@ -54,19 +54,21 @@
     "B05": "Eight internal tasks accepted in available environment; independent165 Flutter/30core, five native flows,12 SIGKILL and ordinary main restart; external services/devices/identity/support/rights not passed"
   },
   "external_dependencies_path": "docs/development/dependencies/user-handoff.md",
-  "next_action": "Review account-reuse-preflight when delivered. B05 CI is complete; do not repeat local suites or CI polls. Pause only after preflight reviewed and only external user dependencies remain.",
+  "next_action": "Await user confirmation of Pourlune native IDs/Firebase project separation, Account Holder agreement handling where applicable, AdMob access and physical devices. Read-only preflight accepted; B05 CI complete. Do not repeat polls or account-creation requests.",
   "account_handoff": {
     "confirmed_at": "2026-10-22",
     "source": "explicit_user_message",
     "apple": "reuse FishPilot existing account",
     "google": "reuse FishPilot existing account",
     "firebase": "reuse FishPilot existing account; Pourlune project/app registrations not yet verified",
-    "status": "configuration_preflight_in_progress",
+    "status": "preflight_accepted_pending_target_identity_and_external_handoff",
     "no_inferred_reuse": [
       "FishPilot app identity",
       "FishPilot Firebase project",
       "AdMob account/units",
       "signing private keys"
-    ]
+    ],
+    "delivery_path": "docs/development/deliveries/account-reuse-preflight.md",
+    "acceptance_path": "docs/development/review/account-reuse-preflight-acceptance.md"
   }
 }

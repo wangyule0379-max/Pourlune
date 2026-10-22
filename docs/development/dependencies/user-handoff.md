@@ -39,3 +39,9 @@ Firebase 与广告项目需明确区分开发、测试及正式环境。配置�
 - FishPilot旧checkout存在 `fishpilot-staging`、`com.fishtk.fishpilot` 客户端配置，已按其AGENTS定位当前工作区；旧配置仅作历史线索，不复制进Pourlune，不据此声称当前Firebase项目/访问权限已核验。
 - 本次没有授权共用FishPilot Firebase业务项目、广告位或应用身份，也没有确认AdMob账号。开发方先盘点Pourlune专属配置缺口，再在相同账号下推进适用准备。
 - 不新增账号、认证能力或FishPilot后端依赖；不修改FishPilot工作树、商店状态或运行服务。
+
+## 只读预检已验收（2026-10-22）
+
+架构已独立确认Apple/Play/Firebase现有会话及FishPilot对象可见；无需重复新开户或当前重新登录。详见[预检验收](../review/account-reuse-preflight-acceptance.md)。Pourlune专属注册、Firebase文件、iOS资源/符号上传、签名和真机仍未完成。
+
+当前需要收束的选择：正式双端应用ID建议 `com.fishtk.pourlune`；同账号下建立独立开发/生产Firebase项目（候选 `pourlune-dev` / `pourlune-prod`，未查重/未注册）。请用户确认身份与项目隔离方案后进入实际注册准备。Apple控制台另有Paid Applications Schedule待持有人核对处理；不代签。AdMob归属因连接失败未知，需恢复可读访问；当前无连接真机。其他原有门槛不变。
