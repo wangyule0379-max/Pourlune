@@ -247,6 +247,7 @@ class RewardStatus extends StatelessWidget {
                           final yes = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
+                              scrollable: true,
                               title: Text(l.restoreRewardTitle),
                               content: Text(
                                 '${l.restoreRewardBody}\n\n${title(attempt.origin)}',
@@ -259,8 +260,14 @@ class RewardStatus extends StatelessWidget {
                                 ),
                                 FilledButton(
                                   key: const Key('confirm-reward-restore'),
+                                  style: FilledButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 14,
+                                    ),
+                                  ),
                                   onPressed: () => Navigator.pop(context, true),
-                                  child: Text(l.resumeReward),
+                                  child: Text(l.resumeGame),
                                 ),
                               ],
                             ),

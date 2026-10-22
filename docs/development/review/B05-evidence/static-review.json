@@ -1,0 +1,16 @@
+{
+  "reviewer": "independent b05_review agent and architecture",
+  "scope": [
+    "service_views.dart production diff",
+    "b05 accessibility and native/lifecycle entrypoints",
+    "b05_lifecycle.py",
+    "AC evidence boundary"
+  ],
+  "blocking_findings": [],
+  "notes": [
+    "Transaction barriers occur inside production SQLite callbacks; SIGKILL checks PID executable and same container.",
+    "QA entrypoint not imported by production main. Isolation requires external bundle override.",
+    "20/40ms widget FFI waits remain a minor timing sensitivity; failures are asserted, not silently accepted."
+  ],
+  "runtime_claim": false
+}

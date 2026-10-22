@@ -1,0 +1,1 @@
+Android release编译已成功，首次产物记录脚本却按英文匹配jarsigner输出，系统Java返回“jar 未签名”而触发脚本AssertionError；不是构建失败或已签名。随后固定jarsigner语言为en/US，复核同一AAB的未签名状态、90题逐字节与hash并补记metadata，没有为日志语言重复编译。原中文输出保留android-release-signature.log。

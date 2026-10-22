@@ -1,0 +1,258 @@
+{
+  "date": "2026-10-22 Asia/Taipei",
+  "execution_base": "ba78a62726754634788f9b3a70f90acf0eefeb33",
+  "current_head": "607ea9d83ab2fa4397ddb1aad83150928f0117db",
+  "head_note": "607ea9d is architecture-owned B05 dispatch plan/tracking commit; execution authored no commit/push",
+  "sdk": "Flutter3.47.2/Dart3.13.2",
+  "device": "GDF-Remaining-20261020 /4DF92321-95EC-4C8E-849C-0CF0AA6FE1D2/iOS26.5 Simulator",
+  "python": "Python 3.12.14",
+  "checks": [
+    {
+      "name": "app-lock",
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": "FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter pub get --enforce-lockfile",
+      "log": "app-lock.log",
+      "result": "exit0, locked dependencies resolved",
+      "platform_mode": "host",
+      "scope": "no dependency upgrade"
+    },
+    {
+      "name": "app-format",
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": "dart format --output=none --set-exit-if-changed lib test integration_test",
+      "log": "format-final.log",
+      "result": "exit0, 86 files 0 changed",
+      "platform_mode": "host",
+      "scope": "source only, excludes generated SPM copies"
+    },
+    {
+      "name": "app-analyze",
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": "FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter analyze",
+      "log": "analyze-final.log",
+      "result": "exit0, No issues",
+      "platform_mode": "host",
+      "scope": "all app/test/integration sources including final QA decoder helper"
+    },
+    {
+      "name": "app-full",
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": "FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter test",
+      "log": "flutter-final-after-label.log",
+      "result": "exit0,165 passed",
+      "platform_mode": "host Flutter + real SQLite FFI",
+      "scope": "final production dialog source;2 additional B05 UI checks, schemas1..4 to5 included"
+    },
+    {
+      "name": "core-lock",
+      "cwd": "/Volumes/data/App Development/Pourlune/packages/pourlune_core",
+      "command": "dart pub get --enforce-lockfile",
+      "log": "core-lock.log",
+      "result": "exit0",
+      "platform_mode": "host Dart",
+      "scope": "lock unchanged"
+    },
+    {
+      "name": "core-format",
+      "cwd": "/Volumes/data/App Development/Pourlune/packages/pourlune_core",
+      "command": "dart format --output=none --set-exit-if-changed .",
+      "log": "core-format.log",
+      "result": "exit0,12 files0 changed",
+      "platform_mode": "host Dart",
+      "scope": "core source"
+    },
+    {
+      "name": "core-analyze",
+      "cwd": "/Volumes/data/App Development/Pourlune/packages/pourlune_core",
+      "command": "dart analyze",
+      "log": "core-analyze.log",
+      "result": "exit0,No issues",
+      "platform_mode": "host Dart",
+      "scope": "core source unchanged"
+    },
+    {
+      "name": "core-tests",
+      "cwd": "/Volumes/data/App Development/Pourlune/packages/pourlune_core",
+      "command": "dart test",
+      "log": "core-baseline.log",
+      "result": "exit0,30 passed",
+      "platform_mode": "host Dart",
+      "scope": "includes packaged90 legal reference replays; reused this-batch baseline because core/content unchanged"
+    },
+    {
+      "name": "python-content-tests",
+      "cwd": "/Volumes/data/App Development/Pourlune",
+      "command": ".venv/bin/python -m unittest discover -s tools/content -v",
+      "log": "content-tests.log",
+      "result": "27 tests OK",
+      "platform_mode": "Python3.12.14",
+      "scope": "content preparation, not Dart/Flutter"
+    },
+    {
+      "name": "python-release-content",
+      "cwd": "/Volumes/data/App Development/Pourlune",
+      "command": ".venv/bin/python tools/content/validate.py --release --catalog docs/content/production-candidates/catalog/daily.json docs/content/production-candidates/puzzles/main/*.json docs/content/production-candidates/puzzles/daily/*.json",
+      "log": "content-release.log",
+      "result": "ok true,release_gate true,90 checked",
+      "platform_mode": "Python3.12.14",
+      "scope": "candidate gate, not original engineering fixtures"
+    },
+    {
+      "name": "assets-tests",
+      "cwd": "/Volumes/data/App Development/Pourlune",
+      "command": "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 -m unittest discover -s tools/assets -v",
+      "log": "asset-tests.log",
+      "result": "23 tests OK",
+      "platform_mode": "bundled Python/Pillow",
+      "scope": "read-only resources+geometry manifest"
+    },
+    {
+      "name": "visual-manifest",
+      "cwd": "/Volumes/data/App Development/Pourlune",
+      "command": "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 tools/assets/visual_manifest.py --check",
+      "log": "visual-manifest.log",
+      "result": "pass23,rights UNCONFIRMED/visual NOT_ASSERTED",
+      "platform_mode": "bundled Python/Pillow",
+      "scope": "no --write"
+    },
+    {
+      "name": "ui-manifest",
+      "cwd": "/Volumes/data/App Development/Pourlune",
+      "command": "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 tools/assets/ui_manifest.py --check",
+      "log": "ui-manifest.log",
+      "result": "pass10,rights UNCONFIRMED/visual NOT_ASSERTED",
+      "platform_mode": "bundled Python/Pillow",
+      "scope": "no --write"
+    },
+    {
+      "name": "audio-source",
+      "cwd": "/Volumes/data/App Development/Pourlune",
+      "command": ".venv/bin/python tools/assets/audio_generate.py --check",
+      "log": "audio-generated.log",
+      "result": "pass",
+      "platform_mode": "Python3.12.14",
+      "scope": "no regenerate"
+    },
+    {
+      "name": "audio-verify",
+      "cwd": "/Volumes/data/App Development/Pourlune",
+      "command": ".venv/bin/python tools/assets/audio_verify.py",
+      "log": "audio-verify.log",
+      "result": "6PCM+3 font source files pass",
+      "platform_mode": "Python3.12.14",
+      "scope": "not physical listening"
+    },
+    {
+      "name": "native-five-e2e",
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": "XCODE_XCCONFIG_FILE=/tmp/pourlune-b05.xcconfig FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter test integration_test/b05_candidate_test.dart -d 4DF92321-95EC-4C8E-849C-0CF0AA6FE1D2",
+      "log": "native-candidate-final.log",
+      "result": "exit0,1 native test/five E2E+surfaces,14 screenshots",
+      "platform_mode": "iOS26.5 Simulator/debug",
+      "scope": "formal90;QA prior progress;controlled ad transport, not SDK reward;runner not process restart"
+    },
+    {
+      "name": "native-lifecycle-build",
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": "XCODE_XCCONFIG_FILE=/tmp/pourlune-b05.xcconfig FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter build ios --simulator --debug -t integration_test/b05_lifecycle_app.dart",
+      "log": "lifecycle-final-build.log",
+      "result": "exit0",
+      "platform_mode": "iOS26.5 Simulator/debug",
+      "scope": "test-only standalone binary, separate QA identity"
+    },
+    {
+      "name": "native-lifecycle",
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": "../.venv/bin/python ../tools/validation/b05_lifecycle.py --device 4DF92321-95EC-4C8E-849C-0CF0AA6FE1D2 --out ../docs/development/evidence/B05/lifecycle-final",
+      "log": "lifecycle-final.log",
+      "result": "exit0,B05_LIFECYCLE_PASS,12 SIGKILL",
+      "platform_mode": "actual Simulator native SQLite, Python3.12.14",
+      "scope": "same installation/container/binary;both slots;seven save/reveal stages+animation+3 controlled reward cases;4 scene images explicitly predecoded;not cold image-load timing"
+    },
+    {
+      "name": "normal-main-build",
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": "XCODE_XCCONFIG_FILE=/tmp/pourlune-b05.xcconfig FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter build ios --simulator --debug -t lib/main.dart --dart-define=POURLUNE_DATABASE=b05_manual.sqlite --dart-define=POURLUNE_AD_MODE=disabled",
+      "log": "ios-normal-qa-build.log",
+      "result": "exit0",
+      "platform_mode": "iOS26.5 Simulator/debug",
+      "scope": "normal Bootstrap, no QA command entrypoint/scenario;not formal service validation"
+    },
+    {
+      "name": "android-profile",
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": [
+        "/Users/wangyule/development/flutter/bin/flutter",
+        "build",
+        "apk",
+        "--profile"
+      ],
+      "log": "android-profile.log",
+      "result": "exit0;90 packaged puzzles match bytes",
+      "artifact": "app/build/app/outputs/flutter-apk/app-profile.apk",
+      "platform_mode": "android-profile",
+      "scope": "Android Debug, verified APK v2"
+    },
+    {
+      "name": "android-release",
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": [
+        "flutter",
+        "build",
+        "appbundle",
+        "--release"
+      ],
+      "log": "android-release.log",
+      "result": "exit0;90 packaged puzzles match bytes",
+      "artifact": "app/build/app/outputs/bundle/release/app-release.aab",
+      "platform_mode": "android-release",
+      "scope": "unsigned, jarsigner English output verified"
+    },
+    {
+      "name": "ios-release-unsigned",
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": [
+        "/Users/wangyule/development/flutter/bin/flutter",
+        "build",
+        "ios",
+        "--release",
+        "--no-codesign",
+        "-t",
+        "lib/main.dart"
+      ],
+      "log": "ios-release-preserve.log",
+      "result": "exit0;90 packaged puzzles match bytes",
+      "artifact": "app/build/b05-candidates/ios-release-unsigned/Runner.app",
+      "platform_mode": "ios-release-unsigned",
+      "scope": "unsigned device-target compile, not runtime/distribution"
+    },
+    {
+      "name": "ios-profile-unsigned",
+      "cwd": "/Volumes/data/App Development/Pourlune/app",
+      "command": [
+        "/Users/wangyule/development/flutter/bin/flutter",
+        "build",
+        "ios",
+        "--profile",
+        "--no-codesign"
+      ],
+      "log": "ios-profile-unsigned.log",
+      "result": "exit0;90 packaged puzzles match bytes",
+      "artifact": "app/build/b05-candidates/ios-profile-unsigned/Runner.app",
+      "platform_mode": "ios-profile-unsigned",
+      "scope": "unsigned device-target compile, not runtime/distribution"
+    }
+  ],
+  "manual": "manual/manual.json +manual-commands.json +manual/after-cold.json",
+  "protected_review": "protected-review-before.json/protected-review-after.json byte-identical,move1 retained",
+  "remote_ci": "remote-ci.json: B04 ba78a62 run39698416205success, not uncommitted B05 CI",
+  "fresh_code_audit": "author-code-audit.md:0Critical/1Important QA reveal gap fixed RED\u2192GREEN+fullL;1Minor FFI wait deferred",
+  "unverified": [
+    "real SDK ad display/earned/native ad interruptions",
+    "Firebase project/console/network delivery",
+    "formal publisher identity/signing/support/privacy approval/visual rights",
+    "Android runtime/representative physical devices/actual screen readers and sound/profile performance/physical network isolation",
+    "formal channel install upgrade"
+  ],
+  "author_acceptance": "execution evidence only; independent architecture acceptance pending"
+}
