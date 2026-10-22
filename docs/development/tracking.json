@@ -7,8 +7,8 @@
   "branch": "codex/offline-foundation",
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "Flame full board FB01-FB08 + page transitions T01-T06",
-  "current_status": "full_board_dispatched_ui_in_progress",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:96",
+  "current_status": "full_board_in_progress_ui_launch_repair_assigned",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:103",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
   "delivery_path": "docs/development/deliveries/page-transitions.md",
@@ -30,9 +30,15 @@
     {
       "id": "FS-CI01",
       "severity": "P2",
-      "status": "diagnosis_assigned",
-      "description": "Exact sample push CI: expected two hint result events but observed one at b04_hint_events_test.dart:65. 181 passed/one failed; iOS build succeeded, Android build not reached. Fixed25ms wait is an unconfirmed timing hypothesis.",
+      "status": "local_independent_pass_pushed_remote_ci_pending",
+      "description": "Test-only synchronization repair independently182 passed + analyze on exact c529e8e+two files; pushed2b0d78d. Remote run39754368999 pending.",
       "delivery_path": "docs/development/deliveries/flame-sample-ci-repair.md"
+    },
+    {
+      "id": "T-R01",
+      "severity": "P2",
+      "status": "repair_assigned",
+      "description": "Native cold-launch white-to-blue discontinuity verified in both author recordings and native source; page-transitions-acceptance.md records evidence. UI owns repair, CLI coordinated."
     }
   ],
   "blockers": [
@@ -53,16 +59,15 @@
   "last_accepted_commit": "c529e8e2cac8afa8266cfd7a3a1b983946fcbc69",
   "last_accepted_push": "origin/codex/offline-foundation",
   "ci_followup": {
-    "commit": "c529e8e2cac8afa8266cfd7a3a1b983946fcbc69",
-    "status": "completed",
-    "conclusion": "failure",
+    "commit": "2b0d78d3ddb0448b59d77b3a19681f068649e3d9",
+    "status": "in_progress",
+    "conclusion": null,
     "run_ids": [
-      39743348698
+      39754368999
     ],
-    "url": "https://github.com/wangyule0379-max/Pourlune/actions/runs/39743348698",
-    "next_action": "Do not repoll terminal run. Original execution assigned focused b04_hint_events_test.dart:65 diagnosis/repair; independently verify repair then push and check new exact CI.",
-    "last_checked_at": "2026-10-22T08:19:39Z",
-    "evidence_path": "docs/development/review/flame-sample-evidence/remote-ci-final.json"
+    "url": "https://github.com/wangyule0379-max/Pourlune/actions/runs/39754368999",
+    "last_checked_at": "2026-10-22T09:24:44.168099+00:00",
+    "next_action": "Check exact repair push to terminal; no repeat old39743348698. Separate from unaccepted full-board and page transitions."
   },
   "deferred_minor_findings": [
     {
@@ -77,7 +82,7 @@
     "F01-F08": "Firebase registration/config implementation accepted; 24 Python/23 Flutter and both offline builds independently passed; real dev runtime inspected. Analytics/Crashlytics receipt and Apple registration NOT passed."
   },
   "external_dependencies_path": "docs/development/dependencies/user-handoff.md",
-  "next_action": "Original execution owns CLI for full-board work and focused CI repair diagnosis. UI continues installed frozen native evidence. Independently review ready deliveries; do not repeat failed terminal CI.",
+  "next_action": "Original continues full board. UI repairs T-R01 native startup source while original owns CLI; coordinate explicit window when ready. Review repaired launch and full-board deliveries; check39754368999 only.",
   "account_handoff": {
     "confirmed_at": "2026-10-22",
     "source": "explicit_user_message",
@@ -146,7 +151,7 @@
     "user_visual_approved_on": "2026-10-22"
   },
   "page_transitions": {
-    "status": "native_evidence_in_progress_frozen_build_cli_released",
+    "status": "independent_review_T_R01_repair_assigned",
     "thread_id": "01a16272-63c8-76d3-bcdb-e2b012feab05",
     "host_id": "local",
     "title": "Pourlune ｜ App UI",
@@ -154,9 +159,10 @@
     "delivery_path": "docs/development/deliveries/page-transitions.md",
     "acceptance_path": "docs/development/review/page-transitions-acceptance.md",
     "handoff_path": "docs/development/deliveries/ui-transition-handoff.md",
-    "wait_cursor": "13a2a871-8b00-43b7-9c13-558250128243:8",
+    "wait_cursor": "13a2a871-8b00-43b7-9c13-558250128243:11",
     "scope": "Official animations package across every existing page/transition edge and modal; shared files and FlutterCLI require explicit release from original execution chat",
-    "shared_release": "2026-10-22T15:27:10+08:00"
+    "shared_release": "2026-10-22T15:27:10+08:00",
+    "pending_repair": "T-R01 P2: iOS and Android native launch white background precedes blue Flutter startup; page routes independently17 tests+analyze and102 steps per platform passed. Native/main cold-launch repair assigned to UI; no implementation commit yet."
   },
   "flame_full_board": {
     "status": "in_progress_isolated_components",
@@ -169,9 +175,16 @@
     "acceptance_path": "docs/development/review/flame-full-board-acceptance.md",
     "scope": "FB01-FB08 production board integration, 4-7 bottles, capacity/liquid synchronization, behavior and native regression; no product-rule or physics-engine expansion",
     "shared_files": "Architecture handed board_page.dart and bottle.dart write ownership to original execution after explicit UI release and matching SHA256; game_screen/motion/startup/navigation/pubspec remain UI-owned. UI native verification uses frozen build/page-transitions-baseline/app.",
-    "cli_owner": "Original execution; explicit App UI release transferred by architecture 2026-10-22T08:19Z",
+    "cli_owner": "Original execution; architecture explicitly released after independent tests on2026-10-22T09:14Z; UI needs coordinated next build window.",
     "visual_gate": "satisfied; no repeated approval required",
-    "board_write_release": "2026-10-22; SHA256 board_page fc7a0250945e5d02a58357ef3b8baa1f0b7d9226d766068d7901905fbd8cb7ad; bottle 4c57b41d574651efd1f6e4bfac999bc5f81c7aa9f0b62031486bf9a136feb61f"
+    "board_write_release": "2026-10-22; SHA256 board_page fc7a0250945e5d02a58357ef3b8baa1f0b7d9226d766068d7901905fbd8cb7ad; bottle 4c57b41d574651efd1f6e4bfac999bc5f81c7aa9f0b62031486bf9a136feb61f",
+    "cli_schedule": "UI short repair window complete; original may resume necessary tests/builds. UI only installed frozen candidate evidence. No global device operations."
   },
-  "last_checked_at": "2026-10-22T08:19:39Z"
+  "last_checked_at": "2026-10-22T09:24:44.168099+00:00",
+  "test_sync_repair": {
+    "status": "accepted_pushed_ci_pending",
+    "commit": "2b0d78d3ddb0448b59d77b3a19681f068649e3d9",
+    "acceptance_path": "docs/development/review/flame-sample-ci-repair-acceptance.md",
+    "scope": "two tests only; independent182 tests/analyze passed"
+  }
 }
