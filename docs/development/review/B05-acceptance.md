@@ -82,3 +82,5 @@ H=本轮host全回归；C=本轮core；N=本轮原生五流程/大字号；L=本
 ## 提交与远端状态
 
 实现、交付、独立证据和交接清单已在 be25ca064ddf48f647e46af22c552d6821dc4f78 推送 origin/codex/offline-foundation。GitHub 对该精确提交返回 run39707677612（in_progress）和39707683317（queued）；此时未完成，不写CI通过。后续状态以tracking及独立CI记录为准。没有合并main或发布。
+
+2026-10-22 10:03（Asia/Taipei）独立核对：上述两次精确提交CI均已completed/success，证据见B05-evidence/remote-ci-final.json。B05远端检查关闭，不再轮询。账号沿用准备仍在原执行聊天进行，自动跟进保留至该交付独立审查完成；真实服务/真机/发布门槛仍未关闭。

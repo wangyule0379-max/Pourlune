@@ -7,8 +7,8 @@
   "branch": "codex/offline-foundation",
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "B05",
-  "current_status": "accepted_internal_pushed_pending_ci",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:58",
+  "current_status": "accepted_internal_ci_passed",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:60",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
   "delivery_path": "docs/development/deliveries/B05.md",
@@ -31,14 +31,16 @@
   "last_accepted_push": "origin/codex/offline-foundation",
   "ci_followup": {
     "commit": "be25ca064ddf48f647e46af22c552d6821dc4f78",
-    "status": "in_progress",
-    "conclusion": null,
+    "status": "completed",
+    "conclusion": "success",
     "run_ids": [
       39707683317,
       39707677612
     ],
     "url": "https://github.com/wangyule0379-max/Pourlune/actions/runs/39707683317",
-    "next_action": "Check both exact B05 commit runs to terminal outcome. Then pause automation until external handoff; never treat B04 success as B05 CI."
+    "next_action": "Both exact B05 commit runs succeeded; no further CI polling for these runs. Account-reuse preflight is still active, keep follow-up until independently reviewed.",
+    "last_checked_at": "2026-10-22T02:03:37.742Z",
+    "evidence_path": "docs/development/review/B05-evidence/remote-ci-final.json"
   },
   "deferred_minor_findings": [
     {
@@ -52,14 +54,14 @@
     "B05": "Eight internal tasks accepted in available environment; independent165 Flutter/30core, five native flows,12 SIGKILL and ordinary main restart; external services/devices/identity/support/rights not passed"
   },
   "external_dependencies_path": "docs/development/dependencies/user-handoff.md",
-  "next_action": "B05 accepted and pushed. Follow exact commit CI; fix actionable CI defect if any. Once terminal, pause idle external-dependency polling. User handoff consolidated.",
+  "next_action": "Review account-reuse-preflight when delivered. B05 CI is complete; do not repeat local suites or CI polls. Pause only after preflight reviewed and only external user dependencies remain.",
   "account_handoff": {
     "confirmed_at": "2026-10-22",
     "source": "explicit_user_message",
     "apple": "reuse FishPilot existing account",
     "google": "reuse FishPilot existing account",
     "firebase": "reuse FishPilot existing account; Pourlune project/app registrations not yet verified",
-    "status": "account_source_confirmed_configuration_preflight_pending",
+    "status": "configuration_preflight_in_progress",
     "no_inferred_reuse": [
       "FishPilot app identity",
       "FishPilot Firebase project",
