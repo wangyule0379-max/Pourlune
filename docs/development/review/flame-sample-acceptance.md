@@ -43,3 +43,7 @@ P3 / FS-M01：倒水尚在表现时，瓶下容量与语义先显示已提交最
 原执行方于 `2026-10-22T15:27:10+08:00` 明确 RELEASED。App UI 已实际接手 T01–T06 并解析 animations 3.0.0；两个短架构 CLI 窗口结束后均明确释放，记录在 `../deliveries/ui-transition-handoff.md`。App UI 使用独立模拟器/身份/库，不覆盖 Flame 或普通安装。其测试中的在制问题由其修复，未被本报告验收。
 
 普通 `b04_review_r2.sqlite` 只读 SHA256 仍为 `dc94bbfd1e8b10cda675f139a822c39e83dcc38bdf830c3a245d2221da9978c6`，未启动、重装、清理普通设备。后续提交只含 Flame 专属边界及独立验收，animations/M 工作区保持未验状态。
+
+## 提交与远端状态
+
+Flame 专属实现、交付及本报告已在 `c529e8e2cac8afa8266cfd7a3a1b983946fcbc69` 推送到 `origin/codex/offline-foundation`。冻结 Flame pubspec/lock 已按文件内容单独暂存，工作区 animations、M 与页面源码保留未提交。新 push CI `39743348698` 已确认指向该精确提交，初读为 in_progress，尚不宣称远端通过；后续由跟进记录终态。纯文档记录不要求重新执行代码CI。
