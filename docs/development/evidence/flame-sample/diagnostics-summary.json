@@ -1,0 +1,183 @@
+{
+  "scope": "debug simulator/emulator route diagnostics; PNG snapshots, native pointer scripting and command polling affect timing. No physical FPS, improvement or release performance pass.",
+  "platforms": {
+    "ios": {
+      "route_steps": 13,
+      "pid": 76270,
+      "timings_ms": {
+        "build_us": {
+          "n": 1523,
+          "p50": 5.467,
+          "p95": 16.821,
+          "p99": 23.217,
+          "max": 48.299
+        },
+        "raster_us": {
+          "n": 1523,
+          "p50": 0.762,
+          "p95": 1.325,
+          "p99": 2.103,
+          "max": 6.991
+        },
+        "total_us": {
+          "n": 1523,
+          "p50": 22.941,
+          "p95": 34.23,
+          "p99": 40.73,
+          "max": 75.509
+        }
+      },
+      "build_over_16_667ms": 78,
+      "raster_over_16_667ms": 0,
+      "dart_main_to_first_postframe_ms": {
+        "n": 3,
+        "p50": 261.246,
+        "p95": 309.953,
+        "p99": 309.953,
+        "max": 309.953
+      },
+      "dart_main_to_first_ready_bottle_frame_ms": {
+        "n": 3,
+        "p50": 967.346,
+        "p95": 1329.53,
+        "p99": 1329.53,
+        "max": 1329.53
+      },
+      "sampling_resolution_ms": 10,
+      "excludes_native_pre_Dart_launch": true,
+      "hot_entries": [
+        {
+          "target": "patch",
+          "from_pointer_up_to_first_ready_frame_us": 128346
+        },
+        {
+          "target": "bottles",
+          "from_pointer_up_to_first_ready_frame_us": 98579
+        }
+      ],
+      "route_rss_bytes": {
+        "min": 531087360,
+        "max": 646709248
+      },
+      "idle": {
+        "start_utc": "2026-10-22T07:13:40.756806Z",
+        "end_utc": "2026-10-22T07:13:43.007127Z",
+        "game_updates_delta": 0,
+        "game_renders_delta": 0,
+        "owned_images": 2,
+        "paused": true,
+        "framework_timing_samples": 0,
+        "scope": "Flame game counters only; nonzero framework callbacks do not establish all-app idle power or FPS"
+      },
+      "restore": {
+        "ok": true,
+        "same_install": true,
+        "before_pid": 78090,
+        "after_pid": 78153,
+        "host_kill_unix_ns": 1792653144739207000,
+        "kill": "SIGKILL",
+        "before_visual_elapsed_ms": 301.933,
+        "exact_fields_compared": [
+          "instance",
+          "saved",
+          "settings",
+          "first_clears",
+          "receipts",
+          "pieces",
+          "revealed"
+        ],
+        "restored_visual": "complete saved state, no resumed half-pour",
+        "reinstall_between": false
+      }
+    },
+    "android": {
+      "route_steps": 13,
+      "pid": 12866,
+      "timings_ms": {
+        "build_us": {
+          "n": 1609,
+          "p50": 7.479,
+          "p95": 29.834,
+          "p99": 61.074,
+          "max": 184.199
+        },
+        "raster_us": {
+          "n": 1609,
+          "p50": 11.741,
+          "p95": 20.548,
+          "p99": 33.154,
+          "max": 149.445
+        },
+        "total_us": {
+          "n": 1609,
+          "p50": 21.792,
+          "p95": 43.58,
+          "p99": 91.327,
+          "max": 346.0
+        }
+      },
+      "build_over_16_667ms": 319,
+      "raster_over_16_667ms": 311,
+      "dart_main_to_first_postframe_ms": {
+        "n": 3,
+        "p50": 511.341,
+        "p95": 597.751,
+        "p99": 597.751,
+        "max": 597.751
+      },
+      "dart_main_to_first_ready_bottle_frame_ms": {
+        "n": 3,
+        "p50": 1888.722,
+        "p95": 2105.536,
+        "p99": 2105.536,
+        "max": 2105.536
+      },
+      "sampling_resolution_ms": 10,
+      "excludes_native_pre_Dart_launch": true,
+      "hot_entries": [
+        {
+          "target": "patch",
+          "from_pointer_up_to_first_ready_frame_us": 224593
+        },
+        {
+          "target": "bottles",
+          "from_pointer_up_to_first_ready_frame_us": 131285
+        }
+      ],
+      "route_rss_bytes": {
+        "min": 442015744,
+        "max": 479051776
+      },
+      "idle": {
+        "start_utc": "2026-10-22T07:11:23.303607Z",
+        "end_utc": "2026-10-22T07:11:25.501995Z",
+        "game_updates_delta": 0,
+        "game_renders_delta": 0,
+        "owned_images": 2,
+        "paused": true,
+        "framework_timing_samples": 133,
+        "scope": "Flame game counters only; nonzero framework callbacks do not establish all-app idle power or FPS"
+      },
+      "restore": {
+        "ok": true,
+        "same_install": true,
+        "before_pid": 21840,
+        "after_pid": 22064,
+        "host_kill_unix_ns": 1792653049576848000,
+        "kill": "am force-stop; pid absence checked",
+        "before_visual_elapsed_ms": 316.666,
+        "exact_fields_compared": [
+          "instance",
+          "saved",
+          "settings",
+          "first_clears",
+          "receipts",
+          "pieces",
+          "revealed"
+        ],
+        "restored_visual": "complete saved state, no resumed half-pour",
+        "reinstall_between": false
+      }
+    }
+  }
+}

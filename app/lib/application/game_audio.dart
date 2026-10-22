@@ -49,6 +49,16 @@ class GameAudio {
     });
   }
 
+  /// Ends a finite visual cue without stopping the background music.
+  Future<void> finishEffect() {
+    if (_disposed) return _pending;
+    return _enqueue(() async {
+      if (!_effectsActive) return;
+      _effectsActive = false;
+      await _transport.stopEffects();
+    });
+  }
+
   Future<void> stop() {
     _musicAllowed = _soundAllowed = false;
     _soundRevision++;

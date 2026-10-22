@@ -120,3 +120,23 @@ B05 does not assign a production identity, increment the store version, or enabl
 Native B05 runners use a separate `dev.pourlune.b05Validation` identity through an external `XCODE_XCCONFIG_FILE`, never overwrite the ordinary review app, and only clear `b05_*` QA databases. Setup, standalone same-install SIGKILL/launch command and evidence copying: `../tools/validation/README.md`. E2E command from app/: `XCODE_XCCONFIG_FILE=/tmp/pourlune-b05.xcconfig FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter test integration_test/b05_candidate_test.dart -d <simulator-id>`. Formal bundled content, seeded progress and controlled advertising inputs are labeled in every report. The main.dart default target does not import either B05 test entrypoint.
 
 B05 author evidence/AC matrix/release and device handoff live under `../docs/development/evidence/B05/` and `../docs/development/deliveries/B05.md`. An execution report is not independent acceptance, actual ad display/earned/Firebase verification, or permission to publish. CI remains the existing fixed-toolchain test/debug-build workflow; B05 candidate compilation and native evidence are local runs, with remote statuses reported separately.
+
+## Flame two-bottle and patch sample (debug only)
+
+The local sample uses exact `flame: 1.38.2` (Flutter >=3.41, Dart >=3.11; this project stays on Flutter3.47.2/Dart3.13.2). It is a partial rendering experiment, not a complete-board migration. `main.dart` does not import it. No Forge2D, physics service, new audio framework, SDK configuration, or new artwork is added.
+
+From app/, on the dedicated QA device:
+
+```sh
+FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter run -t lib/development/flame_sample_main.dart -d <qa-device> --dart-define=POURLUNE_DATABASE=flame_sample.sqlite --dart-define=POURLUNE_AD_MODE=disabled
+```
+
+The guard requires debug and the exact named database. The two stores are `flame_sample.sqlite` (bottles) and `flame_patch.sqlite` (reward). Keep them separate from ordinary/Firebase/M/B05 databases. Existing sample data restores on startup; only explicit QA reset buttons replace or reset their own state.
+
+The two visible bottles are core indices0/2 from a legal, versioned four-bottle engineering fixture. The other color and empty buffer remain in the authoritative board. Versions10001–10004 are QA definitions for 1–4 units, replay instances cannot grant first-clear rewards. Direction changes the projection only. Reset/Replay use the existing controller and SQLite; tapping the selected bottle cancels selection. The rejection probe makes an always-invalid same-index request; ordinary same-bottle taps still cancel selection.
+
+Patch placement uses actual bundled main1–4: three labeled QA settlements, then one real legal final move of a prepared main4. Only a committed receipt can unlock placement. Reveal acknowledgement is also saved before the visual flight; animation callbacks do not write rewards or submit moves. Explicit Replay visual changes no progress; re-entry/cold restore shows the saved placement without replay. The sample-wide settings are owned only by the bottles store; both panels receive reduced motion through MediaQuery (including the OS preference), so a busy patch write cannot create a second conflicting preference. Pending placement reservations are invalidated on cancellation/background; a later save completion restores the committed piece without starting an old flight. Unrevealed or failed-save pieces stay on their source even in reduced mode. Tapping empty bottle-canvas space cancels selection. Source image, world-horizontal liquid clipping, the transformed spout, finite stream and curves are custom sample code; Flame supplies the loop/effect lifecycle, not a fluid simulation.
+
+`integration_test/flame_sample_app.dart` is a separate standalone instrumentation entry with real Flutter pointer gestures, PNG/frame timing and file commands. It does not represent a passing DDS integration-test run. Root helper `tools/validation/flame_sample.py` is restricted to iOS `9B172C50-E5CB-4F3F-8F16-0A3DB04F495D` and Android `emulator-5584`; actions `state`, `route`, `capture`, `prepare-restore`, `startups`. Its command files stay inside the QA sandbox. Do not point it at an ordinary installation. Same-install termination/relaunch proves a different property from installing a new binary.
+
+Independent acceptance and the user's approval of the sample's appearance are required before extending to the complete board. M01–M08 remains a separate, unfinished checkpoint. Evidence and actual run results belong in `../docs/development/deliveries/flame-sample.md`; source existence is not a performance, native-audio, physical-haptics or release conclusion.

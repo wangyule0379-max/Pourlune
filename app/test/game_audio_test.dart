@@ -178,4 +178,19 @@ void main() {
     expect(sink.events.last, 'dispose');
     expect(sink.events.where((e) => e == 'dispose'), hasLength(1));
   });
+  test(
+    'ending a visual cue stops its voice and preserves music and later cues',
+    () async {
+      final sink = AudioSink();
+      final audio = GameAudio(transport: sink);
+      await audio.update(settings: enabled, foreground: true, paused: false);
+      await audio.play(GameSound.pour);
+      await audio.finishEffect();
+      await audio.finishEffect();
+      expect(sink.events, ['music', 'pour', 'stop effects']);
+      await audio.play(GameSound.win);
+      expect(sink.events.last, 'win');
+      await audio.dispose();
+    },
+  );
 }
