@@ -8,7 +8,7 @@
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "Beta readiness BR01: engineering and submission preparation",
   "current_status": "beta_readiness_br01_assigned",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:127",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:130",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
   "delivery_path": "docs/development/deliveries/beta-readiness-BR01.md",
@@ -39,6 +39,13 @@
       "severity": "P2",
       "status": "closed",
       "description": "Independent normal-main dual-platform cold-start repair accepted in 3cc3501; exact CI39764795397 success already recorded."
+    },
+    {
+      "id": "MS-R01",
+      "severity": "P2",
+      "status": "open",
+      "description": "Frozen MS02 keyboard suite 0/4: Flame art/action actual ready boundary not reached. Root cause unproven; exact RED and independent report supplied to original developer; do not weaken assertions or extend sleep blindly.",
+      "evidence_path": "docs/development/review/motion-polish-supplement-evidence/keyboard-independent.log"
     }
   ],
   "blockers": [
@@ -87,7 +94,7 @@
     "FB01-FB08": "Available-platform production board/capacity/motion/navigation/save recovery accepted; physical performance, spoken accessibility and external services excluded."
   },
   "external_dependencies_path": "docs/development/dependencies/user-handoff.md",
-  "next_action": "Review original developer MS supplement and BR01 delivery when available; independently accept and continue BR02/BR03. Only concrete required user actions are escalated together; preserve F9. No terminal CI repoll.",
+  "next_action": "Review MS-R01 root-cause repair and BR01 delivery when ready; keep BR01 independent tasks moving. Do not accept MS02 until independently reproduced. F9 protected; no terminal CI repoll.",
   "account_handoff": {
     "confirmed_at": "2026-10-22",
     "source": "explicit_user_message",
@@ -134,13 +141,13 @@
     "acceptance_path": "docs/development/review/firebase-receipt-diagnosis-acceptance.md"
   },
   "motion_polish": {
-    "status": "mapping_reviewed_targeted_supplement_assigned",
+    "status": "supplement_independent_review_ms02_repair_required",
     "authorized_on": "2026-10-22",
     "plan": "docs/pmpowers/plans/2026-10-22-motion-polish-execution.md",
     "delivery_path": "docs/development/deliveries/motion-polish.md",
     "acceptance_path": "docs/development/review/motion-polish-acceptance.md",
     "scope": "Approved existing App loading/transitions/game feel; eight tasks; preserve product logic and original UI",
-    "latest_feedback": "User now accepts effects. Complete bounded MS evidence at a safe checkpoint and fold into beta readiness; do not let unavailable audio tools or additional cosmetic polish block independent BR01 work. No blanket M acceptance.",
+    "latest_feedback": "Independent MS01 same-install native first-gesture/persistence passed on both platforms; exact frozen MS02 keyboard tests failed 0/4 at settleFlameBoard line150/helper46. MS-R01/P2 assigned root-cause repair; audio observation remains unverified. BR01 independent work continues.",
     "coverage_audit": "docs/development/review/motion-polish-coverage-audit.md",
     "supplement_plan": "docs/pmpowers/plans/2026-10-22-motion-polish-supplement.md",
     "supplement_delivery": "docs/development/deliveries/motion-polish-supplement.md"
@@ -191,7 +198,7 @@
     "acceptance_path": "docs/development/review/flame-full-board-acceptance.md",
     "scope": "FB01-FB08 production board integration, 4-7 bottles, capacity/liquid synchronization, behavior and native regression; no product-rule or physics-engine expansion",
     "shared_files": "Architecture handed board_page.dart and bottle.dart write ownership to original execution after explicit UI release and matching SHA256; game_screen/motion/startup/navigation/pubspec remain UI-owned. UI native verification uses frozen build/page-transitions-baseline/app.",
-    "cli_owner": "Original developer: bounded MS01-MS03 supplement window explicitly assigned; serial Flutter/native builds",
+    "cli_owner": "Original developer BR01: architecture MS review completed and explicitly released CLI/devices; no in-flight review commands",
     "visual_gate": "satisfied; no repeated approval required",
     "board_write_release": "2026-10-22; SHA256 board_page fc7a0250945e5d02a58357ef3b8baa1f0b7d9226d766068d7901905fbd8cb7ad; bottle 4c57b41d574651efd1f6e4bfac999bc5f81c7aa9f0b62031486bf9a136feb61f",
     "cli_schedule": "UI installed-candidate evidence only; original runs necessary FB checks/builds. Narrow single page_transitions_test instance replacement case delegated to original for FB compatibility; all assertions retained, frozen UI copies unchanged.",
@@ -200,7 +207,7 @@
     "commit": "3134637f91c0cb59c26ba6905b557f48f6179e5f",
     "user_preview_protection": "F9 remains user-owned; do not relaunch/install/stop/reset/send input until user explicitly releases it."
   },
-  "last_checked_at": "2026-10-22T14:27:23.937077+00:00",
+  "last_checked_at": "2026-10-22T14:51:05.432996+00:00",
   "test_sync_repair": {
     "status": "accepted_pushed_remote_ci_success",
     "commit": "2b0d78d3ddb0448b59d77b3a19681f068649e3d9",
