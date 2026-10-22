@@ -7,8 +7,8 @@
   "branch": "codex/offline-foundation",
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "F01-F08",
-  "current_status": "firebase_implementation_accepted_service_receipt_pending",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:70",
+  "current_status": "implementation_pushed_receipt_diagnosis_in_progress",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:71",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
   "delivery_path": "docs/development/deliveries/firebase-integration.md",
@@ -36,20 +36,17 @@
   "user_authorization": "Start approved first-release development in the existing execution chat, assign substantial batches, independently accept and continue without repeated reminders. No production release or account/legal authorization implied.",
   "review_round": 1,
   "current_batch_plan": "docs/pmpowers/plans/2026-10-22-firebase-registration-and-integration.md",
-  "last_accepted_commit": "be25ca064ddf48f647e46af22c552d6821dc4f78",
+  "last_accepted_commit": "44353c95599f4fb236bda7002d9ca65c129c42e0",
   "last_accepted_push": "origin/codex/offline-foundation",
   "ci_followup": {
-    "commit": "be25ca064ddf48f647e46af22c552d6821dc4f78",
-    "status": "completed",
-    "conclusion": "success",
+    "commit": "44353c95599f4fb236bda7002d9ca65c129c42e0",
+    "status": "in_progress",
+    "conclusion": null,
     "run_ids": [
-      39707683317,
-      39707677612
+      39720915730
     ],
-    "url": "https://github.com/wangyule0379-max/Pourlune/actions/runs/39707683317",
-    "next_action": "B05 exact commit runs succeeded; do not poll again. New implementation CI only after acceptance and push.",
-    "last_checked_at": "2026-10-22T02:03:37.742Z",
-    "evidence_path": "docs/development/review/B05-evidence/remote-ci-final.json"
+    "url": "https://github.com/wangyule0379-max/Pourlune/actions/runs/39720915730",
+    "next_action": "Check only this exact Firebase implementation run; B05 CI already completed."
   },
   "deferred_minor_findings": [
     {
@@ -64,13 +61,13 @@
     "F01-F08": "Firebase registration/config implementation accepted; 24 Python/23 Flutter and both offline builds independently passed; real dev runtime inspected. Analytics/Crashlytics receipt and Apple registration NOT passed."
   },
   "external_dependencies_path": "docs/development/dependencies/user-handoff.md",
-  "next_action": "Push accepted implementation, verify exact new CI, perform bounded service-receipt diagnosis in existing execution chat; no duplicate B05 polls.",
+  "next_action": "Follow exact implementation CI and bounded receipt diagnosis in existing execution chat. Apple identity registration awaits existing account login. Runtime build paths now contain architecture offline none artifacts, installed QA apps remain dev.",
   "account_handoff": {
     "confirmed_at": "2026-10-22",
     "source": "explicit_user_message",
     "apple": "reuse FishPilot existing account",
     "google": "reuse FishPilot existing account",
-    "firebase": "reuse FishPilot existing account; Pourlune project/app registrations not yet verified",
+    "firebase": "reuse FishPilot existing account; separate Pourlune dev/prod projects and four apps independently verified",
     "status": "firebase_registered_configuration_accepted_receipt_pending",
     "no_inferred_reuse": [
       "FishPilot app identity",
@@ -94,7 +91,7 @@
       "separate_projects": true,
       "preferred_dev_project_id": "pourlune-dev",
       "preferred_prod_project_id": "pourlune-prod",
-      "project_id_availability": "unverified",
+      "project_id_availability": "registered_and_independently_verified",
       "registration_status": "firebase_four_apps_independently_verified",
       "development_ios_id": "dev.pourlune.pourluneDev",
       "development_android_id": "dev.pourlune.pourlune_dev",
@@ -102,5 +99,11 @@
       "production_android_id": "com.pourlune.app",
       "scope": "register and integrate using existing accounts; no billing, legal acceptance or production release"
     }
+  },
+  "receipt_diagnosis": {
+    "status": "in_progress",
+    "delivery_path": "docs/development/deliveries/firebase-receipt-diagnosis.md",
+    "evidence_path": "docs/development/evidence/firebase-receipt-diagnosis/",
+    "scope": "Bounded per-platform receipt diagnosis; no TLS/proxy changes, production actions or repeated failed polling"
   }
 }
