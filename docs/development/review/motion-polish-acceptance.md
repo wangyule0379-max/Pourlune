@@ -49,3 +49,5 @@ MS-R01/P2关闭，M03键盘一次激活/禁用/持久化去重按上述范围通
 ## 远端提交记录
 
 已验MS专属范围已提交并推送 `78feb805d540a28addf12e457b8d34e48a720482`。精确SHA的GitHub Actions查询暂未返回run，记录于 `motion-polish-supplement-evidence/remote-ci-pending.json`；远端CI尚未确认通过，下次按该SHA继续发现并核对。BR01实现未夹带，继续由原开发推进。
+
+后续远端核验：精确实现提交 `78feb805d540a28addf12e457b8d34e48a720482` 的 CI `39801229183` 已于2026-10-22 15:14:36 UTC终态成功。架构通过GitHub连接器独立核对 `tests-and-android` 与 `ios-build` 均success，证据 `motion-polish-supplement-evidence/remote-ci-final.json`。此前pending记录保留为历史，不再轮询此run；BR01仍在制作，不据此宣称封测候选已就绪。
