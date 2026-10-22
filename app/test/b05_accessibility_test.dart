@@ -1,5 +1,6 @@
 // B05 real SQLite + widget interaction; no VoiceOver/physical-device claim.
 import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -145,10 +146,42 @@ void main() {
           reason: 'Confirmation button must not split a word at320x568/2x',
         );
       }
-      await tap(t, confirm);
-      await t.runAsync(
-        () => Future<void>.delayed(const Duration(milliseconds: 40)),
-      );
+      // Confirmation can close its route before the real SQLite restoration
+      // finishes. Exercise that boundary without assuming a wall-clock delay.
+      late Completer<void> entered, release;
+      late Future<void> held;
+      await t.runAsync(() async {
+        entered = Completer<void>();
+        release = Completer<void>();
+        held = store.db.transaction((_) async {
+          entered.complete();
+          await release.future;
+        });
+        await entered.future.timeout(const Duration(seconds: 3));
+      });
+      try {
+        await tap(t, confirm);
+        expect(c.current!.id, replaced);
+        expect(c.busy, isTrue);
+      } finally {
+        release.complete();
+        await t.runAsync(() => held);
+      }
+      final watch = Stopwatch()..start();
+      while (c.current!.id != origin ||
+          !c.current!.extraBottleGranted ||
+          c.busy ||
+          c.phase != SavePhase.clean) {
+        if (watch.elapsed > const Duration(seconds: 3)) {
+          fail(
+            'Timed out waiting for the confirmed original instance restoration',
+          );
+        }
+        await t.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 5)),
+        );
+        await t.pump();
+      }
       await t.pumpAndSettle();
       expect(c.current!.id, origin);
       expect(c.current!.extraBottleGranted, isTrue);
