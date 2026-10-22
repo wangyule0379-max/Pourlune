@@ -177,3 +177,17 @@ iOS确有轻微可见色阶，已记Minor观察及元数据：源码标称sRGB�
 ### Full-board CLI HELD after architecture T-R01 release
 
 Read explicit architecture release (19 tests/analyze passed, no commands in flight). Original developer holds CLI again for final host checks and serial before/after native QA builds. No UI/native/source ownership expansion; no other device operations.
+
+### FB05 控制器表现登记范围补充（有实际 RED，不改产品行为）
+
+全棋盘原生取证连续 QA 实例替换暴露 `_motionPresenter` 布尔竞态：Flutter 同页新实例先 mount/attach，旧页随后 dispose/detach，把新页登记覆盖为 false，后续合法动作不再产生 PourMotion。已新增真实 Flutter＋SQLite 回归（只有一个最终 BoardPage/GameWidget），新实例倒水已落盘但 motion=null 有效 RED：evidence/flame-full-board/presenter-owner-red.log。此边界也适用于产品中的活动实例替换，不能用测试手动结束动画掩盖。
+
+按计划允许的必要控制器修复，本方仅将 application/game_controller.dart 的表现 owner 布尔改为引用计数，最终 owner 离开才取消；未改持久化、奖励、业务锁、导航实现或 SDK。现跑聚焦 GREEN 与新增后全套，独立验收仍由架构执行。before 冻结控制器保持原样；QA前缀准备则改为先真实 Home 并等待旧 BoardView 移除后再载入，避免把工程数据注入的瞬时旧界面当正常玩家路线。共享 game_screen/motion/启动/依赖边界不变，CLI仍由本方持有。
+
+### 全棋盘专用模拟器异常关机记录（未作全局设备操作）
+
+after iOS构建48.4秒成功，但安装时 F9C16DE7 返回 Shutdown/code405。本方未发 shutdown/kill emulator；仅恢复自己的F9设备，并启用有时限、任务专属的防休眠进程以继续录像。原因未确认，不能记为App崩溃。请继续避免全局simctl shutdown、qemu/emulator kill或ADB server清理；F9与5588仍在本方本批取证。Root216项全套及30核心均通过，after Android当前串行构建中，原生最终路线仍未宣称通过。
+
+Full-board final-review P2 repair coordination: loading/failed art now correctly disables transparent board input. Full219 first run exposed8 pre-art synthetic taps in ui_test.dart, motion_arrival_test.dart, replay_navigation_test.dart, offline_ui_test.dart (no production rule failure). These four tests will use bounded actual decoded-art readiness before native bottle taps; arrival still must be animating when first ready input is accepted. No shared production UI, page_transitions_test scope or timing delay is widened. Existing exact readiness helper extended; full suite rerun. CLI remains HELD by full-board.
+
+2026-10-22T13:13:43.253350+00:00 — CLI RELEASED by full-board. FB01–FB08实施/自测交付完成；最终源码115哈希与候选/录像校验通过，应用219、核心30、双端route-fixed各43步＋真实OS后台＋同安装早期流水强退/Undo均通过。一次最终只读审查3个P2已在一次修复pass验证；Minor并行解码/静态刻度缓存保留。最终报告 docs/development/deliveries/flame-full-board.md 可开始架构独立验收；整体视觉与FS-M01关闭仍由验收决定。当前独立F9/5588均装修复版7瓶；仅停本任务caffeinate，不关闭设备。未暂存、提交、推送，未改tracking/计划/独立review及共享production UI。

@@ -8,7 +8,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pourlune_dev/application/game_controller.dart';
 import 'package:pourlune_dev/data/game_store.dart';
 import 'package:pourlune_dev/data/player_settings.dart';
-import 'package:pourlune_dev/presentation/bottle.dart';
+
+import 'dart:ui' as ui;
+
+import 'package:flame/game.dart';
+import 'package:pourlune_dev/presentation/flame_board/game.dart';
+
+import 'support/flame_board_paint.dart';
+
 import 'package:pourlune_dev/l10n/app_localizations.dart';
 import 'package:pourlune_dev/presentation/board_page.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -17,6 +24,22 @@ import 'store_test.dart' show fixture;
 
 void main() {
   sqfliteFfiInit();
+  FlameBoardGame boardGame(WidgetTester t) => t
+      .widget<GameWidget<FlameBoardGame>>(
+        find.byType(GameWidget<FlameBoardGame>),
+      )
+      .game!;
+  Future<void> artReady(WidgetTester t) async {
+    for (var n = 0; n < 300 && boardGame(t).art == null; n++) {
+      await t.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 5)),
+      );
+      await t.pump();
+    }
+    expect(boardGame(t).art, isNotNull);
+    await t.pump();
+  }
+
   Future<void> controllerCase(
     Future<void> Function(GameController, GameStore) check,
   ) async {
@@ -228,11 +251,18 @@ void main() {
         ),
       ),
     );
+    await artReady(t);
     await t.pump(const Duration(milliseconds: 350));
-    final painted = t
-        .widgetList<BottleButton>(find.byType(BottleButton))
-        .map((b) => b.index)
-        .toList();
+    final game = boardGame(t), probe = PaintOrderProbe(boardGame(t).art!);
+    final recorder = ui.PictureRecorder();
+    probe.paint(
+      Canvas(recorder),
+      game.frame,
+      const PlayerSettings(),
+      press: List.filled(4, 0),
+    );
+    recorder.endRecording().dispose();
+    final painted = probe.order;
     expect(painted.toSet(), {0, 1, 2, 3});
     expect(
       painted.last,
@@ -269,6 +299,7 @@ void main() {
           ),
         ),
       );
+      await artReady(t);
       await t.runAsync(() => c.pour(0, 2));
       expect(c.current!.moveCount, 1);
       expect(c.phase, SavePhase.clean);
@@ -284,18 +315,28 @@ void main() {
       await t.pump();
       await t.pump(const Duration(milliseconds: 450));
       expect(c.busy, isTrue);
-      final bottles =
-          t.widgetList<BottleButton>(find.byType(BottleButton)).toList()
-            ..sort((a, b) => a.index.compareTo(b.index));
-      expect(bottles[0].angle.abs(), greaterThan(.5));
-      expect(bottles[0].semanticLabel, contains('2 of 4'));
-      expect(bottles[2].semanticLabel, contains('2 of 4'));
-      final visualVolume = bottles
-          .expand((b) => b.visualLiquid!)
-          .fold(0.0, (sum, b) => sum + b.units);
+      final frame = boardGame(t).frame;
+      expect(frame.poses[0].angle.abs(), greaterThan(.5));
+      final semantics = t.ensureSemantics();
+      for (final index in [0, 2]) {
+        expect(
+          t
+              .getSemantics(find.byKey(Key('bottle-$index')))
+              .getSemanticsData()
+              .label,
+          contains('${frame.counts[index]} of 4'),
+        );
+      }
+      semantics.dispose();
+      final visualVolume =
+          frame.bands.expand((b) => b).fold(0.0, (sum, b) => sum + b.units) +
+          (frame.pour?.inStream ?? 0);
       expect(
         visualVolume,
-        c.current!.board.fold(0, (sum, b) => sum + b.length).toDouble(),
+        closeTo(
+          c.current!.board.fold(0, (sum, b) => sum + b.length).toDouble(),
+          1e-8,
+        ),
       );
       await t.pumpAndSettle();
       expect(c.busy, isFalse);
@@ -351,15 +392,20 @@ void main() {
           ),
         ),
       );
+      await artReady(t);
       final before = t.getTopLeft(find.byKey(const Key('bottle-0')));
       await t.runAsync(() => c.pour(0, 2));
       expect(c.motion!.duration, const Duration(milliseconds: 180));
       await t.pump();
       await t.pump(const Duration(milliseconds: 90));
-      final bottle = t.widget<BottleButton>(find.byKey(const Key('bottle-0')));
-      expect(bottle.angle, 0);
-      expect(bottle.lift, 0);
-      expect(bottle.selected, isTrue);
+      final frame = boardGame(t).frame;
+      expect(frame.pour, isNull);
+      expect(
+        frame.poses.every((pose) => pose.angle == 0 && pose.scale == 1),
+        isTrue,
+      );
+      expect(frame.active?.from, 0);
+      expect(frame.poses[0].mouth, frame.layout.mouths[0]);
       expect(t.getTopLeft(find.byKey(const Key('bottle-0'))), before);
       expect(c.busy, isTrue);
       await t.pumpAndSettle();

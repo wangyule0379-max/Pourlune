@@ -1,3 +1,5 @@
+import 'support/flame_board_ready.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pourlune_core/pourlune_core.dart';
@@ -8,7 +10,7 @@ import 'store_test.dart' show fixture;
 
 void main() {
   testWidgets(
-    'board arrival animates but immediate first input remains enabled',
+    'real art readiness enables the first input while board arrival is still animating',
     (t) async {
       var taps = 0;
       final state = GameInstance.create(id: 'arrival', puzzle: fixture());
@@ -22,6 +24,8 @@ void main() {
         ),
       );
       final bottle = find.byKey(const Key('bottle-0'));
+      expect(t.widget<OutlinedButton>(bottle).onPressed, isNull);
+      await waitForFlameArt(t);
       final fades = find.ancestor(of: bottle, matching: find.byType(Opacity));
       expect(fades, findsOneWidget);
       expect(t.widget<Opacity>(fades).opacity, lessThan(1));

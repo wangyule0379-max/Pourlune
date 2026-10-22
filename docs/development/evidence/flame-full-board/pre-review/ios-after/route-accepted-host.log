@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/flame_full_board.py", line 297, in main
+    response = read()
+               ^^^^^^
+  File "/Volumes/data/App Development/Pourlune/tools/validation/flame_full_board.py", line 276, in read
+    return json.loads((base / (args.id + '.json')).read_text())
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1027, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/wangyule/Library/Developer/CoreSimulator/Devices/F9C16DE7-01D8-4740-B796-A3A2DB8C3265/data/Containers/Data/Application/00D13C70-A270-45B9-BD55-CFCB69F9AFDB/Documents/flame-full-board/route-accepted.json'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/flame_full_board.py", line 327, in <module>
+    main()
+  File "/Volumes/data/App Development/Pourlune/tools/validation/flame_full_board.py", line 301, in main
+    raise TimeoutError(args.id)
+TimeoutError: route-accepted

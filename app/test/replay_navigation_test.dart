@@ -1,3 +1,5 @@
+import 'support/flame_board_ready.dart';
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -31,6 +33,7 @@ void main() {
         ))!;
         final c = GameController(store, library: testLibrary());
         Future<void> tap(String key) async {
+          if (key.startsWith('bottle-')) await waitForFlameArt(t);
           final f = find.byKey(Key(key));
           await t.ensureVisible(f);
           await t.tap(f);

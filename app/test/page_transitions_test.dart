@@ -11,6 +11,7 @@ import 'package:pourlune_dev/presentation/pourlune_app.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'offline_controller_test.dart' show testLibrary;
+import 'support/flame_board_ready.dart';
 
 void main() {
   sqfliteFfiInit();
@@ -73,10 +74,12 @@ void main() {
     (t) => appCase(t, (c) async {
       await t.runAsync(() => c.startLevel(1));
       await t.pumpAndSettle();
+      await settleFlameBoard(t, c);
       Object key() => t.widget<PageMotion>(find.byType(PageMotion)).page;
       final first = key();
       await t.runAsync(() => c.pour(0, 2));
       await t.pumpAndSettle();
+      await settleFlameBoard(t, c);
       expect(key(), first);
       await t.runAsync(() => c.start(c.library.main[1]!, replace: true));
       await t.pump();
@@ -84,6 +87,7 @@ void main() {
       expect(find.byKey(const Key('page-outgoing')), findsNothing);
       expect(find.byType(SharedAxisTransition), findsWidgets);
       await t.pumpAndSettle();
+      await settleFlameBoard(t, c);
       expect(find.byKey(const Key('bottle-0')).hitTestable(), findsOneWidget);
     }),
   );

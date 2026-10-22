@@ -1,3 +1,5 @@
+import 'support/flame_board_ready.dart';
+
 import 'dart:io';
 
 import 'package:pourlune_core/pourlune_core.dart';
@@ -30,6 +32,7 @@ void main() {
       await t.runAsync(c.initialize);
       await t.pumpWidget(PourluneApp(controller: c));
       Future<void> tap(String key) async {
+        if (key.contains('bottle-')) await waitForFlameArt(t);
         final f = find.byKey(Key(key));
         await t.ensureVisible(f);
         await t.tap(f);
@@ -128,6 +131,7 @@ void main() {
       await c.navigate(GamePage.daily);
       await t.pumpWidget(PourluneApp(controller: c));
       Future<void> tap(String key) async {
+        if (key.contains('bottle-')) await waitForFlameArt(t);
         final f = find.byKey(Key(key));
         await t.ensureVisible(f);
         await t.tap(f);
@@ -293,6 +297,7 @@ void main() {
       });
       await t.pumpWidget(PourluneApp(controller: c));
       Future<void> tap(String key) async {
+        if (key.contains('bottle-')) await waitForFlameArt(t);
         final f = find.byKey(Key(key));
         await t.ensureVisible(f);
         await t.tap(f);

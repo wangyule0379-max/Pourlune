@@ -87,15 +87,17 @@ class GameController extends ChangeNotifier {
   final void Function(GameFeedback)? onFeedback;
   PourMotion? motion;
   int _motionToken = 0;
-  bool _motionPresenter = false;
+  int _motionPresenters = 0;
   ({String instanceId, int revision})? _pendingCompletionFeedback;
   int? rejectedBottle;
   int rejectionRevision = 0;
 
-  void attachMotionPresenter() => _motionPresenter = true;
+  void attachMotionPresenter() => _motionPresenters++;
   void detachMotionPresenter() {
-    _motionPresenter = false;
-    _finishMotion();
+    // Flutter may mount the incoming page before disposing the outgoing one.
+    // Only removal of the final owner can cancel the current presentation.
+    if (_motionPresenters > 0) _motionPresenters--;
+    if (_motionPresenters == 0) _finishMotion();
   }
 
   /// Token check prevents a late frame from clearing a newer presentation.
@@ -596,7 +598,7 @@ class GameController extends ChangeNotifier {
     rejection = result.rejection;
     if (result.changed) {
       services?.recordLegalMove();
-      if (_motionPresenter && _foreground && page == GamePage.board) {
+      if (_motionPresenters > 0 && _foreground && page == GamePage.board) {
         motion = PourMotion(
           token: ++_motionToken,
           from: from,

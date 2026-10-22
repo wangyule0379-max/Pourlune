@@ -4,11 +4,14 @@ import 'dart:ui' as ui;
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show listEquals;
+import 'package:pourlune_core/pourlune_core.dart' show Board;
 import 'package:flutter/services.dart';
 
 import '../../application/game_controller.dart';
 import '../../presentation/bottle.dart';
 import '../../presentation/scene_art.dart';
+import '../../presentation/flame_board/frame.dart' show presentedContents;
 import 'geometry.dart';
 
 class _ValueEffect extends Effect {
@@ -80,11 +83,15 @@ abstract class SampleGame extends FlameGame {
 }
 
 class PourSampleGame extends SampleGame {
-  PourSampleGame(this.controller, {this.onFlowStart, this.onFlowEnd}) {
+  PourSampleGame(this.controller, {this.onFlowStart, this.onFlowEnd})
+    : capacityView = ValueNotifier<Board>(
+        controller.current?.board ?? const [],
+      ) {
     controller.addListener(_sync);
   }
   final GameController controller;
   final VoidCallback? onFlowStart, onFlowEnd;
+  final ValueNotifier<Board> capacityView;
   late ui.Image _back, _front;
   PourMotion? _motion;
   SequenceEffect? _pourEffect;
@@ -118,6 +125,28 @@ class PourSampleGame extends SampleGame {
     sourceUnits: _motion!.before[_motion!.from].length,
     initialLift: _lift,
   );
+  void _publishCapacities() {
+    if (closed) return;
+    final state = controller.current;
+    if (state == null) return;
+    final m = _motion;
+    Board next = state.board;
+    if (m != null) {
+      final f = reduced ? null : geometry.frame(_elapsed);
+      final out = reduced ? m.units * (_elapsed / 120).clamp(0.0, 1.0) : f!.out;
+      final arrived = reduced ? out : f!.delivered;
+      next = presentedContents(m.before, m.from, m.to, out, arrived);
+    }
+    final old = capacityView.value;
+    if (old.length != next.length ||
+        List.generate(
+          next.length,
+          (i) => !listEquals(old[i], next[i]),
+        ).any((different) => different)) {
+      capacityView.value = next;
+    }
+  }
+
   @override
   Future<void> onLoad() async {
     final loaded = await Future.wait([
@@ -235,6 +264,7 @@ class PourSampleGame extends SampleGame {
       ], onComplete: () => _finish(m));
     }
     add(_pourEffect!);
+    _publishCapacities();
     wake();
   }
 
@@ -274,6 +304,7 @@ class PourSampleGame extends SampleGame {
         controller.motion?.token == m.token) {
       controller.completeMotion(m.token);
     }
+    _publishCapacities();
     label('idle');
     wake();
   }
@@ -310,7 +341,10 @@ class PourSampleGame extends SampleGame {
         }
       });
     }
-    if (!closed) label('idle');
+    if (!closed) {
+      label('idle');
+      _publishCapacities();
+    }
   }
 
   @override
@@ -323,6 +357,7 @@ class PourSampleGame extends SampleGame {
   void update(double dt) {
     super.update(dt);
     updates++;
+    _publishCapacities();
     if (_motion != null) {
       if (reduced) {
         if (!_sounded) {
@@ -623,6 +658,7 @@ class PourSampleGame extends SampleGame {
     if (!closed) {
       controller.removeListener(_sync);
       abort();
+      capacityView.dispose();
       _selectionEffect?.removeFromParent();
       _errorEffect?.removeFromParent();
       for (final e in _pressEffects) {

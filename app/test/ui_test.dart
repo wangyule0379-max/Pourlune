@@ -1,3 +1,5 @@
+import 'support/flame_board_ready.dart';
+
 import 'dart:io';
 
 import 'package:flutter/semantics.dart';
@@ -26,6 +28,9 @@ void main() {
       await t.runAsync(c.initialize);
       await t.pumpWidget(PourluneApp(controller: c, puzzles: [fixture()]));
       Future<void> tap(Key key) async {
+        if (key is ValueKey<String> && key.value.startsWith('bottle-')) {
+          await waitForFlameArt(t);
+        }
         await t.ensureVisible(find.byKey(key));
         await t.tap(find.byKey(key));
         await t.pump();

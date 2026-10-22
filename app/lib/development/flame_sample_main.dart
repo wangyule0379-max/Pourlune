@@ -414,9 +414,9 @@ class _FlameBottlePanelState extends State<FlameBottlePanel> {
   }
 
   @override
-  Widget build(BuildContext context) => ValueListenableBuilder<String>(
-    valueListenable: game.status,
-    builder: (context, status, _) => Column(
+  Widget build(BuildContext context) => ListenableBuilder(
+    listenable: Listenable.merge([game.status, game.capacityView]),
+    builder: (context, _) => Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const Text(
@@ -462,7 +462,7 @@ class _FlameBottlePanelState extends State<FlameBottlePanel> {
                     ),
                     child: Semantics(
                       label:
-                          'Bottle ${game.indices[i] + 1}. ${game.indices[i] == 0 ? 'Target Green triangle.' : 'Buffer.'} ${c.current!.board[game.indices[i]].length} of 4. ${c.current!.board[game.indices[i]].map((v) => colorNames[v]).join(', ')}',
+                          'Bottle ${game.indices[i] + 1}. ${game.indices[i] == 0 ? 'Target Green triangle.' : 'Buffer.'} ${game.capacityView.value[game.indices[i]].length} of 4. ${game.capacityView.value[game.indices[i]].map((v) => colorNames[v]).join(', ')}',
                       button: true,
                       enabled: !c.busy && game.assetsReady,
                       onTap: c.busy || !game.assetsReady
@@ -498,7 +498,7 @@ class _FlameBottlePanelState extends State<FlameBottlePanel> {
                     width: 132,
                     child: ExcludeSemantics(
                       child: Text(
-                        '${game.indices[i] + 1} · ${game.indices[i] == 0 ? '▲ G' : '— Buffer'} · ${c.current!.board[game.indices[i]].length}/4',
+                        '${game.indices[i] + 1} · ${game.indices[i] == 0 ? '▲ G' : '— Buffer'} · ${game.capacityView.value[game.indices[i]].length}/4',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: ink,

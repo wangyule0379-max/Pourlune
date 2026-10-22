@@ -4,7 +4,8 @@ import 'package:pourlune_core/pourlune_core.dart';
 import 'package:pourlune_dev/application/game_controller.dart';
 import 'package:pourlune_dev/l10n/app_localizations.dart';
 import 'package:pourlune_dev/presentation/board_page.dart';
-import 'package:pourlune_dev/presentation/bottle.dart';
+import 'package:flame/game.dart';
+import 'package:pourlune_dev/presentation/flame_board/game.dart';
 
 import 'store_test.dart' show fixture;
 
@@ -44,6 +45,19 @@ void main() {
         ),
       );
       await show();
+      FlameBoardGame game() => t
+          .widget<GameWidget<FlameBoardGame>>(
+            find.byType(GameWidget<FlameBoardGame>),
+          )
+          .game!;
+      for (var n = 0; n < 300 && game().art == null; n++) {
+        await t.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 5)),
+        );
+        await t.pump();
+      }
+      expect(game().art, isNotNull);
+      await t.pump();
       final resting = t.getTopLeft(find.byKey(const Key('bottle-0')));
       await show(selected: 0);
       await t.pump(const Duration(milliseconds: 70));
@@ -73,9 +87,10 @@ void main() {
         ),
       );
       await t.pump(const Duration(milliseconds: 90));
-      final bottle = t.widget<BottleButton>(find.byKey(const Key('bottle-0')));
-      expect(bottle.angle, 0);
-      expect(bottle.lift, 0);
+      final frame = game().frame;
+      expect(frame.pour, isNull);
+      expect(frame.poses[0].angle, 0);
+      expect(frame.poses[0].mouth, frame.layout.mouths[0]);
       expect(t.getTopLeft(find.byKey(const Key('bottle-0'))), resting);
       expect(
         find.byWidgetPredicate(
@@ -89,7 +104,7 @@ void main() {
       expect(
         completed,
         1,
-        reason: 'system preference must use short180ms presentation',
+        reason: 'system preference must complete the short presentation within180ms',
       );
       await t.pumpWidget(const SizedBox());
     },
