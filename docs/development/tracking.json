@@ -8,7 +8,7 @@
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "Beta readiness BR01: engineering and submission preparation",
   "current_status": "beta_readiness_br01_assigned",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:130",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:131",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
   "delivery_path": "docs/development/deliveries/beta-readiness-BR01.md",
@@ -43,8 +43,8 @@
     {
       "id": "MS-R01",
       "severity": "P2",
-      "status": "open",
-      "description": "Frozen MS02 keyboard suite 0/4: Flame art/action actual ready boundary not reached. Root cause unproven; exact RED and independent report supplied to original developer; do not weaken assertions or extend sleep blindly.",
+      "status": "closed",
+      "description": "Diagnosed wall-clock deadline expiring before virtual animation budget. New test uses same3s virtual-clock pumpAndSettle plus motion-null/busy-false; independent4/4/analyze/format passed, no production changes; original RED preserved.",
       "evidence_path": "docs/development/review/motion-polish-supplement-evidence/keyboard-independent.log"
     }
   ],
@@ -94,7 +94,7 @@
     "FB01-FB08": "Available-platform production board/capacity/motion/navigation/save recovery accepted; physical performance, spoken accessibility and external services excluded."
   },
   "external_dependencies_path": "docs/development/dependencies/user-handoff.md",
-  "next_action": "Review MS-R01 root-cause repair and BR01 delivery when ready; keep BR01 independent tasks moving. Do not accept MS02 until independently reproduced. F9 protected; no terminal CI repoll.",
+  "next_action": "Commit/push accepted MS-only QA/test/evidence and read exact new CI; continue BR01 delivery review when ready. No prior terminal CI repoll, no user F9 actions.",
   "account_handoff": {
     "confirmed_at": "2026-10-22",
     "source": "explicit_user_message",
@@ -141,13 +141,13 @@
     "acceptance_path": "docs/development/review/firebase-receipt-diagnosis-acceptance.md"
   },
   "motion_polish": {
-    "status": "supplement_independent_review_ms02_repair_required",
+    "status": "supplement_accepted_with_explicit_unverified_scope",
     "authorized_on": "2026-10-22",
     "plan": "docs/pmpowers/plans/2026-10-22-motion-polish-execution.md",
     "delivery_path": "docs/development/deliveries/motion-polish.md",
     "acceptance_path": "docs/development/review/motion-polish-acceptance.md",
     "scope": "Approved existing App loading/transitions/game feel; eight tasks; preserve product logic and original UI",
-    "latest_feedback": "Independent MS01 same-install native first-gesture/persistence passed on both platforms; exact frozen MS02 keyboard tests failed 0/4 at settleFlameBoard line150/helper46. MS-R01/P2 assigned root-cause repair; audio observation remains unverified. BR01 independent work continues.",
+    "latest_feedback": "MS-R01 is test wall-clock versus virtual-frame budget mismatch; independent repaired frozen4/4, analyze/format passed. MS01 same-install input/persistence evidence accepted; MS03 audio limitation recorded, no actual audio/haptic or physical performance approval. MS-only QA/test commit allowed; BR01 continues.",
     "coverage_audit": "docs/development/review/motion-polish-coverage-audit.md",
     "supplement_plan": "docs/pmpowers/plans/2026-10-22-motion-polish-supplement.md",
     "supplement_delivery": "docs/development/deliveries/motion-polish-supplement.md"
@@ -207,7 +207,7 @@
     "commit": "3134637f91c0cb59c26ba6905b557f48f6179e5f",
     "user_preview_protection": "F9 remains user-owned; do not relaunch/install/stop/reset/send input until user explicitly releases it."
   },
-  "last_checked_at": "2026-10-22T14:51:05.432996+00:00",
+  "last_checked_at": "2026-10-22T15:02:54.155794+00:00",
   "test_sync_repair": {
     "status": "accepted_pushed_remote_ci_success",
     "commit": "2b0d78d3ddb0448b59d77b3a19681f068649e3d9",

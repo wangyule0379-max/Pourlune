@@ -1,0 +1,3175 @@
+[
+  {
+    "command": [
+      "xcrun",
+      "simctl",
+      "list",
+      "devices",
+      "255890D5-B4A3-42F9-B1A2-409E77118348"
+    ],
+    "code": 0,
+    "stdout": "== Devices ==\n-- iOS 26.5 --\n    Pourlune-FB-Review-20261022 (255890D5-B4A3-42F9-B1A2-409E77118348) (Booted) \n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "emu",
+      "avd",
+      "name"
+    ],
+    "code": 0,
+    "stdout": "Pourlune_FullBoard_API36\nOK\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "xcrun",
+      "simctl",
+      "install",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "/Volumes/data/App Development/Pourlune/build/motion-supplement-candidates/ios/Runner.app"
+    ],
+    "code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "xcrun",
+      "simctl",
+      "get_app_container",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation",
+      "data"
+    ],
+    "code": 0,
+    "stdout": "/Users/wangyule/Library/Developer/CoreSimulator/Devices/255890D5-B4A3-42F9-B1A2-409E77118348/data/Containers/Data/Application/2047F9D9-77EA-41A9-90AC-DD8F21733DA3\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "xcrun",
+      "simctl",
+      "get_app_container",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation",
+      "app"
+    ],
+    "code": 0,
+    "stdout": "/Users/wangyule/Library/Developer/CoreSimulator/Devices/255890D5-B4A3-42F9-B1A2-409E77118348/data/Containers/Bundle/Application/4A4899E3-6AE1-4367-8E94-EF7BC084F037/Runner.app\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "xcrun",
+      "simctl",
+      "terminate",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation"
+    ],
+    "code": 3,
+    "stdout": "",
+    "stderr": "An error was encountered processing the command (domain=NSPOSIXErrorDomain, code=3):\nSimulator device failed to terminate dev.pourlune.motionSupplementValidation.\nfound nothing to terminate\nUnderlying error (domain=NSPOSIXErrorDomain, code=3):\n\tThe request to terminate \"dev.pourlune.motionSupplementValidation\" failed. found nothing to terminate\n\tfound nothing to terminate\n"
+  },
+  {
+    "command": [
+      "xcrun",
+      "simctl",
+      "launch",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation"
+    ],
+    "code": 0,
+    "stdout": "dev.pourlune.motionSupplementValidation: 19292\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "xcrun",
+      "simctl",
+      "terminate",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation"
+    ],
+    "code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "xcrun",
+      "simctl",
+      "launch",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation"
+    ],
+    "code": 0,
+    "stdout": "dev.pourlune.motionSupplementValidation: 19320\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "xcrun",
+      "simctl",
+      "terminate",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation"
+    ],
+    "code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "xcrun",
+      "simctl",
+      "launch",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation"
+    ],
+    "code": 0,
+    "stdout": "dev.pourlune.motionSupplementValidation: 19345\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "xcrun",
+      "simctl",
+      "terminate",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation"
+    ],
+    "code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "xcrun",
+      "simctl",
+      "launch",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation"
+    ],
+    "code": 0,
+    "stdout": "dev.pourlune.motionSupplementValidation: 19366\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "xcrun",
+      "simctl",
+      "get_app_container",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation",
+      "data"
+    ],
+    "code": 0,
+    "stdout": "/Users/wangyule/Library/Developer/CoreSimulator/Devices/255890D5-B4A3-42F9-B1A2-409E77118348/data/Containers/Data/Application/2047F9D9-77EA-41A9-90AC-DD8F21733DA3\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "install",
+      "/Volumes/data/App Development/Pourlune/build/motion-supplement-candidates/android/app-debug.apk"
+    ],
+    "code": 0,
+    "stdout": "Performing Streamed Install\nSuccess\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "dumpsys",
+      "package",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 0,
+    "stdout": "Activity Resolver Table:\n  Non-Data Actions:\n      android.intent.action.MAIN:\n        9772566 dev.pourlune.motion_supplement/dev.pourlune.pourlune_dev.MainActivity filter 80430a7\n          Action: \"android.intent.action.MAIN\"\n          Category: \"android.intent.category.LAUNCHER\"\n\nReceiver Resolver Table:\n  Non-Data Actions:\n      android.intent.action.BATTERY_OKAY:\n        74031f2 dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy filter 8b93043\n          Action: \"android.intent.action.BATTERY_OKAY\"\n          Action: \"android.intent.action.BATTERY_LOW\"\n      android.intent.action.ACTION_POWER_DISCONNECTED:\n        8c5c954 dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy filter a8680fd\n          Action: \"android.intent.action.ACTION_POWER_DISCONNECTED\"\n          Action: \"android.intent.action.ACTION_POWER_CONNECTED\"\n      androidx.profileinstaller.action.SAVE_PROFILE:\n        989b416 dev.pourlune.motion_supplement/androidx.profileinstaller.ProfileInstallReceiver filter 45ea36d\n          Action: \"androidx.profileinstaller.action.SAVE_PROFILE\"\n      android.intent.action.DEVICE_STORAGE_LOW:\n        a6026c0 dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy filter f3f2ff9\n          Action: \"android.intent.action.DEVICE_STORAGE_LOW\"\n          Action: \"android.intent.action.DEVICE_STORAGE_OK\"\n      android.net.conn.CONNECTIVITY_CHANGE:\n        21b7b3e dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy filter 5348d9f\n          Action: \"android.net.conn.CONNECTIVITY_CHANGE\"\n      android.intent.action.DEVICE_STORAGE_OK:\n        a6026c0 dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy filter f3f2ff9\n          Action: \"android.intent.action.DEVICE_STORAGE_LOW\"\n          Action: \"android.intent.action.DEVICE_STORAGE_OK\"\n      androidx.profileinstaller.action.INSTALL_PROFILE:\n        989b416 dev.pourlune.motion_supplement/androidx.profileinstaller.ProfileInstallReceiver filter 3849197\n          Action: \"androidx.profileinstaller.action.INSTALL_PROFILE\"\n      android.intent.action.BATTERY_LOW:\n        74031f2 dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy filter 8b93043\n          Action: \"android.intent.action.BATTERY_OKAY\"\n          Action: \"android.intent.action.BATTERY_LOW\"\n      android.intent.action.TIMEZONE_CHANGED:\n        280eeec dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.RescheduleReceiver filter 39d2b5\n          Action: \"android.intent.action.TIMEZONE_CHANGED\"\n          Action: \"android.intent.action.TIME_SET\"\n          Action: \"android.intent.action.BOOT_COMPLETED\"\n      android.intent.action.TIME_SET:\n        280eeec dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.RescheduleReceiver filter 39d2b5\n          Action: \"android.intent.action.TIMEZONE_CHANGED\"\n          Action: \"android.intent.action.TIME_SET\"\n          Action: \"android.intent.action.BOOT_COMPLETED\"\n      androidx.profileinstaller.action.SKIP_FILE:\n        989b416 dev.pourlune.motion_supplement/androidx.profileinstaller.ProfileInstallReceiver filter 5982f84\n          Action: \"androidx.profileinstaller.action.SKIP_FILE\"\n      androidx.profileinstaller.action.BENCHMARK_OPERATION:\n        989b416 dev.pourlune.motion_supplement/androidx.profileinstaller.ProfileInstallReceiver filter 564fba2\n          Action: \"androidx.profileinstaller.action.BENCHMARK_OPERATION\"\n      android.intent.action.BOOT_COMPLETED:\n        280eeec dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.RescheduleReceiver filter 39d2b5\n          Action: \"android.intent.action.TIMEZONE_CHANGED\"\n          Action: \"android.intent.action.TIME_SET\"\n          Action: \"android.intent.action.BOOT_COMPLETED\"\n      android.intent.action.ACTION_POWER_CONNECTED:\n        8c5c954 dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy filter a8680fd\n          Action: \"android.intent.action.ACTION_POWER_DISCONNECTED\"\n          Action: \"android.intent.action.ACTION_POWER_CONNECTED\"\n      androidx.work.diagnostics.REQUEST_DIAGNOSTICS:\n        9040dd8 dev.pourlune.motion_supplement/androidx.work.impl.diagnostics.DiagnosticsReceiver filter 1e531\n          Action: \"androidx.work.diagnostics.REQUEST_DIAGNOSTICS\"\n      androidx.work.impl.background.systemalarm.UpdateProxies:\n        3d00d4a dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver filter 4de64bb\n          Action: \"androidx.work.impl.background.systemalarm.UpdateProxies\"\n\nDomain verification status:\n\nPermissions:\n  Permission [dev.pourlune.motion_supplement.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (61ae33b):\n    sourcePackage=dev.pourlune.motion_supplement\n    uid=10215 gids=[] type=0 prot=signature\n    perm=PermissionInfo{550ea58 dev.pourlune.motion_supplement.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}\n    flags=0x0\n\nRegistered ContentProviders:\n  dev.pourlune.motion_supplement/androidx.startup.InitializationProvider:\n    Provider{2eac7b1 dev.pourlune.motion_supplement/androidx.startup.InitializationProvider}\n  dev.pourlune.motion_supplement/com.google.android.gms.ads.MobileAdsInitProvider:\n    Provider{ab52496 dev.pourlune.motion_supplement/com.google.android.gms.ads.MobileAdsInitProvider}\n  dev.pourlune.motion_supplement/com.google.firebase.provider.FirebaseInitProvider:\n    Provider{24a7817 dev.pourlune.motion_supplement/com.google.firebase.provider.FirebaseInitProvider}\n\nContentProvider Authorities:\n  [dev.pourlune.motion_supplement.androidx-startup]:\n    Provider{2eac7b1 dev.pourlune.motion_supplement/androidx.startup.InitializationProvider}\n      applicationInfo=ApplicationInfo{3165404 dev.pourlune.motion_supplement}\n  [dev.pourlune.motion_supplement.mobileadsinitprovider]:\n    Provider{ab52496 dev.pourlune.motion_supplement/com.google.android.gms.ads.MobileAdsInitProvider}\n      applicationInfo=ApplicationInfo{d332ded dev.pourlune.motion_supplement}\n  [dev.pourlune.motion_supplement.firebaseinitprovider]:\n    Provider{24a7817 dev.pourlune.motion_supplement/com.google.firebase.provider.FirebaseInitProvider}\n      applicationInfo=ApplicationInfo{916f422 dev.pourlune.motion_supplement}\n\nKey Set Manager:\n  [dev.pourlune.motion_supplement]\n      Signing KeySets: 62\n\nPackages:\n  Package [dev.pourlune.motion_supplement] (b106db6):\n    appId=10215\n    pkg=Package{1747eb3 dev.pourlune.motion_supplement}\n    codePath=/data/app/~~mmra6wTny75lnBdk88T4OQ==/dev.pourlune.motion_supplement-0S-0hsXExO7NJFi9tu-Njw==\n    resourcePath=/data/app/~~mmra6wTny75lnBdk88T4OQ==/dev.pourlune.motion_supplement-0S-0hsXExO7NJFi9tu-Njw==\n    legacyNativeLibraryDir=/data/app/~~mmra6wTny75lnBdk88T4OQ==/dev.pourlune.motion_supplement-0S-0hsXExO7NJFi9tu-Njw==/lib\n    extractNativeLibs=false\n    primaryCpuAbi=arm64-v8a\n    secondaryCpuAbi=null\n    cpuAbiOverride=null\n    versionCode=4 minSdk=24 targetSdk=36\n    minExtensionVersions=[]\n    versionName=0.4.0\n    hiddenApiEnforcementPolicy=2\n    usesNonSdkApi=false\n    splits=[base]\n    apkSigningVersion=2\n    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]\n    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]\n    forceQueryable=false\n    pageSizeCompat=0\n    queriesPackages=[com.android.vending]\n    queriesIntents=[Intent { act=android.intent.action.PROCESS_TEXT dat=content://*/... typ=text/plain }, Intent { act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=https:/... }, Intent { act=android.support.customtabs.action.CustomTabsService }, Intent { act=android.intent.action.INSERT dat=content://*/... typ=vnd.android.cursor.dir/event }, Intent { act=android.intent.action.VIEW dat=sms:xx }, Intent { act=android.intent.action.DIAL }]\n    scannedAsStoppedSystemApp=false\n    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]\n    usesOptionalLibraries:\n      androidx.window.extensions\n      androidx.window.sidecar\n      android.ext.adservices\n    usesLibraryFiles:\n      /system_ext/framework/androidx.window.extensions.jar\n      /system_ext/framework/androidx.window.sidecar.jar\n    timeStamp=2026-10-22 22:36:11\n    lastUpdateTime=2026-10-22 22:36:11\n    installerPackageName=null\n    installerPackageUid=-1\n    initiatingPackageName=com.android.shell\n    originatingPackageName=null\n    packageSource=1\n    appMetadataFilePath=null\n    appMetadataSource=0\n    signatures=PackageSignatures{421bbe9 version:2, signatures:[42c51f91], past signatures:[]}\n    installPermissionsFixed=false\n    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]\n    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]\n    apexModuleName=null\n    declared permissions:\n      dev.pourlune.motion_supplement.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature\n    requested permissions:\n      com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE\n      android.permission.ACCESS_ADSERVICES_TOPICS\n      android.permission.FOREGROUND_SERVICE\n      android.permission.ACCESS_ADSERVICES_AD_ID\n      dev.pourlune.motion_supplement.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION\n      android.permission.INTERNET\n      android.permission.ACCESS_NETWORK_STATE\n      android.permission.ACCESS_ADSERVICES_ATTRIBUTION\n      com.google.android.gms.permission.AD_ID\n      android.permission.WAKE_LOCK\n    install permissions:\n      com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE: granted=true\n      android.permission.ACCESS_ADSERVICES_TOPICS: granted=true\n      android.permission.FOREGROUND_SERVICE: granted=true\n      android.permission.ACCESS_ADSERVICES_AD_ID: granted=true\n      dev.pourlune.motion_supplement.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true\n      android.permission.INTERNET: granted=true\n      android.permission.ACCESS_NETWORK_STATE: granted=true\n      android.permission.ACCESS_ADSERVICES_ATTRIBUTION: granted=true\n      com.google.android.gms.permission.AD_ID: granted=true\n      android.permission.WAKE_LOCK: granted=true\n    User 0: ceDataInode=549415 deDataInode=393803 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=true enabled=0 instant=false virtual=false quarantined=false\n      installReason=0\n      dataDir=/data/user/0/dev.pourlune.motion_supplement\n      firstInstallTime=2026-10-22 22:36:11\n      uninstallReason=0\n      overlay paths:\n        /product/overlay/EmulationPixel7/EmulationPixel7Overlay.apk\n        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk\n      legacy overlay paths:\n        /product/overlay/EmulationPixel7/EmulationPixel7Overlay.apk\n        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk\n      gids=[3003]\n      runtime permissions:\n\nQueries:\n  system apps queryable: false\n  queries via forceQueryable:\n  queries via package name:\n  queries via component:\n    com.google.android.as:\n      dev.pourlune.motion_supplement\n    com.google.android.settings.intelligence:\n      dev.pourlune.motion_supplement\n    com.google.android.apps.accessibility.voiceaccess:\n      dev.pourlune.motion_supplement\n    dev.pourlune.motion_supplement:\n      com.google.android.dialer\n      com.google.android.apps.messaging\n      com.google.android.googlequicksearchbox\n      com.android.chrome\n      com.google.android.calendar\n      com.google.android.apps.docs\n  queryable via interaction:\n    User 0:\n  queryable via uses-library:\n\nDexopt state:\n  [dev.pourlune.motion_supplement]\n    path: /data/app/~~mmra6wTny75lnBdk88T4OQ==/dev.pourlune.motion_supplement-0S-0hsXExO7NJFi9tu-Njw==/base.apk\n      arm64: [status=run-from-apk] [reason=unknown] [primary-abi]\n        [location is error]\n\nCompiler stats:\n  [dev.pourlune.motion_supplement]\n    (No recorded stats)\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "am",
+      "force-stop",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "am",
+      "start",
+      "-n",
+      "dev.pourlune.motion_supplement/dev.pourlune.pourlune_dev.MainActivity"
+    ],
+    "code": 0,
+    "stdout": "Starting: Intent { cmp=dev.pourlune.motion_supplement/dev.pourlune.pourlune_dev.MainActivity }\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "pidof",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "pidof",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "pidof",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 0,
+    "stdout": "5313\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5313.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5313.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5313.json"
+    ],
+    "code": 0,
+    "stdout": "{\"ok\":true,\"pid\":5313,\"platform\":\"android\",\"mode\":\"debug standalone normal product.main, Flutter pointer + native sqflite\",\"database\":\"/data/user/0/dev.pourlune.motion_supplement/databases/motion_supplement.sqlite\",\"dart_began_utc\":\"2026-10-22T14:36:14.407983Z\",\"clock\":\"one Dart Stopwatch at QA Dart entry; includes guard/binding/probe setup; excludes native pre-Dart\",\"product_main_call_us\":86250,\"dart_start_us\":0,\"app_controller_found_us\":1758776,\"home_probe_started_us\":1758782,\"first_flutter_post_frame_us\":397708,\"initialization_shell_first_post_frame_us\":399361,\"home_first_post_frame_us\":1722652,\"home_enabled_hit_testable_us\":1765823,\"pointer_down_request_us\":1767950,\"pointer_down_sent_us\":1787635,\"pointer_up_request_us\":1817475,\"pointer_up_sent_us\":1831953,\"first_controller_response_us\":1829760,\"first_accepted_committed_navigation_us\":2306580,\"gesture_count\":1,\"requested_hold_ms\":16,\"requested_poll_interval_ms\":5,\"home_probe_timestamps_us\":[1765823],\"controller_changes\":[{\"us\":1829767,\"page\":\"home\",\"phase\":\"saving\",\"busy\":true,\"instance\":null,\"revision\":null},{\"us\":2306486,\"page\":\"board\",\"phase\":\"clean\",\"busy\":false,\"instance\":\"dev-1792679776231023-2198682486\",\"revision\":0}],\"before_gesture\":{\"page\":\"home\",\"phase\":\"clean\",\"busy\":false,\"ordinary\":null,\"daily\":null,\"first_clears\":0,\"tutorial_complete\":false,\"settings\":{\"music\":true,\"sound\":true,\"haptics\":true,\"reduced_motion\":false,\"color_symbols\":true,\"strong_contrast\":false},\"firebase_status\":\"disabled\",\"logical_size\":[411.42857142857144,914.2857142857143],\"dpr\":2.625,\"font14_scaled\":14.0,\"ancestor_fade_values\":[1.0,1.0,1.0,0.0,1.0,1.0,1.0,1.0],\"ancestor_opacity\":[]},\"accepted\":{\"page\":\"board\",\"phase\":\"clean\",\"busy\":false,\"instance\":\"dev-1792679776231023-2198682486\",\"saved_instance\":\"dev-1792679776231023-2198682486\",\"revision\":0,\"moves\":0,\"snapshot_writes\":1,\"new_instance_count\":1},\"prepared_for_next_launch\":true,\"excludes_native_pre_dart\":true,\"theoretical_earliest_interactive_claim\":false,\"captures_screen_or_audio\":false}",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "am",
+      "force-stop",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "am",
+      "start",
+      "-n",
+      "dev.pourlune.motion_supplement/dev.pourlune.pourlune_dev.MainActivity"
+    ],
+    "code": 0,
+    "stdout": "Starting: Intent { cmp=dev.pourlune.motion_supplement/dev.pourlune.pourlune_dev.MainActivity }\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "pidof",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "pidof",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "pidof",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 0,
+    "stdout": "5515\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5515.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5515.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5515.json"
+    ],
+    "code": 0,
+    "stdout": "{\"ok\":true,\"pid\":5515,\"platform\":\"android\",\"mode\":\"debug standalone normal product.main, Flutter pointer + native sqflite\",\"database\":\"/data/user/0/dev.pourlune.motion_supplement/databases/motion_supplement.sqlite\",\"dart_began_utc\":\"2026-10-22T14:36:19.075088Z\",\"clock\":\"one Dart Stopwatch at QA Dart entry; includes guard/binding/probe setup; excludes native pre-Dart\",\"product_main_call_us\":107304,\"dart_start_us\":0,\"app_controller_found_us\":1717719,\"home_probe_started_us\":1717722,\"first_flutter_post_frame_us\":707134,\"initialization_shell_first_post_frame_us\":709464,\"home_first_post_frame_us\":1703089,\"home_enabled_hit_testable_us\":1727938,\"pointer_down_request_us\":1729231,\"pointer_down_sent_us\":1747198,\"pointer_up_request_us\":1778551,\"pointer_up_sent_us\":1786691,\"first_controller_response_us\":1785840,\"first_accepted_committed_navigation_us\":2152925,\"gesture_count\":1,\"requested_hold_ms\":16,\"requested_poll_interval_ms\":5,\"home_probe_timestamps_us\":[1727938],\"controller_changes\":[{\"us\":1785844,\"page\":\"home\",\"phase\":\"saving\",\"busy\":true,\"instance\":null,\"revision\":null},{\"us\":2152908,\"page\":\"board\",\"phase\":\"clean\",\"busy\":false,\"instance\":\"dev-1792679780856787-39640283\",\"revision\":0}],\"before_gesture\":{\"page\":\"home\",\"phase\":\"clean\",\"busy\":false,\"ordinary\":null,\"daily\":null,\"first_clears\":0,\"tutorial_complete\":false,\"settings\":{\"music\":true,\"sound\":true,\"haptics\":true,\"reduced_motion\":false,\"color_symbols\":true,\"strong_contrast\":false},\"firebase_status\":\"disabled\",\"logical_size\":[411.42857142857144,914.2857142857143],\"dpr\":2.625,\"font14_scaled\":14.0,\"ancestor_fade_values\":[1.0,1.0,1.0,0.0,1.0,1.0,1.0,1.0],\"ancestor_opacity\":[]},\"accepted\":{\"page\":\"board\",\"phase\":\"clean\",\"busy\":false,\"instance\":\"dev-1792679780856787-39640283\",\"saved_instance\":\"dev-1792679780856787-39640283\",\"revision\":0,\"moves\":0,\"snapshot_writes\":1,\"new_instance_count\":1},\"prepared_for_next_launch\":true,\"excludes_native_pre_dart\":true,\"theoretical_earliest_interactive_claim\":false,\"captures_screen_or_audio\":false}",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "am",
+      "force-stop",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "am",
+      "start",
+      "-n",
+      "dev.pourlune.motion_supplement/dev.pourlune.pourlune_dev.MainActivity"
+    ],
+    "code": 0,
+    "stdout": "Starting: Intent { cmp=dev.pourlune.motion_supplement/dev.pourlune.pourlune_dev.MainActivity }\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "pidof",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "pidof",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 0,
+    "stdout": "5675\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5675.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5675.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5675.json"
+    ],
+    "code": 0,
+    "stdout": "{\"ok\":true,\"pid\":5675,\"platform\":\"android\",\"mode\":\"debug standalone normal product.main, Flutter pointer + native sqflite\",\"database\":\"/data/user/0/dev.pourlune.motion_supplement/databases/motion_supplement.sqlite\",\"dart_began_utc\":\"2026-10-22T14:36:22.737104Z\",\"clock\":\"one Dart Stopwatch at QA Dart entry; includes guard/binding/probe setup; excludes native pre-Dart\",\"product_main_call_us\":69278,\"dart_start_us\":0,\"app_controller_found_us\":1867641,\"home_probe_started_us\":1867648,\"first_flutter_post_frame_us\":769773,\"initialization_shell_first_post_frame_us\":772441,\"home_first_post_frame_us\":1846431,\"home_enabled_hit_testable_us\":1874615,\"pointer_down_request_us\":1876295,\"pointer_down_sent_us\":1894407,\"pointer_up_request_us\":1949465,\"pointer_up_sent_us\":1958005,\"first_controller_response_us\":1956936,\"first_accepted_committed_navigation_us\":2322867,\"gesture_count\":1,\"requested_hold_ms\":16,\"requested_poll_interval_ms\":5,\"home_probe_timestamps_us\":[1874615],\"controller_changes\":[{\"us\":1956940,\"page\":\"home\",\"phase\":\"saving\",\"busy\":true,\"instance\":null,\"revision\":null},{\"us\":2322848,\"page\":\"board\",\"phase\":\"clean\",\"busy\":false,\"instance\":\"dev-1792679784690170-1078154118\",\"revision\":0}],\"before_gesture\":{\"page\":\"home\",\"phase\":\"clean\",\"busy\":false,\"ordinary\":null,\"daily\":null,\"first_clears\":0,\"tutorial_complete\":false,\"settings\":{\"music\":true,\"sound\":true,\"haptics\":true,\"reduced_motion\":false,\"color_symbols\":true,\"strong_contrast\":false},\"firebase_status\":\"disabled\",\"logical_size\":[411.42857142857144,914.2857142857143],\"dpr\":2.625,\"font14_scaled\":14.0,\"ancestor_fade_values\":[1.0,1.0,1.0,0.0,1.0,1.0,1.0,1.0],\"ancestor_opacity\":[]},\"accepted\":{\"page\":\"board\",\"phase\":\"clean\",\"busy\":false,\"instance\":\"dev-1792679784690170-1078154118\",\"saved_instance\":\"dev-1792679784690170-1078154118\",\"revision\":0,\"moves\":0,\"snapshot_writes\":1,\"new_instance_count\":1},\"prepared_for_next_launch\":true,\"excludes_native_pre_dart\":true,\"theoretical_earliest_interactive_claim\":false,\"captures_screen_or_audio\":false}",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "am",
+      "force-stop",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "am",
+      "start",
+      "-n",
+      "dev.pourlune.motion_supplement/dev.pourlune.pourlune_dev.MainActivity"
+    ],
+    "code": 0,
+    "stdout": "Starting: Intent { cmp=dev.pourlune.motion_supplement/dev.pourlune.pourlune_dev.MainActivity }\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "pidof",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "pidof",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 0,
+    "stdout": "5835\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/error-5835.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/error-5835.json: No such file or directory\n"
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-5835.json"
+    ],
+    "code": 0,
+    "stdout": "{\"ok\":true,\"pid\":5835,\"platform\":\"android\",\"mode\":\"debug standalone normal product.main, Flutter pointer + native sqflite\",\"database\":\"/data/user/0/dev.pourlune.motion_supplement/databases/motion_supplement.sqlite\",\"dart_began_utc\":\"2026-10-22T14:36:26.820412Z\",\"clock\":\"one Dart Stopwatch at QA Dart entry; includes guard/binding/probe setup; excludes native pre-Dart\",\"product_main_call_us\":63577,\"dart_start_us\":0,\"app_controller_found_us\":2359360,\"home_probe_started_us\":2359364,\"first_flutter_post_frame_us\":391118,\"initialization_shell_first_post_frame_us\":393919,\"home_first_post_frame_us\":2341299,\"home_enabled_hit_testable_us\":2367078,\"pointer_down_request_us\":2371497,\"pointer_down_sent_us\":2391921,\"pointer_up_request_us\":2415711,\"pointer_up_sent_us\":2426328,\"first_controller_response_us\":2425417,\"first_accepted_committed_navigation_us\":2875260,\"gesture_count\":1,\"requested_hold_ms\":16,\"requested_poll_interval_ms\":5,\"home_probe_timestamps_us\":[2367078],\"controller_changes\":[{\"us\":2425421,\"page\":\"home\",\"phase\":\"saving\",\"busy\":true,\"instance\":null,\"revision\":null},{\"us\":2875167,\"page\":\"board\",\"phase\":\"clean\",\"busy\":false,\"instance\":\"dev-1792679789241094-3027382444\",\"revision\":0}],\"before_gesture\":{\"page\":\"home\",\"phase\":\"clean\",\"busy\":false,\"ordinary\":null,\"daily\":null,\"first_clears\":0,\"tutorial_complete\":false,\"settings\":{\"music\":true,\"sound\":true,\"haptics\":true,\"reduced_motion\":false,\"color_symbols\":true,\"strong_contrast\":false},\"firebase_status\":\"disabled\",\"logical_size\":[411.42857142857144,914.2857142857143],\"dpr\":2.625,\"font14_scaled\":14.0,\"ancestor_fade_values\":[1.0,1.0,1.0,0.0,1.0,1.0,1.0,1.0],\"ancestor_opacity\":[]},\"accepted\":{\"page\":\"board\",\"phase\":\"clean\",\"busy\":false,\"instance\":\"dev-1792679789241094-3027382444\",\"saved_instance\":\"dev-1792679789241094-3027382444\",\"revision\":0,\"moves\":0,\"snapshot_writes\":1,\"new_instance_count\":1},\"prepared_for_next_launch\":true,\"excludes_native_pre_dart\":true,\"theoretical_earliest_interactive_claim\":false,\"captures_screen_or_audio\":false}",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "dumpsys",
+      "package",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 0,
+    "stdout": "Activity Resolver Table:\n  Non-Data Actions:\n      android.intent.action.MAIN:\n        9772566 dev.pourlune.motion_supplement/dev.pourlune.pourlune_dev.MainActivity filter 80430a7\n          Action: \"android.intent.action.MAIN\"\n          Category: \"android.intent.category.LAUNCHER\"\n\nReceiver Resolver Table:\n  Non-Data Actions:\n      android.intent.action.BATTERY_OKAY:\n        74031f2 dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy filter 8b93043\n          Action: \"android.intent.action.BATTERY_OKAY\"\n          Action: \"android.intent.action.BATTERY_LOW\"\n      android.intent.action.ACTION_POWER_DISCONNECTED:\n        8c5c954 dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy filter a8680fd\n          Action: \"android.intent.action.ACTION_POWER_DISCONNECTED\"\n          Action: \"android.intent.action.ACTION_POWER_CONNECTED\"\n      androidx.profileinstaller.action.SAVE_PROFILE:\n        989b416 dev.pourlune.motion_supplement/androidx.profileinstaller.ProfileInstallReceiver filter 45ea36d\n          Action: \"androidx.profileinstaller.action.SAVE_PROFILE\"\n      android.intent.action.DEVICE_STORAGE_LOW:\n        a6026c0 dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy filter f3f2ff9\n          Action: \"android.intent.action.DEVICE_STORAGE_LOW\"\n          Action: \"android.intent.action.DEVICE_STORAGE_OK\"\n      android.net.conn.CONNECTIVITY_CHANGE:\n        21b7b3e dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy filter 5348d9f\n          Action: \"android.net.conn.CONNECTIVITY_CHANGE\"\n      android.intent.action.DEVICE_STORAGE_OK:\n        a6026c0 dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy filter f3f2ff9\n          Action: \"android.intent.action.DEVICE_STORAGE_LOW\"\n          Action: \"android.intent.action.DEVICE_STORAGE_OK\"\n      androidx.profileinstaller.action.INSTALL_PROFILE:\n        989b416 dev.pourlune.motion_supplement/androidx.profileinstaller.ProfileInstallReceiver filter 3849197\n          Action: \"androidx.profileinstaller.action.INSTALL_PROFILE\"\n      android.intent.action.BATTERY_LOW:\n        74031f2 dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy filter 8b93043\n          Action: \"android.intent.action.BATTERY_OKAY\"\n          Action: \"android.intent.action.BATTERY_LOW\"\n      android.intent.action.TIMEZONE_CHANGED:\n        280eeec dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.RescheduleReceiver filter 39d2b5\n          Action: \"android.intent.action.TIMEZONE_CHANGED\"\n          Action: \"android.intent.action.TIME_SET\"\n          Action: \"android.intent.action.BOOT_COMPLETED\"\n      android.intent.action.TIME_SET:\n        280eeec dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.RescheduleReceiver filter 39d2b5\n          Action: \"android.intent.action.TIMEZONE_CHANGED\"\n          Action: \"android.intent.action.TIME_SET\"\n          Action: \"android.intent.action.BOOT_COMPLETED\"\n      androidx.profileinstaller.action.SKIP_FILE:\n        989b416 dev.pourlune.motion_supplement/androidx.profileinstaller.ProfileInstallReceiver filter 5982f84\n          Action: \"androidx.profileinstaller.action.SKIP_FILE\"\n      androidx.profileinstaller.action.BENCHMARK_OPERATION:\n        989b416 dev.pourlune.motion_supplement/androidx.profileinstaller.ProfileInstallReceiver filter 564fba2\n          Action: \"androidx.profileinstaller.action.BENCHMARK_OPERATION\"\n      android.intent.action.BOOT_COMPLETED:\n        280eeec dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.RescheduleReceiver filter 39d2b5\n          Action: \"android.intent.action.TIMEZONE_CHANGED\"\n          Action: \"android.intent.action.TIME_SET\"\n          Action: \"android.intent.action.BOOT_COMPLETED\"\n      android.intent.action.ACTION_POWER_CONNECTED:\n        8c5c954 dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy filter a8680fd\n          Action: \"android.intent.action.ACTION_POWER_DISCONNECTED\"\n          Action: \"android.intent.action.ACTION_POWER_CONNECTED\"\n      androidx.work.diagnostics.REQUEST_DIAGNOSTICS:\n        9040dd8 dev.pourlune.motion_supplement/androidx.work.impl.diagnostics.DiagnosticsReceiver filter 1e531\n          Action: \"androidx.work.diagnostics.REQUEST_DIAGNOSTICS\"\n      androidx.work.impl.background.systemalarm.UpdateProxies:\n        3d00d4a dev.pourlune.motion_supplement/androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver filter 4de64bb\n          Action: \"androidx.work.impl.background.systemalarm.UpdateProxies\"\n\nDomain verification status:\n\nPermissions:\n  Permission [dev.pourlune.motion_supplement.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (a440972):\n    sourcePackage=dev.pourlune.motion_supplement\n    uid=10215 gids=[] type=0 prot=signature\n    perm=PermissionInfo{550ea58 dev.pourlune.motion_supplement.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}\n    flags=0x0\n\nRegistered ContentProviders:\n  dev.pourlune.motion_supplement/androidx.startup.InitializationProvider:\n    Provider{2eac7b1 dev.pourlune.motion_supplement/androidx.startup.InitializationProvider}\n  dev.pourlune.motion_supplement/com.google.android.gms.ads.MobileAdsInitProvider:\n    Provider{ab52496 dev.pourlune.motion_supplement/com.google.android.gms.ads.MobileAdsInitProvider}\n  dev.pourlune.motion_supplement/com.google.firebase.provider.FirebaseInitProvider:\n    Provider{24a7817 dev.pourlune.motion_supplement/com.google.firebase.provider.FirebaseInitProvider}\n\nContentProvider Authorities:\n  [dev.pourlune.motion_supplement.androidx-startup]:\n    Provider{2eac7b1 dev.pourlune.motion_supplement/androidx.startup.InitializationProvider}\n      applicationInfo=ApplicationInfo{a04f1c3 dev.pourlune.motion_supplement}\n  [dev.pourlune.motion_supplement.mobileadsinitprovider]:\n    Provider{ab52496 dev.pourlune.motion_supplement/com.google.android.gms.ads.MobileAdsInitProvider}\n      applicationInfo=ApplicationInfo{5968a40 dev.pourlune.motion_supplement}\n  [dev.pourlune.motion_supplement.firebaseinitprovider]:\n    Provider{24a7817 dev.pourlune.motion_supplement/com.google.firebase.provider.FirebaseInitProvider}\n      applicationInfo=ApplicationInfo{cb88d79 dev.pourlune.motion_supplement}\n\nKey Set Manager:\n  [dev.pourlune.motion_supplement]\n      Signing KeySets: 62\n\nPackages:\n  Package [dev.pourlune.motion_supplement] (9f59084):\n    appId=10215\n    pkg=Package{1747eb3 dev.pourlune.motion_supplement}\n    codePath=/data/app/~~mmra6wTny75lnBdk88T4OQ==/dev.pourlune.motion_supplement-0S-0hsXExO7NJFi9tu-Njw==\n    resourcePath=/data/app/~~mmra6wTny75lnBdk88T4OQ==/dev.pourlune.motion_supplement-0S-0hsXExO7NJFi9tu-Njw==\n    legacyNativeLibraryDir=/data/app/~~mmra6wTny75lnBdk88T4OQ==/dev.pourlune.motion_supplement-0S-0hsXExO7NJFi9tu-Njw==/lib\n    extractNativeLibs=false\n    primaryCpuAbi=arm64-v8a\n    secondaryCpuAbi=null\n    cpuAbiOverride=null\n    versionCode=4 minSdk=24 targetSdk=36\n    minExtensionVersions=[]\n    versionName=0.4.0\n    hiddenApiEnforcementPolicy=2\n    usesNonSdkApi=false\n    splits=[base]\n    apkSigningVersion=2\n    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]\n    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]\n    forceQueryable=false\n    pageSizeCompat=0\n    queriesPackages=[com.android.vending]\n    queriesIntents=[Intent { act=android.intent.action.PROCESS_TEXT dat=content://*/... typ=text/plain }, Intent { act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=https:/... }, Intent { act=android.support.customtabs.action.CustomTabsService }, Intent { act=android.intent.action.INSERT dat=content://*/... typ=vnd.android.cursor.dir/event }, Intent { act=android.intent.action.VIEW dat=sms:xx }, Intent { act=android.intent.action.DIAL }]\n    scannedAsStoppedSystemApp=false\n    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]\n    usesOptionalLibraries:\n      androidx.window.extensions\n      androidx.window.sidecar\n      android.ext.adservices\n    usesLibraryFiles:\n      /system_ext/framework/androidx.window.extensions.jar\n      /system_ext/framework/androidx.window.sidecar.jar\n    timeStamp=2026-10-22 22:36:11\n    lastUpdateTime=2026-10-22 22:36:11\n    installerPackageName=null\n    installerPackageUid=-1\n    initiatingPackageName=com.android.shell\n    originatingPackageName=null\n    packageSource=1\n    appMetadataFilePath=null\n    appMetadataSource=0\n    signatures=PackageSignatures{421bbe9 version:2, signatures:[42c51f91], past signatures:[]}\n    installPermissionsFixed=false\n    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]\n    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]\n    apexModuleName=null\n    declared permissions:\n      dev.pourlune.motion_supplement.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature\n    requested permissions:\n      com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE\n      android.permission.ACCESS_ADSERVICES_TOPICS\n      android.permission.FOREGROUND_SERVICE\n      android.permission.ACCESS_ADSERVICES_AD_ID\n      dev.pourlune.motion_supplement.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION\n      android.permission.INTERNET\n      android.permission.ACCESS_NETWORK_STATE\n      android.permission.ACCESS_ADSERVICES_ATTRIBUTION\n      com.google.android.gms.permission.AD_ID\n      android.permission.WAKE_LOCK\n    install permissions:\n      com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE: granted=true\n      android.permission.ACCESS_ADSERVICES_TOPICS: granted=true\n      android.permission.FOREGROUND_SERVICE: granted=true\n      android.permission.ACCESS_ADSERVICES_AD_ID: granted=true\n      dev.pourlune.motion_supplement.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true\n      android.permission.INTERNET: granted=true\n      android.permission.ACCESS_NETWORK_STATE: granted=true\n      android.permission.ACCESS_ADSERVICES_ATTRIBUTION: granted=true\n      com.google.android.gms.permission.AD_ID: granted=true\n      android.permission.WAKE_LOCK: granted=true\n    User 0: ceDataInode=549415 deDataInode=393803 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false\n      installReason=0\n      dataDir=/data/user/0/dev.pourlune.motion_supplement\n      firstInstallTime=2026-10-22 22:36:11\n      uninstallReason=0\n      overlay paths:\n        /product/overlay/EmulationPixel7/EmulationPixel7Overlay.apk\n        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk\n      legacy overlay paths:\n        /product/overlay/EmulationPixel7/EmulationPixel7Overlay.apk\n        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk\n      gids=[3003]\n      runtime permissions:\n      enabledComponents:\n        androidx.work.impl.background.systemjob.SystemJobService\n\nQueries:\n  system apps queryable: false\n  queries via forceQueryable:\n  queries via package name:\n  queries via component:\n    com.google.android.as:\n      dev.pourlune.motion_supplement\n    com.google.android.settings.intelligence:\n      dev.pourlune.motion_supplement\n    com.google.android.apps.accessibility.voiceaccess:\n      dev.pourlune.motion_supplement\n    dev.pourlune.motion_supplement:\n      com.google.android.dialer\n      com.google.android.apps.messaging\n      com.google.android.googlequicksearchbox\n      com.android.chrome\n      com.google.android.calendar\n      com.google.android.apps.docs\n  queryable via interaction:\n    User 0:\n      [com.android.server.telecom,android,com.android.dynsystem,com.android.keychain,com.android.location.fused,com.android.DeviceAsWebcam,com.android.inputdevices,com.android.localtransport,com.android.emulator.multidisplay,com.android.providers.settings,com.android.settings]:\n        dev.pourlune.motion_supplement\n      com.google.android.gms:\n        dev.pourlune.motion_supplement\n      com.google.android.inputmethod.latin:\n        dev.pourlune.motion_supplement\n      com.google.android.providers.media.module:\n        dev.pourlune.motion_supplement\n  queryable via uses-library:\n\nDexopt state:\n  [dev.pourlune.motion_supplement]\n    path: /data/app/~~mmra6wTny75lnBdk88T4OQ==/dev.pourlune.motion_supplement-0S-0hsXExO7NJFi9tu-Njw==/base.apk\n      arm64: [status=run-from-apk] [reason=unknown] [primary-abi]\n        [location is error]\n\nCompiler stats:\n  [dev.pourlune.motion_supplement]\n    (No recorded stats)\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.pourlune_dev",
+      "sha256sum",
+      "databases/flame_full_board.sqlite"
+    ],
+    "code": 0,
+    "stdout": "858e1a4a9ae2d84329fa86ab345c59b72e5a6e688b2411032f0b0a3765b7e1f0  databases/flame_full_board.sqlite\n",
+    "stderr": ""
+  }
+]
