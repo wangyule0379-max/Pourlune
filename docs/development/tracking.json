@@ -54,14 +54,14 @@
     "B05": "Eight internal tasks accepted in available environment; independent165 Flutter/30core, five native flows,12 SIGKILL and ordinary main restart; external services/devices/identity/support/rights not passed"
   },
   "external_dependencies_path": "docs/development/dependencies/user-handoff.md",
-  "next_action": "Await user confirmation of Pourlune native IDs/Firebase project separation, Account Holder agreement handling where applicable, AdMob access and physical devices. Read-only preflight accepted; B05 CI complete. Do not repeat polls or account-creation requests.",
+  "next_action": "Formal iOS/Android ID com.pourlune.app explicitly confirmed; documents updated, not registered. Await Firebase project separation decision and external configuration/device handoff. Preserve development/QA IDs; no repeated CI or account polls.",
   "account_handoff": {
     "confirmed_at": "2026-10-22",
     "source": "explicit_user_message",
     "apple": "reuse FishPilot existing account",
     "google": "reuse FishPilot existing account",
     "firebase": "reuse FishPilot existing account; Pourlune project/app registrations not yet verified",
-    "status": "preflight_accepted_pending_target_identity_and_external_handoff",
+    "status": "preflight_accepted_identity_confirmed_pending_external_configuration",
     "no_inferred_reuse": [
       "FishPilot app identity",
       "FishPilot Firebase project",
@@ -69,6 +69,15 @@
       "signing private keys"
     ],
     "delivery_path": "docs/development/deliveries/account-reuse-preflight.md",
-    "acceptance_path": "docs/development/review/account-reuse-preflight-acceptance.md"
+    "acceptance_path": "docs/development/review/account-reuse-preflight-acceptance.md",
+    "formal_identity": {
+      "ios_bundle_id": "com.pourlune.app",
+      "android_application_id": "com.pourlune.app",
+      "status": "user_confirmed_not_registered",
+      "confirmed_on": "2026-10-22",
+      "source": "explicit_user_confirmation",
+      "supersedes": "com.fishtk.pourlune proposal",
+      "development_ids_unchanged": true
+    }
   }
 }

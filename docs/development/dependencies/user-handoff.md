@@ -6,7 +6,7 @@
 
 |项目|请提供或安排|收到后我们完成什么|
 |---|---|---|
-|发布身份|个人/公司发布主体、联系人；确认应用名 Pourlune；确定最终 iOS Bundle ID 与 Android applicationId，说明现有账号/已注册 ID。当前 dev.* 只作开发身份。可先反馈“尚未申请”，无需临时编造。|统一客户端身份、平台配置、候选版本及分发方案，避免配置绑定错误应用。|
+|发布身份|个人/公司发布主体、联系人；确认应用名 Pourlune；正式 iOS Bundle ID 与 Android applicationId 已确认均为 `com.pourlune.app`；尚未注册，需核对注册结果。当前 dev.* 只作开发身份。可先反馈“尚未申请”，无需临时编造。|统一客户端身份、平台配置、候选版本及分发方案，避免配置绑定错误应用。|
 |Firebase 开发环境|账号已确认沿用FishPilot；继续核对Pourlune所属Firebase项目和协作访问方式（沿用账号不自动认定共用FishPilot项目）；两端匹配开发身份的客户端配置：iOS GoogleService-Info.plist、Android google-services.json。若使用独立正式项目，另行标明。|真实初始化、Analytics DebugView 事件与去重、Crashlytics 测试报告/符号、Remote Config 有效值/坏值/离线回退，以及采集选择撤回。仅配置文件存在不算联调通过。|
 |AdMob / UMP|你拥有的 AdMob 应用、iOS/Android App ID、插屏和激励广告位 ID；同意/隐私消息的配置情况及计划发行地区。通过授权账号协作或公开配置交接。测试设备登记由联调时采集。|先保持测试广告，核验真实展示、关闭无奖、earned 回调绑定原局并写入 SQLite、冷却、后台/锁屏中断与消息配置。当前共享样例 App ID 和受控回调不能代替这一步。|
 |可连接设备|至少先安排一台 iPhone、一台 Android 手机，说明型号/系统版本/可用时间；提供数据线，解锁并按系统提示授权开发调试。尽量同时覆盖一台较小屏/较低性能设备；最低系统最终支持范围随设备验证确定。|Android 原生运行、两端 profile 性能与内存、真实断网/弱网、升级保留存档、VoiceOver/TalkBack、物理音频/系统中断和广告覆盖层。当前只有 iOS Simulator，未完成这些验证。|
@@ -44,4 +44,8 @@ Firebase 与广告项目需明确区分开发、测试及正式环境。配置�
 
 架构已独立确认Apple/Play/Firebase现有会话及FishPilot对象可见；无需重复新开户或当前重新登录。详见[预检验收](../review/account-reuse-preflight-acceptance.md)。Pourlune专属注册、Firebase文件、iOS资源/符号上传、签名和真机仍未完成。
 
-当前需要收束的选择：正式双端应用ID建议 `com.fishtk.pourlune`；同账号下建立独立开发/生产Firebase项目（候选 `pourlune-dev` / `pourlune-prod`，未查重/未注册）。请用户确认身份与项目隔离方案后进入实际注册准备。Apple控制台另有Paid Applications Schedule待持有人核对处理；不代签。AdMob归属因连接失败未知，需恢复可读访问；当前无连接真机。其他原有门槛不变。
+当前需要收束的选择：正式双端应用ID已由用户确认改为 `com.pourlune.app`；同账号下建立独立开发/生产Firebase项目（候选 `pourlune-dev` / `pourlune-prod`，未查重/未注册）。应用ID命名已确认；Firebase项目隔离方案仍待确认，实际应用/项目注册未执行。Apple控制台另有Paid Applications Schedule待持有人核对处理；不代签。AdMob归属因连接失败未知，需恢复可读访问；当前无连接真机。其他原有门槛不变。
+
+## 正式应用 ID 确认（2026-10-22）
+
+用户明确确认 iOS Bundle ID 和 Android applicationId 均使用 `com.pourlune.app`。该决定取代预检报告中的 `com.fishtk.pourlune` 建议；预检报告及冻结证据保留为历史记录。身份命名确认不代表已完成Apple/Google/Firebase/AdMob注册或查重。开发身份 `dev.pourlune.pourluneDev`、`dev.pourlune.pourlune_dev` 与隔离QA身份保持现状，正式配置接入时按环境核对，不直接替换现有测试安装。

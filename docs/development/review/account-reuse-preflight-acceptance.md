@@ -20,3 +20,7 @@
 3. 账号持有人须自行在[ASC Business](https://appstoreconnect.apple.com/business)核对并处理协议提示；不代签，也不以横幅推断所有开发任务受阻。
 4. AdMob归属待恢复可读访问后确认，不能根据Google账号推定已开通；真机联调等待连接iPhone/Android。其余支持/隐私/权属依赖沿用user-handoff，不重复整份通知。
 5. 准备工作与B05 CI均已结束；只剩具体外部交接，暂停自动轮询。用户确认目标身份或提供资料后，恢复既定范围的注册/本地接入计划，由原执行聊天执行、本聊天验收。权限扩大、条款、购买、商店上传与发布仍遵守独立授权边界。
+
+## 后续用户决定（2026-10-22）
+
+用户已明确确认双端正式应用ID改为 `com.pourlune.app`，取代上文预检阶段的 `com.fishtk.pourlune` 候选建议。上文及执行方冻结证据反映当时审查对象，不再作为当前身份决策。当前权威值同步至production-handoff、user-handoff和tracking；未执行注册、查重、签名或原生工程身份切换。Firebase项目隔离方案仍单独待确认。
