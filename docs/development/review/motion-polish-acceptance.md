@@ -45,3 +45,7 @@
 架构在明确CLI窗口中，于新冻结 `build/motion-supplement-r01-source/app` 独立运行四项测试，12秒全过；`flutter analyze --no-pub`无问题，两个新增文件`dart format --output=none --set-exit-if-changed`零变化。`r01-source-check.json`记录244冻结生产/资源/测试依赖与旧冻结逐字节一致，新测试SHA256为 `1914ae65942b30e7cb84f5b6a8ee8c9c4e05fdc94f6423d949d427849576bcae`；原生QA入口未变，因此不重做MS01原生测试。对应日志在本独立证据目录，首轮RED未被覆盖。
 
 MS-R01/P2关闭，M03键盘一次激活/禁用/持久化去重按上述范围通过。准予精确提交两份新增QA/test、已审阅MS执行证据及交付、本独立报告与tracking。新MS不是生产功能改造；BR01在途原生身份/签名/服务/构建/CI等文件、临时根目录诊断test及旧M未验大录像不夹带。本次代码提交后核对精确远端CI，纯跟踪文档不额外要求CI。CLI已明确归还原开发，无在途复验；用户F9和设备均未操作。
+
+## 远端提交记录
+
+已验MS专属范围已提交并推送 `78feb805d540a28addf12e457b8d34e48a720482`。精确SHA的GitHub Actions查询暂未返回run，记录于 `motion-polish-supplement-evidence/remote-ci-pending.json`；远端CI尚未确认通过，下次按该SHA继续发现并核对。BR01实现未夹带，继续由原开发推进。
