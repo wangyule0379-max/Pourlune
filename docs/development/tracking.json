@@ -8,7 +8,7 @@
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "Full UI reacceptance UI-R01–UI-R04",
   "current_status": "ui_acceptance_reopened_user_reports_overlap_and_style_regressions",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:325",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:327",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
   "delivery_path": "docs/development/deliveries/one-screen-layout.md",
@@ -290,7 +290,7 @@
     "br06_commit": "8251ef1de7afea4bb59707f46f951aafd5a5d507",
     "br07_plan": "docs/pmpowers/plans/2026-10-23-beta-store-assets-preparation.md"
   },
-  "updated_at": "2026-10-23T13:15:45.024905+00:00",
+  "updated_at": "2026-10-23T13:29:58.328340+00:00",
   "br07_independent_review": {
     "status": "accepted_local_candidates",
     "report": "docs/development/review/beta-readiness-BR07-acceptance.md",
@@ -699,13 +699,21 @@
     "visual_pages_passed": 0,
     "author_claims": "270 Flutter/40 strengthened layout tests passed; delivery read, not independently rerun or visual accepted",
     "independent_source_review": "26 frozen hashes match; all 8 production diffs + test deltas read; manifest only geometry_source/sha256; inventory78 scope bounded (hitTestable filtering/ensureVisible)",
-    "independent_review_evidence": "docs/development/review/full-ui-reacceptance-evidence/source-review-20261023.json"
+    "independent_review_evidence": "docs/development/review/full-ui-reacceptance-evidence/source-review-20261023.json",
+    "implementation_owner": "parent after content handoff; developer preserves frozen UI and continues main60 content",
+    "execution_order": "main60 content implementation and required data regression -> explicit CLI/QA handoff -> parent UI-R01–R07 fix and actual visual/transition verification -> combined release gates -> TestFlight update",
+    "new_findings": {
+      "UI-R05": "User reports unnatural Chapter/other page overscroll rebound; unverified",
+      "UI-R06": "User reports entry-frame visual corruption on multiple pages, settings strongest; unverified",
+      "UI-R07": "User reports unnatural settings subpage layouts; exact affected branches require inspection"
+    },
+    "handoff_status": "developer explicitly acknowledged preserving presentation/motion/UI tests; continues60 content/data regression, will release CLI at content delivery; parent owns subsequent UI fixes"
   },
   "difficulty_curve_review": {
     "status": "developer_active_dc01_measurement_after_ui_checkpoint",
     "finding": "DC-R01",
     "report": "docs/development/review/difficulty-curve-review.md",
-    "current_task_priority": "UI remains active; DC01/DC02 start after developer safe checkpoint; no TestFlight update until both independent gates pass",
+    "current_task_priority": "60-level content remains current developer task; parent independently reviews DC02 representatives then full delivery; parent personally fixes remaining UI after content implementation/data regression handoff",
     "reference_replays": 60,
     "human_difficulty_calibrated": false,
     "spec": "docs/pmpowers/specs/main60-level-design-v2.md",
