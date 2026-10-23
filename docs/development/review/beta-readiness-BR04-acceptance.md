@@ -26,3 +26,5 @@
 官方命令依据（本轮回读）：[JDK21 jarsigner](https://docs.oracle.com/en/java/javase/21/docs/specs/man/jarsigner.html)、[JDK21 keytool](https://docs.oracle.com/en/java/javase/21/docs/specs/man/keytool.html)。已有上轮官方Apple/Play/Pages依据见BR04计划；法律答案未由工具推断或代签。
 
 提交/远端：已精准推送 `eb96acb0367c46eba77f180a76935e12ddfbca16` 至开发分支，43文件。scope whitespace检查通过；两份保留的原始RED日志含原生测试输出尾随空格，作为原始证据不改写。新精确CI `39887064814` 已发现queued，见[待完成记录](beta-readiness-BR04-evidence/remote-ci-pending.json)，尚未宣称远端通过。
+
+远端收尾（2026-10-23）：架构通过GitHub连接器独立回读精确实现SHA的CI39887064814，于02:09:46Z终态completed/success；tests-and-android、ios-build均success。见[最终证据](beta-readiness-BR04-evidence/remote-ci-final.json)。不再轮询该run，跟踪文档不要求新CI。原开发idle、无新增交付；当前可做工程已收束，自动跟进暂停等待本人账号状态、发布资料及签名条件，不代表真实签名/公开网站/商店分发/手机验证通过。
