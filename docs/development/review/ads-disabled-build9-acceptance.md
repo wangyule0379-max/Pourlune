@@ -29,3 +29,13 @@
 原开发复用既有ASC记录6826203407及仅本人组、既有签名，继续实际原IPA/AAB上传和独立记录回执。旧记录创建与版本空闲仍为作者可见UI范围，本轮父未登录控制台，上传前仍核对。Play政策/美国出口声明不能代签；认证或其他未知必填集中指明真实页面和影响，继续另一可行路径。无需重复通用上传许可，不扩大IAM/购买/邀请未知人/公开生产发布。
 
 本人手机安装、升级、保存恢复、音触觉、读屏、性能仍未验；不要求远端USB。F9、普通库、FirebaseQA、旧冻结包及受限采集保持不动。父全部只读验证结束，CLI RELEASED交回原开发。
+
+## 2026-10-23 11:49 UTC CI及Organizer重新签名差额
+
+精确779c82eb1d82a582b327d3cbdd517419f06201b4的CI39947544889已于11:49:11Z终态success，父独立回读两job均成功，remote-ci-final.json已保存，禁止重复查询。
+
+Xcode使用既有团队会话对本次归档准备上传，生成新IPA：`build/store-submission/0.5.0-9/ios-organizer-attempt-1/prepared-upload.ipa`，SHA256 **7fd86c11a7cfc5053b1a96aa381134861e9aec0b8a75311adef25c189b51d117**。父另写独立验证器直接读取新旧ZIP并独立解包，非复用作者验签树：256文件中247逐字节相同；8个Mach-O仅各LC_CODE_SIGNATURE实际签名blob变化，签名范围位置/大小、fat头/padding、全部load commands及其他代码字节均不变；另1个CodeResources仅相应framework哈希变化。Info/profile/资源/广告模式继承字节相等证据。
+
+16个真实只读命令exit0，actual codesign deep/strict、同entitlements、有效profile UUID74a202b2-3b25-4e31-8fd4-0413bf15d486及既有公钥证书SHA1 13362E4AF31A860FA6B705DB5192AF78613F7A58、5个dSYM对新实际二进制UUID通过。旧候选533文件hash不变。证据verify_organizer_independent.py、organizer-independent.log、organizer-independent-final.json。
+
+已通知原开发解除该精确重新签名包的上传等待，继续当前Xcode会话；会话如产生不同新包需核差额。父未点击上传/运行生产或设备，也未把作者“最终Upload前”当上传成功。Play本人两项声明已由开发一次询问，不重复提问。CLI归原开发，父命令全部结束。
