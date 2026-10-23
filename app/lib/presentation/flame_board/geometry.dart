@@ -292,22 +292,69 @@ class BoardLayout {
     required this.width,
     required this.count,
     double textScale = 1,
+    double maxHeight = double.infinity,
+    this.preview = false,
   }) {
     assert(count >= 4 && count <= 7);
-    shape = BottleShape(((width - 24) / 4).clamp(48.0, 84.0));
+    final bounded = maxHeight.isFinite;
+    labelHeight = bounded
+        ? math.max(40.0, 32 * textScale + 8)
+        : math.max(52.0, 32 * textScale + 14);
+    if (preview && bounded && textScale <= 1.4) {
+      final cellWidth = width / count;
+      shape = BottleShape(math.min(48, cellWidth - 8));
+      topRowCount = count;
+      mouths = [];
+      cells = [];
+      for (var i = 0; i < count; i++) {
+        final cell = Rect.fromLTWH(
+          i * cellWidth,
+          labelHeight,
+          cellWidth,
+          shape.height,
+        );
+        cells.add(cell);
+        mouths.add(Offset(cell.center.dx, cell.top + shape.height * .148));
+      }
+      height = cells.last.bottom + 4;
+      return;
+    }
+    final preferred = ((width - 24) / 4).clamp(48.0, 84.0);
+    shape = BottleShape(
+      bounded
+          ? math.min(
+              preferred,
+              math.max(
+                preview ? 32 : 48,
+                (maxHeight - labelHeight * 2 - (preview ? 12 : 32)) /
+                    (preview ? 3 : 3.85),
+              ),
+            )
+          : preferred,
+    );
     final rows = switch (count) {
       4 => [2, 2],
       5 => [3, 2],
       6 => [3, 3],
       _ => [4, 3],
     };
-    labelHeight = math.max(52.0, 32 * textScale + 14);
+
     // Captions frame the entire flight area rather than forming a barrier
     // between rows. All labels remain at their own column, next to their row.
-    final gutter = labelHeight + math.max(72.0, shape.width * .95) + 20;
-    final stride = shape.height + 64;
+    final gutter = preview
+        ? labelHeight
+        : bounded
+        ? labelHeight + shape.width * .85 + 12
+        : labelHeight + math.max(72.0, shape.width * .95) + 20;
+    final stride =
+        shape.height +
+        (preview
+            ? labelHeight + 8
+            : bounded
+            ? 8
+            : 64);
     topRowCount = rows.first;
-    final cellWidth = shape.width + 6;
+    final cellWidth = preferred + 6;
     mouths = [];
     cells = [];
     for (var row = 0; row < rows.length; row++) {
@@ -315,15 +362,14 @@ class BoardLayout {
         final left = (width - rows[row] * cellWidth) / 2 + column * cellWidth;
         final top = gutter + row * stride;
         mouths.add(Offset(left + cellWidth / 2, top + shape.height * .148));
-        cells.add(
-          Rect.fromLTWH(left, top, cellWidth, shape.height + labelHeight + 8),
-        );
+        cells.add(Rect.fromLTWH(left, top, cellWidth, shape.height));
       }
     }
-    height = cells.last.bottom + 4;
+    height = (preview ? cells.last.bottom : labelRect(count - 1).bottom) + 4;
   }
   final double width;
   final int count;
+  final bool preview;
   late final int topRowCount;
   late final BottleShape shape;
   late final double height, labelHeight;
@@ -333,7 +379,11 @@ class BoardLayout {
       Rect.fromLTRB(0, labelHeight + 12, width, labelRect(count - 1).top - 8);
   Rect labelRect(int index) => Rect.fromLTWH(
     cells[index].left,
-    index < topRowCount ? 8 : cells[index].top + shape.height + 8,
+    preview
+        ? cells[index].top - labelHeight
+        : index < topRowCount
+        ? 8
+        : cells[index].top + shape.height + 8,
     cells[index].width,
     labelHeight,
   );

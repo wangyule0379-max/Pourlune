@@ -1,0 +1,117 @@
+{
+  "review_date": "2026-10-23 Asia/Taipei",
+  "scope": "LY UI interaction only; static interim snapshot review",
+  "snapshot": "/Volumes/data/App Development/Pourlune/build/ly-independent-review-20261023-0720",
+  "snapshot_file_count": 280,
+  "snapshot_sha256": "cfe5d213715fe783d9d5af3cda125ad4325d40edb137c1bd7bdafbd04d3620f7",
+  "all_snapshot_file_hashes_match": true,
+  "snapshot_collection_hash_match": true,
+  "static_review": "complete",
+  "independent_runtime": "R02/R03 repaired shipping:27/27 independent host probes passed",
+  "acceptance": "R04 UI host scope passed; final native/whole LY remains architecture-owned",
+  "confirmed_product_defects": [],
+  "acceptance_gaps": [
+    {
+      "id": "LY-UI-G01",
+      "priority": "P2 verification gap",
+      "summary": "Normal completion and reward tests check actions/board, not all branch information and scene within their local clip viewport."
+    },
+    {
+      "id": "LY-UI-G02",
+      "priority": "P2 verification gap",
+      "summary": "Temporary hint/tutorial/error/reward matrix only runs scale1.3; 1.5/2.0 fixed56 info-pane clipping must be checked."
+    },
+    {
+      "id": "LY-UI-G03",
+      "priority": "P2 verification gap",
+      "summary": "LY matrix does not check actual focus/semantics bounds/activation; existing unbounded old-board tests do not cover new pinned layouts."
+    }
+  ],
+  "known_test_strengths": [
+    "real Nunito/decoded art",
+    "4-7 bottle counts; five safe-area viewports; four font scales",
+    "bounds plus min48 and hitTestable before scroll for core actions",
+    "zero board maxScrollExtent at normal scales",
+    "nine settlement/reward branches",
+    "geometry all source-target pairs/1,2,4 units/15ms samples, canvas-label checks"
+  ],
+  "author_native_log_review": {
+    "ios-native-final.log": {
+      "sha256": "2838f2ecdab8424b77510fa2a8832e87e71d880373d9b7ad1305b3a3ba9b4f50",
+      "author_all_tests_passed": true,
+      "author_some_tests_failed": false,
+      "reports": [
+        {
+          "platform": "ios",
+          "stages": 11,
+          "viewports": [
+            "[402.0, 874.0]"
+          ],
+          "text_scales": [
+            1.0
+          ],
+          "result": "passed"
+        }
+      ]
+    },
+    "android-native.log": {
+      "sha256": "b8aaf46a522d58f1675d0eda27fa770cccd00d79b9a47cfd43e559e309ddeb43",
+      "author_all_tests_passed": false,
+      "author_some_tests_failed": true,
+      "reports": []
+    }
+  },
+  "pending_commands_cwd": "/Volumes/data/App Development/Pourlune/build/ly-ui-independent-review/app",
+  "pending_commands": [],
+  "additional_probe_design": "implemented as ly_ui_probes_test.dart; pending allocated execution window",
+  "runtime_precondition": "No additional CLI allocated or needed for this completed UI host window.",
+  "protected_surfaces": "F9/window untouched; no device, screenshot, recording, capture retry, installation or native build; no workaround of Cocoa513/EPERM",
+  "writes": "Only this ui review directory",
+  "transactions_restore_dedup": "Delegated to functional reviewer; no duplicate review",
+  "git_commit_push": false,
+  "review_report": "review.md",
+  "test_design": "test-design.md",
+  "written_files": "only ui evidence plus isolated clone probe/derived caches; no shared production edits",
+  "probe_preparation": "formatted, compiled and executed",
+  "probe_source": "ly_ui_repair_probes_test.dart",
+  "probe_clone": "/Volumes/data/App Development/Pourlune/build/ly-ui-independent-review",
+  "probe_sha256": "084e47901e7c748fe4c3dc7b25506ca25cb0976b5fe794a1cc9594dcd24dae0a",
+  "probe_cases": {
+    "G01_settlement_branches": 9,
+    "G02_information_cases": 8,
+    "G03_focus_and_readonly_semantics": 2
+  },
+  "shipping_source_entries": 192,
+  "shipping_source_fingerprint": "6260033bed815e271c6e8de32d4d06781c05823226a3dbbb3c2baf537d2cadf3",
+  "final_delta_review": "only board_page.dart line wrapping, no behavioral delta",
+  "cli_owner": "RELEASED to architecture",
+  "remaining_scope_decisions": [
+    "Only long final-story secondary text may locally scroll, within existing exception. Necessary scene/status strict checks pass."
+  ],
+  "last_command_status": "repair-probe-first-status.json",
+  "probe_result": {
+    "total": 27,
+    "passed": 27,
+    "failed": 0,
+    "exit_code": 0,
+    "outer_timeout": false
+  },
+  "author_native_log_review_note": "earlier author native statuses remain historical; this execution used no native devices",
+  "closed_product_defects": [
+    {
+      "id": "LY-UI-R01 / architecture LY-R02",
+      "status": "fixed and independently verified",
+      "evidence": "repair-probe-first.log; original failing probe-final.log retained"
+    },
+    {
+      "id": "architecture LY-R03",
+      "status": "normal necessary status/ScenePreview local clips now strictly pass including all eight seven-bottle QA branch variants",
+      "evidence": "repair-probe-summary.json"
+    }
+  ],
+  "latest_summary": "repair-probe-summary.json",
+  "parent_repair_source": "R02-R03-parent-source.json exact5files verified",
+  "latest_scope": "R04 targeted independent host2/2; earlier R02/R03 exact-source27/27 retained separately",
+  "latest_result": "R04-probe-summary.json",
+  "R04_game_screen_sha256": "0b577272f9d19a45226c461a54694f4ac822f699c6894331b97430072e023cce"
+}

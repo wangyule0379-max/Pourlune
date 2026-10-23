@@ -188,3 +188,43 @@ candidate commands in `tools/validation/README.md`; they produce unsigned releas
 checks by default, with an explicit existing-profile local IPA export option.
 A successful local signature does not clear store/legal/device gates. Support URLs, store legal forms,
 signing and commercial-rights gates stay explicit in the BR01 delivery.
+
+### Bounded gameplay and settlement layout (LY01–LY06)
+
+Gameplay, completion and patch reward pages now divide the actual SafeArea height
+between information, board/preview and anchored actions. At text scale 1.0/1.3,
+4–7 bottles and the settlement actions fit the documented small-screen matrix
+without scrolling. At 1.5/2.0, a local board or information viewport can scroll
+when its readable content needs more height; core actions stay outside it.
+Lists and collection scenes retain their existing scroll behavior. Completion
+uses a read-only compact preview with no arrival/pour reservation or presenter.
+
+Focused widget/geometry checks, from `app/`:
+
+```sh
+FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter test test/one_screen_layout_test.dart test/one_screen_geometry_test.dart
+```
+
+`integration_test/one_screen_layout_test.dart` calls normal main/Bootstrap with
+the production bundled 60+30 content, disabled optional services and no scenario.
+It clears only explicit `ly_runtime.sqlite`, plays main 1–4, opens the patch,
+continues to 5, closes/reopens SQLite through Bootstrap and checks a separately
+prepared seven-bottle entitlement snapshot. That last snapshot is QA state,
+not evidence of an SDK reward. The harness requires explicit `POURLUNE_AD_MODE=disabled`, Firebase none and no scenario; debug defaults are not accepted. This harness collects bounds/state JSON and no
+screen/audio capture. SQLite reopening is in the same process, not SIGKILL
+recovery or a physical-device performance check.
+
+Run only on an independent QA installation and device; never on the protected
+F9 simulator or an ordinary app database. For iOS use an external xcconfig with
+`POURLUNE_BUNDLE_IDENTIFIER = dev.pourlune.layoutValidation`, verify the built
+Info.plist before installing, then run serially:
+
+```sh
+XCODE_XCCONFIG_FILE=/absolute/path/layout.xcconfig FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter test integration_test/one_screen_layout_test.dart -d <independent-device-id> --dart-define=POURLUNE_DATABASE=ly_runtime.sqlite --dart-define=POURLUNE_AD_MODE=disabled
+```
+
+Android also uses an independent QA device/identity; exact local overrides,
+commands, device inventory, bounds and limitations are recorded in
+`../docs/development/deliveries/one-screen-layout.md`. Source changes do not
+update the frozen BR06 build 6; a new signed candidate follows independent
+layout acceptance and its exact implementation CI.

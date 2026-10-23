@@ -235,16 +235,18 @@ void main() {
     }),
   );
   testWidgets(
-    'new board instance and different scene start at top; returning keeps scroll',
+    'new board explanation and different scene start at top; returning keeps scroll',
     (t) => appCase(t, (c) async {
       await t.binding.setSurfaceSize(const Size(360, 568));
       addTearDown(() => t.binding.setSurfaceSize(null));
       await t.runAsync(() => c.startLevel(1));
       await t.pumpAndSettle();
-      Finder scroll() => find.descendant(
-        of: find.byType(PageMotion),
-        matching: find.byType(SingleChildScrollView),
-      );
+      Finder scroll() => c.page == GamePage.board
+          ? find.byKey(PageStorageKey('board-explanations-${c.current!.id}'))
+          : find.descendant(
+              of: find.byType(PageMotion),
+              matching: find.byType(SingleChildScrollView),
+            );
       double offset() => t
           .state<ScrollableState>(
             find.descendant(of: scroll(), matching: find.byType(Scrollable)),

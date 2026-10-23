@@ -1,0 +1,85 @@
+{
+  "reviewed_at_utc": "2026-10-23T07:57:12.399370+00:00",
+  "status": "focused_functional_runtime_passed_cli_released",
+  "final_acceptance": false,
+  "confirmed_defects": [],
+  "snapshot_sha256": "cfe5d213715fe783d9d5af3cda125ad4325d40edb137c1bd7bdafbd04d3620f7",
+  "snapshot_integrity_verified": true,
+  "files_verified": 280,
+  "actual_checks": [
+    "280-file snapshot SHA256 and aggregate verification",
+    "Current-candidate delta review and isolated source copy",
+    "enforce-lockfile dependencies; app/core locks unchanged",
+    "4 independent widget probes with real Nunito and decoded art",
+    "2 hint identity tests and 1 generation test",
+    "12 completion feedback tests",
+    "Final probe format and analyze clean",
+    "Post-run copied manifest hashes unchanged"
+  ],
+  "independent_flutter_dart_or_native_commands_executed": true,
+  "cli_owner": "RELEASED by functional reviewer; UI owns next serial window",
+  "pending": [
+    "overall LY and independent UI acceptance",
+    "Android native path owned by architecture/developer",
+    "later QA diagnostic delta separately reviewed by architecture",
+    "OS process recovery and real devices remain unverified"
+  ],
+  "probe_source_status": "formatted_analyzed_and_run_4_passed",
+  "evidence_hashes": {
+    "completion-feedback.log": "275bdabb0a8de4a60fbd011d19706f0f67d4b1e6b445de268b0905c226b95cf9",
+    "final-delta.json": "e0cf4d3a3356b78c7fc445e133a877a75753b77a064aa0de139d54af839fb95d",
+    "fp03-diagnostic-geometry.log": "e43e19a1648665691c44b9c2226e3d3bf7fb86b516d48c86eb4d4a4b119c1654",
+    "fp03-diagnostic.log": "9c4a04791c12e43d3ebd2e2e72d913f15abcb8acd65827acc096d83ab518f9d5",
+    "hint-generation.log": "150d4468ef9a5fd47dc10862a2ba48dc41b64c27cc90b96a42f846c9a437fe7a",
+    "hint-identity.log": "cd9a368f18478d6426b88d5899a07260fc8bfc236f11086f197e411f902fe30f",
+    "ly_failure_probes_draft.dart": "16de6c8d6f28e024af07347e2d5db57df83ccb48e33ecee0856d721dd7ffb99b",
+    "ly_failure_probes_test.dart": "2430e5ce675344691b2f7bd294695279edfc3cba50894744643326fd7e39ea22",
+    "probe-analyze-final.log": "eb9e8f4cd670abc643627824a7265a1eafdba0ac70ad773a56e474506f672cd1",
+    "probe-analyze.log": "7130f554804bca7fc214d4c925f0248854060acfe5e4c03f5d57bdc34ed838b0",
+    "probe-format-final-write.log": "d3f36d376e0149fa19fc4b31c768dfd05b548479917d159d3480dc805d2a2f68",
+    "probe-format-final.log": "1685974b88bd671112e17334bdc2abb8ef350e01ae026547459ec7a8307375ec",
+    "probe-format-first.log": "54af9227c181233dcac16f8009937e32f7b519d71990c181d509c79d935e16f9",
+    "probe-format-fp03.log": "d3f36d376e0149fa19fc4b31c768dfd05b548479917d159d3480dc805d2a2f68",
+    "probe-format-write.log": "d3f36d376e0149fa19fc4b31c768dfd05b548479917d159d3480dc805d2a2f68",
+    "probes-final.log": "6ccb5a3bd3cf81c8856032930c7cede5463811833aca621bf9664d2caf636a10",
+    "probes-first.log": "864fa2fde2b4f4145a2cfab985ded5e4e6a4cdfeff088a8d3da2d112757493d8",
+    "probes-fp03-first.log": "d3696dbc4f2efacc7c8724d83f7297cda4c6c51e993b2b2e3de055cee619d6a2",
+    "probes-real-font.log": "f944804024e3bed037168b4da3b00074d6b3ffda27ab7d5213d05dd1aebdb34e",
+    "pub-get.log": "6f333c5f03ea60b07b764ad7a86518a0be4c86b475768d9532d1fa33906d1531",
+    "review-static.md": "d1b31a5e8c578bf827d9eb22ab9ced87da3e443cc02e2154c90bccfc7a3a48bd",
+    "review.md": "8532557cf27bd724ee5b10274df941b75618b0c3ca0491f5d5956a03ffcd0eec",
+    "runtime-checks.json": "952d253896393d832caf0941604c98ff30353e48cbe1b1023d97e105cbbc30df",
+    "static-audit.json": "cf1d0c453ea4757d4ec6501a3614d4144857c892d1771ae5893ed1fb82a2b897"
+  },
+  "restrictions_observed": [
+    "production source/shared tests read-only",
+    "no native commands/device or F9 window touched",
+    "no screenshots recording or audio capture",
+    "no signing upload or git staging commit/push"
+  ],
+  "execution_scope": "Flutter/Dart host tests only; no native devices/commands",
+  "unique_tests_passed": 19,
+  "new_probes_passed": 4,
+  "existing_focused_tests_passed": 15,
+  "known_probe_failures": [
+    {
+      "log": "probes-fp03-first.log",
+      "classification": "probe_setup_missing_real_font",
+      "production_defect": false,
+      "resolution": "FontLoader Nunito only; hitTestable assertion retained; final 4 pass"
+    },
+    {
+      "log": "probe-format-first.log",
+      "classification": "draft_formatting",
+      "production_defect": false
+    },
+    {
+      "log": "probe-analyze.log",
+      "classification": "two_probe_style_infos",
+      "production_defect": false
+    }
+  ],
+  "production_manifest_file_drift_since_copy": [
+    "app/integration_test/one_screen_layout_test.dart"
+  ]
+}

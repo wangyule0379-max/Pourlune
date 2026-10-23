@@ -1,0 +1,7 @@
+gradle.beforeProject { p ->
+  if (p.name == 'app' && p.projectDir.canonicalPath == new File(System.getenv('POURLUNE_LY_ANDROID')).canonicalPath) {
+    p.afterEvaluate {
+      p.extensions.getByName('android').defaultConfig.applicationId = 'dev.pourlune.pourlune_dev.layoutValidation'
+    }
+  }
+}

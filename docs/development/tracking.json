@@ -8,7 +8,7 @@
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "LY01–LY06 gameplay/completion viewport repair; BR07 checkpoint preserved",
   "current_status": "one_screen_layout_active_submission_authorized_after_acceptance",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:163",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:204",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
   "delivery_path": "docs/development/deliveries/one-screen-layout.md",
@@ -311,37 +311,120 @@
     "public_production_release": false
   },
   "layout_latest_check": {
-    "checked_at": "2026-10-23T07:16:57.036072+00:00",
+    "checked_at": "2026-10-23T08:54:53.198224+00:00",
     "delivery_exists": true,
-    "delivery_status": "draft_native_and_final_checks_pending",
+    "delivery_status": "parent_final_runtime_teardown_revalidation",
     "developer_status": "active",
-    "author_progress": "Author reports iOS native path passed; Android same path still running. Delivery explicitly retains unfinished native results and no released CLI window.",
-    "independent_progress": "Read draft delivery, CompletionPage/RewardPage fixed-action structure, bounded preview, geometry and native test. Native SQLite close/reopen is not OS process restore; preserve distinction in final review. No tests run on occupied CLI or device.",
-    "next_action": "Wait for complete frozen delivery and explicit CLI release, then independently rerun seven-bottle/all-completion first-viewport action tests and actual QA app operations; no duplicate implementation dispatch."
+    "author_progress": "73 focused tests/analyze reported passed; Android test driver connection investigation ongoing, not native flow pass. iOS author evidence only.",
+    "parallel_review": "Both reviewers active on pinned snapshot; static bounds/assertion review and scoped probes in preparation. No final findings or CLI windows claimed.",
+    "next_action": "Complete iOS and Android same final QA; independent read-only delta; final acceptance and precise implementation CI."
   },
   "parallel_ly_review": {
     "authorization": "2026-10-23 user instruction relayed through existing Pourlune coordination: more chats by task type",
     "snapshot": "build/ly-independent-review-20261023-0720",
     "snapshot_sha256": "cfe5d213715fe783d9d5af3cda125ad4325d40edb137c1bd7bdafbd04d3620f7",
     "manifest": "docs/development/evidence/one-screen-independent/snapshot.json",
-    "cli_owner": "original developer; reviewers read-only until explicit serial window",
+    "cli_owner": "architecture final record/commit; all Flutter/native commands completed",
     "ui": {
       "thread_id": "01a16272-63c8-76d3-bcdb-e2b012feab05",
       "host": "local",
-      "status": "active",
-      "cursor": "13a2a871-8b00-43b7-9c13-558250128243:20",
-      "output": "docs/development/evidence/one-screen-independent/ui/"
+      "status": "independent27+2passed; final QA delta read-only accepted; idle CLI released",
+      "cursor": "13a2a871-8b00-43b7-9c13-558250128243:60",
+      "output": "docs/development/evidence/one-screen-independent/ui/",
+      "parent_review": {
+        "read": [
+          "review.md",
+          "readiness.json",
+          "bounds-findings.json",
+          "qa-wait-review.md"
+        ],
+        "confirmed_defects": 2,
+        "execution_status": "19 probes:17 passed,2 real clipping failures; R02/R03 repair pending",
+        "qa_wait_review": "accepted independent read-only review; no weakened assertions; not final layout or visual acceptance"
+      },
+      "confirmed_findings": [
+        "LY-R02 / UI LY-UI-R01: 2.0 text hint/tutorial actions clipped",
+        "LY-R03: normal completion necessary content allocation"
+      ]
     },
     "functional": {
       "thread_id": "01a167a2-09c7-75c3-8b20-5c26e7186cce",
       "host": "local",
-      "status": "active",
-      "cursor": "a64c0fd1-050c-4101-8842-b3b8329e1cd5:1",
-      "output": "docs/development/evidence/one-screen-independent/functional/"
+      "status": "runtime19_passed_final_report_synced",
+      "cursor": "a64c0fd1-050c-4101-8842-b3b8329e1cd5:46",
+      "output": "docs/development/evidence/one-screen-independent/functional/",
+      "parent_review": {
+        "checked_at": "2026-10-23T07:27:30.901411+00:00",
+        "read": [
+          "review.md",
+          "readiness.json",
+          "ly_failure_probes_test.dart"
+        ],
+        "confirmed_product_defects": 0,
+        "execution_status": "Final19 runtime checks passed;17 command log hashes independently verified; no product defect. Subsequent QA-review turn capacity failure is not test failure.",
+        "next_action": "Developer asked for explicit safe bounded CLI release after current command; no window assumed."
+      }
     },
     "peripheral_coordinator": "01a1679c-3a7b-713e-abfc-9f012a86703e",
     "production_owner": "01a15eca-2b7f-70c1-978d-45dd735765f1",
     "final_acceptance_owner": "01a15eaf-f58d-74d2-90d8-0f64bb28ddce",
-    "note": "Static interim snapshot review is not final runtime acceptance. No concurrent Flutter/Dart/native CLI; final snapshot diff required."
+    "note": "Static interim snapshot review is not final runtime acceptance. No concurrent Flutter/Dart/native CLI; final snapshot diff required.",
+    "interim_snapshot_drift": [
+      {
+        "path": "app/integration_test/one_screen_layout_test.dart",
+        "snapshot": "9010c27b2ea8d90012be2ee7c48108b3cd3ffd5c4a678890cb8fe97c95bc1b62",
+        "current": "d06f6a588da1c54d8c1b93139ca2bf12f82b5ff7d8dffc2b39616d360918059c"
+      },
+      {
+        "path": "app/lib/presentation/board_page.dart",
+        "snapshot": "5e278a6fc318c1a109e440719f6293d644d36f1888a8067b82e850e16afd80e7",
+        "current": "f7759cddfa77030e91e986b32ac1595cea8a0ad614a06e96979916ae36d7b276"
+      },
+      {
+        "path": "app/test/one_screen_layout_test.dart",
+        "snapshot": "5b55133b9615618ecf5ba7a80d26a04c98d9057e1693816bd11ee1cca781fe18",
+        "current": "759c4ec003754c1babcd4c7bc5219f8f93172e1fdd70bcc5fd8a6f00eceb70c8"
+      }
+    ],
+    "parent_takeover": {
+      "authorization": "User explicitly requested coordinator directly resolve stuck work",
+      "handoff": "docs/development/evidence/one-screen-layout/CLI-RELEASED.json",
+      "qa_owner": "architecture",
+      "android": "emulator-5590 / dev.pourlune.pourlune_dev.layoutValidation / ly_runtime.sqlite",
+      "status": "final iOS/Android14 exit0 each, QA teardown RED preserved and independently reviewed; local LY accepted",
+      "checked_at": "2026-10-23T07:43:37.187363+00:00",
+      "evidence": "docs/development/review/one-screen-layout-evidence/android-fixed-pass-audit.json",
+      "root_cause": "audioplayers FramePositionUpdater continuously schedules frames; global pumpAndSettle invalid",
+      "qa_independent_review": "UI qa-wait-review.md read and accepted; original bounds/hitTest/SQLite byte-preserved; 11-stage report independently checked; does not cover R02/R03.",
+      "handoff_request": "Explicit safe release requested; subsequent revision204 shows developer resumed concrete root-cause/test work, no release yet. Keep original ownership and do not concurrently edit/run CLI."
+    },
+    "checked_at": "2026-10-23T08:18:54.231574+00:00"
+  },
+  "latest_owner_facts_relay": {
+    "source": "01a1679c trusted direct user relay",
+    "self_testing_only": true,
+    "target_audience": "13+ confirmed after explanation; not automatic store content rating or legal exemption",
+    "original_art_question": "User confirms all five original images ChatGPT-generated; source unknown closed, no fabricated third-party-free/legal guarantee"
+  },
+  "one_screen_layout_acceptance": {
+    "status": "accepted_local_pending_exact_ci_and_new_candidate",
+    "report": "docs/development/review/one-screen-layout-acceptance.md",
+    "production_fingerprint": "6260033bed815e271c6e8de32d4d06781c05823226a3dbbb3c2baf537d2cadf3",
+    "qa_sha256": "e17380cf95249919535ae4b5ba49fd5ecfd7fbb998cf32b84e731f6aae32897f",
+    "ios": {
+      "stages": 14,
+      "exit_code": 0
+    },
+    "android": {
+      "stages": 14,
+      "exit_code": 0
+    },
+    "closed_findings": [
+      "LY-R01",
+      "LY-R02",
+      "LY-R03",
+      "LY-R04"
+    ],
+    "updated_at": "2026-10-23T08:59:27.066478+00:00"
   }
 }

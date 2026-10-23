@@ -10,6 +10,73 @@ import '../services/service_hub.dart';
 import 'knit_components.dart';
 import 'motion.dart';
 
+class SaveFailureNotice extends StatelessWidget {
+  const SaveFailureNotice({
+    super.key,
+    required this.controller,
+    this.compact = false,
+  });
+  final GameController controller;
+  final bool compact;
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    if (compact) {
+      return ColoredBox(
+        color: const Color(0xfffff3d7),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Semantics(
+                liveRegion: true,
+                child: Text(
+                  l.saveFailed,
+                  style: const TextStyle(fontSize: 14, height: 1.1),
+                ),
+              ),
+            ),
+            KnitIconButton(
+              key: const Key('retry'),
+              icon: Icons.refresh,
+              label: l.retry,
+              onPressed: controller.retry,
+            ),
+            KnitIconButton(
+              key: const Key('stay'),
+              icon: Icons.close,
+              label: l.stayHere,
+              onPressed: controller.stayHere,
+            ),
+          ],
+        ),
+      );
+    }
+    return KnitPanel(
+      child: Column(
+        children: [
+          Text(l.saveFailed),
+          Wrap(
+            spacing: 8,
+            children: [
+              FilledButton(
+                key: const Key('retry'),
+                onPressed: controller.retry,
+                child: Text(l.retry),
+              ),
+              TextButton(
+                key: const Key('stay'),
+                onPressed: controller.stayHere,
+                child: Text(l.stayHere),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 Future<void> openSupportEntry(
   BuildContext context,
   GameController c, {
@@ -193,8 +260,13 @@ Future<void> showPrivacyChoices(BuildContext context, GameController c) async {
 }
 
 class RewardStatus extends StatelessWidget {
-  const RewardStatus({super.key, required this.controller});
+  const RewardStatus({
+    super.key,
+    required this.controller,
+    this.compact = false,
+  });
   final GameController controller;
+  final bool compact;
   @override
   Widget build(BuildContext context) {
     final c = controller, l = AppLocalizations.of(context);
@@ -206,6 +278,7 @@ class RewardStatus extends StatelessWidget {
       children: [
         if (c.rewardSaveFailed || c.rewardIssue != null)
           KnitPanel(
+            padding: EdgeInsets.all(compact ? 4 : 20),
             child: Column(
               children: [
                 Text(
@@ -225,15 +298,21 @@ class RewardStatus extends StatelessWidget {
         for (final attempt in c.pendingRewards)
           KnitPanel(
             key: Key('pending-${attempt.id}'),
+            padding: EdgeInsets.all(compact ? 4 : 20),
             child: Column(
               children: [
+                if (compact)
+                  Text(
+                    attempt.unconfirmed ? l.rewardUnconfirmed : l.rewardRestore,
+                  ),
                 Text(
                   title(attempt.origin),
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-                Text(
-                  attempt.unconfirmed ? l.rewardUnconfirmed : l.rewardRestore,
-                ),
+                if (!compact)
+                  Text(
+                    attempt.unconfirmed ? l.rewardUnconfirmed : l.rewardRestore,
+                  ),
                 TextButton(
                   onPressed: c.busy
                       ? null

@@ -400,6 +400,9 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: c,
     builder: (context, _) {
+      // A retained outgoing page must keep its own scroll/constraint policy.
+      // Its LayoutBuilder can run after the live controller navigates elsewhere.
+      final renderedPage = c.page;
       final instance =
           {
             GamePage.board,
@@ -519,112 +522,137 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                     animateInitial: c.page == GamePage.home,
                     retainPrevious: _retainPrevious,
                     immediate: c.phase == SavePhase.failed,
-                    child: SingleChildScrollView(
-                      key: PageStorageKey(
-                        instance != null
-                            ? 'scroll-${c.page.name}-$instance'
-                            : c.page == GamePage.scene
-                            ? 'scroll-scene-${c.selectedScene}'
-                            : 'scroll-${c.page.name}',
-                      ),
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          if (c.page != GamePage.home &&
-                              c.page != GamePage.board)
-                            KnitHeader(
-                              title:
-                                  c.page == GamePage.completion ||
-                                      c.page == GamePage.reward
-                                  ? (c.current?.slot == 'daily'
-                                        ? l.dailyPuzzle
-                                        : l.level(c.current!.puzzle.mainLevel!))
-                                  : title,
-                              backLabel: c.page == GamePage.rules
-                                  ? l.settings
-                                  : l.home,
-                              backKey: Key(
-                                c.page == GamePage.completion
-                                    ? 'page-back'
-                                    : 'home',
+                    child: LayoutBuilder(
+                      builder: (context, box) {
+                        final bounded = {
+                          GamePage.board,
+                          GamePage.completion,
+                          GamePage.reward,
+                        }.contains(renderedPage);
+                        final notices = Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (c.phase == SavePhase.failed &&
+                                renderedPage != GamePage.board)
+                              SaveFailureNotice(
+                                key: const Key('save-failed'),
+                                controller: c,
+                                compact: bounded,
                               ),
-                              onBack: c.phase == SavePhase.saving
-                                  ? null
-                                  : c.page == GamePage.rules
-                                  ? () => c.navigate(GamePage.settings)
-                                  : c.goHome,
-                            ),
-                          if (c.library.engineering)
-                            Text(
-                              l.developmentNotice,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          if (c.recoveryNotice != null)
-                            Text(
-                              c.recoveryNotice == 'recovered'
-                                  ? l.recoveredSave
-                                  : l.unavailableSave,
-                            ),
-                          if (c.notice != null)
-                            Semantics(
-                              liveRegion: true,
-                              child: Text(noticeLabel(l, c.notice!)),
-                            ),
-                          if (c.phase == SavePhase.failed)
-                            KnitPanel(
-                              key: const Key('save-failed'),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Column(
-                                  children: [
-                                    Text(l.saveFailed),
-                                    Wrap(
-                                      spacing: 8,
-                                      children: [
-                                        FilledButton(
-                                          key: const Key('retry'),
-                                          onPressed: c.retry,
-                                          child: Text(l.retry),
-                                        ),
-                                        TextButton(
-                                          key: const Key('stay'),
-                                          onPressed: c.stayHere,
-                                          child: Text(l.stayHere),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                            if (renderedPage != GamePage.board)
+                              RewardStatus(controller: c, compact: bounded),
+                            if (c.library.engineering &&
+                                renderedPage != GamePage.board)
+                              Text(
+                                l.developmentNotice,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
-                            ),
-                          RewardStatus(controller: c),
-                          body,
-                          const SizedBox(height: 14),
-                          Text(
-                            c.phase == SavePhase.saving
-                                ? l.saving
-                                : c.phase == SavePhase.clean
-                                ? l.saved
-                                : l.pauseMemory,
-                            key: const Key('save-status'),
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          if (kDebugMode &&
-                              widget.advanceTestDay != null &&
-                              c.page == GamePage.home)
-                            TextButton(
-                              key: const Key('advance-test-day'),
-                              onPressed: widget.advanceTestDay,
-                              child: const Text(
-                                'Development: advance local test day',
+                            if (c.recoveryNotice != null &&
+                                renderedPage != GamePage.board)
+                              Text(
+                                c.recoveryNotice == 'recovered'
+                                    ? l.recoveredSave
+                                    : l.unavailableSave,
                               ),
+                            if (c.notice != null &&
+                                renderedPage != GamePage.board)
+                              Semantics(
+                                liveRegion: true,
+                                child: Text(noticeLabel(l, c.notice!)),
+                              ),
+                          ],
+                        );
+                        final content = Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (renderedPage != GamePage.home &&
+                                renderedPage != GamePage.board)
+                              KnitHeader(
+                                title:
+                                    renderedPage == GamePage.completion ||
+                                        renderedPage == GamePage.reward
+                                    ? (c.current?.slot == 'daily'
+                                          ? l.dailyPuzzle
+                                          : l.level(
+                                              c.current!.puzzle.mainLevel!,
+                                            ))
+                                    : title,
+                                compact: bounded,
+                                backLabel: renderedPage == GamePage.rules
+                                    ? l.settings
+                                    : l.home,
+                                backKey: Key(
+                                  renderedPage == GamePage.completion
+                                      ? 'page-back'
+                                      : 'home',
+                                ),
+                                onBack: c.phase == SavePhase.saving
+                                    ? null
+                                    : renderedPage == GamePage.rules
+                                    ? () => c.navigate(GamePage.settings)
+                                    : c.goHome,
+                              ),
+                            if (bounded)
+                              ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  maxHeight: 56,
+                                ),
+                                child: SingleChildScrollView(
+                                  key: const Key('session-explanations'),
+                                  child: notices,
+                                ),
+                              )
+                            else
+                              notices,
+                            if (bounded) Expanded(child: body) else body,
+                            SizedBox(height: bounded ? 2 : 14),
+                            if (renderedPage != GamePage.board)
+                              Text(
+                                c.phase == SavePhase.saving
+                                    ? l.saving
+                                    : c.phase == SavePhase.clean
+                                    ? l.saved
+                                    : l.pauseMemory,
+                                key: const Key('save-status'),
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            if (kDebugMode &&
+                                widget.advanceTestDay != null &&
+                                renderedPage == GamePage.home)
+                              TextButton(
+                                key: const Key('advance-test-day'),
+                                onPressed: widget.advanceTestDay,
+                                child: const Text(
+                                  'Development: advance local test day',
+                                ),
+                              ),
+                          ],
+                        );
+                        if (bounded) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 4,
                             ),
-                        ],
-                      ),
+                            child: content,
+                          );
+                        }
+                        return SingleChildScrollView(
+                          key: PageStorageKey(
+                            instance != null
+                                ? 'scroll-${renderedPage.name}-$instance'
+                                : renderedPage == GamePage.scene
+                                ? 'scroll-scene-${c.selectedScene}'
+                                : 'scroll-${renderedPage.name}',
+                          ),
+                          padding: const EdgeInsets.all(16),
+                          child: content,
+                        );
+                      },
                     ),
                   ),
                 ),

@@ -130,16 +130,18 @@ class KnitIconButton extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onPressed,
+    this.size = 52,
   });
   final IconData icon;
   final String label;
   final VoidCallback? onPressed;
+  final double size;
   @override
   Widget build(BuildContext context) => Tooltip(
     message: label,
     child: SizedBox(
-      width: 52,
-      height: 52,
+      width: size,
+      height: size,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(padding: EdgeInsets.zero),
         onPressed: onPressed,
@@ -157,15 +159,17 @@ class KnitHeader extends StatelessWidget {
     this.backKey,
     this.backLabel,
     this.trailing,
+    this.compact = false,
   });
   final String title;
+  final bool compact;
   final String? backLabel;
   final VoidCallback? onBack;
   final Key? backKey;
   final Widget? trailing;
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 12),
+    padding: EdgeInsets.only(bottom: compact ? 0 : 12),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -175,26 +179,48 @@ class KnitHeader extends StatelessWidget {
             icon: Icons.arrow_back_rounded,
             label: backLabel ?? AppLocalizations.of(context).home,
             onPressed: onBack,
+            size: compact ? 48 : 52,
           )
         else
           const SizedBox(width: 52),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-            child: Column(
-              children: [
-                const KnitArt(name: 'moon', width: 28, height: 28),
-                Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                    height: 1.1,
+            child: compact
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (MediaQuery.textScalerOf(context).scale(1) <= 1.4) ...[
+                        const KnitArt(name: 'moon', width: 20, height: 20),
+                        const SizedBox(width: 4),
+                      ],
+                      Flexible(
+                        child: Text(
+                          title,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                            height: 1.1,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      const KnitArt(name: 'moon', width: 28, height: 28),
+                      Text(
+                        title,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w900,
+                          height: 1.1,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
           ),
         ),
         trailing ?? const SizedBox(width: 52),

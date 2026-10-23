@@ -28,6 +28,7 @@ class FlameBoard extends StatefulWidget {
     this.onMotionComplete,
     this.rejectedBottle,
     this.rejectionRevision = 0,
+    this.preview = false,
   });
   final GameInstance state;
   final int? selected, suggested, rejectedBottle;
@@ -36,6 +37,7 @@ class FlameBoard extends StatefulWidget {
   final String keyPrefix;
   final PourMotion? motion;
   final int rejectionRevision;
+  final bool preview;
   @override
   State<FlameBoard> createState() => _FlameBoardState();
 }
@@ -84,8 +86,10 @@ class _FlameBoardState extends State<FlameBoard> {
       final w = widget, l = AppLocalizations.of(context);
       final layout = BoardLayout(
         width: box.maxWidth,
+        maxHeight: box.maxHeight,
         count: w.state.board.length,
         textScale: MediaQuery.textScalerOf(context).scale(14) / 14,
+        preview: w.preview,
       );
       game.show(
         state: w.state,
@@ -98,7 +102,7 @@ class _FlameBoardState extends State<FlameBoard> {
         rejectedBottle: w.rejectedBottle,
         rejectionRevision: w.rejectionRevision,
       );
-      return SizedBox(
+      final board = SizedBox(
         width: box.maxWidth,
         height: layout.height,
         child: AnimatedBuilder(
@@ -126,17 +130,15 @@ class _FlameBoardState extends State<FlameBoard> {
               children: [
                 Positioned.fill(child: canvas!),
                 for (var i = 0; i < w.state.board.length; i++)
-                  Positioned.fromRect(
-                    rect: Rect.fromLTRB(
-                      layout.cells[i].left,
-                      layout.cells[i].top - 10,
-                      layout.cells[i].right,
-                      layout.cells[i].bottom,
-                    ),
+                  Positioned(
+                    left: layout.cells[i].left,
+                    top: layout.cells[i].top,
+                    width: layout.cells[i].width,
+                    height: layout.shape.height,
                     child: Semantics(
                       label:
                           '${l.bottleSemantics(i + 1, i < w.state.puzzle.targets.length && w.state.puzzle.targets[i] != null ? l.targetLabel(colorLabel(l, w.state.puzzle.targets[i]!)) : l.bufferLabel, visual.contents[i].isEmpty ? l.emptyLabel : l.contentsLabel(visual.contents[i].map((c) => colorLabel(l, c)).join(', ')), visual.counts[i])}${w.suggested == i ? ' ${l.suggestedTarget}' : ''}',
-                      button: true,
+                      button: !w.preview,
                       enabled: canTap,
                       selected: w.selected == i,
                       onTap: canTap ? () => tap(i) : null,
@@ -205,6 +207,15 @@ class _FlameBoardState extends State<FlameBoard> {
               ],
             );
           },
+        ),
+      );
+      // Keep the same widget ancestry on resize/text changes: removing a
+      // GameWidget disposes its Flame game and its visual notifiers.
+      return KeyedSubtree(
+        key: const Key('board-accessibility-viewport'),
+        child: SingleChildScrollView(
+          key: PageStorageKey('board-viewport-${w.state.id}'),
+          child: board,
         ),
       );
     },
