@@ -345,7 +345,7 @@ class FirebaseConfigTest(unittest.TestCase):
         self.assertNotEqual(r.returncode, 0)
         self.assertEqual(p.read_bytes(), b"previous-owned-resource")
 
-    def wrapper(self, env, command=None):
+    def wrapper(self, env, command=None, **destinations):
         capture = self.root / "flutter-input.json"
         fake = self.root / "flutter-fixture"
         fake.write_text(
@@ -360,7 +360,10 @@ class FirebaseConfigTest(unittest.TestCase):
         fake.chmod(0o700)
         args = [sys.executable, str(SCRIPT.with_name("firebase_build.py")),
                 "--environment", env, "--platform", "ios", "--config-dir", str(self.root),
-                "--registry", str(self.registry), "--flutter", str(fake), "--"]
+                "--registry", str(self.registry), "--flutter", str(fake)]
+        for flag, value in destinations.items():
+            args.extend(['--' + flag.replace('_', '-'), value])
+        args.append('--')
         args.extend(command or ["build", "ios", "--no-codesign"])
         return subprocess.run(args, env={**os.environ, "FIREBASE_FIXTURE_CAPTURE": str(capture)},
                               capture_output=True, text=True)
@@ -429,6 +432,39 @@ class FirebaseConfigTest(unittest.TestCase):
     def test_development_keeps_diagnostic_entrypoint_support(self):
         r = self.wrapper('dev', ['build', 'ios', '-tintegration_test/firebase_services_app.dart'])
         self.assertEqual(r.returncode, 0, r.stderr)
+
+    def test_public_destinations_reach_actual_flutter_definitions(self):
+        r = self.wrapper('prod', support_url='https://pourlune-fixture.github.io/help',
+                         privacy_url='https://pourlune-fixture.github.io/privacy',
+                         feedback_email='beta@pourlune-fixture.org')
+        self.assertEqual(r.returncode, 0, r.stderr)
+        sent = json.loads((self.root / 'flutter-input.json').read_text())['defines']
+        self.assertEqual(sent['POURLUNE_SUPPORT_URL'], 'https://pourlune-fixture.github.io/help')
+        self.assertEqual(sent['POURLUNE_PRIVACY_URL'], 'https://pourlune-fixture.github.io/privacy')
+        self.assertEqual(sent['POURLUNE_FEEDBACK_EMAIL'], 'beta@pourlune-fixture.org')
+        self.assertEqual(sent['POURLUNE_AD_MODE'], 'disabled')
+
+    def test_invalid_public_destinations_reject_before_flutter(self):
+        for value in ['http://public.org', 'https://user:password@public.org',
+                      'https://example.com', 'https://sub.example.org',
+                      'https://localhost', 'https://private.test', 'https://127.0.0.1',
+                      'https://public.org/\nsecret']:
+            with self.subTest(value=value):
+                r = self.wrapper('prod', support_url=value)
+                self.assertNotEqual(r.returncode, 0)
+                self.assertFalse((self.root / 'flutter-input.json').exists())
+        for value in ['name', 'x@example.com', 'a@@public.org', '.a@public.org',
+                      'a..b@public.org', 'a@local', 'x@domain.invalid']:
+            r = self.wrapper('prod', feedback_email=value)
+            self.assertNotEqual(r.returncode, 0)
+            self.assertFalse((self.root / 'flutter-input.json').exists())
+
+    def test_destination_or_ads_defines_cannot_bypass_owned_selection(self):
+        for name in ['POURLUNE_SUPPORT_URL', 'POURLUNE_PRIVACY_URL',
+                     'POURLUNE_FEEDBACK_EMAIL', 'POURLUNE_AD_MODE']:
+            r = self.wrapper('prod', ['build', 'ios', f'--dart-define={name}=bypass'])
+            self.assertNotEqual(r.returncode, 0)
+            self.assertFalse((self.root / 'flutter-input.json').exists())
 
 
 if __name__ == "__main__":

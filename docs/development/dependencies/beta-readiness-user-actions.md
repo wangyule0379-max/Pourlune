@@ -1,18 +1,16 @@
-# Beta最小持有人事项 — 2026-10-23收束
+# Beta持有人事项 — BR04更新（2026-10-23）
 
-工程侧已完成：工具下载/校验；Apple专属AppID、profile生成/下载/安装及现有证书本地签名；双端0.5.0+5静态候选、资源/源码/配置指纹、符号索引；英文说明/表单事实、支持隐私本地草稿；BR02设备条件/升级步骤和BR03交接。Apple登录、profile下载、Firebase四App注册均不再是用户待办。账号事实沿用2026-10-22作者控制台观察，本批未重复登录或轮询，不把它称再次独立回读。
+以[持有人确认表](beta-owner-decisions.md)和BR04计划为最新输入；BR01–03历史验收边界保留。**已确认**SKU POURLUNE-IOS-001、英语、益智游戏、免费封测/广告关闭、组名Pourlune Beta。Apple登录、profile下载/安装/本地签名、Firebase四App注册已解决，不再要求用户重复处理。暂无域名/邮箱/Android key，不把建议当批准。
 
-以下归并为4组，架构集中通知即可；不要求现在逐条操作，不把密码/验证码/私钥/keystore/服务账号发到聊天。没有创建/重置密钥、代签声明、购买域名、部署、上传或邀请。
+远端Mac无法USB连接用户手机，**USB不再是上传前一律门槛**。工程/包签名校验先完成，授权分发后经TestFlight/Play验本人手机；真机/最低OS/16KB/读屏/音触觉/性能/升级等未验风险仍如实保留，不因调整时序改成通过。详细[远端路线](../evidence/beta-readiness/BR04/remote-device-route.md)。
 
-|最小动作组|持有人确需提供/自行操作|具体入口与已完成准备|对应门槛／影响|
+|需本人决定/操作的组|现状与最小下一步|开发侧已完成／后续代办|追溯|
 |---|---|---|---|
-|1 一次提供发布与内容决定|确认Pourlune SKU、公开支持/隐私HTTPS目的地、公开反馈邮箱及处理人；目标受众/年龄/地区、实际主体/审核联系、商业图像授权链；后续测试组/名单。已有归属资料可一次给出，不猜填。|[ASC Apps](https://appstoreconnect.apple.com/apps)；help/privacy可审草稿在docs/support/beta/；英文copy及SDK清单已备。OFL和程序音频来源已留档，不需重交。|BR-B01、03、04、05、06；尚无ASC应用记录或真实公开联系入口/权属批准。网址填入文档并不会自动进入已冻结二进制。|
-|2 在控制台自行确认法律声明|AccountHolder判断现有Apple Schedule2 banner是否适用并处理实际协议；Play创建应用所需开发者政策/美国出口声明及后续实际年龄/数据/主体问卷由持有人确认。|[ASC协议](https://appstoreconnect.apple.com/business)及[Play创建应用](https://play.google.com/console/u/0/developers/8719288384645399837/create-new-app)；既有Apple Team T7U878Z8H6和个人Play账号已观察，正式BundleID及包名准备完成。|BR-B01/B01-P、05；不代签，不把banner猜成所有免费Beta的阻断，不复用FishPilot的配置/密钥。准确声明以最终包和经营事实为依据。|
-|3 在本机选择授权Android签名资产|选定已有、允许用于Pourlune的upload key及alias并本地解锁；若不存在，持有人决定创建/托管，当前执行不代建或重置。不要传密码/keystore到聊天。|包名com.pourlune.app；[Android签名说明](https://developer.android.com/studio/publish/app-signing)。当前AAB格式/资源已验，工程release signing仍未配置，拿到资产后要定向实现本地签名门控并复验新文件。|BR-B02；当前unsigned不能上传，debug或FishPilot密钥不自动获准；upload key和Play实际安装app-signing key分开记录。iOS现有签名资产无需重复处理。|
-|4 提供适用设备和运行/观察条件|提供可用独立真机/最低OS及安装条件；明确允许生产配置实际运行（可能涉及RC/SDK数据）的后续范围；提供合法允许的观察/正式素材采集条件。测试名单可与第1组合并。|当前devicectl无连接设备，adb仅API36/arm64/4KB模拟器；iOS仅26.5模拟器；BR02步骤、完整证据字段及截图清单已备。不会重试或改路绕过既有Cocoa513/EPERM限制。|BR-B06及03/05实际行为依据；正式安装/同签名升级/16KB/读屏音画/性能/正式截图未验。无条件时不重复旧QA或下载无可运行候选的环境来凑通过。|
+|发布主体/联系/受众/权属|提供准确经营/隐私主体、审核联系和公开支持邮箱及处理人；确认真实目标受众/国家地区/图像商业授权。SKU等通用项已确认，不再询问。|双平台逐字段技术依据、英文资料、未决栏已备；不在仓库公开私人审核电话/测试者邮箱，不猜数值分级/trader/export。|BR-B01、03、04、05|
+|本人控制台法律声明|按架构正在引导的真实提示阅读Apple适用协议、Play政策/出口/App Signing条款及最终问卷；不代签。新应用记录创建前核对是否已有，避免重复。|已用确认值准备记录表；Schedule2 banner适用性不能猜成免费Beta一律阻断；不再重复登录轮询。|BR-B01/B01-P、05|
+|独立upload key|本人决定创建后，在远端终端交互创建专用pourlune-upload，备份并授权本地使用；不复用FishPilot，不发密码/keystore到聊天。|[本人命令](../evidence/beta-readiness/BR04/owner-key-steps.md)仅准备未执行。已完成密码文件/权限/alias/证书pin/有效期/debug拒绝及签名新副本/失败关闭工程；真实key后执行侧接入，不把工程转给用户。|BR-B02|
+|公开站点与后续封测范围|独立pourlune-support公共repo+Pages为待批准方案；本人注册真实公开邮箱。待具体网页/最终包可审后分别决定公开部署、生产配置运行与商店分发，并给已有内部资格或外部/closed名单/手机OS/地区。|仅网页3文件draft及ZIP、Pages/IP日志说明、目的地构建输入/元数据、手机最小试玩/反馈/N→N+1路线已备；未知不填示例值，不创建repo/部署/上传/审核/轨道/组/邀请，不扩IAM。|BR-B03、05、06|
 
-内部分工：资料和权限到位后，执行方在新候选目录完成批准目的地配置/签名、必要自动/原生复验、更新最小差异索引；不把技术整合转给用户。架构独立验收并按原授权精准提交/推送。生产运行授权与将来的上传/审核/开轨道/邀请是不同决定；本轮尚未进行后者，也不要求现在批准分发。
+纯网页目录为docs/support/pages-site/，不是已发布政策。实际URL/邮箱获准后，开发侧校验可达/收件并在新候选目录编入，必要时增构建号；格式通过不等于归属、法律或商店通过。新签名AAB的upload证书与Play最终安装app-signing证书分别核对。首包没有旧正式N就先记升级未执行，后续N+1原位更新验证，不卸载/清档凑恢复。
 
-三条结论均不就绪：iOS内部TestFlight、外部TestFlight、Play closed。Play internal不能代替closed，适用个人账号12人连续14天属于后续生产访问条件，不把它误作开始封测前置。可选广告保持关闭，真实联调和旧Firebase运输失败保留真实状态，Firebase无需重新注册。
-
-执行交付：[BR02](../deliveries/beta-readiness-BR02.md)、[BR03](../deliveries/beta-readiness-BR03.md)；具体重建/复验条件及最终产物指纹见报告链接。此表只集中无法代签或缺少实际资产的输入，其余可做项已由执行方收束。
+不需要用户再下载描述文件、注册Firebase、连USB/启开发者模式、导SQLite、制造存储故障或反复走旧T/FB/MS路线。可选广告保持关闭，生产当前compile-only，旧Firebase运输问题仅网络条件实际变化且获准后有限复验。内部新增工程的实际/替身验证与尚待真实资产项见[BR04交付](../deliveries/beta-readiness-BR04.md)。

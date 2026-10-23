@@ -225,3 +225,68 @@ Firebase-selected bundle identity is also a Runner-only variable
 rename SPM resource bundles. The final IPA inspection rejects that leakage.
 QA-only external raw identity overrides remain historical QA scope; the official
 candidate uses the scoped selection and keeps SDK bundle identifiers distinct.
+
+### BR04 public destinations and authorized Android upload signing
+
+`beta_build.py` and `firebase_build.py` accept explicit `--support-url`,
+`--privacy-url`, and `--feedback-email` **before** the Flutter `--` separator.
+Missing values remain empty; no guessed URL, mailbox or fixture is built in.
+HTTPS only, public DNS format, no credentials/IP/local/reserved placeholder host,
+no control characters, and a plain valid mailbox are required. Ports other than
+443 are rejected. Validation checks syntax, not ownership, live availability or
+legal approval. `candidate.json.public_destinations` records exact public inputs;
+`ready` means all three syntactically valid values are present. It is not store
+or owner approval. `external_store_gates_verified` remains false.
+
+The wrapper owns the destination and ads definitions; direct Dart-definition
+bypasses are rejected. Values enter the same private defines file used by the
+existing Firebase selection. All identity/config/default-entrypoint/no-AdID,
+lock/source, and production compile-only protections remain. In the manual iOS
+archive path these values use the same Flutter preparation, without automatic
+provisioning or symbol upload. Never run a production candidate without the
+separate runtime authorization.
+
+Android is still unsigned by default. To use a **previously created and explicitly
+authorized** upload key, pass all four options to `beta_build.py`:
+
+- `--android-keystore` existing file outside the repository
+- `--android-key-alias` selected alias, normally `pourlune-upload`
+- `--android-store-password-file` outside-repository password file
+- `--android-certificate-sha256` expected public certificate fingerprint
+
+An optional `--android-key-password-file` handles a distinct key password; absent
+means the store password is used. Files must be owned by the current user, have
+no group/other permissions (normally0600), and sit in a private directory
+(normally0700). Final symlink files are refused. Password files contain one line,
+6–1024 bytes. No password CLI value/env or secret manifest field is supported.
+`keytool` only lists the specified alias; metadata must show PrivateKeyEntry,
+current validity and exact certificate pin, with no Android Debug certificate.
+Raw keytool/jarsigner output is not printed or saved because errors may echo
+secrets or personal subject data. Missing/wrong assets fail before compiling.
+
+After a successful unsigned build, the tool preserves
+`app-release-unsigned.aab` and creates a separate
+`Pourlune-<version>-<build>-upload-signed.aab` using JAR signing. It requires
+strict verification with the selected keystore/alias, a public-certificate pin
+check on the signed AAB itself, and identical non-META-INF payload. Failed signing/verification removes only the incomplete new signed
+copy. It never overwrites an existing output or generates/resets a key.
+`signing.json` holds alias, public SHA256, expiry and verification state;
+`signature-check.log` contains that public summary, while the unsigned input
+check has its own log. This is upload signing, not the final APK app-signing
+certificate Google Play uses. Both signatures and real installation/update
+continuity require later actual assets and platform evidence.
+
+For future approved values only, the executor can add the public flags plus
+these Android flags to the existing new-output build command. First update the
+actual build number as appropriate; do not reuse a processed platform build or
+overwrite BR01. The user is not asked to run engineering commands. Owner-only
+interactive key creation steps (not executed) are in
+`docs/development/evidence/beta-readiness/BR04/owner-key-steps.md`.
+
+The user cannot connect a phone to this remote Mac: **USB is not a universal
+pre-upload gate.** Package/engineering checks precede a later concrete
+distribution/runtime authorization. Actual phone install, N→N+1 update, restore,
+audio/haptics and reader feedback follow TestFlight/Play on that phone; missing
+results remain unverified. See `BR04/remote-device-route.md` and
+`BR04/device-feedback.md`. No developer mode, debug USB, unsigned sideloading or
+unknown certificate installation is needed for that route.

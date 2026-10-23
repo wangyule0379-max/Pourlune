@@ -216,3 +216,9 @@ BR01已读架构MS-R01独立4项/analyze/format通过及CLI归还；现CLI HELD 
 
 
 2026-10-22T16:09:14.741545+00:00 — BR02/BR03 CLI RELEASED by原开发。八工作包可做准备/只读检查已收束；两份交付beta-readiness-BR02.md、BR03.md及BR03精确候选/符号/资料ZIP索引齐备，一次fresh终审Critical0/Important0/Minor0。无Flutter/Dart/pub/SPM/Xcode/原生/设备命令在途，未构建/安装/运行生产或改冻结包，F9及窗口完全未操作、无采集重试。BR02正式运行及三条商店提交均未就绪，只剩集中4组持有人/资产/设备/允许运行条件；不再重复轮询或旧路线。等待架构独立验收；未stage/commit/push，tracking及后台emulator log等无关变化排除。
+
+
+2026-10-23T01:26:12.654879+00:00 — BR04 CLI HELD by原开发，已读架构新整批计划和CLI归还；仅签名/目的地工具与文档、仅公开站点预备。保持串行noAdID，不动F9、不运行prod、不创建key或部署/上传；旧候选冻结，结束明确释放。
+
+
+2026-10-23T01:55:52.988941+00:00 — BR04 CLI RELEASED by原开发。BR04-1至8工程/资料已交beta-readiness-BR04.md；目的地flags/Android授权签名与失败门控、仅3网页draft包、本人key步骤/逐字段技术依据/远端TestFlight-Play手机路线完成。Python46项通过、3CLI拒绝无输出、公开包/链接/旧冻结hash检查通过，一次fresh终审Critical0/Important0/Minor0。无Flutter/Dart/pub/SPM/Xcode/原生/设备命令在途；无真实签名/key生成、生产运行、publicrepo/部署或商店分发；F9及窗口/旧库完全未操作，无采集重试。USB不是上传前一律门槛，后续手机真实验收保留未验。候选不重建、不覆盖，测试样例未进正式包；未stage/commit/push，tracking/后台emulator log/旧motion均排除，架构可独立复验。

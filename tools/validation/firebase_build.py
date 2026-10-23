@@ -11,6 +11,7 @@ import tempfile
 
 from firebase_config import ConfigError, NATIVE_IDS, REGISTRY, ROOT, inspect_config, require
 from ios_signing import ProfileError, inspect_profile
+from public_destinations import DestinationError, add_destination_arguments, validate_destinations
 
 
 def main():
@@ -24,12 +25,17 @@ def main():
     parser.add_argument("--ios-profile", type=Path,
                         help="Existing Pourlune App Store profile, for local IPA export only")
     parser.add_argument("--ios-output", type=Path)
+    add_destination_arguments(parser)
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
     try:
+        destinations = validate_destinations(args.support_url, args.privacy_url, args.feedback_email)
         command = args.command[1:] if args.command[:1] == ["--"] else args.command
         require(bool(command) and command[0] in {"build", "run", "test"}, "invalid_flutter_command")
-        require(not any("POURLUNE_FIREBASE_" in a or a.startswith("--dart-define-from-file")
+        require(not any(any(name in a for name in (
+                        "POURLUNE_FIREBASE_", "POURLUNE_SUPPORT_URL", "POURLUNE_PRIVACY_URL",
+                        "POURLUNE_FEEDBACK_EMAIL", "POURLUNE_AD_MODE"))
+                        or a.startswith("--dart-define-from-file")
                         for a in command), "caller_cannot_override_firebase_selection")
         if args.environment == "prod":
             require(command[0] == "build", "production_is_compile_only")
@@ -78,6 +84,8 @@ def main():
         definitions = {"POURLUNE_FIREBASE_ENV": args.environment,
                        "POURLUNE_FIREBASE_NATIVE_READY": "false" if config is None else "true",
                        "POURLUNE_AD_MODE": "disabled"}
+        definitions.update({'POURLUNE_' + name.upper(): value
+                            for name, value in destinations.items() if name != 'ready'})
         if config:
             definitions["POURLUNE_FIREBASE_OPTIONS"] = json.dumps(config["options"], separators=(",", ":"))
         with tempfile.TemporaryDirectory(prefix="pourlune-firebase-") as temp:
@@ -171,7 +179,7 @@ def main():
                     log = log.replace(value, "[CLIENT_CONFIG_REDACTED]")
             print(log, end="")
             return result.returncode
-    except (ConfigError, ProfileError) as error:
+    except (ConfigError, ProfileError, DestinationError) as error:
         print(json.dumps({"ok": False, "code": str(error)}), file=sys.stderr)
         return 1
     except OSError:
