@@ -1,19 +1,36 @@
-# Pourlune支持/隐私静态站预备方案（未公开）
+# Pourlune支持/隐私网站
 
-2026-10-23。仅可部署根目录为pages-site/，其中只有index.html、privacy.html和空.nojekyll；不发布Pourlune App源码仓库。现有beta/本地草稿继续保留。本批未创建公共仓库、未改源码仓库可见性、未部署，也没有购买域名。
+2026-10-23。用户已明确授权复用FishPilot实际主体与支持邮箱，并发布独立GitHub Pages。唯一源码根为`pages-site/`；只含`index.html`、`privacy.html`、空`.nojekyll`。旧`beta/`和BR04 ZIP是历史本地草稿，不是发布根。
 
-低成本建议：在用户明确批准后，建立独立仅网页公共仓库pourlune-support，以GitHub Pages发布。GitHub Free支持公共仓库Pages；默认project-site地址模式是https://<实际owner>.github.io/pourlune-support/。这只是方案，当前地址不存在/未批准，不编入App、不作为已可用政策URL。账号真实owner及命名冲突应在获准时核对，不把已有源码仓库直接变public。官方[Pages说明](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)。
+- 帮助：https://wangyule0379-max.github.io/pourlune-support/
+- 隐私：https://wangyule0379-max.github.io/pourlune-support/privacy.html
+- 邮箱：wangyule0379@gmail.com（用户批准公开复用；未发送测试信，真实收件/处理仍待实际请求验证）。
+- 独立公共仓库：[pourlune-support](https://github.com/wangyule0379-max/pourlune-support)，提交`24ff80c6fc0cc2f0b513b49c5c236a029334cc2b`，Pages[39906073868](https://github.com/wangyule0379-max/pourlune-support/actions/runs/39906073868)终态success，main根目录/默认域名/强制HTTPS，无CNAME或购买。
 
-## 已准备与发布前差异
+主体`changjiang li`从ASC商务协议实体记录只读核对，未从证书CN/用户名猜测；证据仅保留必要姓名与依据，不复制私人电话/地址/银行资料。FishPilot旧支持页提供邮箱来源，但Pourlune内容按本项目离线/无账号/无付费/默认可选采集/RC实际功能另写，不照搬其账号/位置/订阅条款。
 
-|项|当前交付|正式公开前必须补齐|
-|---|---|---|
-|纯网页包|pages-site/3文件，原始内容由现有beta帮助/隐私草稿复用；精确hash与ZIP在BR04证据|只复制这3个网页文件，不能递归发布docs/、app/、build/、仓库根目录或任何配置/日志/签名资产|
-|状态标识|LOCAL REVIEW DRAFT、noindex/nofollow、无占位mailto/地址|经营/隐私主体、真实公共邮箱及处理人、可履行的保留/删除/请求流程、受众地区/批准日期及最终SDK披露确认后再更新标识。不能只去掉DRAFT就称法律通过|
-|访问处理|网页无表单/JS/跟踪脚本/外链字体/嵌入媒体；供应商链接为真实anchor|GitHub Pages会记录访客IP用于安全；GitHub自己的处理/保留按其政策，不承诺网站“零收集”，不替GitHub承诺删日志或保留期限|
-|App与网页区分|App本地保存及可选SDK说明、当前adsdisabled/默认采集off/RC风险如实保留|最终配置和实际批准运行范围核对；链接对浏览器/邮箱的处理与App内处理分开披露|
-|发布与验证|仅本地ZIP和文件结构/链接检查|本人批准独立公共repo/公开内容及部署后，再按具体目标执行。随后检查HTTPS证书/正文/两页导航、无登录墙及手机浏览，并真实验证邮箱收件；最后批准URL/邮箱交给构建工具|
+网站无JavaScript、表单、嵌入媒体、外链字体或主动analytics。GitHub会记录Pages访问IP用于安全，外链及用户主动邮件由对应供应商处理；正文明确说明，不承诺零收集或删除供应商日志。请求和保留说明不虚构固定响应天数或自动SDK删除能力。
 
-GitHub明确[记录Pages访问IP用于安全](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages#data-collection)，[隐私政策](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement)另有服务处理说明。当前只是可审可部署结构，不是有效公开政策或网址。无第三方网页图像/字体，不扩大游戏视觉范围。
+本轮部署与HTTP正文hash、导航和有限布局检查在`docs/development/evidence/beta-readiness/BR06/`。公开App源码仓库可见性未改；没有发布app/config/build/测试名单/私密文件。站点上线不代表商店法律/受众/数据标签最终通过。
 
-后续获准的Pages建议配置：独立repo根目录的main分支发布、Enforce HTTPS，使用项目子路径下相对导航；不设置自定义域名/CNAME，不购买服务。此说明不执行gh repo create、git push或Pages API。
+## 后续有限更新与打包
+
+编辑此唯一根的已知段落：`index.html#operator-contact`和`privacy.html#operator-contact`为主体/邮箱；`privacy.html#requests-retention`为可履行请求/保留流程；`#providers-transfers`为服务方/处理；`#children`不代替目标年龄问卷。更新这些事实时同步商店声明，必要时新候选目录重建；不要只改历史ZIP或另造模板站。
+
+先核对这3份文件和正文无占位/密钥，再按文件名逐个打包（不能递归docs或仓库根）：
+
+```python
+from pathlib import Path
+from zipfile import ZipFile
+root = Path('docs/support/pages-site')
+names = ['.nojekyll', 'index.html', 'privacy.html']
+assert sorted(p.name for p in root.iterdir()) == names
+output = Path('build/beta-owner-assisted/BR06/support-site.zip')
+output.parent.mkdir(parents=True, exist_ok=True)
+assert not output.exists()  # 冻结包不覆盖
+with ZipFile(output, 'x') as package:
+    for name in names:
+        package.write(root / name, name)
+```
+
+发布后只读检查该commit的远端tree白名单、Pages终态及两个HTTPS正文与本地逐字节一致；浏览器检查相对两页导航和mailto，不自动发邮件。移动CSS含device-width viewport、流式max-width/16px窄屏边距、44px导航、长链接换行。当前实际浏览器1440宽无溢出；320/375/430是静态结构检查，真实手机浏览保留未验。没有采集系统屏幕/设备图或绕过既有限制。

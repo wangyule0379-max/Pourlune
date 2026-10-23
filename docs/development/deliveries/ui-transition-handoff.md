@@ -228,3 +228,9 @@ BR01已读架构MS-R01独立4项/analyze/format通过及CLI归还；现CLI HELD 
 
 
 2026-10-23T03:35:49.432269+00:00 — BR05 CLI RELEASED by原开发，明确交架构仅Java证书/strict/bundletool只读独立复验。一次fresh终审Critical0/Important0/Minor0已完成；当前无Java/Flutter/Dart/pub/SPM/Xcode/原生/设备/签名命令在途。独立upload key仅创建一次，本机受限恢复副本核验完成；新android-br05-sign-1真实signed AAB已冻结，旧候选未动。不会重建/重签/再生成/重置key，私密文件原位保留，不向仓库/日志/argv实值输出密码或私钥。F9及窗口/普通库未操作，无生产运行/部署/商店分发；作者仅补非秘密文档/范围清单，未stage/commit/push，tracking/emulator/motion排除。交付beta-readiness-BR05.md可独立验收。
+
+2026-10-23 — BR06资料补齐进行中；原开发仅文件/Python/公开官方资料检查，无Flutter/Dart/pub/SPM/Xcode/设备命令占用，不操作F9/窗口，不重签或重建。资料收束时明确释放。
+
+2026-10-23 — BR06新授权候选阶段 CLI HELD by原开发。独立网页3文件已部署24ff80c，Pages39906073868 success，两HTTPS200且正文与源一致。ASC/Play只读无Pourlune记录，选择新0.5.0+6避免混淆旧5；串行noAdID Android/iOS正常入口prod编译，复用BR05key和既有iOSprofile，不运行生产、不上传符号/商店、不操作设备/F9。
+
+2026-10-23T05:48:07.060670+00:00 — BR06 CLI RELEASED by原开发。6项材料＋新增授权的独立Pages/真实URL双端0.5.0+6候选完成；Pages39906073868success，3文件/HTTPS200正文一致，既有key/profile签名、397来源/136assets90puzzles/AOT目的地/571payload/bundletool3/codesign/dSYM5匹配通过；旧包hash不变。一次fresh作者终审C0/I0/M2，终审记录与事实引用已收尾，无第二次审查/重编/重签。所有本方Flutter/Dart/pub/SPM/Xcode/Java签名与验证命令均结束，无设备/生产/商店操作；F9/窗口/受限采集和普通库未操作。交付beta-readiness-BR06.md及BR06/scope-manifest.json可独立验收；主仓未stage/commit/push，tracking/plans/review/旧motion/emulator排除。只公开已授权独立网页仓库，主体/邮箱/Pages/key不再待确认；余受众/地区名单/图像权属/适用本人声明与分发后手机验证集中留给架构。
