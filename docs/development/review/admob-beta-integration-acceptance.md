@@ -32,3 +32,7 @@
 |ADM01-4 支持/隐私技术披露|源码与实际HTTPS正文核对通过，具体商店声明未提交|
 |ADM01-5 聚焦业务与构建校验|独立通过；新签名候选/真实广告闭环另验|
 |ADM01-6 分发与本人结果|待推进，无安装/广告到账通过结论|
+
+工程已精准提交推送 `18f8c8b0fdf94acb9bb8ffcc71193723ce805a58`，仅跟该SHA的CI `39938640955`（2026-10-23T10:33:11Z终态completed/success）。原始证据日志保留工具输出空白，代码与文档diff-check通过；旧motion日志、未验icon-selection及网络后续未纳入本实现。
+
+父独立回读该精确CI及jobs：ios-build、tests-and-android均success，精简终态证据`admob-beta-integration-evidence/remote-ci-final.json`。已通知原开发继续下一未占用build的安全test双端签名候选；本CI不再查询。账号/SDK实际闭环仍未通过。
