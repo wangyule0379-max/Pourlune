@@ -9,7 +9,7 @@
 |编号|直接执行的差额|验收条件|
 |---|---|---|
 |BR06-1|把现有英文稿整理为可直接粘贴的最终技术文案：Apple Beta App Description/What to Test/Review Notes及无需登录说明，Play short/full description及release notes。|依当前真实玩法/数量/免费封测广告关闭措辞；检查官方长度与格式，不夸大真机性能/SDK送达，不把30每日候选宣传为每日新增30关。主体等未知不用占位文案混入可粘贴字段；已有满足稿直接引用。|
-|BR06-2|以docs/support/pages-site为唯一拟公开根，完善玩家帮助/反馈说明和隐私技术部分；给可审页面差异及待替换字段的精确位置，准备固定输入到打包的有限校验。|只剩真实主体/邮箱/可履行政策需要用户输入；检查页面导航/移动布局/无多余主动采集/包白名单。本批可本地预览，不公开repo/部署或购买域名。已有工具够用则复用，不建模板框架；未知事实不得改成正式政策。|
+|BR06-2|以docs/support/pages-site为唯一拟公开根，完善玩家帮助/反馈说明和隐私技术部分；给可审页面差异及待替换字段的精确位置，准备固定输入到打包的有限校验。|只剩真实主体/邮箱/可履行政策需要用户输入；检查页面导航/移动布局/无多余主动采集/包白名单。本批按下文最新授权发布独立GitHub Pages站，不购买域名。已有工具够用则复用，不建模板框架；未知事实不得改成正式政策。|
 |BR06-3|提供精确“技术事实→问卷建议→需本人核实”表，覆盖App Privacy/Data safety/广告/内容分级/出口的实际SDK和最终签名包。|能由源码/包确认的事实开发直接填写并给依据，不把所有技术问题推给用户；受众/经营法律等不猜。不以采集off猜零数据，不重复生产网络实验或代签；与英文页一致。|
 |BR06-4|盘点既有正常App来源素材，形成双平台图标/截图/feature graphic可用清单，包含路径/hash/尺寸/来源版本/是否有QA叠层。|仅复用合法已存在素材，必要无损导出/排版仍复用原视觉；原型或QA夹具不冒充正式截图，缺真实画面明确标缺。受限录屏截图不得换工具/路径/委派绕过，不启动操作用户F9。既有素材不足可先完成尺寸/版式/捕获清单，不能伪造正式运行通过。|
 |BR06-5|把素材权属按实际来源收敛到未决原图/派生图组；字体/自制音频/已知依赖许可证能证实的直接附据，给需要用户回答的最短清单。|不泛泛要求用户证明所有文件，不因视觉接受推定商业权属；不猜AI生成许可/账号套餐。复用既有权属表，记录本次差额。|
@@ -27,9 +27,24 @@
 6. 用户本人处理控制台显示的适用协议/政策/出口/Play App Signing及账户声明。开发给技术依据，不代签或反复登录催促。
 7. 首批测试邮箱、手机型号/系统版本；仅用于真实测试安排，私有名单不入公共仓库。先已有合格ASC内部身份，否则走外部Beta审核；Google目标closed不偷换internal。
 
-当前新增授权是可独立完成资料，不自动扩大为公开网站、法律签署、账号注册、实际上传或生产运行。密钥已解决不再列为用户待办。用户F9及窗口继续保护；CLI仅在确有必要时串行，FIREBASE_ANALYTICS_WITHOUT_ADID=1。所有旧已终态CI不再查询；旧未验motion-polish与后台日志不夹带。
+此前仅资料授权现已由下文公开网站授权扩展；法律签署、账号注册、实际商店上传或生产App运行仍未授权。密钥已解决不再列为用户待办。用户F9及窗口继续保护；CLI仅在确有必要时串行，FIREBASE_ANALYTICS_WITHOUT_ADID=1。所有旧已终态CI不再查询；旧未验motion-polish与后台日志不夹带。
 
 本轮官方核对：
 - https://developer.apple.com/help/app-store-connect/test-a-beta-version/provide-test-information/
 - https://support.google.com/googleplay/android-developer/answer/9859152?hl=en
 - https://support.google.com/googleplay/android-developer/answer/9845334?hl=en
+
+## 最新用户授权：沿用 FishPilot 主体/邮箱，发布 GitHub Pages
+
+用户明确：“发布主体和支持邮箱都沿用 FishPilot 的，同意用 GitHub Pages 做支持和隐私网站。能直接做的继续安排开发完成，剩下必须我确认的再集中告诉我。”此前第1–3项不再等待重复批准；准确主体取证与发布工程由原开发连续完成。
+
+已只读核对 FishPilot 本地既有公开站源码：`/Users/wangyule/.codex/worktrees/fishpilot-testflight-build12/FishPilot AI/apps/legal-site/support/index.html`、privacy页面及部署历史，公开支持邮箱为 `wangyule0379@gmail.com`。此证据不等于本轮线上可达或收件测试。发布主体复用已确认，准确法律名称尚须从既有公开商店/实际账号记录回读，不能从品牌、证书CN或用户名推定。不得修改FishPilot或复制其业务政策。
+
+|追加项|原开发执行范围|独立验收边界|
+|---|---|---|
+|BR06-7 主体与公共站|核实准确主体；定稿Pourlune帮助/隐私；创建或核对独立仅网页公共仓库pourlune-support，发布GitHub Pages免费HTTPS域名。已有仓库须先核对用途与内容，不覆盖其他项目。|发布白名单仅站点静态文件；主App源码仓库可见性不变；无秘密、客户端配置、私人审核资料或测试名单；记录公开repo/部署SHA/Pages终态、support/privacy实际HTTP回读、导航/邮箱/移动布局、占位清零。政策对应Pourlune真实离线及SDK处理，不能off等于零数据；不发送邮件验证收件。|
+|BR06-8 URL接入与候选|网站稳定后以既有BR04目的地工具、Apple既有签名和BR05上传key，在新ignored目录生成带实际support/privacy/email的封测候选。|核对实际版本和商店上传状态，冻结新源码/资源/包/签名/符号，不把旧来源清单当新包证据；不覆盖旧包、不创建/重置key；只做必要新风险检查，不跑生产App或上传商店/符号。架构独立验收主仓改动后精准提交推送；有新代码才跟踪精确CI。|
+
+GitHub Pages公开部署已获得授权，无需再让用户批准已选方案。准确主体取证若确实无法完成才集中报告具体缺口，其他独立工作不停止。私人审核电话、测试名单、真实受众/地区、未证实图像权属与适用账号法律声明仍按事实补齐；不把邮箱复用扩展为所有FishPilot私人联系方式复用。实际TestFlight/Play上传、Beta审核、轨道开启、邀请、生产App运行、购买/IAM/条款代签/合并main仍不在此次授权内。公开支持站发布不等于App生产发布。
+
+本次参考：GitHub官方创建Pages站文档 https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site 。实际发布时再次按所选branch/Actions方式核对可用设置。
