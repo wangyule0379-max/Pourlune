@@ -8,7 +8,7 @@
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "LY01–LY06 gameplay/completion viewport repair; BR07 checkpoint preserved",
   "current_status": "one_screen_layout_active_submission_authorized_after_acceptance",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:295",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:297",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
   "delivery_path": "docs/development/deliveries/one-screen-layout.md",
@@ -458,7 +458,7 @@
     "review": "docs/development/review/beta-readiness-BR08-acceptance.md"
   },
   "admob_beta_integration": {
-    "status": "build8_independently_verified_store_submission_dispatched",
+    "status": "admob_deferred_by_owner_ads_disabled_beta_candidate_requested",
     "authorization": [
       "申请Google AdMob，并接入吧",
       "可以一块测试"
@@ -468,8 +468,8 @@
     "updated_at": "2026-10-23T09:31:09.993039+00:00",
     "mode": "safe beta test ads; production monetization readiness separate",
     "build7": "Independently accepted ads-disabled frozen baseline; not final ad-testing candidate",
-    "author_progress": "Exact implementation CI success independently confirmed; developer notified to start next unused build test-mode signed candidates. Network exceptions remain pending owner response, not blocking candidate preparation.",
-    "checked_at": "2026-10-23T10:52:56.609512+00:00",
+    "author_progress": "Developer active on direct owner turn 01a1687c. Parent read submission report/store-state: ASC record 6826203407 and self-only group reported, zero builds; Play creation declarations unchecked. Parent has not independently read live store UI; no upload/install acceptance.",
+    "checked_at": "2026-10-23T11:21:11.646378+00:00",
     "parent_scope_check": {
       "checked_at": "2026-10-23T09:48:34.664473+00:00",
       "files": [
@@ -500,7 +500,7 @@
       "report": "docs/development/review/admob-beta-integration-acceptance.md",
       "cli": "Parent RELEASED; no in-flight command"
     },
-    "network_followup": "Developer received direct user request to diagnose automatically; current developer request for temporary proxy exceptions remains pending in that chat; parent did not approve or change network.",
+    "network_followup": "Original three exceptions restored per author evidence; owner subsequently authorized four exceptions but also deferred AdMob. No parent network change. Do not require QR for current beta or repeat diagnosis solely to use permission; restore any already in-flight temporary changes.",
     "implementation_commit": "18f8c8b0fdf94acb9bb8ffcc71193723ce805a58",
     "ci": {
       "id": 39938640955,
@@ -530,7 +530,7 @@
       "independently_read": true,
       "checked_at": "2026-10-23T10:35:12.712192+00:00"
     },
-    "next_action": "Read developer actual submission delivery, verify specific store states and owner-only missing fields; no old CI polling.",
+    "next_action": "Developer prepares next-unused version ads-disabled signed candidates using accepted source/tooling; parent independently verifies fresh packages and disclosure changes, then authorized TestFlight self/Play closed. Build8 CI now terminal success, never repoll. No new key or full LY retest.",
     "build8": {
       "version": "0.5.0+8",
       "report": "docs/development/review/admob-build8-acceptance.md",
@@ -540,7 +540,49 @@
       "read_only_commands": 17,
       "actual_ad_runtime_pass": false,
       "owned_registration_verified": false,
-      "store_submission": "dispatched; not yet uploaded/accepted"
+      "store_submission": "held: owner deferred AdMob; preserve explicit-test build8, do not upload as next beta",
+      "commit": "ea52dcf62ccc749cf94c497d1bed4a41e973f030",
+      "ci": {
+        "id": 39942263602,
+        "head_sha": "ea52dcf62ccc749cf94c497d1bed4a41e973f030",
+        "event": "push",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/wangyule0379-max/Pourlune/actions/runs/39942263602",
+        "created_at": "2026-10-23T10:53:30Z",
+        "updated_at": "2026-10-23T11:12:40Z",
+        "jobs": [
+          {
+            "id": 120376311096,
+            "name": "ios-build",
+            "status": "completed",
+            "conclusion": "success",
+            "completed_at": "2026-10-23T10:57:58Z"
+          },
+          {
+            "id": 120376311285,
+            "name": "tests-and-android",
+            "status": "completed",
+            "conclusion": "success",
+            "completed_at": "2026-10-23T11:12:40Z"
+          }
+        ],
+        "independently_read": true,
+        "checked_at": "2026-10-23T11:21:11.555Z"
+      }
+    },
+    "network_evidence_review": {
+      "at": "2026-10-23T11:08:33.550864+00:00",
+      "path": "docs/development/evidence/admob-beta-integration/network-diagnosis/temporary-exception-verification.json",
+      "scope": "read author report and trusted direct user authorization; no parent network mutation or native rerun",
+      "independent_runtime_pass": false
+    },
+    "owner_latest_direction": {
+      "source_turn": "01a1687c-d13c-70f1-9616-8887c357bbd4",
+      "user_reply": "先放弃AdMob接入",
+      "other_reply": "同意这四条临时例外，验证后恢复",
+      "interpretation": "Defer AdMob work and proceed with ads-disabled beta; network permission does not require further advertising diagnosis",
+      "at": "2026-10-23T11:21:11.646378+00:00"
     }
   }
 }
