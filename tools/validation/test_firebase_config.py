@@ -459,6 +459,17 @@ class FirebaseConfigTest(unittest.TestCase):
             self.assertNotEqual(r.returncode, 0)
             self.assertFalse((self.root / 'flutter-input.json').exists())
 
+    def test_explicit_beta_ads_passes_test_mode_and_platform_sample_app_to_both_layers(self):
+        r = self.wrapper('prod', ad_mode='test')
+        self.assertEqual(r.returncode, 0, r.stderr)
+        sent = json.loads((self.root / 'flutter-input.json').read_text())
+        self.assertEqual(sent['defines']['POURLUNE_AD_MODE'], 'test')
+        self.assertEqual(sent['defines']['POURLUNE_AD_APP_ID'],
+                         'ca-app-pub-3940256099942544~1458002511')
+        self.assertIn('POURLUNE_ADMOB_APP_ID = ca-app-pub-3940256099942544~1458002511',
+                      sent['xcconfig'])
+        self.assertIn('--target=lib/main.dart', sent['argv'])
+
     def test_destination_or_ads_defines_cannot_bypass_owned_selection(self):
         for name in ['POURLUNE_SUPPORT_URL', 'POURLUNE_PRIVACY_URL',
                      'POURLUNE_FEEDBACK_EMAIL', 'POURLUNE_AD_MODE']:

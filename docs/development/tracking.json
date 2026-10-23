@@ -8,7 +8,7 @@
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "LY01–LY06 gameplay/completion viewport repair; BR07 checkpoint preserved",
   "current_status": "one_screen_layout_active_submission_authorized_after_acceptance",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:256",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:293",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
   "delivery_path": "docs/development/deliveries/one-screen-layout.md",
@@ -458,7 +458,7 @@
     "review": "docs/development/review/beta-readiness-BR08-acceptance.md"
   },
   "admob_beta_integration": {
-    "status": "developer_active_engineering_console_connection_unavailable",
+    "status": "engineering_independently_accepted_pending_exact_ci_runtime_account_open",
     "authorization": [
       "申请Google AdMob，并接入吧",
       "可以一块测试"
@@ -468,7 +468,38 @@
     "updated_at": "2026-10-23T09:31:09.993039+00:00",
     "mode": "safe beta test ads; production monetization readiness separate",
     "build7": "author reports signed iOS/Android created, ads disabled baseline retained; not final new ad beta",
-    "author_progress": "AdMob browser connection closed; one ordinary refresh failed. Account status not confirmed. Continuing explicit beta test mode and mismatch rejection engineering.",
-    "checked_at": "2026-10-23T09:32:15.197609+00:00"
+    "author_progress": "Developer active. iOS actual UMP qualification allowed; interstitial and rewarded inventory both unavailable/timeout. Local move save reported true, Firebase disabled; Android native test-mode build completed, not installed. No display/close/reward success. ADM delivery not yet complete.",
+    "checked_at": "2026-10-23T10:21:37.076228+00:00",
+    "parent_scope_check": {
+      "checked_at": "2026-10-23T09:48:34.664473+00:00",
+      "files": [
+        "docs/development/evidence/admob-beta-integration/implementation-scope.md",
+        "app/integration_test/admob_beta_native_test.dart"
+      ],
+      "status": "read_only_interim_not_acceptance",
+      "finding": "Probe explicitly does not show ads; exit0 cannot prove load/display/close/reward. Review allowed qualification and per-format inventory reason separately. UMP/GMA availability does not replace own account registration.",
+      "next_action": "Await completed ADM delivery and explicit CLI window for focused independent review; no repeated task dispatch"
+    },
+    "parent_interim_evidence_read": {
+      "checked_at": "2026-10-23T09:53:00.431633+00:00",
+      "files": [
+        "docs/development/evidence/admob-beta-integration/ios-native-probe.json",
+        "docs/development/evidence/admob-beta-integration/native-artifact-checks.json",
+        "docs/development/evidence/admob-beta-integration/account-check.json"
+      ],
+      "result": "Author artifacts read; not independently rerun or accepted. Account unknown; console connection closed. iOS qualification success is separate from two load timeouts. Overall ADM remains pending.",
+      "next_action": "Continue existing active work; review complete delivery and request explicit CLI release before independent commands."
+    },
+    "independent_checkpoint": {
+      "at": "2026-10-23T10:07:27.629321+00:00",
+      "python_guards": "54/54 exit0; source unchanged during test",
+      "source_checkpoint": "405 hashes remain exact after parent checks",
+      "site": "Both HTTPS200 and byte-identical to reviewed source",
+      "flutter": "47/47 exit0; analyze clean; 3 format unchanged",
+      "ad_runtime": "Author iOS UMP allowed but both inventory timeout; actual load/show/close/reward not passed",
+      "report": "docs/development/review/admob-beta-integration-acceptance.md",
+      "cli": "Parent RELEASED; no in-flight command"
+    },
+    "network_followup": "Developer received direct user request to diagnose automatically; current developer request for temporary proxy exceptions remains pending in that chat; parent did not approve or change network."
   }
 }

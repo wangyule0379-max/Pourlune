@@ -12,6 +12,7 @@ import tempfile
 from firebase_config import ConfigError, NATIVE_IDS, REGISTRY, ROOT, inspect_config, require
 from ios_signing import ProfileError, inspect_profile
 from public_destinations import DestinationError, add_destination_arguments, validate_destinations
+from admob_config import AdConfigError, add_arguments as add_ad_arguments, selection as ad_selection
 
 
 def main():
@@ -26,6 +27,7 @@ def main():
                         help="Existing Pourlune App Store profile, for local IPA export only")
     parser.add_argument("--ios-output", type=Path)
     add_destination_arguments(parser)
+    add_ad_arguments(parser)
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
     try:
@@ -34,7 +36,8 @@ def main():
         require(bool(command) and command[0] in {"build", "run", "test"}, "invalid_flutter_command")
         require(not any(any(name in a for name in (
                         "POURLUNE_FIREBASE_", "POURLUNE_SUPPORT_URL", "POURLUNE_PRIVACY_URL",
-                        "POURLUNE_FEEDBACK_EMAIL", "POURLUNE_AD_MODE"))
+                        "POURLUNE_FEEDBACK_EMAIL", "POURLUNE_AD", "POURLUNE_INTERSTITIAL",
+                        "POURLUNE_REWARDED"))
                         or a.startswith("--dart-define-from-file")
                         for a in command), "caller_cannot_override_firebase_selection")
         if args.environment == "prod":
@@ -81,9 +84,15 @@ def main():
             args.config_dir, args.environment, args.platform, args.registry
         )
         profile = inspect_profile(args.ios_profile) if args.ios_profile else None
+        ads = ad_selection(args.ad_mode, args.platform,
+                           NATIVE_IDS['prod' if args.environment == 'prod' else 'dev'][args.platform],
+                           args.admob_registration)
         definitions = {"POURLUNE_FIREBASE_ENV": args.environment,
                        "POURLUNE_FIREBASE_NATIVE_READY": "false" if config is None else "true",
-                       "POURLUNE_AD_MODE": "disabled"}
+                       "POURLUNE_AD_MODE": args.ad_mode,
+                       "POURLUNE_AD_APP_ID": ads['app_id'],
+                       "POURLUNE_AD_PLATFORM": args.platform,
+                       "POURLUNE_AD_NATIVE_ID": ads['native_id']}
         definitions.update({'POURLUNE_' + name.upper(): value
                             for name, value in destinations.items() if name != 'ready'})
         if config:
@@ -94,9 +103,12 @@ def main():
             define_file.write_text(json.dumps(definitions))
             define_file.chmod(0o600)
             inputs = temp / "config-inputs.xcfilelist"
-            inputs.write_text("" if config is None else "\n".join([
+            input_paths = [] if config is None else [
                 str(config["native_path"]), str(config["options_path"]), str(args.registry.resolve())
-            ]) + "\n")
+            ]
+            if args.admob_registration:
+                input_paths.append(str(args.admob_registration.resolve()))
+            inputs.write_text("\n".join(input_paths) + ("\n" if input_paths else ""))
             symbol_inputs = temp / "symbol-inputs.xcfilelist"
             symbol_inputs.write_text("" if not args.upload_symbols else "\n".join([
                 "$(DWARF_DSYM_FOLDER_PATH)/$(DWARF_DSYM_FILE_NAME)",
@@ -107,6 +119,8 @@ def main():
             ]) + "\n")
             xcconfig = temp / "selection.xcconfig"
             lines = [f"POURLUNE_FIREBASE_ENV = {args.environment}",
+                     f"POURLUNE_ADMOB_APP_ID = {ads['app_id']}",
+                     f"POURLUNE_ADMOB_REGISTRATION = {args.admob_registration.resolve() if args.admob_registration else ''}",
                      f"POURLUNE_DISPLAY_NAME = {'Pourlune' if args.environment == 'prod' else 'Pourlune Dev'}",
                      f"POURLUNE_FIREBASE_CONFIG_DIR = {args.config_dir.resolve()}",
                      f"POURLUNE_FIREBASE_REGISTRY = {args.registry.resolve()}",
@@ -139,6 +153,8 @@ def main():
                 "ORG_GRADLE_PROJECT_POURLUNE_FIREBASE_ENV": args.environment,
                 "ORG_GRADLE_PROJECT_POURLUNE_FIREBASE_CONFIG_DIR": str(args.config_dir.resolve()),
                 "ORG_GRADLE_PROJECT_POURLUNE_FIREBASE_REGISTRY": str(args.registry.resolve()),
+                "ORG_GRADLE_PROJECT_POURLUNE_ADMOB_APP_ID": ads['app_id'],
+                "ORG_GRADLE_PROJECT_POURLUNE_ADMOB_REGISTRATION": str(args.admob_registration.resolve()) if args.admob_registration else '',
             })
             # Flutter's signed IPA path unconditionally adds provisioning-update
             # flags. Prepare unsigned, then archive/export with the verified
@@ -179,7 +195,7 @@ def main():
                     log = log.replace(value, "[CLIENT_CONFIG_REDACTED]")
             print(log, end="")
             return result.returncode
-    except (ConfigError, ProfileError, DestinationError) as error:
+    except (ConfigError, ProfileError, DestinationError, AdConfigError) as error:
         print(json.dumps({"ok": False, "code": str(error)}), file=sys.stderr)
         return 1
     except OSError:

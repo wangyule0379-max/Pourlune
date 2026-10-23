@@ -1,0 +1,16 @@
+...F
+======================================================================
+FAIL: test_registration_hash_matches_the_same_bytes_that_were_parsed (test_admob_config.AdConfigTest.test_registration_hash_matches_the_same_bytes_that_were_parsed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_admob_config.py", line 35, in test_registration_hash_matches_the_same_bytes_that_were_parsed
+    self.assertEqual(selected['registration_sha256'], hashlib.sha256(before).hexdigest())
+AssertionError: 'd243c5512aa188213ce8771bfbfe5628aee6bf6e97bc8e54877f421bc0650076' != '0c69adc24f03c437f162372c965eb7008e9701c6d39bd260380288389f023a3e'
+- d243c5512aa188213ce8771bfbfe5628aee6bf6e97bc8e54877f421bc0650076
++ 0c69adc24f03c437f162372c965eb7008e9701c6d39bd260380288389f023a3e
+
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.038s
+
+FAILED (failures=1)

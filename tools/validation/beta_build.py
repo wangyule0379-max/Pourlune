@@ -1,6 +1,6 @@
 """Freeze a production candidate; never upload, install or create signing keys.
 
-Uses existing validated prod Firebase selection (ads disabled, no symbol upload).
+Uses validated prod Firebase selection (ads disabled unless explicit beta test).
 Outputs are immutable named folders inside ignored build/. Requires local prod
 client configuration. See tools/validation/README.md for signing handoff.
 """
@@ -20,6 +20,7 @@ import zipfile
 from ios_signing import ProfileError, inspect_profile
 from public_destinations import DestinationError, add_destination_arguments, validate_destinations
 from android_signing import SigningError, inspect_signer, sign_aab
+from admob_config import AdConfigError, add_arguments as add_ad_arguments, selection as ad_selection
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -68,6 +69,7 @@ def main():
     parser.add_argument('--ios-profile', type=Path,
                         help='Export an IPA using this existing App Store profile')
     add_destination_arguments(parser)
+    add_ad_arguments(parser)
     parser.add_argument('--android-keystore', type=Path)
     parser.add_argument('--android-key-alias')
     parser.add_argument('--android-store-password-file', type=Path)
@@ -76,6 +78,7 @@ def main():
     args = parser.parse_args()
     try:
         destinations = validate_destinations(args.support_url, args.privacy_url, args.feedback_email)
+        ads = ad_selection(args.ad_mode, args.platform, 'com.pourlune.app', args.admob_registration)
         version, number = read_version((ROOT / 'app/pubspec.yaml').read_text())
         android_inputs = [args.android_keystore, args.android_key_alias,
                           args.android_store_password_file, args.android_certificate_sha256]
@@ -92,13 +95,21 @@ def main():
             raise BuildError('ios_profile_requires_ios')
         profile = inspect_profile(args.ios_profile) if args.ios_profile else None
         output = prepare_output(ROOT, args.output)
+        registration = None
+        if args.admob_registration:
+            registration = output / 'admob-registration.json'
+            registration.write_bytes(args.admob_registration.read_bytes())
+            registration.chmod(0o444)
+            ads = ad_selection(args.ad_mode, args.platform, 'com.pourlune.app', registration)
         source = sources()
         (output / 'sources.json').write_text(json.dumps(source, indent=2) + '\n')
         environment = dict(os.environ, FIREBASE_ANALYTICS_WITHOUT_ADID='1')
         # No silent caller target, SDK config, signing, AdMob or Dart overrides.
         command = [sys.executable, str(ROOT / 'tools/validation/firebase_build.py'),
                    '--environment', 'prod', '--platform', args.platform,
-                   '--flutter', args.flutter]
+                   '--flutter', args.flutter, '--ad-mode', args.ad_mode]
+        if registration:
+            command.extend(['--admob-registration', str(registration)])
         for name, value in destinations.items():
             if name != 'ready' and value:
                 command.extend(['--' + name.replace('_', '-'), value])
@@ -119,6 +130,8 @@ def main():
             raise BuildError('compile_failed_see_redacted_log')
         if source != sources():
             raise BuildError('source_changed_during_build')
+        if ads != ad_selection(args.ad_mode, args.platform, 'com.pourlune.app', registration):
+            raise BuildError('ad_registration_changed_during_build')
         if args.platform == 'ios':
             if profile:
                 artifacts = list((output / 'ios-export/ipa').glob('*.ipa'))
@@ -140,6 +153,8 @@ def main():
                 info['CFBundleShortVersionString'], info['CFBundleVersion']) != (
                     'com.pourlune.app', 'Pourlune', version, str(number)):
                 raise BuildError('ios_packaging_mismatch')
+            if info.get('GADApplicationIdentifier') != ads['app_id']:
+                raise BuildError('ios_ad_app_id_mismatch')
             for nested in artifact.rglob('Info.plist'):
                 if nested == artifact / 'Info.plist':
                     continue
@@ -179,6 +194,8 @@ def main():
             if 'jar is unsigned' not in signature.stdout.lower():
                 raise BuildError('unexpected_aab_signature_state')
             hashes = {artifact.name: sha(artifact)}
+            if registration:
+                hashes[registration.name] = sha(registration)
             if credentials:
                 signed = output / f'Pourlune-{version}-{number}-upload-signed.aab'
                 signing = sign_aab(artifact, signed, **credentials)
@@ -196,8 +213,11 @@ def main():
                                if credentials else 'compile-only unsigned; not upload-ready'),
                     'platform': args.platform, 'identity': 'com.pourlune.app',
                     'version': version, 'build_number': number,
-                    'firebase_environment': 'prod', 'ads': 'disabled',
-                    'collection': 'independent opt-in, defaults off; RC may process installation data',
+                    'firebase_environment': 'prod', 'ads': args.ad_mode,
+                    'ad_configuration': ads,
+                    'collection': ('analytics/crash independent opt-in, defaults off; RC may process installation data'
+                                   + ('; test ads/UMP may process IP/device/interaction data'
+                                      if args.ad_mode == 'test' else '')),
                     'production_run_or_upload': False,
                     'public_destinations': destinations,
                     'signed_for_upload': bool(profile or credentials),
@@ -209,8 +229,8 @@ def main():
         print(json.dumps({'ok': True, 'candidate': str(output / 'candidate.json'),
                           'status': manifest['status']}))
         return 0
-    except (BuildError, ProfileError, DestinationError, SigningError, OSError) as error:
-        print(json.dumps({'ok': False, 'code': str(error) if isinstance(error, (BuildError, ProfileError, DestinationError, SigningError))
+    except (BuildError, ProfileError, DestinationError, SigningError, AdConfigError, OSError) as error:
+        print(json.dumps({'ok': False, 'code': str(error) if isinstance(error, (BuildError, ProfileError, DestinationError, SigningError, AdConfigError))
                           else 'candidate_io_error'}), file=sys.stderr)
         return 1
 

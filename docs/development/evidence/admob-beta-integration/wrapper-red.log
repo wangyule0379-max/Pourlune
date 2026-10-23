@@ -1,0 +1,22 @@
+.....F......................
+======================================================================
+FAIL: test_explicit_beta_ads_passes_test_mode_and_platform_sample_app_to_both_layers (test_firebase_config.FirebaseConfigTest.test_explicit_beta_ads_passes_test_mode_and_platform_sample_app_to_both_layers)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_firebase_config.py", line 459, in test_explicit_beta_ads_passes_test_mode_and_platform_sample_app_to_both_layers
+    self.assertEqual(r.returncode, 0, r.stderr)
+AssertionError: 2 != 0 : usage: firebase_build.py [-h] --environment {none,dev,prod} --platform
+                         {ios,android} [--config-dir CONFIG_DIR]
+                         [--registry REGISTRY] [--flutter FLUTTER]
+                         [--upload-symbols] [--ios-profile IOS_PROFILE]
+                         [--ios-output IOS_OUTPUT] [--support-url SUPPORT_URL]
+                         [--privacy-url PRIVACY_URL]
+                         [--feedback-email FEEDBACK_EMAIL]
+                         ...
+firebase_build.py: error: unrecognized arguments: --ad-mode
+
+
+----------------------------------------------------------------------
+Ran 28 tests in 4.634s
+
+FAILED (failures=1)

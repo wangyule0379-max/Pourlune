@@ -290,3 +290,50 @@ audio/haptics and reader feedback follow TestFlight/Play on that phone; missing
 results remain unverified. See `BR04/remote-device-route.md` and
 `BR04/device-feedback.md`. No developer mode, debug USB, unsigned sideloading or
 unknown certificate installation is needed for that route.
+
+
+## ADM01 explicit beta test ads
+
+Default `firebase_build.py` and `beta_build.py` remain `--ad-mode disabled`.
+Use `--ad-mode test` only for the authorized ad-testing candidate. Both platforms
+use Google's exact official interstitial/rewarded test units, even on phones that
+have not been registered as test devices; no live-unit flag is provided.
+Existing Firebase selection, production compile-only/default-main guard, signing,
+new-output folders and source/lock checks still apply. No candidate should be
+built/uploaded until the new implementation's independent acceptance and exact CI.
+
+An optional `--admob-registration /absolute/registration.json` chooses the real
+Pourlune native App ID while retaining official test units. Public config shape:
+
+```json
+{"schema":1,"apps":{"ios":{"native_id":"com.pourlune.app","app_id":"COPY_CONSOLE_APP_ID"},"android":{"native_id":"com.pourlune.app","app_id":"COPY_CONSOLE_APP_ID"}}}
+```
+
+This illustrative placeholder fails validation. Use only actual console-verified
+platform records; do not fabricate IDs or copy another app's resources. App IDs
+are public client config. No signing secrets, payment/tax data or login credentials
+belong here. When no registration is provided, Google's platform sample App ID
+is explicit and candidate metadata has `owned_registration_verified=false`;
+this is engineering preparation, not account registration/readiness approval.
+
+The wrapper pins matching Dart definitions, iOS xcconfig and Android properties;
+native guards reject stale platform/identity/App ID, duplicates and unit injection.
+Direct debug builds with no ad definition retain the official-sample debug default.
+An explicit test definition must include matching `POURLUNE_AD_APP_ID`,
+`POURLUNE_AD_PLATFORM`, `POURLUNE_AD_NATIVE_ID`. QA external identity overrides
+must match those definitions and use Firebase none; they are not production builds.
+
+BR08 build7 remains frozen with ads disabled. Do not overwrite or relabel it as
+ADM01. Actual UMP availability/message configuration, test ad delivery/show/close/
+reward, app-ads.txt verification, store declarations and phone results are separate
+checks; controlled B04 transport tests do not establish real SDK receipt.
+
+For an owned registration the candidate tool freezes the exact public JSON bytes
+as read-only `admob-registration.json` in the new output before delegation; the
+wrapper and native checks consume that snapshot. Parsing and hashing use one byte
+read. The snapshot hash is pinned in the candidate and checked after compilation;
+changing the original file cannot relabel an in-flight build. iOS packaging also
+checks the actual product's GADApplicationIdentifier. Independently inspect the
+new AAB's actual bundletool manifest App ID before store upload, alongside its
+certificate/payload/signature checks; native Gradle checks alone are not store
+acceptance.

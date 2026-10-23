@@ -27,8 +27,15 @@ class ServiceConfig {
       feedbackEmail,
       umpTestDevice,
       umpTestRegion;
+  static String get testInterstitialId =>
+      defaultTargetPlatform == TargetPlatform.iOS
+      ? 'ca-app-pub-3940256099942544/4411468910'
+      : 'ca-app-pub-3940256099942544/1033173712';
+  static String get testRewardedId =>
+      defaultTargetPlatform == TargetPlatform.iOS
+      ? 'ca-app-pub-3940256099942544/1712485313'
+      : 'ca-app-pub-3940256099942544/5224354917';
   static ServiceConfig environment() {
-    final ios = defaultTargetPlatform == TargetPlatform.iOS;
     const mode = String.fromEnvironment(
       'POURLUNE_AD_MODE',
       defaultValue: kReleaseMode ? 'disabled' : 'test',
@@ -36,14 +43,10 @@ class ServiceConfig {
     return ServiceConfig(
       adMode: mode,
       interstitialId: mode == 'test'
-          ? (ios
-                ? 'ca-app-pub-3940256099942544/4411468910'
-                : 'ca-app-pub-3940256099942544/1033173712')
+          ? testInterstitialId
           : const String.fromEnvironment('POURLUNE_INTERSTITIAL_ID'),
       rewardedId: mode == 'test'
-          ? (ios
-                ? 'ca-app-pub-3940256099942544/1712485313'
-                : 'ca-app-pub-3940256099942544/5224354917')
+          ? testRewardedId
           : const String.fromEnvironment('POURLUNE_REWARDED_ID'),
       firebaseJson: const String.fromEnvironment('POURLUNE_FIREBASE_OPTIONS'),
       firebaseNativeReady: const bool.fromEnvironment(
@@ -71,8 +74,7 @@ class ServiceConfig {
     }
     const testPublisher = 'ca-app-pub-3940256099942544/';
     return testing
-        ? interstitialId.startsWith(testPublisher) &&
-              rewardedId.startsWith(testPublisher)
+        ? interstitialId == testInterstitialId && rewardedId == testRewardedId
         : !interstitialId.startsWith(testPublisher) &&
               !rewardedId.startsWith(testPublisher);
   }

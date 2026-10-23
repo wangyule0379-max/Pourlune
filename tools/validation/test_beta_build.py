@@ -6,6 +6,8 @@ import json
 import sys
 import subprocess
 import zipfile
+import hashlib
+import plistlib
 from unittest.mock import patch
 import beta_build
 from pathlib import Path
@@ -13,6 +15,101 @@ from beta_build import BuildError, prepare_output, read_version
 
 
 class CandidateSafetyTest(unittest.TestCase):
+    def test_ios_candidate_rejects_packaged_native_ad_app_id_different_from_selection(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); (root / 'app').mkdir()
+            (root / 'app/pubspec.yaml').write_text('version: 0.5.0+8\n')
+            output = root / 'build/test-ios'
+            def build(args, **kwargs):
+                if args[0] == sys.executable:
+                    app = root / 'app/build/ios/iphoneos/Runner.app'; app.mkdir(parents=True)
+                    (app / 'Info.plist').write_bytes(plistlib.dumps({
+                        'CFBundleIdentifier': 'com.pourlune.app', 'CFBundleDisplayName': 'Pourlune',
+                        'CFBundleShortVersionString': '0.5.0', 'CFBundleVersion': '8',
+                        'GADApplicationIdentifier': 'ca-app-pub-3940256099942544~3347511713'}))
+                    return subprocess.CompletedProcess(args, 0)
+                return subprocess.CompletedProcess(args, 1, '', '')
+            error = io.StringIO()
+            with patch.object(beta_build, 'ROOT', root), patch.object(beta_build, 'sources', return_value={}), \
+                 patch('beta_build.subprocess.run', side_effect=build), \
+                 patch('beta_build.subprocess.check_output', return_value='fixture-head\n'), \
+                 patch.object(sys, 'argv', ['beta_build.py', '--platform', 'ios', '--output', str(output),
+                                          '--ad-mode', 'test']), contextlib.redirect_stdout(io.StringIO()), \
+                 contextlib.redirect_stderr(error):
+                self.assertEqual(beta_build.main(), 1)
+            self.assertEqual(json.loads(error.getvalue())['code'], 'ios_ad_app_id_mismatch')
+            self.assertFalse((output / 'candidate.json').exists())
+
+    def test_registration_is_frozen_before_delegated_build_and_matches_packaged_app(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); (root / 'app').mkdir()
+            (root / 'app/pubspec.yaml').write_text('version: 0.5.0+8\n')
+            registration = root / 'outside-registration.json'
+            data = {'schema': 1, 'apps': {'android': {'native_id': 'com.pourlune.app',
+                    'app_id': 'ca-app-pub-1111111111111111~1111111111'}}}
+            registration.write_text(json.dumps(data)); original = registration.read_bytes()
+            output = root / 'build/test-ads'; compiled = {}
+            def build(args, **kwargs):
+                if args[0] == sys.executable:
+                    data['apps']['android']['app_id'] = 'ca-app-pub-1111111111111111~2222222222'
+                    registration.write_text(json.dumps(data))
+                    selected = Path(args[args.index('--admob-registration') + 1])
+                    compiled['app_id'] = json.loads(selected.read_text())['apps']['android']['app_id']
+                    artifact = root / 'app/build/app/outputs/bundle/release/app-release.aab'
+                    artifact.parent.mkdir(parents=True)
+                    with zipfile.ZipFile(artifact, 'w') as z:
+                        z.writestr('base/fixture-app-id.txt', compiled['app_id'])
+                    return subprocess.CompletedProcess(args, 0)
+                return subprocess.CompletedProcess(args, 0, 'jar is unsigned.', '')
+            with patch.object(beta_build, 'ROOT', root), patch.object(beta_build, 'sources', return_value={}), \
+                 patch('beta_build.subprocess.run', side_effect=build), \
+                 patch('beta_build.subprocess.check_output', return_value='fixture-head\n'), \
+                 patch.object(sys, 'argv', ['beta_build.py', '--platform', 'android', '--output', str(output),
+                                          '--ad-mode', 'test', '--admob-registration', str(registration)]), \
+                 contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(beta_build.main(), 0)
+            candidate = json.loads((output / 'candidate.json').read_text())
+            self.assertEqual(compiled['app_id'], candidate['ad_configuration']['app_id'])
+            self.assertEqual(candidate['ad_configuration']['registration_sha256'], hashlib.sha256(original).hexdigest())
+            with zipfile.ZipFile(candidate['artifact']) as package:
+                self.assertEqual(package.read('base/fixture-app-id.txt').decode(),
+                                 candidate['ad_configuration']['app_id'])
+            frozen = output / 'admob-registration.json'
+            self.assertEqual(frozen.read_bytes(), original)
+            self.assertEqual(candidate['files_sha256'][frozen.name], hashlib.sha256(original).hexdigest())
+
+    def test_explicit_test_candidate_records_sample_app_without_claiming_owned_registration(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); (root / 'app').mkdir()
+            (root / 'app/pubspec.yaml').write_text('version: 0.5.0+8\n')
+            output = root / 'build/test-ads'
+            def build(args, **kwargs):
+                if args[0] == sys.executable:
+                    self.assertIn('--ad-mode', args)
+                    self.assertEqual(args[args.index('--ad-mode') + 1], 'test')
+                    artifact = root / 'app/build/app/outputs/bundle/release/app-release.aab'
+                    artifact.parent.mkdir(parents=True)
+                    with zipfile.ZipFile(artifact, 'w') as z:
+                        z.writestr('base/assets/puzzle.json', b'payload fixture')
+                return subprocess.CompletedProcess(args, 0, 'jar is unsigned.', '')
+            with patch.object(beta_build, 'ROOT', root), patch.object(beta_build, 'sources', return_value={}), \
+                 patch('beta_build.subprocess.run', side_effect=build), \
+                 patch('beta_build.subprocess.check_output', return_value='fixture-head\n'), \
+                 patch.object(sys, 'argv', ['beta_build.py', '--platform', 'android', '--output', str(output),
+                                          '--ad-mode', 'test']), contextlib.redirect_stdout(io.StringIO()), \
+                 contextlib.redirect_stderr(io.StringIO()):
+                try:
+                    code = beta_build.main()
+                except SystemExit as error:
+                    code = error.code
+                self.assertEqual(code, 0)
+            candidate = json.loads((output / 'candidate.json').read_text())
+            self.assertEqual(candidate['ads'], 'test')
+            self.assertEqual(candidate['ad_configuration']['app_id'],
+                             'ca-app-pub-3940256099942544~3347511713')
+            self.assertFalse(candidate['ad_configuration']['owned_registration_verified'])
+            self.assertFalse(candidate['external_store_gates_verified'])
+
     def test_existing_candidate_is_never_overwritten(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

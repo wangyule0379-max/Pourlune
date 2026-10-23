@@ -19,6 +19,20 @@ val firebaseRegistry = providers.gradleProperty("POURLUNE_FIREBASE_REGISTRY")
 val pourluneApplicationId = if (firebaseEnvironment == "prod") "com.pourlune.app" else "dev.pourlune.pourlune_dev"
 val pourlunePython = System.getenv("POURLUNE_PYTHON")
     ?: pourluneRepo.resolve(".venv/bin/python").takeIf { it.exists() }?.path ?: "python3"
+val admobAppId = providers.gradleProperty("POURLUNE_ADMOB_APP_ID")
+    .getOrElse("ca-app-pub-3940256099942544~3347511713")
+val admobRegistration = providers.gradleProperty("POURLUNE_ADMOB_REGISTRATION").getOrElse("")
+val admobCheck = providers.exec {
+    commandLine(listOf(pourlunePython, pourluneRepo.resolve("tools/validation/admob_config.py").path,
+        "--platform", "android", "--native-id", pourluneApplicationId,
+        "--native-app-id", admobAppId) +
+        if (admobRegistration.isEmpty()) emptyList() else listOf("--registration", admobRegistration))
+    environment("DART_DEFINES", providers.gradleProperty("dart-defines").getOrElse(""))
+    isIgnoreExitValue = true
+}
+check(admobCheck.result.get().exitValue == 0) {
+    "Pourlune AdMob selection rejected; inspect explicit platform/App ID/test configuration."
+}
 val firebaseCheck = providers.exec {
     commandLine(pourlunePython, pourluneRepo.resolve("tools/validation/firebase_config.py").path,
         "--environment", firebaseEnvironment, "--platform", "android",
@@ -60,7 +74,7 @@ android {
         manifestPlaceholders["POURLUNE_DISPLAY_NAME"] =
             if (firebaseEnvironment == "prod") "Pourlune" else "Pourlune Dev"
         manifestPlaceholders["POURLUNE_ADMOB_APP_ID"] =
-            providers.gradleProperty("POURLUNE_ADMOB_APP_ID").getOrElse("ca-app-pub-3940256099942544~3347511713")
+            admobAppId
         minSdk = 24
         targetSdk = flutter.targetSdkVersion
         // Uses the version code from pubspec.yaml. When using split APKs, 1000 * ABI_VERSION
