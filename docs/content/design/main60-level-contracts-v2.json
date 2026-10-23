@@ -555,11 +555,11 @@
       "capacity": 4,
       "empty_buffers": 2,
       "pace": "挑战",
-      "learning_goal": "连续色段受剩余容量限制",
-      "board_constraints": "四色，合法路线含一次因目标剩余容量不足而部分倒入的真实截断",
-      "intended_strategy": "利用已有同色接收余量转走一部分，重新安排剩余块",
-      "required_evidence": "明确截断前后单位数、后续空间收益、UI容量同步",
-      "reject_if": "为触发截断加入可删的往返动作，或允许手选倒入量",
+      "learning_goal": "比较连续色段与接收余量，识别无收益截断",
+      "board_constraints": "四色，提供可正常通关的非冗余参考路线及一个真实容量不足的合法分支；比较该分支有无揭开新层或释放有效空间",
+      "intended_strategy": "先判断倒入量和被露出的颜色；无收益部分倒入可不做，转而腾出完整接收空间",
+      "required_evidence": "同一盘14步参考与15步截断反例逐步对照；删去第2步后按最大倒入量重算仍14步胜利；说明源顶色未变、接收瓶被填满，UI容量同步另验",
+      "reject_if": "把已证可删截断声称为有效或必需策略、把反例当推荐解、允许手选倒入量或仅靠参考长度称难度通过",
       "milestone_piece": 2,
       "preserve_exact_existing_definition": false,
       "status": "design_contract_not_authored_or_validated_board"
@@ -775,11 +775,11 @@
       "capacity": 4,
       "empty_buffers": 2,
       "pace": "挑战",
-      "learning_goal": "结合截断和目标先后",
-      "board_constraints": "四色，截断发生在目标归位顺序的关键位置，非附加炫技",
-      "intended_strategy": "利用余量露出下层→清理目标→逐个归位",
-      "required_evidence": "容量截断单位证据+两种顺序对照+全解",
-      "reject_if": "截断和归位两个独立装饰步骤，互不影响",
+      "learning_goal": "结合接收余量与目标归位先后",
+      "board_constraints": "四色，两种归位顺序有可回放的容量或覆盖差异；合理路线先取得足够接收空间，再移开色段；不强制有效解发生容量截断",
+      "intended_strategy": "比较色段与余量→清出足够接收空间→露出下层并逐个归位",
+      "required_evidence": "两种真实顺序的逐步容量/露层/后续差异与全解；若采用截断，须另证收益且不能靠可删动作凑条件",
+      "reject_if": "把部分倒入说成直接揭开源瓶下层、用互不影响的装饰步骤凑组合、仅有两种文案而无盘面后果",
       "milestone_piece": null,
       "preserve_exact_existing_definition": false,
       "status": "design_contract_not_authored_or_validated_board"
@@ -1204,5 +1204,6 @@
       "preserve_exact_existing_definition": false,
       "status": "design_contract_not_authored_or_validated_board"
     }
-  ]
+  ],
+  "design_revision": "2026-10-23-DC02-R01-capacity-comparison"
 }
