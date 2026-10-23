@@ -39,3 +39,11 @@ Xcode使用既有团队会话对本次归档准备上传，生成新IPA：`build
 16个真实只读命令exit0，actual codesign deep/strict、同entitlements、有效profile UUID74a202b2-3b25-4e31-8fd4-0413bf15d486及既有公钥证书SHA1 13362E4AF31A860FA6B705DB5192AF78613F7A58、5个dSYM对新实际二进制UUID通过。旧候选533文件hash不变。证据verify_organizer_independent.py、organizer-independent.log、organizer-independent-final.json。
 
 已通知原开发解除该精确重新签名包的上传等待，继续当前Xcode会话；会话如产生不同新包需核差额。父未点击上传/运行生产或设备，也未把作者“最终Upload前”当上传成功。Play本人两项声明已由开发一次询问，不重复提问。CLI归原开发，父命令全部结束。
+
+## 2026-10-23 12:04 UTC Apple上传回执核对
+
+父读到作者pre-upload-check.json/apple-upload-receipt.json/store-state.json后，实际通过CUA对Xcode当前辅助功能状态只读回读：`Status log for "Runner"` 中显示 Prepared archive for uploading（Oct23 19:40）及 **Uploaded to Apple（Oct23 19:54）**，与作者保存的上传完成回执一致。没有点击、截图或操作Simulator。独立记录apple-upload-independent-readback.json。
+
+本轮直接UI支持“Xcode上传完成”；该状态sheet自身仅展示归档名/时间，完整com.pourlune.app/0.5.0(9)/SHA关联依前次实际独立IPA检查及作者上传前队列hash核对，不能把此sheet说成独立读取了ASC构建详细记录。作者指出刷新ASC时登录会话过期，正在正常登录排查。因此 **服务器处理状态、本人测试组构建可用、邀请或手机安装均仍未独立确认**，不把上传回执当可安装。
+
+父已核实原开发聊天的最新直接本人答复“先只推进 TestFlight”，本轮Google Play创建/声明/上传暂停，不再追问该项；冻结AAB保留。TestFlight继续已授权正常处理，无需重复通用上传许可。

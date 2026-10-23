@@ -8,7 +8,7 @@
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "LY01–LY06 gameplay/completion viewport repair; BR07 checkpoint preserved",
   "current_status": "one_screen_layout_active_submission_authorized_after_acceptance",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:299",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:300",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
   "delivery_path": "docs/development/deliveries/one-screen-layout.md",
@@ -458,7 +458,7 @@
     "review": "docs/development/review/beta-readiness-BR08-acceptance.md"
   },
   "admob_beta_integration": {
-    "status": "build9_ads_disabled_independently_accepted_continue_submission",
+    "status": "build9_apple_upload_corroborated_processing_pending_play_deferred",
     "authorization": [
       "申请Google AdMob，并接入吧",
       "可以一块测试"
@@ -468,8 +468,8 @@
     "updated_at": "2026-10-23T09:31:09.993039+00:00",
     "mode": "safe beta test ads; production monetization readiness separate",
     "build7": "Independently accepted ads-disabled frozen baseline; not final ad-testing candidate",
-    "author_progress": "Xcode existing authenticated account reached final Upload; newly generated IPA independently accepted by parent and developer notified to proceed. Play owner policy/export declaration question already sent, no duplicate.",
-    "checked_at": "2026-10-23T11:52:07.034931+00:00",
+    "author_progress": "Developer active: Apple uploaded, ASC browser session expired and normal sign-in resources under diagnosis; no user action currently requested. Play stopped at direct owner request.",
+    "checked_at": "2026-10-23T12:12:19.585110+00:00",
     "parent_scope_check": {
       "checked_at": "2026-10-23T09:48:34.664473+00:00",
       "files": [
@@ -530,7 +530,7 @@
       "independently_read": true,
       "checked_at": "2026-10-23T10:35:12.712192+00:00"
     },
-    "next_action": "Independently read actual Apple upload/processing/self group receipt when delivered; follow Play owner declaration response. All existing CI terminal success, no repeat polling.",
+    "next_action": "Follow existing developer normal ASC authentication then independently verify server processing/self group availability. No further AdMob/Play or old CI polling.",
     "build8": {
       "version": "0.5.0+8",
       "report": "docs/development/review/admob-build8-acceptance.md",
@@ -624,14 +624,36 @@
         "checked_at": "2026-10-23T11:51:13.109Z"
       },
       "commit": "779c82eb1d82a582b327d3cbdd517419f06201b4",
-      "store_submission": "developer notified to continue actual authorized submission; not yet uploaded/processed/installable",
+      "store_submission": "Apple upload completion independently corroborated in Xcode status; ASC processing/installable not independently verified",
       "organizer_reexport": {
         "path": "build/store-submission/0.5.0-9/ios-organizer-attempt-1/prepared-upload.ipa",
         "sha256": "7fd86c11a7cfc5053b1a96aa381134861e9aec0b8a75311adef25c189b51d117",
         "independent_review": "passed signature-only differences; 256 entries,247 equal,16 commands",
         "evidence": "docs/development/review/ads-disabled-build9-evidence/organizer-independent-final.json",
         "upload": "released to developer; receipt pending"
+      },
+      "apple_upload_readback": {
+        "checked_at": "2026-10-23T12:12:19.585110+00:00",
+        "source": "Independent CUA native accessibility read of com.apple.dt.Xcode current status sheet",
+        "interaction": "getApp only; no click, simulator focus or image capture",
+        "visible_text": [
+          "Status log for \"Runner\":",
+          "Prepared archive for uploading — Oct 23, 2026 at 19:40",
+          "Uploaded to Apple — Oct 23, 2026 at 19:54"
+        ],
+        "author_receipt_correspondence": "Runner status and displayed local upload time agree with author apple-upload-receipt.json",
+        "accepted_upload_ipa_sha256": "7fd86c11a7cfc5053b1a96aa381134861e9aec0b8a75311adef25c189b51d117",
+        "package_identity_basis": "Prior independent actual IPA check com.pourlune.app/0.5.0/build9; current native status sheet itself shows Runner name and timestamps, not full bundle/version/hash",
+        "asc_processing_independently_verified": false,
+        "installable_independently_verified": false,
+        "device_installation_verified": false
       }
+    },
+    "owner_testflight_only": {
+      "source_turn": "01a1688a-e2ec-77a1-bc84-6c03c309e014",
+      "source_user_message": "01a1689b-f28e-7922-8028-2cfc04a8f773",
+      "reply": "先只推进 TestFlight",
+      "play": "deferred for this batch; no additional declaration reminder"
     }
   }
 }
