@@ -31,3 +31,17 @@
 - https://support.google.com/googleplay/android-developer/answer/9867159?hl=en
 - https://support.google.com/googleplay/android-developer/answer/9845334?hl=en
 - https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages
+
+
+## BR05：用户授权代建独立上传密钥并完成本地签名（2026-10-23，优先于上述旧限制）
+
+用户针对Android upload key明确表示“你来搞就可以了，跟以前一样”“不要因为这个停下来等我”。现授权原开发代建Pourlune独立upload key、机器生成强随机口令、仓库外受限本地保存，使用已验工具完成真实本地签名及候选验证；不再要求本人先输入密码。旧BR04本人交互限定仅作为历史，不阻止本批。原开发实施，架构独立验收。
+
+1. 核对实际Java工具和指定Pourlune路径是否已存在。不得覆盖、重置或删除已有key；如用户期间已创建，则确认其alias/公开证书及可用受限凭据，不读取其他产品资产。没有资产时才创建一次正式独立PKCS12 upload key，alias pourlune-upload，RSA3072/SHA256withRSA，有效期10000天。只创建上传密钥，不操作Play App Signing托管密钥或条款。
+2. 使用系统密码学安全随机源生成至少32字节熵的ASCII口令，直接写仓库外用户私有目录的0600文件，目录0700。密码只通过Java受限文件参数传递；不得输出至终端/工具结果、argv实值、环境变量、日志、证据、Git或候选manifest。不要展示文件内容，不启用shell trace。文件创建拒绝覆盖与symlink；失败按实际状态诊断，不能盲目再生成第二把key。密钥本身0600，原开发可读取明确授权密码文件供签名程序使用，但不得回显。
+3. 留存本机受限恢复副本及仅公开的证书指纹/alias/有效期/路径定位资料，核对副本字节一致。明确本机副本不等异机灾备，不上传秘密或把完整key/password打包进交付；后续由用户自行保存到其控制的安全位置。不得以等待手动备份阻塞本批可做签名验证。
+4. 使用已验beta_build/android_signing门控，在新的ignored候选目录生成真实upload-signed AAB，保留原unsigned候选；如新构建则串行、正常prod compile-only/广告disabled/采集默认off/无AdID/锁不变，不虚构未确认支持URL邮箱。不能把已签名等同其他商店资料完成。
+5. 实际验证PrivateKeyEntry、公开SHA256 pin、有效期、非debug、jarsigner strict和最终签名证书一致、unsigned与signed非签名payload一致；记录来源/产物哈希、身份版本、资源/符号适用性以及实际命令退出状态。密码字段不得进入证据。真实签名失败才最小修复代码并聚焦复验；无实现变化不重跑旧全量Flutter/CI。
+6. 交付docs/development/deliveries/beta-readiness-BR05.md及evidence/beta-readiness/BR05/，明确释放CLI。架构review/beta-readiness-BR05-acceptance.md独立复验公开证书/签名/包；仅提交已验非秘密代码资料。真实设备/商店分发仍未执行。授权未扩大为公开网站、账号声明代签、商店上传/审核/开轨道/邀请或生产运行。
+
+保护F9用户模拟器、普通库及旧QA冻结包；不因其他待定发布资料停止上述已授权工作。任务只在真实技术缺陷/权限阻碍时汇报，不重复索取已获密钥创建和本地签名授权。
