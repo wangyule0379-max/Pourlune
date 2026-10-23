@@ -41,3 +41,5 @@ iOS构建bundle为dev.pourlune.layoutValidation，Runner哈希已保存；flutte
 精准提交本次生产/QA及必要记录，跟踪新精确CI；通过后使用已有Apple profile与BR05 upload key生成新版本目的地候选，旧0.5.0+6冻结。逐包验证来源/身份/资源/签名/符号后按已有授权推进TestFlight与Play closed。13+目标、仅本人首测、ChatGPT生成原图来源已记录；商店实际必填未知事实不得猜，协议不代签。真机分发后测试、音触觉/读屏/性能与商店接受状态仍未通过。
 
 实现已精准提交推送`cd335efc5d293549d97a4b6c44420e605b665297`；新精确CI39928698433正在运行，iOS与tests-and-android均in_progress。唯一CLI明确交还原开发，其已接收BR08，当前只读准备，green后新候选核包再分发。跟踪文档提交不要求额外CI。
+
+最终远端CI：39928698433已于2026-10-23T09:09:22Z completed/success，精确head cd335efc5d293549d97a4b6c44420e605b665297，父通过GitHub连接器独立回读ios-build和tests-and-android均success；remote-ci-final.json已保存，禁止重复查询。已明确通知原开发进入BR08新签名候选；新包/商店提交尚未通过。

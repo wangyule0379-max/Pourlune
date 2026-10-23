@@ -8,7 +8,7 @@
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "LY01–LY06 gameplay/completion viewport repair; BR07 checkpoint preserved",
   "current_status": "one_screen_layout_active_submission_authorized_after_acceptance",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:208",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:219",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
   "delivery_path": "docs/development/deliveries/one-screen-layout.md",
@@ -407,7 +407,7 @@
     "original_art_question": "User confirms all five original images ChatGPT-generated; source unknown closed, no fabricated third-party-free/legal guarantee"
   },
   "one_screen_layout_acceptance": {
-    "status": "accepted_local_pending_exact_ci_and_new_candidate",
+    "status": "accepted_and_exact_ci_success_new_candidate_in_progress",
     "report": "docs/development/review/one-screen-layout-acceptance.md",
     "production_fingerprint": "6260033bed815e271c6e8de32d4d06781c05823226a3dbbb3c2baf537d2cadf3",
     "qa_sha256": "e17380cf95249919535ae4b5ba49fd5ecfd7fbb998cf32b84e731f6aae32897f",
@@ -430,15 +430,23 @@
     "pushed": true,
     "ci": {
       "run_id": 39928698433,
-      "status": "in_progress",
-      "conclusion": null,
-      "checked_at": "2026-10-23T09:03:44.590257+00:00",
+      "status": "completed",
+      "conclusion": "success",
+      "updated_at": "2026-10-23T09:09:22Z",
       "jobs": {
-        "ios-build": "in_progress",
-        "tests-and-android": "in_progress"
-      }
+        "ios-build": "success",
+        "tests-and-android": "success"
+      },
+      "evidence": "docs/development/review/one-screen-layout-evidence/remote-ci-final.json",
+      "terminal_no_repoll": true
     },
     "next_plan": "docs/pmpowers/plans/2026-10-23-layout-beta-candidate-and-submission.md",
-    "next_owner": "original developer accepted BR08; read-only preparation pending exact CI"
+    "next_owner": "original developer explicitly notified CI green; BR08 new candidate authorized to build"
+  },
+  "beta_candidate_latest_check": {
+    "status": "BR08_build_released_after_exact_ci_success",
+    "delivery_exists": false,
+    "checked_at": "2026-10-23T09:11:54.251823+00:00",
+    "next_action": "Review actual frozen BR08 candidate on delivery; no old CI polling"
   }
 }
