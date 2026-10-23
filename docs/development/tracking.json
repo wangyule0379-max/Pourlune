@@ -7,10 +7,10 @@
   "branch": "codex/offline-foundation",
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
   "current_batch": "BR05 authorized Android upload-key creation and real signing",
-  "current_status": "br05_dispatched_authorized_local_key_and_signing",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:141",
+  "current_status": "br05_local_upload_key_and_signature_accepted_owner_inputs_pending",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:147",
   "automation_id": "pourlune",
-  "automation_status": "ACTIVE",
+  "automation_status": "PAUSED",
   "delivery_path": "docs/development/deliveries/beta-readiness-BR05.md",
   "acceptance_path": "docs/development/review/beta-readiness-BR05-acceptance.md",
   "accepted_batches": [
@@ -90,10 +90,11 @@
     "F01-F08": "Firebase registration/config implementation accepted; 24 Python/23 Flutter and both offline builds independently passed; real dev runtime inspected. Analytics/Crashlytics receipt and Apple registration NOT passed.",
     "FB01-FB08": "Available-platform production board/capacity/motion/navigation/save recovery accepted; physical performance, spoken accessibility and external services excluded.",
     "BR02": "Device-condition preparation, candidate applicability and reusable verification contract accepted; formal runtime and same-signature upgrade NOT executed.",
-    "BR03": "Exact artifact/symbol/document handoff independently accepted; TestFlight internal/external and Play closed remain not ready."
+    "BR03": "Exact artifact/symbol/document handoff independently accepted; TestFlight internal/external and Play closed remain not ready.",
+    "BR05": "Real existing alias, restricted primary/recovery files, strict JAR signature/pin, unchanged payload/assets/symbols and formal identity accepted; store distribution/physical runtime not executed."
   },
   "external_dependencies_path": "docs/development/dependencies/user-handoff.md",
-  "next_action": "Original developer creates dedicated upload key and local credentials under latest authorization, signs and verifies candidate; architecture independently reviews. Do not wait for user password input.",
+  "next_action": "Android upload key and signed AAB independently accepted. Await public support/contact and owner console/decision inputs; no manual password or key creation required. No new CI for documentation-only delivery.",
   "account_handoff": {
     "confirmed_at": "2026-10-22",
     "source": "explicit_user_message",
@@ -207,7 +208,7 @@
     "commit": "3134637f91c0cb59c26ba6905b557f48f6179e5f",
     "user_preview_protection": "F9 remains user-owned; do not relaunch/install/stop/reset/send input until user explicitly releases it."
   },
-  "last_checked_at": "2026-10-23T03:16:44.768508+00:00",
+  "last_checked_at": "2026-10-23T03:37:40.437512+00:00",
   "test_sync_repair": {
     "status": "accepted_pushed_remote_ci_success",
     "commit": "2b0d78d3ddb0448b59d77b3a19681f068649e3d9",
@@ -215,7 +216,7 @@
     "scope": "two tests only; independent182 tests/analyze passed"
   },
   "beta_readiness": {
-    "status": "br05_authorized_local_key_and_signing_active",
+    "status": "br05_local_signing_accepted_awaiting_owner_conditions",
     "plan": "docs/pmpowers/plans/2026-10-22-beta-readiness.md",
     "execution_thread_id": "01a15eca-2b7f-70c1-978d-45dd735765f1",
     "implementation_owner": "Pourlune ｜ App 设计 开发",
@@ -229,7 +230,7 @@
     "br01_evidence": "docs/development/review/beta-readiness-BR01-evidence/",
     "submission_status": {
       "ios": "signed IPA locally verified; account/public policy/owner/device gates remain",
-      "android": "unsigned AAB verified; signing and other gates remain"
+      "android": "upload-signed AAB locally independently verified; public support/owner/store distribution and runtime gates remain"
     },
     "resolved_dependency": "FI-E02 old Apple login blocker superseded by dedicated current profile and independently verified local signature; app record/legal status still separate",
     "br01_commit": "33433c76cd6c97338f0016815208999832050cfb",
@@ -237,14 +238,13 @@
     "br03_acceptance": "docs/development/review/beta-readiness-BR03-acceptance.md",
     "br02_status": "preparation_accepted_runtime_not_executed",
     "br03_status": "handoff_accepted_three_submission_routes_not_ready",
-    "cli_status": "assigned_to_original_developer_for_br05_serial_work",
+    "cli_status": "released_no_inflight_commands",
     "user_action_groups": [
       "Publishing/contact/audience/region/SKU and image rights decisions",
       "Account-holder legal declarations in consoles",
-      "Authorized Android upload signing assets selected and unlocked locally",
       "Eligible independent devices and explicit production runtime/observation scope"
     ],
-    "paused_at": "2026-10-23T02:12:21.013Z",
+    "paused_at": "2026-10-23T03:37:40.437512+00:00",
     "owner_decisions_path": "docs/development/dependencies/beta-owner-decisions.md",
     "confirmed_release_fields": {
       "sku": "POURLUNE-IOS-001",
@@ -257,13 +257,15 @@
     "owner_assets": {
       "website_domain": "none",
       "feedback_email": "none",
-      "android_upload_key": "none confirmed previously; delegated creation now authorized, actual creation pending evidence"
+      "android_upload_key": "created_once_authorized_and_independently_verified_local_signature"
     },
     "device_route": "Remote Mac; only TestFlight/Google Play installation available to user. Pre-upload engineering and post-distribution physical validation split; no direct USB prerequisite.",
     "resumed_at": "2026-10-23T03:16:44.768508+00:00",
-    "latest_execution_note": "BR04 delivered; architecture independently46 Python +3 real CLI refusal probes +36 file hashes +3-file draft ZIP +old IPA/AAB hashes passed. Real keys/signing/new native build/site deployment/store distribution NOT performed.",
+    "latest_execution_note": "Architecture independently5 real Java checks, 571payload,136assets/90puzzles,10symbols and private recovery permissions/equality passed. No rebuild/sign/upload or devices used by architecture.",
     "br04_acceptance": "docs/development/review/beta-readiness-BR04-acceptance.md",
     "br04_evidence": "docs/development/review/beta-readiness-BR04-evidence/",
-    "br04_commit": "eb96acb0367c46eba77f180a76935e12ddfbca16"
+    "br04_commit": "eb96acb0367c46eba77f180a76935e12ddfbca16",
+    "br05_acceptance": "docs/development/review/beta-readiness-BR05-acceptance.md",
+    "br05_evidence": "docs/development/review/beta-readiness-BR05-evidence/"
   }
 }

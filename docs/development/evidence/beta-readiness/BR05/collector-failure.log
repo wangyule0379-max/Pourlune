@@ -1,0 +1,6 @@
+BR05 initial read-only result collector failed after bundletool/ZIP/resource checks:
+TypeError: object of type 'function' has no len()
+Root cause: payload_entries used len(payload) on the local helper instead of its map.
+This is evidence-collector bookkeeping, not signing/product failure. Existing key,
+unsigned/signed outputs were retained; no second key generation or signing occurred.
+The collector was corrected and rerun read-only.

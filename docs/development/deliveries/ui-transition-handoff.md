@@ -222,3 +222,9 @@ BR01已读架构MS-R01独立4项/analyze/format通过及CLI归还；现CLI HELD 
 
 
 2026-10-23T01:55:52.988941+00:00 — BR04 CLI RELEASED by原开发。BR04-1至8工程/资料已交beta-readiness-BR04.md；目的地flags/Android授权签名与失败门控、仅3网页draft包、本人key步骤/逐字段技术依据/远端TestFlight-Play手机路线完成。Python46项通过、3CLI拒绝无输出、公开包/链接/旧冻结hash检查通过，一次fresh终审Critical0/Important0/Minor0。无Flutter/Dart/pub/SPM/Xcode/原生/设备命令在途；无真实签名/key生成、生产运行、publicrepo/部署或商店分发；F9及窗口/旧库完全未操作，无采集重试。USB不是上传前一律门槛，后续手机真实验收保留未验。候选不重建、不覆盖，测试样例未进正式包；未stage/commit/push，tracking/后台emulator log/旧motion均排除，架构可独立复验。
+
+
+2026-10-23T03:18:46.265106+00:00 — BR05 CLI HELD by原开发。已读新增用户明确授权代建Pourlune独立upload key/随机密码及本地签名，旧本人交互限定仅历史。只操作指定仓库外Pourlune路径，拒绝覆盖/重置/重复生成，不碰FishPilot。使用原冻结AAB的新目录签名派生，若无真实缺陷不重编。串行noAdID，不动F9/窗口/旧库，不生产运行或公开网站/商店分发；结束释放。
+
+
+2026-10-23T03:35:49.432269+00:00 — BR05 CLI RELEASED by原开发，明确交架构仅Java证书/strict/bundletool只读独立复验。一次fresh终审Critical0/Important0/Minor0已完成；当前无Java/Flutter/Dart/pub/SPM/Xcode/原生/设备/签名命令在途。独立upload key仅创建一次，本机受限恢复副本核验完成；新android-br05-sign-1真实signed AAB已冻结，旧候选未动。不会重建/重签/再生成/重置key，私密文件原位保留，不向仓库/日志/argv实值输出密码或私钥。F9及窗口/普通库未操作，无生产运行/部署/商店分发；作者仅补非秘密文档/范围清单，未stage/commit/push，tracking/emulator/motion排除。交付beta-readiness-BR05.md可独立验收。
