@@ -1,4 +1,10 @@
+> 最新结果：TestFlight 0.5.0(9)已独立确认“正在测试”，仅本人已邀请。按[testflight-iphone-install.md](testflight-iphone-install.md)在手机安装；不再等待ASC处理或重复登录。
+
 # Pourlune 首版：用户一次性交接清单
+
+## 2026-10-23 当前优先：只推进TestFlight本人测试
+
+本人已要求暂停AdMob接入及Google Play本轮工作。build9广告关闭签名包、Apple上传和ASC本人组分发均已独立验收：0.5.0(9)正在测试、本人已邀请。现在按[手机安装与首轮测试](testflight-iphone-install.md)安装试玩；实际收件、接受邀请和手机运行仍待本人反馈。无需重复旧账号、密钥、USB或发布资料清单。内部可做项已完成，周期检查暂停，收到手机反馈再继续。下文均为历史记录，冲突以本段和tracking最新实际证据为准。
 
 ## 当前执行目标（2026-10-22 最新）
 
