@@ -6,13 +6,13 @@
   "review_thread_id": "01a15eaf-f58d-74d2-90d8-0f64bb28ddce",
   "branch": "codex/offline-foundation",
   "baseline_commit": "a4a3efb876e5647e137079bbfad99ce475332082",
-  "current_batch": "BR07 local store asset candidates and BR06 exact CI",
-  "current_status": "br06_pushed_ci_in_progress_br07_active",
-  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:153",
+  "current_batch": "LY01–LY06 gameplay/completion viewport repair; BR07 checkpoint preserved",
+  "current_status": "one_screen_layout_dispatched_br07_checkpoint_requested",
+  "last_wait_cursor": "a3f12aa3-fe3c-4d72-ab8b-3a7c021b71ca:155",
   "automation_id": "pourlune",
   "automation_status": "ACTIVE",
-  "delivery_path": "docs/development/deliveries/beta-readiness-BR07.md",
-  "acceptance_path": "docs/development/review/beta-readiness-BR07-acceptance.md",
+  "delivery_path": "docs/development/deliveries/one-screen-layout.md",
+  "acceptance_path": "docs/development/review/one-screen-layout-acceptance.md",
   "accepted_batches": [
     "B01",
     "B02",
@@ -46,6 +46,12 @@
       "status": "closed",
       "description": "Diagnosed wall-clock deadline expiring before virtual animation budget. New test uses same3s virtual-clock pumpAndSettle plus motion-null/busy-false; independent4/4/analyze/format passed, no production changes; original RED preserved.",
       "evidence_path": "docs/development/review/motion-polish-supplement-evidence/keyboard-independent.log"
+    },
+    {
+      "id": "LY-R01",
+      "severity": "P2",
+      "status": "open",
+      "description": "User Level10 screenshot shows oversized board gaps and below-fold controls; height-unbounded shared scroll and width-only Flame layout also affect completion preview. Normal-size core content/actions must fit viewport."
     }
   ],
   "blockers": [
@@ -62,7 +68,7 @@
   "prior_ui_acceptance": "D01-D09 static design and bounded HTML prototype only; not App runtime acceptance",
   "user_authorization": "2026-10-22: User accepts current visual effects; original development chat continuously implements through TestFlight and Google Play closed-test readiness; architecture supervises and independently verifies. Existing accepted-scope commit/push authorization continues. Actual store upload, beta review submission, track rollout and invitations remain a subsequent concrete handoff; no legal signing, purchases, IAM expansion, signing-key creation/reset or production release. 2026-10-23 latest direct authorization supersedes prior no-key-creation boundary for Pourlune dedicated upload key only: original developer may generate random password, store locally with restricted permissions, create key and sign local Android candidate; no store distribution/legal/public deployment expansion. 2026-10-23 later explicit authorization: reuse FishPilot actual publisher and public support email; create independent public website repo and publish GitHub Pages, integrate real URLs into new local candidates. App distribution/production runtime remain separate.",
   "review_round": 1,
-  "current_batch_plan": "docs/pmpowers/plans/2026-10-23-beta-store-assets-preparation.md",
+  "current_batch_plan": "docs/pmpowers/plans/2026-10-23-one-screen-gameplay-layout.md",
   "last_accepted_commit": "8251ef1de7afea4bb59707f46f951aafd5a5d507",
   "last_accepted_push": "origin/codex/offline-foundation",
   "ci_followup": {
@@ -70,12 +76,12 @@
     "run_ids": [
       39908633649
     ],
-    "status": "in_progress",
-    "conclusion": null,
+    "status": "completed",
+    "conclusion": "success",
     "url": "https://github.com/wangyule0379-max/Pourlune/actions/runs/39908633649",
-    "last_checked_at": "2026-10-23T05:58:45.126897+00:00",
+    "last_checked_at": "2026-10-23T06:09:03.009Z",
     "evidence_path": "docs/development/review/beta-readiness-BR06-evidence/remote-ci-final.json",
-    "next_action": "Read only this exact implementation run until terminal; then record, no polling older terminal runs or requesting CI for docs."
+    "next_action": "Terminal success recorded. Never poll this run again; next CI only for newly accepted implementation."
   },
   "deferred_minor_findings": [
     {
@@ -95,7 +101,7 @@
     "BR06": "Materials/public static site and build6 exact local signed candidates accepted: 45 scope/397 sources each/136 assets each, 17 real package-signature commands, HTTP and ASC entity independently checked. Legal/store/physical runtime excluded."
   },
   "external_dependencies_path": "docs/development/dependencies/user-handoff.md",
-  "next_action": "Commit accepted BR06, discover exact new CI; original developer finishes bounded BR07 local512 icon and1024x500 feature candidate. Collect only remaining owner facts once.",
+  "next_action": "Developer checkpoints BR07 and prioritizes LY01–LY06; parent independently verifies delivery, then commits accepted scope and rebuilds candidates only after acceptance.",
   "account_handoff": {
     "confirmed_at": "2026-10-22",
     "source": "explicit_user_message",
@@ -284,5 +290,11 @@
     "br06_commit": "8251ef1de7afea4bb59707f46f951aafd5a5d507",
     "br07_plan": "docs/pmpowers/plans/2026-10-23-beta-store-assets-preparation.md"
   },
-  "updated_at": "2026-10-23T05:57:00.512347+00:00"
+  "updated_at": "2026-10-23T05:57:00.512347+00:00",
+  "br07_independent_review": {
+    "status": "candidate_checks_passed_final_delivery_pending",
+    "report": "docs/development/review/beta-readiness-BR07-acceptance.md",
+    "evidence": "docs/development/review/beta-readiness-BR07-evidence/independent.json",
+    "checks": "12 inputs; 3 byte-identical reproduction outputs; real parent image inspection; final author-review placeholder still pending"
+  }
 }
