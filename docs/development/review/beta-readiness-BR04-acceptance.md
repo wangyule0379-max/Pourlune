@@ -24,3 +24,5 @@
 用户F9及窗口、普通b04_review_r2.sqlite/FirebaseQA完全未操作；无Flutter/Dart/SPM/Xcode命令、设备启停或受限采集重试。当前CLI无在途。后续仍由原开发实施、架构验收。只剩真实网站/邮箱/本人签名资产/账号声明和明确分发运行条件时集中处理，不重复要求直连真机。
 
 官方命令依据（本轮回读）：[JDK21 jarsigner](https://docs.oracle.com/en/java/javase/21/docs/specs/man/jarsigner.html)、[JDK21 keytool](https://docs.oracle.com/en/java/javase/21/docs/specs/man/keytool.html)。已有上轮官方Apple/Play/Pages依据见BR04计划；法律答案未由工具推断或代签。
+
+提交/远端：已精准推送 `eb96acb0367c46eba77f180a76935e12ddfbca16` 至开发分支，43文件。scope whitespace检查通过；两份保留的原始RED日志含原生测试输出尾随空格，作为原始证据不改写。新精确CI `39887064814` 已发现queued，见[待完成记录](beta-readiness-BR04-evidence/remote-ci-pending.json)，尚未宣称远端通过。
