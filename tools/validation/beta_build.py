@@ -142,7 +142,8 @@ def main():
                 raise BuildError('ios_packaging_mismatch')
             if info.get('GADApplicationIdentifier') != ads['app_id']:
                 raise BuildError('ios_ad_app_id_mismatch')
-            verify_no_test_plugin(artifact / 'Runner')
+            if profile:
+                verify_no_test_plugin(artifact / 'Runner')
             for nested in artifact.rglob('Info.plist'):
                 if nested == artifact / 'Info.plist':
                     continue

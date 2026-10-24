@@ -21,21 +21,51 @@ class CandidateSafetyTest(unittest.TestCase):
             (root / 'app/pubspec.yaml').write_text('version: 0.5.0+10\n')
             output = root / 'build/test-ios'
             def build(args, **kwargs):
+                info = plistlib.dumps({
+                    'CFBundleIdentifier': 'com.pourlune.app', 'CFBundleDisplayName': 'Pourlune',
+                    'CFBundleShortVersionString': '0.5.0', 'CFBundleVersion': '10',
+                    'GADApplicationIdentifier': 'ca-app-pub-3940256099942544~1458002511'})
+                ipa = output / 'ios-export/ipa/fixture.ipa'; ipa.parent.mkdir(parents=True)
+                with zipfile.ZipFile(ipa, 'w') as package:
+                    package.writestr('Payload/Runner.app/Runner', b'IntegrationTestPlugin')
+                    package.writestr('Payload/Runner.app/Info.plist', info)
+                return subprocess.CompletedProcess(args, 0)
+            error = io.StringIO()
+            with patch.object(beta_build, 'ROOT', root), patch.object(beta_build, 'sources', return_value={}), \
+                 patch.object(beta_build, 'inspect_profile', return_value={'team': 'T7U878Z8H6'}), \
+                 patch('beta_build.subprocess.run', side_effect=build), \
+                 patch.object(sys, 'argv', ['beta_build.py', '--platform', 'ios', '--output', str(output),
+                                          '--ios-profile', str(root / 'fixture.mobileprovision')]), \
+                 contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(error):
+                self.assertEqual(beta_build.main(), 1)
+            self.assertEqual(json.loads(error.getvalue())['code'], 'ios_native_test_plugin_packaged')
+            self.assertFalse((output / 'candidate.json').exists())
+
+    def test_unsigned_ios_remains_compile_only_even_if_flutter_retains_native_dev_plugin(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); (root / 'app').mkdir()
+            (root / 'app/pubspec.yaml').write_text('version: 0.5.0+10\n')
+            output = root / 'build/test-ios'
+            def build(args, **kwargs):
+                if args[0] != sys.executable:
+                    return subprocess.CompletedProcess(args, 1, '', '')  # Unsigned.
                 app = root / 'app/build/ios/iphoneos/Runner.app'; app.mkdir(parents=True)
-                (app / 'Runner').write_bytes(b'actual-file-boundary: IntegrationTestPlugin')
+                (app / 'Runner').write_bytes(b'IntegrationTestPlugin')
                 (app / 'Info.plist').write_bytes(plistlib.dumps({
                     'CFBundleIdentifier': 'com.pourlune.app', 'CFBundleDisplayName': 'Pourlune',
                     'CFBundleShortVersionString': '0.5.0', 'CFBundleVersion': '10',
                     'GADApplicationIdentifier': 'ca-app-pub-3940256099942544~1458002511'}))
                 return subprocess.CompletedProcess(args, 0)
-            error = io.StringIO()
             with patch.object(beta_build, 'ROOT', root), patch.object(beta_build, 'sources', return_value={}), \
                  patch('beta_build.subprocess.run', side_effect=build), \
+                 patch('beta_build.subprocess.check_output', return_value='fixture-head\n'), \
                  patch.object(sys, 'argv', ['beta_build.py', '--platform', 'ios', '--output', str(output)]), \
-                 contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(error):
-                self.assertEqual(beta_build.main(), 1)
-            self.assertEqual(json.loads(error.getvalue())['code'], 'ios_native_test_plugin_packaged')
-            self.assertFalse((output / 'candidate.json').exists())
+                 contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(beta_build.main(), 0)
+            candidate = json.loads((output / 'candidate.json').read_text())
+            self.assertFalse(candidate['signed_for_upload'])
+            self.assertFalse(candidate['external_store_gates_verified'])
+            self.assertIn('compile-only unsigned', candidate['status'])
 
     def test_ios_candidate_rejects_packaged_native_ad_app_id_different_from_selection(self):
         with tempfile.TemporaryDirectory() as temp:

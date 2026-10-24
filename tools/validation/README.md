@@ -226,6 +226,8 @@ formats or additional native dev plugins before writing, and restores both
 generated files on success or failure. SDK sources, pubspec and locks are untouched.
 The actual archived Runner and copied IPA Runner must contain neither the native
 test plugin class nor its channel name; otherwise the candidate is rejected.
+The existing unsigned iOS path remains compile-only and may retain the upstream
+native dev plugin; it never claims signing, distribution approval or upload readiness.
 Ordinary QA builds retain integration_test. The candidate source/lock hashes must
 still remain unchanged. Build10's first local candidate was blocked by this check
 during independent review and was never uploaded; it remains frozen for evidence.
