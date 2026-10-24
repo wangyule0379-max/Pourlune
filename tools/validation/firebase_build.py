@@ -1,6 +1,7 @@
 """Invoke Flutter with one validated local Firebase selection, without file swaps."""
 import argparse
 import base64
+from contextlib import ExitStack
 import json
 import os
 import plistlib
@@ -14,6 +15,7 @@ from ios_signing import ProfileError, inspect_profile
 from public_destinations import DestinationError, add_destination_arguments, validate_destinations
 from admob_config import AdConfigError, add_arguments as add_ad_arguments, selection as ad_selection
 from build_version import BuildError, display_definitions
+from ios_release_plugins import release_plugins, verify_no_test_plugin
 
 
 def main():
@@ -179,14 +181,20 @@ def main():
                      "-exportOptionsPlist", str(export), "-exportPath", str(output / "ipa")],
                 ])
             logs = []
-            for invocation in commands:
-                result = subprocess.run(
-                    invocation, cwd=ROOT / "app", env=environment,
-                    capture_output=True, text=True, errors="replace",
-                )
-                logs.append(result.stdout + result.stderr)
-                if result.returncode:
-                    break
+            with ExitStack() as generated_inputs:
+                for index, invocation in enumerate(commands):
+                    if profile and index == 1:
+                        evidence = generated_inputs.enter_context(release_plugins(ROOT / 'app'))
+                        (output / 'release-plugins.json').write_text(json.dumps(evidence, indent=2) + '\n')
+                    result = subprocess.run(
+                        invocation, cwd=ROOT / "app", env=environment,
+                        capture_output=True, text=True, errors="replace",
+                    )
+                    logs.append(result.stdout + result.stderr)
+                    if result.returncode:
+                        break
+                    if profile and index == 1:
+                        verify_no_test_plugin(archive / 'Products/Applications/Runner.app/Runner')
             # Flutter/Xcode can echo their environment on failure. Redact both
             # the client value and its complete encoded Dart definition.
             log = "\n".join(logs)

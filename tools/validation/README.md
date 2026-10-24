@@ -216,7 +216,19 @@ compile for that successful export evidence.
 Release candidate builds intentionally allow Flutter's normal pub/tooling refresh
 after an explicit enforce-lockfile check. `--no-pub` can retain a dev-mode native
 GeneratedPluginRegistrant containing integration_test while Gradle excludes that
-dev plugin in release. The candidate source/lock hashes must still remain unchanged.
+dev plugin in release. Normal refresh alone is insufficient on iOS: fixed Flutter
+3.47.2 explicitly retains iOS dev plugins (upstream
+[flutter/flutter#163874](https://github.com/flutter/flutter/issues/163874)).
+For manual App Store archive/export, `ios_release_plugins.py` temporarily excludes
+only the known integration_test import/registration and its two generated SPM
+dependency entries after Flutter generation. It rejects unexpected generator
+formats or additional native dev plugins before writing, and restores both
+generated files on success or failure. SDK sources, pubspec and locks are untouched.
+The actual archived Runner and copied IPA Runner must contain neither the native
+test plugin class nor its channel name; otherwise the candidate is rejected.
+Ordinary QA builds retain integration_test. The candidate source/lock hashes must
+still remain unchanged. Build10's first local candidate was blocked by this check
+during independent review and was never uploaded; it remains frozen for evidence.
 Manual profile variables are consumed only by Runner target build settings, not
 global PROVISIONING_PROFILE_SPECIFIER on SPM framework/resource targets.
 
