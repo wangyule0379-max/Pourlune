@@ -1,0 +1,21 @@
+test_measure_levels (unittest.loader._FailedTest.test_measure_levels) ... ERROR
+
+======================================================================
+ERROR: test_measure_levels (unittest.loader._FailedTest.test_measure_levels)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_measure_levels
+Traceback (most recent call last):
+  File "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "/Volumes/data/App Development/Pourlune/tools/content/test_measure_levels.py", line 8, in <module>
+    from measure_levels import bounded_search, trace_solution, trace_features
+ImportError: cannot import name 'trace_features' from 'measure_levels' (/Volumes/data/App Development/Pourlune/tools/content/measure_levels.py)
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

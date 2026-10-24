@@ -38,11 +38,17 @@ class HomePage extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, box) {
         final largeText = MediaQuery.textScalerOf(context).scale(16) > 22;
+        final shortWelcome = welcome && MediaQuery.sizeOf(context).height < 700;
         final heroWidth = box.maxWidth.clamp(
           0.0,
           largeText
               ? 220.0
-              : MediaQuery.sizeOf(context).height * (welcome ? .38 : .32),
+              : MediaQuery.sizeOf(context).height *
+                    (shortWelcome
+                        ? .28
+                        : welcome
+                        ? .38
+                        : .32),
         );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -52,7 +58,7 @@ class HomePage extends StatelessWidget {
               Semantics(
                 label: 'Pourlune',
                 header: true,
-                child: const KnitArt(name: 'logo', height: 116),
+                child: KnitArt(name: 'logo', height: shortWelcome ? 88 : 116),
               ),
               const SizedBox(height: 10),
               Text(
@@ -274,57 +280,121 @@ class ChaptersPage extends StatelessWidget {
       builder: (context, box) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          for (var chapter = 0; chapter < 3; chapter++) ...[
+          for (var chapter = 0; chapter < 3; chapter++)
             KnitPanel(
-              child: Text(
-                sceneTitle(
-                  ['color_studio', 'garden_nook', 'seaside_corner'][chapter],
-                ),
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-            ),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                for (
-                  var level = chapter * 20 + 1;
-                  level <= chapter * 20 + 20;
-                  level++
-                )
-                  SizedBox(
-                    width: (box.maxWidth - 8) / 2,
-                    child: OutlinedButton(
-                      key: Key('level-$level'),
-                      onPressed:
-                          c.busy ||
-                              !c.progress.unlockedLevels.contains(level) ||
-                              !c.library.main.containsKey(level)
-                          ? null
-                          : () => onPlay(level),
-                      child: Column(
+              padding: const EdgeInsets.all(12),
+              child: LayoutBuilder(
+                builder: (context, card) {
+                  final scene = sceneIds[chapter];
+                  final large = MediaQuery.textScalerOf(context).scale(1) > 1.4;
+                  final columns = large
+                      ? 2
+                      : card.maxWidth >= 280
+                      ? 5
+                      : 4;
+                  final completed = c.progress.completedLevels
+                      .where((n) => sceneForLevel(n) == scene)
+                      .length;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(
                         children: [
-                          Text(l.level(level)),
-                          Text(
-                            !c.progress.unlockedLevels.contains(level)
-                                ? l.locked
-                                : c.progress.completedLevels.contains(level)
-                                ? l.completed
-                                : c.library.main.containsKey(level)
-                                ? l.ready
-                                : l.missing,
+                          SizedBox(
+                            width: large ? 64 : 96,
+                            child: SceneArt(
+                              scene: scene,
+                              pieces: c.progress.pieces,
+                            ),
                           ),
-                          if (c.progress.completedLevels.contains(level) &&
-                              !c.library.main.containsKey(level))
-                            Text(l.missing),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  sceneTitle(scene),
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                                Text('$completed / 20'),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                  ),
-              ],
+                      const SizedBox(height: 12),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          for (
+                            var level = chapter * 20 + 1;
+                            level <= chapter * 20 + 20;
+                            level++
+                          )
+                            SizedBox(
+                              width:
+                                  (card.maxWidth - (columns - 1) * 8) / columns,
+                              child: Semantics(
+                                label:
+                                    '${l.level(level)} · ${!c.progress.unlockedLevels.contains(level)
+                                        ? l.locked
+                                        : c.progress.completedLevels.contains(level)
+                                        ? l.completed
+                                        : !c.library.main.containsKey(level)
+                                        ? l.missing
+                                        : l.ready}',
+                                child: OutlinedButton(
+                                  key: Key('level-$level'),
+                                  style: OutlinedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 8,
+                                      horizontal: 2,
+                                    ),
+                                  ),
+                                  onPressed:
+                                      c.busy ||
+                                          !c.progress.unlockedLevels.contains(
+                                            level,
+                                          ) ||
+                                          !c.library.main.containsKey(level)
+                                      ? null
+                                      : () => onPlay(level),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        '$level',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                      if (c.progress.completedLevels.contains(
+                                        level,
+                                      ))
+                                        const Icon(Icons.check_circle, size: 18)
+                                      else if (!c.progress.unlockedLevels
+                                          .contains(level))
+                                        const Icon(Icons.lock_outline, size: 18)
+                                      else if (!c.library.main.containsKey(
+                                        level,
+                                      ))
+                                        const Icon(
+                                          Icons.error_outline,
+                                          size: 18,
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
-            const SizedBox(height: 24),
-          ],
         ],
       ),
     );

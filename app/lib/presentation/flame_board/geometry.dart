@@ -300,25 +300,6 @@ class BoardLayout {
     labelHeight = bounded
         ? math.max(40.0, 32 * textScale + 8)
         : math.max(52.0, 32 * textScale + 14);
-    if (preview && bounded && textScale <= 1.4) {
-      final cellWidth = width / count;
-      shape = BottleShape(math.min(48, cellWidth - 8));
-      topRowCount = count;
-      mouths = [];
-      cells = [];
-      for (var i = 0; i < count; i++) {
-        final cell = Rect.fromLTWH(
-          i * cellWidth,
-          labelHeight,
-          cellWidth,
-          shape.height,
-        );
-        cells.add(cell);
-        mouths.add(Offset(cell.center.dx, cell.top + shape.height * .148));
-      }
-      height = cells.last.bottom + 4;
-      return;
-    }
     final preferred = ((width - 24) / 4).clamp(48.0, 84.0);
     shape = BottleShape(
       bounded
@@ -365,7 +346,7 @@ class BoardLayout {
         cells.add(Rect.fromLTWH(left, top, cellWidth, shape.height));
       }
     }
-    height = (preview ? cells.last.bottom : labelRect(count - 1).bottom) + 4;
+    height = preview ? cells.last.bottom + 4 : labelRect(count - 1).bottom;
   }
   final double width;
   final int count;

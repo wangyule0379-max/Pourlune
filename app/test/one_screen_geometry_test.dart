@@ -6,7 +6,7 @@ import 'package:pourlune_dev/presentation/flame_board/geometry.dart';
 
 void main() {
   test(
-    'LY-R03 readonly 4–7 previews retain equal bottles and labels in one row',
+    'UI-R02 readonly 4–7 previews retain two rows, equal bottles and labels',
     () {
       for (final width in [296.0, 351.0, 406.0]) {
         for (final scale in [1.0, 1.3]) {
@@ -15,13 +15,18 @@ void main() {
               width: width,
               count: count,
               textScale: scale,
-              maxHeight: 140,
+              maxHeight: 260,
               preview: true,
             );
             expect(board.shape.width, greaterThanOrEqualTo(32));
-            expect(board.height, lessThanOrEqualTo(140));
+            expect(board.height, lessThanOrEqualTo(260));
             for (var i = 0; i < count; i++) {
-              expect(board.cells[i].top, board.cells.first.top);
+              expect(
+                board.cells[i].top,
+                i < board.topRowCount
+                    ? board.cells.first.top
+                    : board.cells.last.top,
+              );
               expect(
                 board.cells[i].width,
                 closeTo(board.cells.first.width, 1e-9),

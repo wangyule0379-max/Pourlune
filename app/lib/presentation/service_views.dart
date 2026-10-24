@@ -121,6 +121,22 @@ Future<void> showExtraBottle(BuildContext context, GameController c) async {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Center(
+                  child: ExcludeSemantics(
+                    child: SizedBox(
+                      width: 84,
+                      height: 126,
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Image.asset('assets/art/bottles/back.png'),
+                          Image.asset('assets/art/bottles/front.png'),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
                 Text(l.extraExplain),
                 const SizedBox(height: 12),
                 if (!c.canWatchExtraBottle)
@@ -174,7 +190,16 @@ Future<void> showPrivacyChoices(BuildContext context, GameController c) async {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Text(
+                  l.yourProgress,
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 8),
+                Text(l.localOnly),
+                const SizedBox(height: 16),
                 if (hub == null || !hub.firebaseReady) Text(l.servicesDisabled),
+                const SizedBox(height: 8),
                 SwitchListTile(
                   key: const Key('analytics-choice'),
                   contentPadding: EdgeInsets.zero,
@@ -205,6 +230,7 @@ Future<void> showPrivacyChoices(BuildContext context, GameController c) async {
                           ),
                         ),
                 ),
+                const SizedBox(height: 12),
                 if (hub != null &&
                     (hub.privacySaveFailed || hub.privacySyncFailed)) ...[
                   Text(l.privacySaveProblem),
@@ -232,6 +258,7 @@ Future<void> showPrivacyChoices(BuildContext context, GameController c) async {
                           },
                     child: Text(l.adPrivacyRetry),
                   ),
+                const SizedBox(height: 12),
                 TextButton(
                   onPressed: () => openSupportEntry(context, c, privacy: true),
                   child: Text(l.privacyPolicy),

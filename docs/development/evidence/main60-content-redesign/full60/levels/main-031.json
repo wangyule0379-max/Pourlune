@@ -1,0 +1,852 @@
+{
+  "puzzle_id": "main-031",
+  "level": 31,
+  "status": "authored_and_rule_measured_not_human_difficulty_or_visual_accepted",
+  "contract": {
+    "level": 31,
+    "puzzle_id": "main-031",
+    "chapter": 2,
+    "scene": "garden_nook",
+    "title": "两个好开局",
+    "colors": 4,
+    "initial_bottles": 6,
+    "capacity": 4,
+    "empty_buffers": 2,
+    "pace": "小挑战",
+    "learning_goal": "比较可行路线而非找唯一答案",
+    "board_constraints": "四色，至少两个非对称开局都可解，但后续规划不同",
+    "intended_strategy": "一条先腾目标、一条先合色；均合法，选择更易理解的一条",
+    "required_evidence": "两条开局各给有效解后缀，描述认知负担而非伪称唯一解",
+    "reject_if": "只将两个空缓冲互换当两种策略",
+    "milestone_piece": null,
+    "preserve_exact_existing_definition": false,
+    "status": "design_contract_not_authored_or_validated_board"
+  },
+  "author_strategy_notes": "保留1→5(O2)与2→5(G1)两种非缓冲对调的开局。两条完整解分别先建立O与G收集，后续第3–5步局面不同；等长也如实记录，不要求唯一解。",
+  "old_content_version": 1,
+  "new_content_version": 2,
+  "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+  "new_definition_sha256": "6d158ad5cea4c4c96a2d1080182034a7963b32978054fe50690f4020ed4ac393",
+  "search": {
+    "algorithm": "exact BFS, ordered bottle and colour identities; no pruning",
+    "status": "found",
+    "depth_limit": 15,
+    "excluded_through": 14,
+    "visited": 15137,
+    "expanded": 13616,
+    "generated": 70245,
+    "layer_states": {
+      "0": 1,
+      "1": 8,
+      "2": 29,
+      "3": 61,
+      "4": 108,
+      "5": 142,
+      "6": 198,
+      "7": 319,
+      "8": 501,
+      "9": 819,
+      "10": 1271,
+      "11": 1878,
+      "12": 2540,
+      "13": 2923,
+      "14": 2818,
+      "15": 1521
+    },
+    "layer_legal_edges": {
+      "0": 8,
+      "1": 52,
+      "2": 131,
+      "3": 261,
+      "4": 458,
+      "5": 542,
+      "6": 762,
+      "7": 1174,
+      "8": 1958,
+      "9": 3488,
+      "10": 5897,
+      "11": 9159,
+      "12": 13010,
+      "13": 16245,
+      "14": 17100
+    },
+    "max_frontier": 3088,
+    "max_states": 500000,
+    "time_budget_seconds": 30,
+    "elapsed_ms": 74.269,
+    "moves": [
+      {
+        "from_index": 0,
+        "to_index": 4
+      },
+      {
+        "from_index": 0,
+        "to_index": 5
+      },
+      {
+        "from_index": 1,
+        "to_index": 5
+      },
+      {
+        "from_index": 1,
+        "to_index": 4
+      },
+      {
+        "from_index": 1,
+        "to_index": 5
+      },
+      {
+        "from_index": 2,
+        "to_index": 5
+      },
+      {
+        "from_index": 2,
+        "to_index": 0
+      },
+      {
+        "from_index": 1,
+        "to_index": 2
+      },
+      {
+        "from_index": 3,
+        "to_index": 2
+      },
+      {
+        "from_index": 3,
+        "to_index": 4
+      },
+      {
+        "from_index": 3,
+        "to_index": 0
+      },
+      {
+        "from_index": 3,
+        "to_index": 2
+      },
+      {
+        "from_index": 0,
+        "to_index": 3
+      },
+      {
+        "from_index": 4,
+        "to_index": 0
+      },
+      {
+        "from_index": 5,
+        "to_index": 1
+      }
+    ],
+    "shortest_within_bound": 15
+  },
+  "reference_replay": {
+    "steps": [
+      {
+        "step": 1,
+        "from_index": 0,
+        "to_index": 4,
+        "color": "O",
+        "units": 2,
+        "source_top_run": 2,
+        "receiver_space_before": 4,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "",
+          ""
+        ],
+        "buffer_contents_after": [
+          "OO",
+          ""
+        ],
+        "before": [
+          "BGOO",
+          "PGOG",
+          "PBBG",
+          "PBOP",
+          "",
+          ""
+        ],
+        "after": [
+          "BG",
+          "PGOG",
+          "PBBG",
+          "PBOP",
+          "OO",
+          ""
+        ],
+        "after_sha256": "9963209c26d6c4bcda1aa608666f8faae6fbb9c866ee9ff10dbda4a68036707c"
+      },
+      {
+        "step": 2,
+        "from_index": 0,
+        "to_index": 5,
+        "color": "G",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 4,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "OO",
+          ""
+        ],
+        "buffer_contents_after": [
+          "OO",
+          "G"
+        ],
+        "before": [
+          "BG",
+          "PGOG",
+          "PBBG",
+          "PBOP",
+          "OO",
+          ""
+        ],
+        "after": [
+          "B",
+          "PGOG",
+          "PBBG",
+          "PBOP",
+          "OO",
+          "G"
+        ],
+        "after_sha256": "970987548b8f1392767d62f374bc8722ec4f5f821fc0267fb22c9d3235d4d163"
+      },
+      {
+        "step": 3,
+        "from_index": 1,
+        "to_index": 5,
+        "color": "G",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 3,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "OO",
+          "G"
+        ],
+        "buffer_contents_after": [
+          "OO",
+          "GG"
+        ],
+        "before": [
+          "B",
+          "PGOG",
+          "PBBG",
+          "PBOP",
+          "OO",
+          "G"
+        ],
+        "after": [
+          "B",
+          "PGO",
+          "PBBG",
+          "PBOP",
+          "OO",
+          "GG"
+        ],
+        "after_sha256": "d26d4c67ab1e8ec2d2603539ba4a11623dec60b899fae20362a9be91f7c2f413"
+      },
+      {
+        "step": 4,
+        "from_index": 1,
+        "to_index": 4,
+        "color": "O",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 2,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "OO",
+          "GG"
+        ],
+        "buffer_contents_after": [
+          "OOO",
+          "GG"
+        ],
+        "before": [
+          "B",
+          "PGO",
+          "PBBG",
+          "PBOP",
+          "OO",
+          "GG"
+        ],
+        "after": [
+          "B",
+          "PG",
+          "PBBG",
+          "PBOP",
+          "OOO",
+          "GG"
+        ],
+        "after_sha256": "d40164d489250caeab504be0ce0a9375359c159b9f3b8cfcd3922126dc26cc07"
+      },
+      {
+        "step": 5,
+        "from_index": 1,
+        "to_index": 5,
+        "color": "G",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 2,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "OOO",
+          "GG"
+        ],
+        "buffer_contents_after": [
+          "OOO",
+          "GGG"
+        ],
+        "before": [
+          "B",
+          "PG",
+          "PBBG",
+          "PBOP",
+          "OOO",
+          "GG"
+        ],
+        "after": [
+          "B",
+          "P",
+          "PBBG",
+          "PBOP",
+          "OOO",
+          "GGG"
+        ],
+        "after_sha256": "98a95ff9e88c8048860ae269148989e787383e6ba316b3bcd61f5b01d123c514"
+      },
+      {
+        "step": 6,
+        "from_index": 2,
+        "to_index": 5,
+        "color": "G",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 1,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "OOO",
+          "GGG"
+        ],
+        "buffer_contents_after": [
+          "OOO",
+          "GGGG"
+        ],
+        "before": [
+          "B",
+          "P",
+          "PBBG",
+          "PBOP",
+          "OOO",
+          "GGG"
+        ],
+        "after": [
+          "B",
+          "P",
+          "PBB",
+          "PBOP",
+          "OOO",
+          "GGGG"
+        ],
+        "after_sha256": "cf510d84e8a2d32a0c48ab1cead3a6d1e4d004686a568020ab41091beda32689"
+      },
+      {
+        "step": 7,
+        "from_index": 2,
+        "to_index": 0,
+        "color": "B",
+        "units": 2,
+        "source_top_run": 2,
+        "receiver_space_before": 3,
+        "capacity_truncated": false,
+        "target_borrowed": true,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "OOO",
+          "GGGG"
+        ],
+        "buffer_contents_after": [
+          "OOO",
+          "GGGG"
+        ],
+        "before": [
+          "B",
+          "P",
+          "PBB",
+          "PBOP",
+          "OOO",
+          "GGGG"
+        ],
+        "after": [
+          "BBB",
+          "P",
+          "P",
+          "PBOP",
+          "OOO",
+          "GGGG"
+        ],
+        "after_sha256": "13f0c9253a9105f8be44fdc50de577f628f8a6d6047fb114db14483d17e892d4"
+      },
+      {
+        "step": 8,
+        "from_index": 1,
+        "to_index": 2,
+        "color": "P",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 3,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": true,
+        "buffer_contents_before": [
+          "OOO",
+          "GGGG"
+        ],
+        "buffer_contents_after": [
+          "OOO",
+          "GGGG"
+        ],
+        "before": [
+          "BBB",
+          "P",
+          "P",
+          "PBOP",
+          "OOO",
+          "GGGG"
+        ],
+        "after": [
+          "BBB",
+          "",
+          "PP",
+          "PBOP",
+          "OOO",
+          "GGGG"
+        ],
+        "after_sha256": "f2a51bcc0a5cebbe5b12eadc9875d1093ffd7518ccd1993f5ae249dadbd5fd0d"
+      },
+      {
+        "step": 9,
+        "from_index": 3,
+        "to_index": 2,
+        "color": "P",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 2,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "OOO",
+          "GGGG"
+        ],
+        "buffer_contents_after": [
+          "OOO",
+          "GGGG"
+        ],
+        "before": [
+          "BBB",
+          "",
+          "PP",
+          "PBOP",
+          "OOO",
+          "GGGG"
+        ],
+        "after": [
+          "BBB",
+          "",
+          "PPP",
+          "PBO",
+          "OOO",
+          "GGGG"
+        ],
+        "after_sha256": "bc43e8e3093a0936a5b52ae346c11c91cca499daa4e716ec8a8acbb011e6e1bc"
+      },
+      {
+        "step": 10,
+        "from_index": 3,
+        "to_index": 4,
+        "color": "O",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 1,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "OOO",
+          "GGGG"
+        ],
+        "buffer_contents_after": [
+          "OOOO",
+          "GGGG"
+        ],
+        "before": [
+          "BBB",
+          "",
+          "PPP",
+          "PBO",
+          "OOO",
+          "GGGG"
+        ],
+        "after": [
+          "BBB",
+          "",
+          "PPP",
+          "PB",
+          "OOOO",
+          "GGGG"
+        ],
+        "after_sha256": "ef270f4b2fc83b21cdec027070b9d7ff2cba98061dffcf79392ee6de55992f3b"
+      },
+      {
+        "step": 11,
+        "from_index": 3,
+        "to_index": 0,
+        "color": "B",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 1,
+        "capacity_truncated": false,
+        "target_borrowed": true,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "OOOO",
+          "GGGG"
+        ],
+        "buffer_contents_after": [
+          "OOOO",
+          "GGGG"
+        ],
+        "before": [
+          "BBB",
+          "",
+          "PPP",
+          "PB",
+          "OOOO",
+          "GGGG"
+        ],
+        "after": [
+          "BBBB",
+          "",
+          "PPP",
+          "P",
+          "OOOO",
+          "GGGG"
+        ],
+        "after_sha256": "02fbb96339c770d25e82b171086e28ede6221e66770c7fcd88e66bb767c21dbc"
+      },
+      {
+        "step": 12,
+        "from_index": 3,
+        "to_index": 2,
+        "color": "P",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 1,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": true,
+        "buffer_contents_before": [
+          "OOOO",
+          "GGGG"
+        ],
+        "buffer_contents_after": [
+          "OOOO",
+          "GGGG"
+        ],
+        "before": [
+          "BBBB",
+          "",
+          "PPP",
+          "P",
+          "OOOO",
+          "GGGG"
+        ],
+        "after": [
+          "BBBB",
+          "",
+          "PPPP",
+          "",
+          "OOOO",
+          "GGGG"
+        ],
+        "after_sha256": "38b8a0434e906905cc2f3bfbb3b5e59f1e2efdf02525635ca8c08a3977f9ceb9"
+      },
+      {
+        "step": 13,
+        "from_index": 0,
+        "to_index": 3,
+        "color": "B",
+        "units": 4,
+        "source_top_run": 4,
+        "receiver_space_before": 4,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": true,
+        "buffer_contents_before": [
+          "OOOO",
+          "GGGG"
+        ],
+        "buffer_contents_after": [
+          "OOOO",
+          "GGGG"
+        ],
+        "before": [
+          "BBBB",
+          "",
+          "PPPP",
+          "",
+          "OOOO",
+          "GGGG"
+        ],
+        "after": [
+          "",
+          "",
+          "PPPP",
+          "BBBB",
+          "OOOO",
+          "GGGG"
+        ],
+        "after_sha256": "24983ebe03e246f2f105dcf0f05ea399f43efec878e8933ddf24c46ed8b536a8"
+      },
+      {
+        "step": 14,
+        "from_index": 4,
+        "to_index": 0,
+        "color": "O",
+        "units": 4,
+        "source_top_run": 4,
+        "receiver_space_before": 4,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": true,
+        "buffer_contents_before": [
+          "OOOO",
+          "GGGG"
+        ],
+        "buffer_contents_after": [
+          "",
+          "GGGG"
+        ],
+        "before": [
+          "",
+          "",
+          "PPPP",
+          "BBBB",
+          "OOOO",
+          "GGGG"
+        ],
+        "after": [
+          "OOOO",
+          "",
+          "PPPP",
+          "BBBB",
+          "",
+          "GGGG"
+        ],
+        "after_sha256": "a62ee07a02d1b7bb57db5adcdaa898ebb20d8ba2477fb92283518bb9ed559985"
+      },
+      {
+        "step": 15,
+        "from_index": 5,
+        "to_index": 1,
+        "color": "G",
+        "units": 4,
+        "source_top_run": 4,
+        "receiver_space_before": 4,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": true,
+        "buffer_contents_before": [
+          "",
+          "GGGG"
+        ],
+        "buffer_contents_after": [
+          "",
+          ""
+        ],
+        "before": [
+          "OOOO",
+          "",
+          "PPPP",
+          "BBBB",
+          "",
+          "GGGG"
+        ],
+        "after": [
+          "OOOO",
+          "GGGG",
+          "PPPP",
+          "BBBB",
+          "",
+          ""
+        ],
+        "after_sha256": "e4c50681cd3f26d0b5d663522fa13078de8c617d1265eff251182762d33e8f26"
+      }
+    ],
+    "won": true,
+    "initial_sha256": "521b94ad11edad410d4159791a50a62432328c0140f7c3091966fd13658965c8",
+    "final": [
+      "OOOO",
+      "GGGG",
+      "PPPP",
+      "BBBB",
+      "",
+      ""
+    ],
+    "extra_bottles": 0
+  },
+  "route_observations": {
+    "buffer_roles": {
+      "4": [
+        "O"
+      ],
+      "5": [
+        "G"
+      ]
+    },
+    "both_buffers_used": true,
+    "buffer_reused": false,
+    "strategic_buffer_reuse_steps": [],
+    "target_space_freed_while_mixed_steps": [
+      8
+    ],
+    "target_borrow_steps": [
+      7,
+      11
+    ],
+    "truncation_steps": [],
+    "nonbuffer_empty_steps": [
+      8,
+      12,
+      13
+    ],
+    "space_links": [
+      {
+        "empty_step": 12,
+        "use_step": 13,
+        "bottle": 3
+      },
+      {
+        "empty_step": 13,
+        "use_step": 14,
+        "bottle": 0
+      },
+      {
+        "empty_step": 8,
+        "use_step": 15,
+        "bottle": 1
+      }
+    ],
+    "reveal_events": [
+      {
+        "step": 1,
+        "bottle": 0,
+        "removed": "O",
+        "exposed": "G",
+        "exposed_run": 1
+      },
+      {
+        "step": 2,
+        "bottle": 0,
+        "removed": "G",
+        "exposed": "B",
+        "exposed_run": 1
+      },
+      {
+        "step": 3,
+        "bottle": 1,
+        "removed": "G",
+        "exposed": "O",
+        "exposed_run": 1
+      },
+      {
+        "step": 4,
+        "bottle": 1,
+        "removed": "O",
+        "exposed": "G",
+        "exposed_run": 1
+      },
+      {
+        "step": 5,
+        "bottle": 1,
+        "removed": "G",
+        "exposed": "P",
+        "exposed_run": 1
+      },
+      {
+        "step": 6,
+        "bottle": 2,
+        "removed": "G",
+        "exposed": "B",
+        "exposed_run": 2
+      },
+      {
+        "step": 7,
+        "bottle": 2,
+        "removed": "B",
+        "exposed": "P",
+        "exposed_run": 1
+      },
+      {
+        "step": 9,
+        "bottle": 3,
+        "removed": "P",
+        "exposed": "O",
+        "exposed_run": 1
+      },
+      {
+        "step": 10,
+        "bottle": 3,
+        "removed": "O",
+        "exposed": "B",
+        "exposed_run": 1
+      },
+      {
+        "step": 11,
+        "bottle": 3,
+        "removed": "B",
+        "exposed": "P",
+        "exposed_run": 1
+      }
+    ],
+    "stable_goal_events": [
+      {
+        "step": 12,
+        "bottle": 2,
+        "color": "P"
+      },
+      {
+        "step": 13,
+        "bottle": 3,
+        "color": "B"
+      },
+      {
+        "step": 14,
+        "bottle": 0,
+        "color": "O"
+      },
+      {
+        "step": 15,
+        "bottle": 1,
+        "color": "G"
+      }
+    ],
+    "target_reborrow": [],
+    "goal_order_choice_nodes": []
+  },
+  "single_action_deletion_findings": [],
+  "human_playtest": "not performed; algorithmic replay is not play experience"
+}

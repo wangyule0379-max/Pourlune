@@ -43,6 +43,21 @@ class PourluneApp extends StatelessWidget {
             ? Colors.white
             : const Color(0xff82dff1),
         useMaterial3: true,
+        dialogTheme: DialogThemeData(
+          backgroundColor: cream,
+          surfaceTintColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(28),
+            side: const BorderSide(color: Color(0xffffe8ba), width: 4),
+          ),
+          titleTextStyle: const TextStyle(
+            fontFamily: 'Nunito',
+            color: ink,
+            fontSize: 24,
+            height: 1.15,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
         pageTransitionsTheme: PageTransitionsTheme(
           builders: {
             for (final platform in TargetPlatform.values)

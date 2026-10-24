@@ -580,6 +580,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get extraBottle => 'Extra bottle';
 
   @override
+  String get bottleAdded => 'Bottle added';
+
+  @override
   String get extraExplain =>
       'Watch an optional ad to add one empty bottle to this puzzle. It stays through Undo and Restart. You can add one per puzzle. Hint, Undo and Restart remain free.';
 

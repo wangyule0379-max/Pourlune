@@ -1,29 +1,35 @@
 {
   "schema_version": 1,
   "puzzle_id": "main-030",
-  "content_version": 1,
+  "content_version": 2,
   "mode": "main",
   "content_status": "production_candidate",
   "main_level": 30,
   "capacity": 4,
   "initial_bottom_to_top": [
     [
-      "G",
-      "G",
-      "G",
-      "P"
-    ],
-    [
       "O",
-      "O",
-      "O",
-      "P"
+      "G",
+      "B",
+      "O"
     ],
     [
       "P",
-      "G",
       "O",
-      "P"
+      "G",
+      "G"
+    ],
+    [
+      "B",
+      "P",
+      "B",
+      "O"
+    ],
+    [
+      "P",
+      "P",
+      "B",
+      "G"
     ],
     [],
     []
@@ -32,47 +38,76 @@
     "O",
     "G",
     "P",
+    "B",
     null,
     null
   ],
   "reference_moves": [
     {
       "from_index": 0,
-      "to_index": 3
-    },
-    {
-      "from_index": 1,
-      "to_index": 3
+      "to_index": 4
     },
     {
       "from_index": 2,
-      "to_index": 3
+      "to_index": 4
+    },
+    {
+      "from_index": 0,
+      "to_index": 2
+    },
+    {
+      "from_index": 1,
+      "to_index": 0
+    },
+    {
+      "from_index": 1,
+      "to_index": 4
+    },
+    {
+      "from_index": 0,
+      "to_index": 5
+    },
+    {
+      "from_index": 3,
+      "to_index": 5
+    },
+    {
+      "from_index": 4,
+      "to_index": 0
+    },
+    {
+      "from_index": 2,
+      "to_index": 4
     },
     {
       "from_index": 2,
       "to_index": 1
-    },
-    {
-      "from_index": 2,
-      "to_index": 0
     },
     {
       "from_index": 3,
       "to_index": 2
     },
     {
-      "from_index": 0,
+      "from_index": 1,
       "to_index": 3
     },
     {
-      "from_index": 1,
-      "to_index": 0
+      "from_index": 2,
+      "to_index": 4
     },
     {
       "from_index": 3,
+      "to_index": 2
+    },
+    {
+      "from_index": 4,
+      "to_index": 3
+    },
+    {
+      "from_index": 5,
       "to_index": 1
     }
   ],
-  "difficulty_intent": "3色／moderate候选：双层与单层交错；规划两个缓冲的交替释放，避免同色整瓶停在错误目标。初始8个色段，2个目标色不在自身瓶顶；结构编排，未经人类难度标定。",
-  "source_reference": "tools/content/author_candidates.py"
+  "difficulty_intent": "收回第一处暂存：局部整理后主动偿还临时占位。开局暂存→中段收回→用该空位完成新依赖。结构/求解证据见单关卡；人类难度未标定。",
+  "source_reference": "docs/content/design/main60-level-contracts-v2.json"
 }

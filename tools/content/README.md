@@ -1,5 +1,24 @@
 # 离线内容准备工具
 
+## 当前主线 v2（60关重设计）
+
+主线作者输入为 `docs/content/design/main60-authored-v2.json`，逐关契约为
+`main60-level-contracts-v2.json`。58关新定义已替换运行和候选副本，1/12原字节、30每日及日历保持。
+历史 `author_candidates.py` 的无参数生成流程属于旧B03，不再用于重建当前主线；它的 `--check`
+仍可只读核对候选和打包副本。不要用旧4关循环schedule覆盖新内容。
+
+```sh
+.venv/bin/python tools/content/author_main60_v2.py --output build/main60-reproduce
+.venv/bin/python tools/content/author_candidates.py --check
+.venv/bin/python tools/content/validate.py --release --catalog app/assets/catalog/daily.json app/assets/puzzles/main/*.json app/assets/puzzles/daily/*.json
+```
+
+第一条只输出复现结果；仅明确加 `--install` 才写60主线副本，且先拒绝未知并发差额。
+有序BFS证据在完整预算内证明排除范围；unknown不能充下界，参考长度不是人类难度。
+单关策略、正反分支与历史错误保留在 `docs/development/evidence/main60-content-redesign/`。
+真实Dart提示/旧快照及SQLite升级检查见 `main60_v2_test.dart`、`main60_upgrade_test.dart`。
+实际视觉、首次体验和TestFlight仍是单独门槛，题库工具通过不等发布批准。
+
 在仓库根目录运行，Python 3.11+。本轮实际环境为 Python 3.12.14。系统自带 Python 3.9 不用于本工具。
 
 下例 `python3.12` 指可用的 Python 3.12 解释器。本机实际使用 `/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3` 创建了 .venv；当前可直接运行后两条命令，无须重复创建。

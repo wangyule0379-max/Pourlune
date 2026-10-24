@@ -1,0 +1,54 @@
+Initial UI regression run failed; corrected before final suite.
+Full local log: build/ui-reacceptance/ui-regression-initial-full.log
+Full SHA256: 5129b1320ab47c47c5ef9458b7f2382df8c90be7a668e8737f1c60ba6f51da1f
+
+First reported exception:
+══╡ EXCEPTION CAUGHT BY FLUTTER FRAMEWORK ╞═════════════════════════════════════════════════════════
+The following assertion was thrown:
+ListTile background color or ink splashes may be invisible.
+The ListTile is wrapped in a DecoratedBox that has a background color. Because ListTile paints its
+background and ink splashes on the nearest Material ancestor, this DecoratedBox will hide those
+effects.
+To fix this, wrap the ListTile in its own Material widget, or remove the background color from the
+intermediate DecoratedBox.
+
+ListTile:
+  ListTile(selectedColor: Color(alpha: 1.0000, red: 0.3569, green: 0.3647, blue: 0.4471, colorSpace: ColorSpace.sRGB), onTap: Closure: () => void)
+DecoratedBox: DecoratedBox(bg:
+    BoxDecoration(color: Color(alpha: 1.0000, red: 1.0000, green: 0.9765, blue: 0.9020, colorSpace: ColorSpace.sRGB), image: DecorationImage(AssetImage(bundle: null, name: "assets/art/ui/cream-tile.png"), Alignment.center, ImageRepeat.repeat, scale 2.0, opacity 0.7, FilterQuality.medium), border: Border.all(BorderSide(color: Color(alpha: 1.0000, red: 1.0000, green: 0.9098, blue: 0.7294, colorSpace: ColorSpace.sRGB), width: 5.0)), borderRadius: BorderRadius.circular(28.0),
+      boxShadow: [BoxShadow(Color(alpha: 0.1569, red: 0.3882, green:
+        0.3216, blue: 0.2863, colorSpace: ColorSpace.sRGB), Offset(0.0,
+        5.0), 4.0, 0.0, BlurStyle.normal)]
+      )
+  )
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER FRAMEWORK ╞═════════════════════════════════════════════════════════
+The following assertion was thrown:
+ListTile background color or ink splashes may be invisible.
+The ListTile is wrapped in a DecoratedBox that has a background color. Because ListTile paints its
+background and ink splashes on the nearest Material ancestor, this DecoratedBox will hide those
+effects.
+To fix this, wrap the ListTile in its own Material widget, or remove the background color from the
+intermediate DecoratedBox.
+
+ListTile:
+  ListTile(selectedColor: Color(alpha: 1.0000, red: 0.3569, green: 0.3647, blue: 0.4471, colorSpace: ColorSpace.sRGB), onTap: Closure: () => void)
+DecoratedBox: DecoratedBox(bg:
+    BoxDecoration(color: Color(alpha: 1.0000, red: 1.0000, green: 0.9765, blue: 0.9020, colorSpace: ColorSpace.sRGB), image: DecorationImage(AssetImage(bundle: null, name: "assets/art/ui/cream-tile.png"), Alignment.center, ImageRepeat.repeat, scale 2.0, opacity 0.7, FilterQuality.medium), border: Border.all(BorderSide(color: Color(alpha: 1.0000, red: 1.0000, green: 0.9098, blue: 0.7294, colorSpace: ColorSpace.sRGB), width: 5.0)), borderRadius: BorderRadius.circular(28.0),
+      boxShadow: [BoxShadow(Color(alpha: 0.1569, red: 0.3882, green:
+        0.3216, blue: 0.2863, colorSpace: ColorSpace.sRGB), Offset(0.0,
+        5.0), 4.0, 0.0, BlurStyle.normal)]
+      )
+  )
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER FRAMEWORK ╞═════════════════════════════════════════════════════════
+The following assertion was thrown:
+ListTile background color or ink splashes may be invisible.
+The ListTile is wrapped
+
+Failing tests:
+  /Volumes/data/App Development/Pourlune/app/test/b04_ui_test.dart: AC06/36 privacy choices are separate and persist without Firebase; Rules back announces Settings
+  /Volumes/data/App Development/Pourlune/app/test/b05_accessibility_test.dart: B05 narrow2x privacy content scrolls to independent choices and saves
+  /Volumes/data/App Development/Pourlune/app/test/completion_presentation_test.dart: AC-12 main daily replay success appears only after saved receipt and cannot reaward
+  /Volumes/data/App Development/Pourlune/app/test/motion_polish_test.dart: chapters restores its own scroll position after settings navigation
+  ... and 8 more

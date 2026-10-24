@@ -39,7 +39,7 @@ void main() {
       expect(board.state.toJson(), completed.toJson());
       expect(board.onTap, isNull);
       expect(
-        find.text('Your progress is saved on this device.'),
+        find.bySemanticsLabel('Your progress is saved on this device.'),
         findsOneWidget,
       );
       final before = await t.runAsync(store.progress);

@@ -95,12 +95,14 @@ class KnitPanel extends StatelessWidget {
     super.key,
     required this.child,
     this.padding = const EdgeInsets.all(20),
+    this.margin = const EdgeInsets.symmetric(vertical: 8),
   });
   final Widget child;
   final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry margin;
   @override
   Widget build(BuildContext context) => Container(
-    margin: const EdgeInsets.symmetric(vertical: 8),
+    margin: margin,
     decoration: BoxDecoration(
       color: cream,
       borderRadius: BorderRadius.circular(28),
@@ -207,10 +209,10 @@ class KnitHeader extends StatelessWidget {
                       ),
                     ],
                   )
-                : Column(
-                    children: [
-                      const KnitArt(name: 'moon', width: 28, height: 28),
-                      Text(
+                : ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 44),
+                    child: Center(
+                      child: Text(
                         title,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
@@ -219,7 +221,7 @@ class KnitHeader extends StatelessWidget {
                           height: 1.1,
                         ),
                       ),
-                    ],
+                    ),
                   ),
           ),
         ),

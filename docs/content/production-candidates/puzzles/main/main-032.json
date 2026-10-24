@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "puzzle_id": "main-032",
-  "content_version": 1,
+  "content_version": 2,
   "mode": "main",
   "content_status": "production_candidate",
   "main_level": 32,
@@ -11,19 +11,25 @@
       "P",
       "P",
       "O",
-      "O"
+      "G"
+    ],
+    [
+      "G",
+      "B",
+      "G",
+      "G"
+    ],
+    [
+      "B",
+      "B",
+      "B",
+      "P"
     ],
     [
       "O",
-      "G",
-      "G",
-      "O"
-    ],
-    [
-      "G",
-      "G",
+      "O",
       "P",
-      "P"
+      "O"
     ],
     [],
     []
@@ -32,43 +38,60 @@
     "O",
     "G",
     "P",
+    "B",
     null,
     null
   ],
   "reference_moves": [
     {
       "from_index": 0,
-      "to_index": 3
+      "to_index": 4
     },
     {
       "from_index": 1,
-      "to_index": 3
+      "to_index": 4
+    },
+    {
+      "from_index": 3,
+      "to_index": 0
     },
     {
       "from_index": 2,
-      "to_index": 0
+      "to_index": 3
     },
     {
       "from_index": 1,
       "to_index": 2
     },
     {
-      "from_index": 1,
-      "to_index": 3
+      "from_index": 4,
+      "to_index": 1
+    },
+    {
+      "from_index": 0,
+      "to_index": 4
+    },
+    {
+      "from_index": 3,
+      "to_index": 0
+    },
+    {
+      "from_index": 3,
+      "to_index": 4
     },
     {
       "from_index": 2,
-      "to_index": 1
+      "to_index": 3
     },
     {
       "from_index": 0,
       "to_index": 2
     },
     {
-      "from_index": 3,
+      "from_index": 4,
       "to_index": 0
     }
   ],
-  "difficulty_intent": "3色／moderate候选：双层与单层交错；规划两个缓冲的交替释放，避免同色整瓶停在错误目标。初始7个色段，1个目标色不在自身瓶顶；结构编排，未经人类难度标定。",
-  "source_reference": "tools/content/author_candidates.py"
+  "difficulty_intent": "Garden中段拼片：分批收集与空间回收组合。一色分批回收释放空间→另一色归位。结构/求解证据见单关卡；人类难度未标定。",
+  "source_reference": "docs/content/design/main60-level-contracts-v2.json"
 }

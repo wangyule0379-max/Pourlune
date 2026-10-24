@@ -444,6 +444,30 @@ class FirebaseConfigTest(unittest.TestCase):
         self.assertEqual(sent['POURLUNE_FEEDBACK_EMAIL'], 'beta@pourlune-fixture.org')
         self.assertEqual(sent['POURLUNE_AD_MODE'], 'disabled')
 
+    def test_display_version_matches_native_build_override(self):
+        r = self.wrapper('prod', ['build', 'ios', '--no-codesign',
+                                 '--build-name=0.5.1', '--build-number=17'])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        sent = json.loads((self.root / 'flutter-input.json').read_text())['defines']
+        self.assertFalse(any(key.startswith('FLUTTER_BUILD_') for key in sent))
+        self.assertEqual(sent['POURLUNE_VERSION_NAME'], '0.5.1')
+        self.assertEqual(sent['POURLUNE_VERSION_CODE'], '17')
+
+    def test_display_version_uses_pubspec_when_no_override(self):
+        from beta_build import read_version
+        name, number = read_version((SCRIPT.parents[2] / 'app/pubspec.yaml').read_text())
+        r = self.wrapper('none')
+        self.assertEqual(r.returncode, 0, r.stderr)
+        sent = json.loads((self.root / 'flutter-input.json').read_text())['defines']
+        self.assertEqual((sent['POURLUNE_VERSION_NAME'], sent['POURLUNE_VERSION_CODE']),
+                         (name, str(number)))
+
+    def test_caller_cannot_spoof_display_version(self):
+        r = self.wrapper('dev', ['build', 'ios',
+                                '--dart-define=POURLUNE_VERSION_CODE=999'])
+        self.assertNotEqual(r.returncode, 0)
+        self.assertFalse((self.root / 'flutter-input.json').exists())
+
     def test_invalid_public_destinations_reject_before_flutter(self):
         for value in ['http://public.org', 'https://user:password@public.org',
                       'https://example.com', 'https://sub.example.org',

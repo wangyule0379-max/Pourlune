@@ -69,6 +69,17 @@ void main() {
         await t.tap(find.byKey(const Key('startup-retry')));
         await until(() => find.byType(PourluneApp).evaluate().isNotEmpty);
         expect(find.byKey(const Key('sample-main-001')), findsOneWidget);
+        final panelKey = await const AssetImage('assets/art/ui/cream-tile.png')
+            .obtainKey(
+              createLocalImageConfiguration(
+                t.element(find.byType(PourluneApp)),
+              ),
+            );
+        expect(
+          PaintingBinding.instance.imageCache.statusForKey(panelKey).keepAlive,
+          isTrue,
+          reason: 'Shared panel texture must be decoded before first Settings entry, not painted in after its transition begins.',
+        );
         expect(File('${dir.path}/pourlune_dev.sqlite').existsSync(), isTrue);
       } finally {
         await t.pumpWidget(const SizedBox());

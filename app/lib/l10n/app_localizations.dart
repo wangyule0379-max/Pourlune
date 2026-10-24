@@ -1072,6 +1072,12 @@ abstract class AppLocalizations {
   /// **'Extra bottle'**
   String get extraBottle;
 
+  /// No description provided for @bottleAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottle added'**
+  String get bottleAdded;
+
   /// No description provided for @extraExplain.
   ///
   /// In en, this message translates to:

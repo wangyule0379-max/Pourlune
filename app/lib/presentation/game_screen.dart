@@ -166,11 +166,12 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                   ),
                 ]
               : [
-                  TextButton(
+                  FilledButton(
+                    autofocus: true,
                     onPressed: () => Navigator.pop(context, false),
                     child: Text(l.keepPlaying),
                   ),
-                  FilledButton(
+                  TextButton(
                     key: Key(key),
                     onPressed: () => Navigator.pop(context, true),
                     child: Text(action),
@@ -291,6 +292,8 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
           builder: (context, _) => Dialog(
             key: const Key('pause-card'),
             backgroundColor: Colors.transparent,
+            shape: const RoundedRectangleBorder(),
+            elevation: 0,
             insetPadding: const EdgeInsets.symmetric(
               horizontal: 24,
               vertical: 24,
@@ -565,12 +568,11 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                               ),
                           ],
                         );
-                        final content = Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            if (renderedPage != GamePage.home &&
-                                renderedPage != GamePage.board)
-                              KnitHeader(
+                        final header =
+                            renderedPage == GamePage.home ||
+                                renderedPage == GamePage.board
+                            ? null
+                            : KnitHeader(
                                 title:
                                     renderedPage == GamePage.completion ||
                                         renderedPage == GamePage.reward
@@ -594,7 +596,11 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                                     : renderedPage == GamePage.rules
                                     ? () => c.navigate(GamePage.settings)
                                     : c.goHome,
-                              ),
+                              );
+                        final content = Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (bounded && header != null) header,
                             if (bounded)
                               ConstrainedBox(
                                 constraints: const BoxConstraints(
@@ -641,7 +647,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                             child: content,
                           );
                         }
-                        return SingleChildScrollView(
+                        final scroll = SingleChildScrollView(
                           key: PageStorageKey(
                             instance != null
                                 ? 'scroll-${renderedPage.name}-$instance'
@@ -649,8 +655,34 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                                 ? 'scroll-scene-${c.selectedScene}'
                                 : 'scroll-${renderedPage.name}',
                           ),
+                          primary: false,
+                          // These are menu panels over a stationary backdrop,
+                          // not a pull-to-refresh surface. Keep their edges in
+                          // the viewport; dialogs and board input are unchanged.
+                          physics: const ClampingScrollPhysics(),
                           padding: const EdgeInsets.all(16),
                           child: content,
+                        );
+                        return Column(
+                          children: [
+                            if (header != null)
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                  16,
+                                  16,
+                                  16,
+                                  0,
+                                ),
+                                child: header,
+                              ),
+                            Expanded(
+                              child: ScrollConfiguration(
+                                behavior: ScrollConfiguration.of(context)
+                                    .copyWith(overscroll: false),
+                                child: scroll,
+                              ),
+                            ),
+                          ],
                         );
                       },
                     ),

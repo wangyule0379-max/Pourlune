@@ -194,6 +194,7 @@ class ScenePage extends StatelessWidget {
                 : () => onPlay(c.progress.nextUnfinished!),
             child: Text(l.playLevel(c.progress.nextUnfinished ?? 1)),
           ),
+        const SizedBox(height: 8),
         OutlinedButton(
           key: const Key('collection-back'),
           onPressed: c.busy ? null : () => c.navigate(GamePage.collection),
@@ -261,38 +262,81 @@ class RewardPage extends StatelessWidget {
         child: Text(l.viewCollection),
       ),
     ];
-    final details = Column(
-      children: [
-        Text(
+    return LayoutBuilder(
+      builder: (context, box) {
+        final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.4;
+        final heading = Text(
           unseen ? l.newPatch : sceneTitle(c.selectedScene),
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
-        ),
-        ScenePreview(
-          compact: true,
+          style: const TextStyle(
+            fontSize: 26,
+            height: 1.1,
+            fontWeight: FontWeight.w900,
+          ),
+        );
+        final scene = SceneArt(
           scene: c.selectedScene,
           pieces: c.progress.pieces,
           reveal: unseen ? int.parse(piece.split(':').last) : null,
-        ),
-        Text(l.addedCollection, textAlign: TextAlign.center),
-      ],
-    );
-    return LayoutBuilder(
-      builder: (context, box) => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (box.hasBoundedHeight)
-            Expanded(
-              child: SingleChildScrollView(
-                key: const Key('reward-details'),
-                child: details,
+        );
+        final progress = KnitPanel(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Column(
+            children: [
+              PatchProgress(
+                scene: c.selectedScene,
+                pieces: c.progress.pieces,
+                compact: box.maxHeight < 560,
               ),
-            )
-          else
-            details,
-          _SettlementActions(children: actions),
-        ],
-      ),
+              Text(
+                sceneTitle(c.selectedScene),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ],
+          ),
+        );
+        final footer = Text(
+          l.addedCollection,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodySmall,
+        );
+        final details = Column(children: [heading, scene, progress, footer]);
+        if (!box.hasBoundedHeight) {
+          return Column(
+            children: [
+              details,
+              _SettlementActions(children: actions),
+            ],
+          );
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: largeText
+                  ? SingleChildScrollView(
+                      key: const Key('reward-details'),
+                      child: details,
+                    )
+                  : Column(
+                      children: [
+                        heading,
+                        const SizedBox(height: 8),
+                        Expanded(child: Center(child: scene)),
+                        progress,
+                        footer,
+                      ],
+                    ),
+            ),
+            const SizedBox(height: 8),
+            _SettlementActions(children: actions),
+          ],
+        );
+      },
     );
   }
 }
@@ -372,13 +416,19 @@ class CompletionPage extends StatelessWidget {
           onPressed: c.busy ? null : () => c.navigate(GamePage.chapters),
           child: Text(l.chooseLevel),
         ),
-      ] else if (kind == SettlementKind.daily)
+      ] else if (kind == SettlementKind.daily) ...[
         FilledButton(
           key: const Key('daily-calendar'),
           onPressed: c.busy ? null : () => c.navigate(GamePage.daily),
           child: Text(l.dailyPuzzle),
-        )
-      else if (patch)
+        ),
+        if (s.puzzleDate == c.today.date && c.library.daily != null)
+          OutlinedButton(
+            key: const Key('daily-replay'),
+            onPressed: c.busy ? null : c.startToday,
+            child: Text(l.replayToday),
+          ),
+      ] else if (patch)
         FilledButton(
           key: const Key('view-patch'),
           onPressed: c.busy ? null : c.viewPatch,
@@ -396,103 +446,172 @@ class CompletionPage extends StatelessWidget {
         child: Text(l.home),
       ),
     ];
-    final info = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (c.phase != SavePhase.clean || c.receipt == null)
-          Text(l.pendingCompletion)
-        else if (kind == SettlementKind.daily)
-          Text(s.isReplay ? l.dailyReplayComplete : l.stampSaved(s.puzzleDate!))
-        else
-          Text(
-            kind == SettlementKind.replay
-                ? l.replayComplete
-                : l.firstClearSaved,
-          ),
-        if ((kind == SettlementKind.chapter || finalStory) &&
-            c.phase == SavePhase.clean) ...[
-          Text(l.chapterComplete),
-          ScenePreview(
-            compact: true,
-            scene: sceneForLevel(s.puzzle.mainLevel!),
-            pieces: c.progress.pieces,
-            reveal:
-                c.receipt?.piece != null &&
-                    !c.progress.revealedPieces.contains(c.receipt!.piece)
-                ? int.parse(c.receipt!.piece!.split(':').last)
-                : null,
-          ),
+    final saved = c.phase == SavePhase.clean && c.receipt != null;
+    final scene = s.slot == 'daily' ? null : sceneForLevel(s.puzzle.mainLevel!);
+    final status = !saved
+        ? l.pendingCompletion
+        : kind == SettlementKind.daily
+        ? (s.isReplay ? l.dailyReplayComplete : l.stampSaved(s.puzzleDate!))
+        : kind == SettlementKind.replay
+        ? l.replayComplete
+        : l.firstClearSaved;
+    final chapter = kind == SettlementKind.chapter || finalStory;
+    final progress = KnitPanel(
+      key: const Key('completion-progress'),
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      child: Column(
+        children: [
+          if (scene != null && kind != SettlementKind.replay)
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    sceneTitle(scene),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      height: 1.1,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+                Text(
+                  '${c.progress.completedLevels.where((n) => sceneForLevel(n) == scene).length} / 20',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    height: 1.1,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
+            ),
+          if (!saved ||
+              kind == SettlementKind.daily ||
+              kind == SettlementKind.replay)
+            Text(
+              status,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12, height: 1.1),
+            ),
+          if (patch && saved)
+            Text(
+              chapter ? l.chapterComplete : l.newPatch,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+                height: 1.1,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          if (finalStory) ...[
+            Text(l.chapterComplete, textAlign: TextAlign.center),
+            Text(
+              l.storyCompleteBody,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12, height: 1.1),
+            ),
+          ],
         ],
-        if (finalStory) Text(l.storyCompleteBody),
-      ],
+      ),
     );
     return LayoutBuilder(
       builder: (context, box) {
-        final heading = c.phase == SavePhase.clean && c.receipt != null
-            ? _CompletionFeedback(
+        final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.4;
+        final short = box.hasBoundedHeight && box.maxHeight < 560;
+        final badge = KnitArt(
+          name: 'success',
+          height: short ? 40 : 72,
+          width: short ? 40 : 72,
+        );
+        final heading = Column(
+          children: [
+            title,
+            if (saved && kind != SettlementKind.daily)
+              _CompletionFeedback(
                 key: Key('completion-feedback-${s.id}'),
-                child: Row(
-                  children: [
-                    const KnitArt(name: 'success', width: 36, height: 36),
-                    const SizedBox(width: 8),
-                    Expanded(child: title),
-                  ],
+                child: Semantics(label: status, liveRegion: true, child: badge),
+              ),
+          ],
+        );
+        final hero = kind == SettlementKind.daily
+            ? _CompletionFeedback(
+                key: saved ? Key('completion-feedback-${s.id}') : null,
+                child: FittedBox(
+                  child: SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: Stack(
+                      children: [
+                        CalendarArt(
+                          day: int.parse(s.puzzleDate!.split('-').last),
+                          size: 200,
+                        ),
+                        if (saved)
+                          const Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: KnitArt(
+                              name: 'success',
+                              width: 64,
+                              height: 64,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
               )
-            : title;
-        final preview = BoardView(
-          key: const Key('completion-preview'),
-          state: s,
-          selected: null,
-          onTap: null,
-          settings: c.settings,
-          preview: true,
-          keyPrefix: 'preview-bottle',
-        );
+            : chapter && saved
+            ? SceneArt(
+                scene: scene!,
+                pieces: c.progress.pieces,
+                reveal:
+                    c.receipt?.piece != null &&
+                        !c.progress.revealedPieces.contains(c.receipt!.piece)
+                    ? int.parse(c.receipt!.piece!.split(':').last)
+                    : null,
+              )
+            : BoardView(
+                key: const Key('completion-preview'),
+                state: s,
+                selected: null,
+                onTap: null,
+                settings: c.settings,
+                preview: true,
+                keyPrefix: 'preview-bottle',
+              );
         if (!box.hasBoundedHeight) {
           return Column(
             children: [
               heading,
-              preview,
-              info,
+              hero,
+              progress,
               _SettlementActions(children: actions),
             ],
           );
         }
-        final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.4;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (!largeText) heading,
             Expanded(
-              child: LayoutBuilder(
-                builder: (context, space) {
-                  // A large accessibility font may need to inspect the read-only
-                  // preview/details; the actual settlement actions stay outside it.
-                  final minPreview =
-                      32 * 3 +
-                      (32 * MediaQuery.textScalerOf(context).scale(1) + 8) * 2 +
-                      12;
-                  final previewHeight = largeText
-                      ? minPreview
-                      : 32 * MediaQuery.textScalerOf(context).scale(1) +
-                            8 +
-                            (space.maxWidth / s.board.length - 8).clamp(0, 48) *
-                                1.5 +
-                            4;
-                  return SingleChildScrollView(
-                    key: const Key('completion-details'),
-                    child: Column(
+              child: largeText
+                  ? SingleChildScrollView(
+                      key: const Key('completion-details'),
+                      child: Column(children: [heading, hero, progress]),
+                    )
+                  : Column(
                       children: [
-                        if (largeText) heading,
-                        SizedBox(height: previewHeight, child: preview),
-                        info,
+                        heading,
+                        Expanded(
+                          child: chapter || kind == SettlementKind.daily
+                              ? Center(child: hero)
+                              : hero,
+                        ),
+                        progress,
                       ],
                     ),
-                  );
-                },
-              ),
             ),
+            const SizedBox(height: 4),
             _SettlementActions(children: actions),
           ],
         );
@@ -533,21 +652,37 @@ class _SettlementActions extends StatelessWidget {
         ),
       ),
       child: LayoutBuilder(
-        builder: (context, box) => Wrap(
-          spacing: 8,
-          runSpacing: 4,
-          children: [
-            for (var i = 0; i < children.length; i++)
-              SizedBox(
-                width:
-                    MediaQuery.textScalerOf(context).scale(1) > 1.4 ||
-                        (children.length.isOdd && i == children.length - 1)
-                    ? box.maxWidth
-                    : (box.maxWidth - 8) / 2,
-                child: children[i],
-              ),
-          ],
-        ),
+        builder: (context, box) {
+          final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.4;
+          final secondary = children.skip(1).toList();
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              children.first,
+              if (secondary.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (var i = 0; i < secondary.length; i++)
+                      SizedBox(
+                        width:
+                            largeText ||
+                                secondary.length == 1 ||
+                                (secondary.length.isOdd &&
+                                    i == secondary.length - 1)
+                            ? box.maxWidth
+                            : (box.maxWidth - 8) / 2,
+                        child: secondary[i],
+                      ),
+                  ],
+                ),
+              ],
+            ],
+          );
+        },
       ),
     );
   }

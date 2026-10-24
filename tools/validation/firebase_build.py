@@ -13,6 +13,7 @@ from firebase_config import ConfigError, NATIVE_IDS, REGISTRY, ROOT, inspect_con
 from ios_signing import ProfileError, inspect_profile
 from public_destinations import DestinationError, add_destination_arguments, validate_destinations
 from admob_config import AdConfigError, add_arguments as add_ad_arguments, selection as ad_selection
+from build_version import BuildError, display_definitions
 
 
 def main():
@@ -37,7 +38,7 @@ def main():
         require(not any(any(name in a for name in (
                         "POURLUNE_FIREBASE_", "POURLUNE_SUPPORT_URL", "POURLUNE_PRIVACY_URL",
                         "POURLUNE_FEEDBACK_EMAIL", "POURLUNE_AD", "POURLUNE_INTERSTITIAL",
-                        "POURLUNE_REWARDED"))
+                        "POURLUNE_REWARDED", "POURLUNE_VERSION_NAME", "POURLUNE_VERSION_CODE"))
                         or a.startswith("--dart-define-from-file")
                         for a in command), "caller_cannot_override_firebase_selection")
         if args.environment == "prod":
@@ -93,6 +94,7 @@ def main():
                        "POURLUNE_AD_APP_ID": ads['app_id'],
                        "POURLUNE_AD_PLATFORM": args.platform,
                        "POURLUNE_AD_NATIVE_ID": ads['native_id']}
+        definitions.update(display_definitions((ROOT / 'app/pubspec.yaml').read_text(), command))
         definitions.update({'POURLUNE_' + name.upper(): value
                             for name, value in destinations.items() if name != 'ready'})
         if config:
@@ -195,7 +197,7 @@ def main():
                     log = log.replace(value, "[CLIENT_CONFIG_REDACTED]")
             print(log, end="")
             return result.returncode
-    except (ConfigError, ProfileError, DestinationError, AdConfigError) as error:
+    except (ConfigError, ProfileError, DestinationError, AdConfigError, BuildError) as error:
         print(json.dumps({"ok": False, "code": str(error)}), file=sys.stderr)
         return 1
     except OSError:

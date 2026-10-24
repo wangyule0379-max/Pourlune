@@ -1,29 +1,35 @@
 {
   "schema_version": 1,
   "puzzle_id": "main-021",
-  "content_version": 2,
+  "content_version": 3,
   "mode": "main",
   "content_status": "production_candidate",
   "main_level": 21,
   "capacity": 4,
   "initial_bottom_to_top": [
     [
-      "O",
-      "O",
       "G",
-      "G"
+      "B",
+      "G",
+      "O"
     ],
     [
+      "G",
+      "G",
       "O",
-      "O",
-      "P",
       "P"
     ],
     [
       "P",
       "P",
-      "G",
-      "G"
+      "B",
+      "P"
+    ],
+    [
+      "B",
+      "O",
+      "B",
+      "O"
     ],
     [],
     []
@@ -32,21 +38,34 @@
     "O",
     "G",
     "P",
+    "B",
     null,
     null
   ],
   "reference_moves": [
     {
+      "from_index": 1,
+      "to_index": 4
+    },
+    {
       "from_index": 0,
-      "to_index": 3
+      "to_index": 1
     },
     {
       "from_index": 2,
-      "to_index": 3
+      "to_index": 4
     },
     {
-      "from_index": 1,
+      "from_index": 0,
+      "to_index": 5
+    },
+    {
+      "from_index": 0,
       "to_index": 2
+    },
+    {
+      "from_index": 0,
+      "to_index": 5
     },
     {
       "from_index": 1,
@@ -54,9 +73,33 @@
     },
     {
       "from_index": 3,
+      "to_index": 0
+    },
+    {
+      "from_index": 5,
       "to_index": 1
+    },
+    {
+      "from_index": 2,
+      "to_index": 5
+    },
+    {
+      "from_index": 3,
+      "to_index": 5
+    },
+    {
+      "from_index": 3,
+      "to_index": 0
+    },
+    {
+      "from_index": 4,
+      "to_index": 2
+    },
+    {
+      "from_index": 5,
+      "to_index": 3
     }
   ],
-  "difficulty_intent": "3色／easy候选：先合并连续色块（1–3单位）；保留一只空缓冲，最后按固定标签回收。初始6个色段，3个目标色不在自身瓶顶；结构编排，未经人类难度标定。",
-  "source_reference": "tools/content/author_candidates.py"
+  "difficulty_intent": "新章不重学：用熟悉规则解决新的空间关系。先识别可回收目标瓶，再延续双缓冲接力。结构/求解证据见单关卡；人类难度未标定。",
+  "source_reference": "docs/content/design/main60-level-contracts-v2.json"
 }

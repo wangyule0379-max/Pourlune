@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "puzzle_id": "main-017",
-  "content_version": 1,
+  "content_version": 2,
   "mode": "main",
   "content_status": "production_candidate",
   "main_level": 17,
@@ -10,26 +10,26 @@
     [
       "B",
       "B",
-      "P",
-      "P"
+      "G",
+      "G"
     ],
     [
       "P",
-      "P",
+      "G",
+      "G",
+      "O"
+    ],
+    [
+      "B",
       "O",
+      "B",
       "O"
     ],
     [
       "O",
-      "O",
-      "G",
-      "G"
-    ],
-    [
-      "B",
-      "B",
-      "G",
-      "G"
+      "P",
+      "P",
+      "P"
     ],
     [],
     []
@@ -48,8 +48,12 @@
       "to_index": 4
     },
     {
-      "from_index": 1,
+      "from_index": 0,
       "to_index": 5
+    },
+    {
+      "from_index": 1,
+      "to_index": 0
     },
     {
       "from_index": 1,
@@ -57,29 +61,41 @@
     },
     {
       "from_index": 2,
-      "to_index": 1
-    },
-    {
-      "from_index": 3,
-      "to_index": 1
-    },
-    {
-      "from_index": 0,
-      "to_index": 3
+      "to_index": 0
     },
     {
       "from_index": 2,
       "to_index": 5
     },
     {
-      "from_index": 4,
+      "from_index": 2,
+      "to_index": 0
+    },
+    {
+      "from_index": 2,
+      "to_index": 5
+    },
+    {
+      "from_index": 1,
       "to_index": 2
     },
     {
-      "from_index": 5,
+      "from_index": 3,
+      "to_index": 2
+    },
+    {
+      "from_index": 3,
       "to_index": 0
+    },
+    {
+      "from_index": 4,
+      "to_index": 1
+    },
+    {
+      "from_index": 5,
+      "to_index": 3
     }
   ],
-  "difficulty_intent": "4色／easy候选：先合并连续色块（1–3单位）；保留一只空缓冲，最后按固定标签回收。初始8个色段，4个目标色不在自身瓶顶；结构编排，未经人类难度标定。",
-  "source_reference": "tools/content/author_candidates.py"
+  "difficulty_intent": "清晰但不退级：熟练执行已掌握的两阶段策略。看出明确入口，完成一次转移链后收尾。结构/求解证据见单关卡；人类难度未标定。",
+  "source_reference": "docs/content/design/main60-level-contracts-v2.json"
 }

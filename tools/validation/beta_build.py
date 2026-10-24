@@ -10,7 +10,6 @@ import json
 import os
 from pathlib import Path
 import plistlib
-import re
 import shutil
 import subprocess
 import sys
@@ -21,22 +20,9 @@ from ios_signing import ProfileError, inspect_profile
 from public_destinations import DestinationError, add_destination_arguments, validate_destinations
 from android_signing import SigningError, inspect_signer, sign_aab
 from admob_config import AdConfigError, add_arguments as add_ad_arguments, selection as ad_selection
+from build_version import BuildError, read_version
 
 ROOT = Path(__file__).resolve().parents[2]
-
-
-class BuildError(Exception):
-    pass
-
-
-def read_version(source):
-    versions = re.findall(r'^version:\s*(\d+\.\d+\.\d+)\+(\d+)\s*$', source, re.M)
-    if len(versions) != 1 or len(re.findall(r'^version:', source, re.M)) != 1:
-        raise BuildError('invalid_version')
-    name, number = versions[0]
-    if not 1 <= int(number) <= 2100000000:
-        raise BuildError('invalid_build_number')
-    return name, int(number)
 
 
 def prepare_output(root, output):

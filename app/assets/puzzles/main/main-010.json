@@ -1,35 +1,35 @@
 {
   "schema_version": 1,
   "puzzle_id": "main-010",
-  "content_version": 1,
+  "content_version": 2,
   "mode": "main",
   "content_status": "production_candidate",
   "main_level": 10,
   "capacity": 4,
   "initial_bottom_to_top": [
     [
-      "G",
-      "G",
-      "G",
+      "O",
+      "O",
+      "P",
       "P"
     ],
     [
-      "O",
-      "O",
       "B",
-      "G"
+      "G",
+      "G",
+      "O"
     ],
     [
       "P",
-      "P",
       "B",
-      "B"
+      "B",
+      "P"
     ],
     [
-      "O",
-      "O",
-      "P",
-      "B"
+      "G",
+      "B",
+      "G",
+      "O"
     ],
     [],
     []
@@ -53,6 +53,30 @@
     },
     {
       "from_index": 3,
+      "to_index": 0
+    },
+    {
+      "from_index": 2,
+      "to_index": 4
+    },
+    {
+      "from_index": 3,
+      "to_index": 1
+    },
+    {
+      "from_index": 2,
+      "to_index": 3
+    },
+    {
+      "from_index": 4,
+      "to_index": 2
+    },
+    {
+      "from_index": 1,
+      "to_index": 4
+    },
+    {
+      "from_index": 3,
       "to_index": 1
     },
     {
@@ -61,33 +85,13 @@
     },
     {
       "from_index": 1,
-      "to_index": 5
-    },
-    {
-      "from_index": 2,
-      "to_index": 5
+      "to_index": 3
     },
     {
       "from_index": 4,
-      "to_index": 2
-    },
-    {
-      "from_index": 1,
-      "to_index": 3
-    },
-    {
-      "from_index": 0,
       "to_index": 1
-    },
-    {
-      "from_index": 3,
-      "to_index": 0
-    },
-    {
-      "from_index": 5,
-      "to_index": 3
     }
   ],
-  "difficulty_intent": "4色／moderate候选：双层与单层交错；规划两个缓冲的交替释放，避免同色整瓶停在错误目标。初始10个色段，2个目标色不在自身瓶顶；结构编排，未经人类难度标定。",
-  "source_reference": "tools/content/author_candidates.py"
+  "difficulty_intent": "一只瓶的两次用途：同一空位先后服务不同颜色。暂存O→回收空位→暂存另一色，保留另一只缓冲。结构/求解证据见单关卡；人类难度未标定。",
+  "source_reference": "docs/content/design/main60-level-contracts-v2.json"
 }

@@ -1,0 +1,40 @@
+test_authored_anchors_cannot_be_replaced_by_candidate_helper (test_main60_v2.Main60V2Tests.test_authored_anchors_cannot_be_replaced_by_candidate_helper) ... ok
+test_changed_021_keeps_identity_and_increments_actual_version_two_to_three (test_main60_v2.Main60V2Tests.test_changed_021_keeps_identity_and_increments_actual_version_two_to_three) ... ok
+test_revised028_keeps_removable_truncation_as_negative_not_recommended (test_main60_v2.Main60V2Tests.test_revised028_keeps_removable_truncation_as_negative_not_recommended) ... ok
+test_route_links_refer_to_real_emptied_capacity_and_fixed_completion (test_main60_v2.Main60V2Tests.test_route_links_refer_to_real_emptied_capacity_and_fixed_completion) ... ERROR
+test_three_colour_021_cannot_pass_four_colour_contract (test_main60_v2.Main60V2Tests.test_three_colour_021_cannot_pass_four_colour_contract) ... ok
+
+======================================================================
+ERROR: test_route_links_refer_to_real_emptied_capacity_and_fixed_completion (test_main60_v2.Main60V2Tests.test_route_links_refer_to_real_emptied_capacity_and_fixed_completion)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/content/validate.py", line 36, in read_json
+    return json.loads(Path(path).read_text(encoding='utf-8-sig'),
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/json/__init__.py", line 359, in loads
+    return cls(**kw).decode(s)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/json/decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/json/decoder.py", line 354, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/data/App Development/Pourlune/tools/content/validate.py", line 34, in non_integer_token
+    raise ContentError(f'numbers must use integer tokens without decimals or exponents: {value}')
+validate.ContentError: numbers must use integer tokens without decimals or exponents: 0.473
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/content/test_main60_v2.py", line 50, in test_route_links_refer_to_real_emptied_capacity_and_fixed_completion
+    c = read_json(base / 'main-053.json')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/data/App Development/Pourlune/tools/content/validate.py", line 40, in read_json
+    raise ContentError(f'{path}: {error}') from error
+validate.ContentError: /Volumes/data/App Development/Pourlune/docs/development/evidence/main60-content-redesign/history/dc02-r2/levels/main-053.json: numbers must use integer tokens without decimals or exponents: 0.473
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.010s
+
+FAILED (errors=1)

@@ -1,5 +1,14 @@
 # Pourlune client — B04 optional services
 
+**2026-10-23 current working candidate:** main60 v2 has58 revised definitions,
+with main001/main012 unchanged and main021 advancing fromv2 tov3. The daily30
+and calendar are unchanged; active saves retain their original full puzzle.
+See `docs/development/deliveries/main60-content-redesign.md` and the full UI
+reacceptance report. New menu/settlement/settings repairs are still awaiting
+actual current visual inspection; automated checks do not approve a TestFlight
+update. The previously distributed build9 remains frozen. Google Play/AdMob
+work is paused. Historical B03/B04 descriptions below do not override this state.
+
 Actual Flutter iOS/Android app, local pure Dart core and sqflite SQLite. B01 and B02 are independently accepted within their documented engineering scope; see `docs/development/review/B02-acceptance.md` for checks and limits. Default content is **60 main +30 independent daily candidates** from `assets/puzzles/` and `assets/catalog/daily.json`; original main012 stays v1 and newly authored main021 is v2. B03 replaces development visual probes with layered candidate art, original synthesized local WAVs, Nunito/OFL and platform icon exports. Candidate content/visuals remain subject to independent acceptance and the reference artwork commercial rights remain unconfirmed. B04 adds optional service adapters, official test advertising and configured support entries; real Firebase/project/support handoff remains external.
 
 Use Flutter **3.47.2** (`d3b14c876900e553bc736ca19295fc09e3853e8e`), Dart **3.13.2**. `.flutter-version` and both lockfiles fix the toolchain/dependencies. Runtime dependencies are Flutter localization, intl 0.20.3, sqflite 2.4.5, audioplayers 6.8.1 and local core; host tests also use sqflite_common_ffi 2.4.4 against actual SQLite files. Audioplayers provides local asset playback; the lockfile pins its platform dependencies.
@@ -20,7 +29,7 @@ flutter run -d <device-id>
 
 Run core checks separately from `../packages/pourlune_core/`. GitHub Actions discovers the added tests; remote CI is unverified until the acceptance owner pushes. Build artifacts remain ignored under `build/`.
 
-Home/chapters use actual saved progress, locks, missing content and Replay identity. Ordinary and daily slots are independent. First-level guidance restricts its three introductory actions; Skip preserves the board. Settings contains a separate practice board. Hints search the **current board** in a cancellable isolate (2-second wall budget including startup, 50,000-state search budget); only exhausted search means proven unsolvable. A suggestion selects the source and never pours automatically. Token, instance and revision checks discard stale replies, and board/navigation/background changes cancel the worker.
+Home/chapters use actual saved progress, locks, missing content and Replay identity. Ordinary and daily slots are independent. First-level guidance restricts its three introductory actions; Skip preserves the board. Settings contains a separate practice board. Hints search the **current board** in a cancellable isolate (2-second wall budget including startup, 50,000-state search budget); only exhausted search means proven unsolvable. The bounded A* search uses an admissible unanchored-color-group lower bound; fixed target positions remain distinct, while unlabeled buffer permutations are equivalent. Every found suggestion lies on a shortest remaining route, preventing repeated-hint cycles. Continuous-hint regressions cover the eight representative puzzles with and without the seventh bottle; an independent full-position BFS oracle checks all188 reachable two-color states. A suggestion selects the source and never pours automatically. Token, instance and revision checks discard stale replies, and board/navigation/background changes cancel the worker.
 
 SQLite schema **v5** explicitly migrates B01 v1/v2 records without clearing them. It retains both slots, original definitions, undo history/extra entitlement, receipts, unlocks, pieces and qualification count; v3 adds tutorial completion, six preferences, separately acknowledged piece reveals, and consumed Next targets. Snapshot schema2 accepts old schema1; unfinished guidance verifies the bounded guided prefix. R01 history checks remain. Unknown newer DB schemas fail without deletion. A corrupt slot uses its valid same-instance backup; a completed backup can continue settlement navigation. Whole-file database repair is not implemented.
 

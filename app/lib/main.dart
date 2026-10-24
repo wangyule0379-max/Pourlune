@@ -189,6 +189,11 @@ class _BootstrapState extends State<Bootstrap> {
           context,
           onError: (_, _) {},
         ),
+        precacheImage(
+          const AssetImage('assets/art/ui/cream-tile.png'),
+          context,
+          onError: (_, _) {},
+        ),
         for (final name in ['logo', 'green-frame', 'cream-frame'])
           precacheImage(
             knitArtImage(context, name),

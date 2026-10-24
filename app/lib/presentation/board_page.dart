@@ -137,6 +137,7 @@ class _BoardPageState extends State<BoardPage> {
     return LayoutBuilder(
       builder: (context, box) {
         final bounded = box.hasBoundedHeight;
+        final largeText = MediaQuery.textScalerOf(context).scale(18) > 26;
         final hasPriorityNotice =
             c.phase == SavePhase.failed ||
             c.rewardSaveFailed ||
@@ -234,11 +235,12 @@ class _BoardPageState extends State<BoardPage> {
             if (unmatched) Text(l.matchLabels),
             if (suggestion != null)
               Text(l.hintReason(colorLabel(l, s.board[suggestion.from].last))),
-            Text(
-              l.goal,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            if (!bounded || suggestion == null)
+              Text(
+                l.goal,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
             if (kDebugMode)
               ExpansionTile(
                 key: const PageStorageKey('board-diagnostics-state'),
@@ -308,20 +310,27 @@ class _BoardPageState extends State<BoardPage> {
               ),
             ),
 
-            if (bounded)
+            if (bounded && c.phase == SavePhase.failed)
+              SaveFailureNotice(
+                key: const Key('save-failed'),
+                controller: c,
+                compact: true,
+              )
+            else if (bounded)
               SizedBox(
-                height:
-                    (lesson?.active ?? false) ||
-                        c.hintSearching ||
-                        c.hint != null ||
-                        noMoves ||
-                        c.rejection != null ||
-                        c.phase == SavePhase.failed ||
-                        c.pendingRewards.isNotEmpty ||
-                        c.rewardSaveFailed ||
-                        c.rewardIssue != null
-                    ? 56
-                    : 28,
+                height: suggestion != null && !largeText && box.maxHeight >= 600
+                    ? 104
+                    : (lesson?.active ?? false) ||
+                          c.hintSearching ||
+                          c.hint != null ||
+                          noMoves ||
+                          c.rejection != null ||
+                          c.phase == SavePhase.failed ||
+                          c.pendingRewards.isNotEmpty ||
+                          c.rewardSaveFailed ||
+                          c.rewardIssue != null
+                    ? 52
+                    : 24,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -367,10 +376,17 @@ class _BoardPageState extends State<BoardPage> {
                     : null,
                 key: const Key('extra-bottle'),
                 onPressed: c.busy ? null : widget.onExtra,
-                icon: const Icon(Icons.add_circle_outline),
-                label: Text(l.extraBottle, textAlign: TextAlign.center),
+                icon: Icon(
+                  s.extraBottleGranted
+                      ? Icons.check_circle_outline
+                      : Icons.add_circle_outline,
+                ),
+                label: Text(
+                  s.extraBottleGranted ? l.bottleAdded : l.extraBottle,
+                  textAlign: TextAlign.center,
+                ),
               ),
-            SizedBox(height: bounded ? 0 : 4),
+            if (c.offersExtraBottle) const SizedBox(height: 10),
             LayoutBuilder(
               builder: (context, box) {
                 final labels = <(String, IconData, String, VoidCallback?)>[
@@ -394,9 +410,10 @@ class _BoardPageState extends State<BoardPage> {
                     c.busy ? null : widget.onRestart,
                   ),
                 ];
-                final largeText =
-                    MediaQuery.textScalerOf(context).scale(18) > 26;
-                final columns = largeText ? 2 : labels.length;
+                final largeActions =
+                    MediaQuery.textScalerOf(context).scale(bounded ? 14 : 18) >
+                    26;
+                final columns = largeActions ? 2 : labels.length;
                 return Wrap(
                   alignment: WrapAlignment.center,
                   spacing: 8,
@@ -404,7 +421,7 @@ class _BoardPageState extends State<BoardPage> {
                   children: [
                     for (final item in labels)
                       SizedBox(
-                        width: largeText && item.$1 == 'restart'
+                        width: largeActions && item.$1 == 'restart'
                             ? box.maxWidth
                             : (box.maxWidth - (columns - 1) * 8) / columns,
                         child: OutlinedButton(

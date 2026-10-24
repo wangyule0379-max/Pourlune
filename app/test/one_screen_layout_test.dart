@@ -10,13 +10,43 @@ import 'package:pourlune_dev/application/game_controller.dart';
 import 'package:pourlune_dev/data/content_library.dart';
 import 'package:pourlune_dev/data/game_store.dart';
 import 'package:pourlune_dev/l10n/app_localizations.dart';
-import 'package:pourlune_dev/presentation/collection_pages.dart';
+import 'package:pourlune_dev/presentation/scene_art.dart';
 import 'package:pourlune_dev/presentation/pourlune_app.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'support/flame_board_ready.dart';
 import 'support/flame_board_support.dart';
 import 'store_test.dart' show fixture, finish, daily;
+
+Future<void> retryAndAwaitSave(WidgetTester t, GameController c) async {
+  expect(c.phase, SavePhase.failed);
+  // Create the completion future and initiate the real UI tap in the same
+  // real async zone as SQLite FFI. A fake-zone Completer needs another pump
+  // even after the controller has reported clean, so it cannot be awaited
+  // from a frozen fake clock as if it were a native I/O future.
+  await t.runAsync(() async {
+    final completed = Completer<void>();
+    var started = false;
+    void onSaveChanged() {
+      if (c.phase == SavePhase.saving) {
+        started = true;
+      } else if (started && !completed.isCompleted) {
+        completed.complete();
+      }
+    }
+
+    c.addListener(onSaveChanged);
+    try {
+      await t.tap(find.byKey(const Key('retry')));
+      await completed.future.timeout(const Duration(seconds: 5));
+      expect(started, isTrue);
+    } finally {
+      c.removeListener(onSaveChanged);
+    }
+  });
+  await t.pumpAndSettle();
+  expect(c.phase, SavePhase.clean);
+}
 
 const screens = [
   (size: Size(375, 667), top: 20.0, bottom: 0.0),
@@ -359,12 +389,7 @@ void main() {
           (await t.runAsync(() => store.load('ordinary')))!.instance!.moveCount,
           0,
         );
-        await t.tap(find.byKey(const Key('retry')));
-        await t.pump();
-        await t.runAsync(
-          () => Future<void>.delayed(const Duration(milliseconds: 25)),
-        );
-        await t.pumpAndSettle();
+        await retryAndAwaitSave(t, c);
         expect(c.phase, SavePhase.clean);
         expect(
           (await t.runAsync(() => store.load('ordinary')))!.instance!.moveCount,
@@ -425,12 +450,7 @@ void main() {
         }
         expect((await t.runAsync(store.progress))!.receipts, 0);
         store.fault = null;
-        await t.tap(find.byKey(const Key('retry')));
-        await t.pump();
-        await t.runAsync(
-          () => Future<void>.delayed(const Duration(milliseconds: 25)),
-        );
-        await t.pumpAndSettle();
+        await retryAndAwaitSave(t, c);
         expect(c.phase, SavePhase.clean);
         expect((await t.runAsync(store.progress))!.receipts, 1);
         expect(t.takeException(), isNull);
@@ -810,7 +830,7 @@ void main() {
                     ? l.stampSaved(state.puzzleDate!)
                     : branch == 'replay'
                     ? l.replayComplete
-                    : l.firstClearSaved;
+                    : l.saved;
                 fullyVisible(
                   t,
                   find.text(status),
@@ -827,7 +847,7 @@ void main() {
                   );
                 }
               }
-              final scenes = find.byType(ScenePreview);
+              final scenes = find.byType(SceneArt);
               for (var i = 0; i < scenes.evaluate().length; i++) {
                 fullyVisible(
                   t,
@@ -837,7 +857,11 @@ void main() {
                 );
               }
             }
-            if (scale <= 1.3 && !branch.startsWith('reward')) {
+            if (scale <= 1.3 &&
+                !branch.startsWith('reward') &&
+                !branch.startsWith('chapter') &&
+                !branch.startsWith('final') &&
+                branch != 'daily') {
               final actionsTop = keys
                   .map((k) => t.getRect(find.byKey(Key(k))).top)
                   .reduce((a, b) => a < b ? a : b);

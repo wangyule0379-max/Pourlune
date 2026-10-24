@@ -180,10 +180,15 @@ void main() {
     }
   });
 
-  test('formal main9 partial top-run transfer respects one-unit capacity at every presentation frame', () {
+  test('archived main9 partial top-run transfer respects one-unit capacity at every presentation frame', () {
     final puzzle = Puzzle.fromJson(
-      jsonDecode(File('assets/puzzles/main/main-009.json').readAsStringSync())
-          as Map<String, dynamic>,
+      // Keep this exact one-unit-capacity regression after the authored v2
+      // library replaces main9; old saved instances still use this definition.
+      jsonDecode(
+        File(
+          '../docs/development/evidence/main60-content-redesign/old-main/main-009.json',
+        ).readAsStringSync(),
+      ) as Map<String, dynamic>,
     );
     final initial = GameInstance.create(
       id: 'formal-partial',

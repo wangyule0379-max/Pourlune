@@ -228,6 +228,14 @@ candidate uses the scoped selection and keeps SDK bundle identifiers distinct.
 
 ### BR04 public destinations and authorized Android upload signing
 
+`firebase_build.py` also derives the Settings version label from the same
+`app/pubspec.yaml` version or explicit native `--build-name`/`--build-number`
+overrides. It supplies project-owned `POURLUNE_VERSION_NAME` and
+`POURLUNE_VERSION_CODE`; callers cannot override these. Never inject reserved
+`FLUTTER_BUILD_NAME`/`FLUTTER_BUILD_NUMBER` through Dart defines: Flutter rejects
+them. A raw development invocation without version definitions displays only
+the app name. This does not change the native version or bump a release.
+
 `beta_build.py` and `firebase_build.py` accept explicit `--support-url`,
 `--privacy-url`, and `--feedback-email` **before** the Flutter `--` separator.
 Missing values remain empty; no guessed URL, mailbox or fixture is built in.
