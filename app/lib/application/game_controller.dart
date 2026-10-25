@@ -65,7 +65,7 @@ enum FlowNotice {
   settingsUnreadable,
 }
 
-enum _Write { snapshot, candidate, settings, reveal, reset }
+enum _Write { snapshot, candidate, settings, reveal, reset, directBottle }
 
 typedef _Navigation = ({GamePage page, String? slot, String? scene});
 
@@ -258,6 +258,8 @@ class GameController extends ChangeNotifier {
       current != null &&
       !current!.completed &&
       (current!.slot == 'daily' || current!.puzzle.mainLevel! >= 4);
+  bool get directExtraBottleEnabled =>
+      services == null || services!.config.adMode == 'disabled';
   bool get canWatchExtraBottle =>
       offersExtraBottle &&
       !busy &&
@@ -266,10 +268,10 @@ class GameController extends ChangeNotifier {
       !current!.extraBottleGranted &&
       !rewardSaveFailed &&
       !pendingRewards.any((r) => r.origin.slot == current!.slot) &&
-      services != null &&
-      services!.ads.ready(AdKind.rewarded) &&
-      services!.ads.cooldown == Duration.zero &&
-      !services!.ads.timingSaveFailed;
+      (directExtraBottleEnabled ||
+          (services!.ads.ready(AdKind.rewarded) &&
+              services!.ads.cooldown == Duration.zero &&
+              !services!.ads.timingSaveFailed));
 
   bool get continueLabelIsReplay =>
       ordinary != null && !ordinary!.completed && ordinary!.isReplay;
@@ -709,7 +711,10 @@ class GameController extends ChangeNotifier {
     final operation = _write;
     try {
       CompletionReceipt? completion;
+      GameInstance? directGrant;
       switch (operation) {
+        case _Write.directBottle:
+          directGrant = await store.grantDirectExtraBottle(current!);
         case _Write.snapshot:
           final s = current;
           if (s == null) throw StateError('No pending snapshot');
@@ -737,6 +742,18 @@ class GameController extends ChangeNotifier {
           await store.resetProgress();
       }
       await _refresh();
+      if (directGrant != null) {
+        final before = current!;
+        current = directGrant;
+        _slots[directGrant.slot] = directGrant;
+        if (!before.extraBottleGranted && page == GamePage.board) {
+          _extraBottlePresentation = (
+            token: ++_extraBottlePresentationToken,
+            instanceId: directGrant.id,
+            bottleIndex: directGrant.board.length - 1,
+          );
+        }
+      }
       if (operation == _Write.candidate) {
         current = _candidate;
         _slots[current!.slot] = current;
@@ -998,6 +1015,12 @@ class GameController extends ChangeNotifier {
 
   Future<void> watchExtraBottle() async {
     if (!canWatchExtraBottle) return;
+    if (directExtraBottleEnabled) {
+      _cancelHint();
+      _write = _Write.directBottle;
+      await _persist();
+      return;
+    }
     final origin = current!, id = _id();
     _adFlow = true;
     rewardIssue = null;

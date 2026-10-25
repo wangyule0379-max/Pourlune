@@ -1,33 +1,33 @@
 {
   "schema_version": 1,
   "puzzle_id": "main-035",
-  "content_version": 2,
+  "content_version": 3,
   "mode": "main",
   "content_status": "production_candidate",
   "main_level": 35,
   "capacity": 4,
   "initial_bottom_to_top": [
     [
-      "O",
+      "G",
+      "G",
       "B",
-      "O",
       "P"
     ],
     [
       "P",
-      "P",
       "G",
-      "G"
+      "P",
+      "O"
+    ],
+    [
+      "O",
+      "B",
+      "P",
+      "O"
     ],
     [
       "B",
       "G",
-      "G",
-      "B"
-    ],
-    [
-      "O",
-      "P",
       "B",
       "O"
     ],
@@ -44,66 +44,70 @@
   ],
   "reference_moves": [
     {
-      "from_index": 0,
-      "to_index": 4
-    },
-    {
-      "from_index": 3,
-      "to_index": 0
-    },
-    {
-      "from_index": 2,
-      "to_index": 3
-    },
-    {
-      "from_index": 0,
-      "to_index": 5
-    },
-    {
-      "from_index": 3,
-      "to_index": 0
-    },
-    {
-      "from_index": 3,
-      "to_index": 4
-    },
-    {
-      "from_index": 3,
-      "to_index": 5
-    },
-    {
-      "from_index": 0,
-      "to_index": 3
-    },
-    {
-      "from_index": 5,
-      "to_index": 0
-    },
-    {
-      "from_index": 1,
-      "to_index": 5
-    },
-    {
-      "from_index": 2,
-      "to_index": 5
-    },
-    {
-      "from_index": 2,
-      "to_index": 3
-    },
-    {
       "from_index": 1,
       "to_index": 4
     },
     {
-      "from_index": 4,
+      "from_index": 2,
+      "to_index": 4
+    },
+    {
+      "from_index": 2,
+      "to_index": 1
+    },
+    {
+      "from_index": 3,
+      "to_index": 4
+    },
+    {
+      "from_index": 2,
+      "to_index": 3
+    },
+    {
+      "from_index": 2,
+      "to_index": 4
+    },
+    {
+      "from_index": 0,
       "to_index": 2
     },
     {
-      "from_index": 5,
+      "from_index": 1,
+      "to_index": 2
+    },
+    {
+      "from_index": 0,
+      "to_index": 5
+    },
+    {
+      "from_index": 1,
+      "to_index": 0
+    },
+    {
+      "from_index": 1,
+      "to_index": 2
+    },
+    {
+      "from_index": 0,
       "to_index": 1
+    },
+    {
+      "from_index": 3,
+      "to_index": 5
+    },
+    {
+      "from_index": 3,
+      "to_index": 1
+    },
+    {
+      "from_index": 4,
+      "to_index": 0
+    },
+    {
+      "from_index": 5,
+      "to_index": 3
     }
   ],
-  "difficulty_intent": "两侧轮换：把双缓冲轮换用在两条相交链。推进A→回收缓冲→推进B→再接回A。结构/求解证据见单关卡；人类难度未标定。",
-  "source_reference": "docs/content/design/main60-level-contracts-v2.json"
+  "difficulty_intent": "节奏校准：最短16次最大连续倒水；腾空后再利用目标瓶和双缓冲。误入已验证的无合法步分支时，一只额外缓冲瓶可恢复通关。算法距离用于校准节奏，不等于人类难度评分。",
+  "source_reference": "docs/content/design/main60-rebalance-v3.json"
 }

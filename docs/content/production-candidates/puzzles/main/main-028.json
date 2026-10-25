@@ -1,35 +1,35 @@
 {
   "schema_version": 1,
   "puzzle_id": "main-028",
-  "content_version": 2,
+  "content_version": 3,
   "mode": "main",
   "content_status": "production_candidate",
   "main_level": 28,
   "capacity": 4,
   "initial_bottom_to_top": [
     [
-      "B",
+      "P",
       "B",
       "G",
       "P"
     ],
     [
-      "O",
+      "B",
+      "G",
       "P",
-      "O",
       "O"
     ],
     [
-      "G",
+      "B",
       "P",
-      "O",
-      "B"
+      "G",
+      "O"
     ],
     [
       "B",
       "G",
-      "G",
-      "P"
+      "O",
+      "O"
     ],
     [],
     []
@@ -44,16 +44,40 @@
   ],
   "reference_moves": [
     {
-      "from_index": 0,
+      "from_index": 1,
       "to_index": 4
+    },
+    {
+      "from_index": 0,
+      "to_index": 1
+    },
+    {
+      "from_index": 2,
+      "to_index": 4
+    },
+    {
+      "from_index": 0,
+      "to_index": 2
     },
     {
       "from_index": 3,
       "to_index": 4
     },
     {
-      "from_index": 0,
+      "from_index": 2,
       "to_index": 3
+    },
+    {
+      "from_index": 1,
+      "to_index": 2
+    },
+    {
+      "from_index": 1,
+      "to_index": 5
+    },
+    {
+      "from_index": 0,
+      "to_index": 1
     },
     {
       "from_index": 2,
@@ -61,45 +85,29 @@
     },
     {
       "from_index": 1,
-      "to_index": 5
-    },
-    {
-      "from_index": 1,
-      "to_index": 4
-    },
-    {
-      "from_index": 2,
-      "to_index": 1
-    },
-    {
-      "from_index": 2,
-      "to_index": 4
-    },
-    {
-      "from_index": 3,
       "to_index": 2
     },
     {
-      "from_index": 0,
-      "to_index": 3
-    },
-    {
-      "from_index": 1,
-      "to_index": 5
+      "from_index": 3,
+      "to_index": 1
     },
     {
       "from_index": 2,
-      "to_index": 1
+      "to_index": 3
+    },
+    {
+      "from_index": 0,
+      "to_index": 2
     },
     {
       "from_index": 4,
-      "to_index": 2
+      "to_index": 0
     },
     {
       "from_index": 5,
-      "to_index": 0
+      "to_index": 1
     }
   ],
-  "difficulty_intent": "容量刚好不够：比较连续色段与接收余量，识别无收益截断。先判断倒入量和被露出的颜色；无收益部分倒入可不做，转而腾出完整接收空间。结构/求解证据见单关卡；人类难度未标定。",
-  "source_reference": "docs/content/design/main60-level-contracts-v2.json"
+  "difficulty_intent": "节奏校准：最短16次最大连续倒水；腾空后再利用目标瓶和双缓冲。误入已验证的无合法步分支时，一只额外缓冲瓶可恢复通关。算法距离用于校准节奏，不等于人类难度评分。",
+  "source_reference": "docs/content/design/main60-rebalance-v3.json"
 }

@@ -1,0 +1,6235 @@
+{
+  "puzzle_id": "main-048",
+  "search": {
+    "algorithm": "exact BFS, ordered bottle and colour identities; no pruning",
+    "status": "found",
+    "depth_limit": 17,
+    "excluded_through": 16,
+    "visited": 19830,
+    "expanded": 18313,
+    "generated": 89950,
+    "layer_states": {
+      "0": 1,
+      "1": 8,
+      "2": 23,
+      "3": 34,
+      "4": 53,
+      "5": 98,
+      "6": 192,
+      "7": 338,
+      "8": 490,
+      "9": 692,
+      "10": 959,
+      "11": 1383,
+      "12": 2027,
+      "13": 2673,
+      "14": 3127,
+      "15": 3285,
+      "16": 2930,
+      "17": 1517
+    },
+    "layer_legal_edges": {
+      "0": 8,
+      "1": 52,
+      "2": 84,
+      "3": 123,
+      "4": 186,
+      "5": 368,
+      "6": 770,
+      "7": 1280,
+      "8": 1838,
+      "9": 2690,
+      "10": 4145,
+      "11": 6210,
+      "12": 9417,
+      "13": 12631,
+      "14": 15532,
+      "15": 17382,
+      "16": 17234
+    },
+    "max_frontier": 3364,
+    "max_states": 500000,
+    "time_budget_seconds": 30,
+    "elapsed_ms": 132.478,
+    "moves": [
+      {
+        "from_index": 0,
+        "to_index": 4
+      },
+      {
+        "from_index": 0,
+        "to_index": 5
+      },
+      {
+        "from_index": 2,
+        "to_index": 4
+      },
+      {
+        "from_index": 2,
+        "to_index": 0
+      },
+      {
+        "from_index": 1,
+        "to_index": 2
+      },
+      {
+        "from_index": 1,
+        "to_index": 5
+      },
+      {
+        "from_index": 3,
+        "to_index": 4
+      },
+      {
+        "from_index": 3,
+        "to_index": 0
+      },
+      {
+        "from_index": 3,
+        "to_index": 5
+      },
+      {
+        "from_index": 3,
+        "to_index": 2
+      },
+      {
+        "from_index": 0,
+        "to_index": 3
+      },
+      {
+        "from_index": 0,
+        "to_index": 4
+      },
+      {
+        "from_index": 1,
+        "to_index": 3
+      },
+      {
+        "from_index": 2,
+        "to_index": 1
+      },
+      {
+        "from_index": 2,
+        "to_index": 0
+      },
+      {
+        "from_index": 4,
+        "to_index": 2
+      },
+      {
+        "from_index": 5,
+        "to_index": 0
+      }
+    ],
+    "shortest_within_bound": 17
+  },
+  "reference_replay": {
+    "steps": [
+      {
+        "step": 1,
+        "from_index": 0,
+        "to_index": 4,
+        "color": "P",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 4,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "",
+          ""
+        ],
+        "buffer_contents_after": [
+          "P",
+          ""
+        ],
+        "before": [
+          "PBOP",
+          "GBOG",
+          "OGBP",
+          "GOBP",
+          "",
+          ""
+        ],
+        "after": [
+          "PBO",
+          "GBOG",
+          "OGBP",
+          "GOBP",
+          "P",
+          ""
+        ],
+        "after_sha256": "fb1059eb57e9f7f5e5d4d9bc451592d416a86329f54bf0dae2ef89fedcb70339"
+      },
+      {
+        "step": 2,
+        "from_index": 2,
+        "to_index": 4,
+        "color": "P",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 3,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "P",
+          ""
+        ],
+        "buffer_contents_after": [
+          "PP",
+          ""
+        ],
+        "before": [
+          "PBO",
+          "GBOG",
+          "OGBP",
+          "GOBP",
+          "P",
+          ""
+        ],
+        "after": [
+          "PBO",
+          "GBOG",
+          "OGB",
+          "GOBP",
+          "PP",
+          ""
+        ],
+        "after_sha256": "1dbab95942025a1bd48ce8951b769b4df7b809c9f2ec312d94d083325b4831ff"
+      },
+      {
+        "step": 3,
+        "from_index": 3,
+        "to_index": 4,
+        "color": "P",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 2,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "PP",
+          ""
+        ],
+        "buffer_contents_after": [
+          "PPP",
+          ""
+        ],
+        "before": [
+          "PBO",
+          "GBOG",
+          "OGB",
+          "GOBP",
+          "PP",
+          ""
+        ],
+        "after": [
+          "PBO",
+          "GBOG",
+          "OGB",
+          "GOB",
+          "PPP",
+          ""
+        ],
+        "after_sha256": "d950086440383c4e50f5628f6777453f5a65e00dd4ed2db111f509519450e321"
+      },
+      {
+        "step": 4,
+        "from_index": 2,
+        "to_index": 3,
+        "color": "B",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 1,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "PPP",
+          ""
+        ],
+        "buffer_contents_after": [
+          "PPP",
+          ""
+        ],
+        "before": [
+          "PBO",
+          "GBOG",
+          "OGB",
+          "GOB",
+          "PPP",
+          ""
+        ],
+        "after": [
+          "PBO",
+          "GBOG",
+          "OG",
+          "GOBB",
+          "PPP",
+          ""
+        ],
+        "after_sha256": "34f0e7255da537e996c16cc21b68ab717f1150920adaacac653c838deb9c1f55"
+      },
+      {
+        "step": 5,
+        "from_index": 1,
+        "to_index": 2,
+        "color": "G",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 2,
+        "capacity_truncated": false,
+        "target_borrowed": true,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "PPP",
+          ""
+        ],
+        "buffer_contents_after": [
+          "PPP",
+          ""
+        ],
+        "before": [
+          "PBO",
+          "GBOG",
+          "OG",
+          "GOBB",
+          "PPP",
+          ""
+        ],
+        "after": [
+          "PBO",
+          "GBO",
+          "OGG",
+          "GOBB",
+          "PPP",
+          ""
+        ],
+        "after_sha256": "7f2662cb4bf609dec2ac71bb78ed179f3c2667ba7d14f5c914fb84c6a2fa450d"
+      },
+      {
+        "step": 6,
+        "from_index": 0,
+        "to_index": 1,
+        "color": "O",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 1,
+        "capacity_truncated": false,
+        "target_borrowed": true,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "PPP",
+          ""
+        ],
+        "buffer_contents_after": [
+          "PPP",
+          ""
+        ],
+        "before": [
+          "PBO",
+          "GBO",
+          "OGG",
+          "GOBB",
+          "PPP",
+          ""
+        ],
+        "after": [
+          "PB",
+          "GBOO",
+          "OGG",
+          "GOBB",
+          "PPP",
+          ""
+        ],
+        "after_sha256": "d06b5c70125c1f8cdb8565c3242b676bde0ab44f93d2b9662d2f1abc90f0554f"
+      },
+      {
+        "step": 7,
+        "from_index": 3,
+        "to_index": 0,
+        "color": "B",
+        "units": 2,
+        "source_top_run": 2,
+        "receiver_space_before": 2,
+        "capacity_truncated": false,
+        "target_borrowed": true,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "PPP",
+          ""
+        ],
+        "buffer_contents_after": [
+          "PPP",
+          ""
+        ],
+        "before": [
+          "PB",
+          "GBOO",
+          "OGG",
+          "GOBB",
+          "PPP",
+          ""
+        ],
+        "after": [
+          "PBBB",
+          "GBOO",
+          "OGG",
+          "GO",
+          "PPP",
+          ""
+        ],
+        "after_sha256": "f70fb4b15329784ee8c970e2dec18813de1da67861e626fd8600d41895d8cb52"
+      },
+      {
+        "step": 8,
+        "from_index": 1,
+        "to_index": 3,
+        "color": "O",
+        "units": 2,
+        "source_top_run": 2,
+        "receiver_space_before": 2,
+        "capacity_truncated": false,
+        "target_borrowed": true,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "PPP",
+          ""
+        ],
+        "buffer_contents_after": [
+          "PPP",
+          ""
+        ],
+        "before": [
+          "PBBB",
+          "GBOO",
+          "OGG",
+          "GO",
+          "PPP",
+          ""
+        ],
+        "after": [
+          "PBBB",
+          "GB",
+          "OGG",
+          "GOOO",
+          "PPP",
+          ""
+        ],
+        "after_sha256": "68c706e8528d35dabeeb6141095935945c336e92ed4b88fc7125978f30091ea8"
+      },
+      {
+        "step": 9,
+        "from_index": 0,
+        "to_index": 5,
+        "color": "B",
+        "units": 3,
+        "source_top_run": 3,
+        "receiver_space_before": 4,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "PPP",
+          ""
+        ],
+        "buffer_contents_after": [
+          "PPP",
+          "BBB"
+        ],
+        "before": [
+          "PBBB",
+          "GB",
+          "OGG",
+          "GOOO",
+          "PPP",
+          ""
+        ],
+        "after": [
+          "P",
+          "GB",
+          "OGG",
+          "GOOO",
+          "PPP",
+          "BBB"
+        ],
+        "after_sha256": "84fa89d56db0c95e31b370a0172d2b7f2e4bc64bc1c9f6e29944008301bf8d7d"
+      },
+      {
+        "step": 10,
+        "from_index": 0,
+        "to_index": 4,
+        "color": "P",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 1,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": true,
+        "buffer_contents_before": [
+          "PPP",
+          "BBB"
+        ],
+        "buffer_contents_after": [
+          "PPPP",
+          "BBB"
+        ],
+        "before": [
+          "P",
+          "GB",
+          "OGG",
+          "GOOO",
+          "PPP",
+          "BBB"
+        ],
+        "after": [
+          "",
+          "GB",
+          "OGG",
+          "GOOO",
+          "PPPP",
+          "BBB"
+        ],
+        "after_sha256": "4d5e6ee5ced93dac49bb1e4bfe845d9b6b579b1258e05f9d05223a466b99315a"
+      },
+      {
+        "step": 11,
+        "from_index": 1,
+        "to_index": 5,
+        "color": "B",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 1,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "PPPP",
+          "BBB"
+        ],
+        "buffer_contents_after": [
+          "PPPP",
+          "BBBB"
+        ],
+        "before": [
+          "",
+          "GB",
+          "OGG",
+          "GOOO",
+          "PPPP",
+          "BBB"
+        ],
+        "after": [
+          "",
+          "G",
+          "OGG",
+          "GOOO",
+          "PPPP",
+          "BBBB"
+        ],
+        "after_sha256": "7e95c6e91def1cd8dfb2e14082a4e8f11ec3fb039bd1ab414c35cc4ceed52905"
+      },
+      {
+        "step": 12,
+        "from_index": 2,
+        "to_index": 1,
+        "color": "G",
+        "units": 2,
+        "source_top_run": 2,
+        "receiver_space_before": 3,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "PPPP",
+          "BBBB"
+        ],
+        "buffer_contents_after": [
+          "PPPP",
+          "BBBB"
+        ],
+        "before": [
+          "",
+          "G",
+          "OGG",
+          "GOOO",
+          "PPPP",
+          "BBBB"
+        ],
+        "after": [
+          "",
+          "GGG",
+          "O",
+          "GOOO",
+          "PPPP",
+          "BBBB"
+        ],
+        "after_sha256": "876ebb3bdb1638d831654bb52e09436aa337836ba52862b5e17d2b7cbeff073f"
+      },
+      {
+        "step": 13,
+        "from_index": 2,
+        "to_index": 0,
+        "color": "O",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 4,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": true,
+        "buffer_contents_before": [
+          "PPPP",
+          "BBBB"
+        ],
+        "buffer_contents_after": [
+          "PPPP",
+          "BBBB"
+        ],
+        "before": [
+          "",
+          "GGG",
+          "O",
+          "GOOO",
+          "PPPP",
+          "BBBB"
+        ],
+        "after": [
+          "O",
+          "GGG",
+          "",
+          "GOOO",
+          "PPPP",
+          "BBBB"
+        ],
+        "after_sha256": "de160de6cb33f00d59f5c3a228e69f96da9b7ab69d4a23da5a0f4bf4974f089d"
+      },
+      {
+        "step": 14,
+        "from_index": 3,
+        "to_index": 0,
+        "color": "O",
+        "units": 3,
+        "source_top_run": 3,
+        "receiver_space_before": 3,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "PPPP",
+          "BBBB"
+        ],
+        "buffer_contents_after": [
+          "PPPP",
+          "BBBB"
+        ],
+        "before": [
+          "O",
+          "GGG",
+          "",
+          "GOOO",
+          "PPPP",
+          "BBBB"
+        ],
+        "after": [
+          "OOOO",
+          "GGG",
+          "",
+          "G",
+          "PPPP",
+          "BBBB"
+        ],
+        "after_sha256": "d68df97e3e1729fd3fb21d2eb580425c97dd1b61823c07931dacbc52d2c78342"
+      },
+      {
+        "step": 15,
+        "from_index": 3,
+        "to_index": 1,
+        "color": "G",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 1,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": true,
+        "buffer_contents_before": [
+          "PPPP",
+          "BBBB"
+        ],
+        "buffer_contents_after": [
+          "PPPP",
+          "BBBB"
+        ],
+        "before": [
+          "OOOO",
+          "GGG",
+          "",
+          "G",
+          "PPPP",
+          "BBBB"
+        ],
+        "after": [
+          "OOOO",
+          "GGGG",
+          "",
+          "",
+          "PPPP",
+          "BBBB"
+        ],
+        "after_sha256": "82f049218f8fa1aa6150dfe0c67a3de9b915291294d82d2c9080605da432fa08"
+      },
+      {
+        "step": 16,
+        "from_index": 4,
+        "to_index": 2,
+        "color": "P",
+        "units": 4,
+        "source_top_run": 4,
+        "receiver_space_before": 4,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": true,
+        "buffer_contents_before": [
+          "PPPP",
+          "BBBB"
+        ],
+        "buffer_contents_after": [
+          "",
+          "BBBB"
+        ],
+        "before": [
+          "OOOO",
+          "GGGG",
+          "",
+          "",
+          "PPPP",
+          "BBBB"
+        ],
+        "after": [
+          "OOOO",
+          "GGGG",
+          "PPPP",
+          "",
+          "",
+          "BBBB"
+        ],
+        "after_sha256": "c003e5915156ad305e5580e1d7b912c780f30577fa3daea2aed92373aad45b52"
+      },
+      {
+        "step": 17,
+        "from_index": 5,
+        "to_index": 3,
+        "color": "B",
+        "units": 4,
+        "source_top_run": 4,
+        "receiver_space_before": 4,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": true,
+        "buffer_contents_before": [
+          "",
+          "BBBB"
+        ],
+        "buffer_contents_after": [
+          "",
+          ""
+        ],
+        "before": [
+          "OOOO",
+          "GGGG",
+          "PPPP",
+          "",
+          "",
+          "BBBB"
+        ],
+        "after": [
+          "OOOO",
+          "GGGG",
+          "PPPP",
+          "BBBB",
+          "",
+          ""
+        ],
+        "after_sha256": "e4c50681cd3f26d0b5d663522fa13078de8c617d1265eff251182762d33e8f26"
+      }
+    ],
+    "won": true,
+    "initial_sha256": "3526450fb132917fb30ed31dbfce7ce9b8c5e0c8253fc3ce92f5aa38861f4d30",
+    "final": [
+      "OOOO",
+      "GGGG",
+      "PPPP",
+      "BBBB",
+      "",
+      ""
+    ],
+    "extra_bottles": 0
+  },
+  "route_observations": {
+    "buffer_roles": {
+      "4": [
+        "P"
+      ],
+      "5": [
+        "B"
+      ]
+    },
+    "both_buffers_used": true,
+    "buffer_reused": false,
+    "strategic_buffer_reuse_steps": [],
+    "target_space_freed_while_mixed_steps": [
+      10,
+      13
+    ],
+    "target_borrow_steps": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "truncation_steps": [],
+    "nonbuffer_empty_steps": [
+      10,
+      13,
+      15
+    ],
+    "space_links": [
+      {
+        "empty_step": 10,
+        "use_step": 13,
+        "bottle": 0
+      },
+      {
+        "empty_step": 13,
+        "use_step": 16,
+        "bottle": 2
+      },
+      {
+        "empty_step": 15,
+        "use_step": 17,
+        "bottle": 3
+      }
+    ],
+    "reveal_events": [
+      {
+        "step": 1,
+        "bottle": 0,
+        "removed": "P",
+        "exposed": "O",
+        "exposed_run": 1
+      },
+      {
+        "step": 2,
+        "bottle": 2,
+        "removed": "P",
+        "exposed": "B",
+        "exposed_run": 1
+      },
+      {
+        "step": 3,
+        "bottle": 3,
+        "removed": "P",
+        "exposed": "B",
+        "exposed_run": 1
+      },
+      {
+        "step": 4,
+        "bottle": 2,
+        "removed": "B",
+        "exposed": "G",
+        "exposed_run": 1
+      },
+      {
+        "step": 5,
+        "bottle": 1,
+        "removed": "G",
+        "exposed": "O",
+        "exposed_run": 1
+      },
+      {
+        "step": 6,
+        "bottle": 0,
+        "removed": "O",
+        "exposed": "B",
+        "exposed_run": 1
+      },
+      {
+        "step": 7,
+        "bottle": 3,
+        "removed": "B",
+        "exposed": "O",
+        "exposed_run": 1
+      },
+      {
+        "step": 8,
+        "bottle": 1,
+        "removed": "O",
+        "exposed": "B",
+        "exposed_run": 1
+      },
+      {
+        "step": 9,
+        "bottle": 0,
+        "removed": "B",
+        "exposed": "P",
+        "exposed_run": 1
+      },
+      {
+        "step": 11,
+        "bottle": 1,
+        "removed": "B",
+        "exposed": "G",
+        "exposed_run": 1
+      },
+      {
+        "step": 12,
+        "bottle": 2,
+        "removed": "G",
+        "exposed": "O",
+        "exposed_run": 1
+      },
+      {
+        "step": 14,
+        "bottle": 3,
+        "removed": "O",
+        "exposed": "G",
+        "exposed_run": 1
+      }
+    ],
+    "stable_goal_events": [
+      {
+        "step": 14,
+        "bottle": 0,
+        "color": "O"
+      },
+      {
+        "step": 15,
+        "bottle": 1,
+        "color": "G"
+      },
+      {
+        "step": 16,
+        "bottle": 2,
+        "color": "P"
+      },
+      {
+        "step": 17,
+        "bottle": 3,
+        "color": "B"
+      }
+    ],
+    "target_reborrow": [],
+    "goal_order_choice_nodes": [
+      {
+        "before_step": 14,
+        "moves": [
+          {
+            "from_index": 3,
+            "to_index": 0
+          },
+          {
+            "from_index": 4,
+            "to_index": 2
+          }
+        ]
+      }
+    ]
+  },
+  "opening_branches": [
+    {
+      "first_move": {
+        "from_index": 0,
+        "to_index": 4
+      },
+      "replay": {
+        "steps": [
+          {
+            "step": 1,
+            "from_index": 0,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "",
+              ""
+            ],
+            "buffer_contents_after": [
+              "P",
+              ""
+            ],
+            "before": [
+              "PBOP",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "",
+              ""
+            ],
+            "after": [
+              "PBO",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "P",
+              ""
+            ],
+            "after_sha256": "fb1059eb57e9f7f5e5d4d9bc451592d416a86329f54bf0dae2ef89fedcb70339"
+          },
+          {
+            "step": 2,
+            "from_index": 0,
+            "to_index": 5,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "P",
+              ""
+            ],
+            "buffer_contents_after": [
+              "P",
+              "O"
+            ],
+            "before": [
+              "PBO",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "P",
+              ""
+            ],
+            "after": [
+              "PB",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "P",
+              "O"
+            ],
+            "after_sha256": "5792c6f6e90558290e63306a8a9ae4dd30e5d38b65f88d1385b94e9a26262d67"
+          },
+          {
+            "step": 3,
+            "from_index": 2,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "P",
+              "O"
+            ],
+            "buffer_contents_after": [
+              "PP",
+              "O"
+            ],
+            "before": [
+              "PB",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "P",
+              "O"
+            ],
+            "after": [
+              "PB",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "PP",
+              "O"
+            ],
+            "after_sha256": "8b3600504373727e1ee17155ad87ac758592c0c84c35a7bc1357481e4cf8cb5b"
+          },
+          {
+            "step": 4,
+            "from_index": 2,
+            "to_index": 0,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PP",
+              "O"
+            ],
+            "buffer_contents_after": [
+              "PP",
+              "O"
+            ],
+            "before": [
+              "PB",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "PP",
+              "O"
+            ],
+            "after": [
+              "PBB",
+              "GBOG",
+              "OG",
+              "GOBP",
+              "PP",
+              "O"
+            ],
+            "after_sha256": "c774bc14e44ab3607ba739b2b582ba93592166ec2577c4f34c40e8aff7060485"
+          },
+          {
+            "step": 5,
+            "from_index": 1,
+            "to_index": 2,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PP",
+              "O"
+            ],
+            "buffer_contents_after": [
+              "PP",
+              "O"
+            ],
+            "before": [
+              "PBB",
+              "GBOG",
+              "OG",
+              "GOBP",
+              "PP",
+              "O"
+            ],
+            "after": [
+              "PBB",
+              "GBO",
+              "OGG",
+              "GOBP",
+              "PP",
+              "O"
+            ],
+            "after_sha256": "71b2c1df1cf77da30ff21852073451c7116b867fb0849207f0425dceb924957c"
+          },
+          {
+            "step": 6,
+            "from_index": 1,
+            "to_index": 5,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PP",
+              "O"
+            ],
+            "buffer_contents_after": [
+              "PP",
+              "OO"
+            ],
+            "before": [
+              "PBB",
+              "GBO",
+              "OGG",
+              "GOBP",
+              "PP",
+              "O"
+            ],
+            "after": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOBP",
+              "PP",
+              "OO"
+            ],
+            "after_sha256": "2fa314a0a5d77a8918f1034f59269d13170928b3b8f4cf91767ab06cd54d51ff"
+          },
+          {
+            "step": 7,
+            "from_index": 3,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PP",
+              "OO"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "OO"
+            ],
+            "before": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOBP",
+              "PP",
+              "OO"
+            ],
+            "after": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOB",
+              "PPP",
+              "OO"
+            ],
+            "after_sha256": "07ce32ddfaf8d3146b06bae19807e4ec198d26f3ced5d0e8fd0c1a36a3e853c5"
+          },
+          {
+            "step": 8,
+            "from_index": 3,
+            "to_index": 0,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPP",
+              "OO"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "OO"
+            ],
+            "before": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOB",
+              "PPP",
+              "OO"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "GO",
+              "PPP",
+              "OO"
+            ],
+            "after_sha256": "9d78d37157c1b0c03809946bc77f45a8372c37a4ee23a961c892c733f7c58c09"
+          },
+          {
+            "step": 9,
+            "from_index": 3,
+            "to_index": 5,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPP",
+              "OO"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "OOO"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "GO",
+              "PPP",
+              "OO"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "G",
+              "PPP",
+              "OOO"
+            ],
+            "after_sha256": "934b5c2f3b9d1cf9d00a90dabe05ab91a08eb9c46b2ec42e675d009597b77d31"
+          },
+          {
+            "step": 10,
+            "from_index": 3,
+            "to_index": 2,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "OOO"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "G",
+              "PPP",
+              "OOO"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGGG",
+              "",
+              "PPP",
+              "OOO"
+            ],
+            "after_sha256": "f1b2fbe34bc36e0444db29a0b1ec185f634b36e4ec771dfe716761f0711c1f34"
+          },
+          {
+            "step": 11,
+            "from_index": 0,
+            "to_index": 3,
+            "color": "B",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "OOO"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGGG",
+              "",
+              "PPP",
+              "OOO"
+            ],
+            "after": [
+              "P",
+              "GB",
+              "OGGG",
+              "BBB",
+              "PPP",
+              "OOO"
+            ],
+            "after_sha256": "75d181d277b57bf49f76d89a1e54a8a83ba73d1c106cf0632ac3d48357f26335"
+          },
+          {
+            "step": 12,
+            "from_index": 0,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "OOO"
+            ],
+            "before": [
+              "P",
+              "GB",
+              "OGGG",
+              "BBB",
+              "PPP",
+              "OOO"
+            ],
+            "after": [
+              "",
+              "GB",
+              "OGGG",
+              "BBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after_sha256": "57ed9f17d3ca6d8a0a60a7c434c48d9e0f14b0da01fcf410a34ea25900a962d4"
+          },
+          {
+            "step": 13,
+            "from_index": 1,
+            "to_index": 3,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "OOO"
+            ],
+            "before": [
+              "",
+              "GB",
+              "OGGG",
+              "BBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after": [
+              "",
+              "G",
+              "OGGG",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after_sha256": "17761812fe052513f5506f925766885b1aeca43357168c0d59f8c4b7aac8c691"
+          },
+          {
+            "step": 14,
+            "from_index": 2,
+            "to_index": 1,
+            "color": "G",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "OOO"
+            ],
+            "before": [
+              "",
+              "G",
+              "OGGG",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after": [
+              "",
+              "GGGG",
+              "O",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after_sha256": "c127fd54d5e50fac9f45c1632d94ae8eeac92506ec504d784f321670964cd373"
+          },
+          {
+            "step": 15,
+            "from_index": 2,
+            "to_index": 0,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PPPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "OOO"
+            ],
+            "before": [
+              "",
+              "GGGG",
+              "O",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after": [
+              "O",
+              "GGGG",
+              "",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after_sha256": "966bdb85357265eb4a82c29412df0bee933b8ec5bdaff4e5e876c5f4b42d2a75"
+          },
+          {
+            "step": 16,
+            "from_index": 4,
+            "to_index": 2,
+            "color": "P",
+            "units": 4,
+            "source_top_run": 4,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PPPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "",
+              "OOO"
+            ],
+            "before": [
+              "O",
+              "GGGG",
+              "",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after": [
+              "O",
+              "GGGG",
+              "PPPP",
+              "BBBB",
+              "",
+              "OOO"
+            ],
+            "after_sha256": "eef9f21fdc72d8d88ed02ac4ba46a5888bde04054d1adaadd6b9201502ec3cc5"
+          },
+          {
+            "step": 17,
+            "from_index": 5,
+            "to_index": 0,
+            "color": "O",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "",
+              ""
+            ],
+            "before": [
+              "O",
+              "GGGG",
+              "PPPP",
+              "BBBB",
+              "",
+              "OOO"
+            ],
+            "after": [
+              "OOOO",
+              "GGGG",
+              "PPPP",
+              "BBBB",
+              "",
+              ""
+            ],
+            "after_sha256": "e4c50681cd3f26d0b5d663522fa13078de8c617d1265eff251182762d33e8f26"
+          }
+        ],
+        "won": true,
+        "initial_sha256": "3526450fb132917fb30ed31dbfce7ce9b8c5e0c8253fc3ce92f5aa38861f4d30",
+        "final": [
+          "OOOO",
+          "GGGG",
+          "PPPP",
+          "BBBB",
+          "",
+          ""
+        ],
+        "extra_bottles": 0
+      }
+    },
+    {
+      "first_move": {
+        "from_index": 0,
+        "to_index": 5
+      },
+      "replay": {
+        "steps": [
+          {
+            "step": 1,
+            "from_index": 0,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "",
+              ""
+            ],
+            "buffer_contents_after": [
+              "",
+              "P"
+            ],
+            "before": [
+              "PBOP",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "",
+              ""
+            ],
+            "after": [
+              "PBO",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "",
+              "P"
+            ],
+            "after_sha256": "793661b737614c24492a02fa035cb05a6611f9929208ac194ab59e3a7052a9c3"
+          },
+          {
+            "step": 2,
+            "from_index": 0,
+            "to_index": 4,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "",
+              "P"
+            ],
+            "buffer_contents_after": [
+              "O",
+              "P"
+            ],
+            "before": [
+              "PBO",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "",
+              "P"
+            ],
+            "after": [
+              "PB",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "O",
+              "P"
+            ],
+            "after_sha256": "8962aebe2159de97ab6db30940a039351d75adb9a1fe23d171a79759966302ce"
+          },
+          {
+            "step": 3,
+            "from_index": 2,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "O",
+              "P"
+            ],
+            "buffer_contents_after": [
+              "O",
+              "PP"
+            ],
+            "before": [
+              "PB",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "O",
+              "P"
+            ],
+            "after": [
+              "PB",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "O",
+              "PP"
+            ],
+            "after_sha256": "43c6edab37eef7faa86aa25f590e71fb2eff4d75764c24f3119b3666e644f5ea"
+          },
+          {
+            "step": 4,
+            "from_index": 2,
+            "to_index": 0,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "O",
+              "PP"
+            ],
+            "buffer_contents_after": [
+              "O",
+              "PP"
+            ],
+            "before": [
+              "PB",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "O",
+              "PP"
+            ],
+            "after": [
+              "PBB",
+              "GBOG",
+              "OG",
+              "GOBP",
+              "O",
+              "PP"
+            ],
+            "after_sha256": "51953f8171b178ca2a2396e176256d6cfd17e82c46c9ff7632b6da03e76c0e48"
+          },
+          {
+            "step": 5,
+            "from_index": 1,
+            "to_index": 2,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "O",
+              "PP"
+            ],
+            "buffer_contents_after": [
+              "O",
+              "PP"
+            ],
+            "before": [
+              "PBB",
+              "GBOG",
+              "OG",
+              "GOBP",
+              "O",
+              "PP"
+            ],
+            "after": [
+              "PBB",
+              "GBO",
+              "OGG",
+              "GOBP",
+              "O",
+              "PP"
+            ],
+            "after_sha256": "debbcaa2cee235ac23362e597a4dfdd862bae112160bb2d0e09f90c5d1455496"
+          },
+          {
+            "step": 6,
+            "from_index": 1,
+            "to_index": 4,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "O",
+              "PP"
+            ],
+            "buffer_contents_after": [
+              "OO",
+              "PP"
+            ],
+            "before": [
+              "PBB",
+              "GBO",
+              "OGG",
+              "GOBP",
+              "O",
+              "PP"
+            ],
+            "after": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOBP",
+              "OO",
+              "PP"
+            ],
+            "after_sha256": "93125122a6f233f965a344b90b36af11a874af0b6c41425909e5822772ee2d67"
+          },
+          {
+            "step": 7,
+            "from_index": 3,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OO",
+              "PP"
+            ],
+            "buffer_contents_after": [
+              "OO",
+              "PPP"
+            ],
+            "before": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOBP",
+              "OO",
+              "PP"
+            ],
+            "after": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOB",
+              "OO",
+              "PPP"
+            ],
+            "after_sha256": "53676146cd86fa5605821c0e1245a2eba10a58d663ccb4dfcc5a8227c833846f"
+          },
+          {
+            "step": 8,
+            "from_index": 3,
+            "to_index": 0,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OO",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OO",
+              "PPP"
+            ],
+            "before": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOB",
+              "OO",
+              "PPP"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "GO",
+              "OO",
+              "PPP"
+            ],
+            "after_sha256": "c4748e3bc07c6ef7ca74561636a00c91f57e5af5ef32814447243c1be71220d0"
+          },
+          {
+            "step": 9,
+            "from_index": 3,
+            "to_index": 4,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OO",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPP"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "GO",
+              "OO",
+              "PPP"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "G",
+              "OOO",
+              "PPP"
+            ],
+            "after_sha256": "02d42ce1456c4c6582ba119c3a2d69b95b1ae0b1c63ec1a7e534cce197444ce1"
+          },
+          {
+            "step": 10,
+            "from_index": 3,
+            "to_index": 2,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "OOO",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPP"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "G",
+              "OOO",
+              "PPP"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGGG",
+              "",
+              "OOO",
+              "PPP"
+            ],
+            "after_sha256": "8b057963138bfe1fc6e24cf4d53ae4225623840b97044955daaa8b38445ec0ac"
+          },
+          {
+            "step": 11,
+            "from_index": 0,
+            "to_index": 3,
+            "color": "B",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OOO",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPP"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGGG",
+              "",
+              "OOO",
+              "PPP"
+            ],
+            "after": [
+              "P",
+              "GB",
+              "OGGG",
+              "BBB",
+              "OOO",
+              "PPP"
+            ],
+            "after_sha256": "50b18efb9f71d685b960c8db85f6ee55f96f13dd3cfd2bee5fdca5d457e7405d"
+          },
+          {
+            "step": 12,
+            "from_index": 0,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "OOO",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPPP"
+            ],
+            "before": [
+              "P",
+              "GB",
+              "OGGG",
+              "BBB",
+              "OOO",
+              "PPP"
+            ],
+            "after": [
+              "",
+              "GB",
+              "OGGG",
+              "BBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after_sha256": "216d46ccf3927ec95c316b8fdb1e1e8977b4c48198951621b5cb039db012b4ef"
+          },
+          {
+            "step": 13,
+            "from_index": 1,
+            "to_index": 3,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OOO",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPPP"
+            ],
+            "before": [
+              "",
+              "GB",
+              "OGGG",
+              "BBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after": [
+              "",
+              "G",
+              "OGGG",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after_sha256": "9ce4700b4d80944e06383e2876cd5c1bfad8596af2952727ccdb6f5028f6a644"
+          },
+          {
+            "step": 14,
+            "from_index": 2,
+            "to_index": 1,
+            "color": "G",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OOO",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPPP"
+            ],
+            "before": [
+              "",
+              "G",
+              "OGGG",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after": [
+              "",
+              "GGGG",
+              "O",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after_sha256": "d8a067edf821fced41de4d723cb3c4211ed97c2c6ada56a524def09592ff1e5f"
+          },
+          {
+            "step": 15,
+            "from_index": 2,
+            "to_index": 0,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "OOO",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPPP"
+            ],
+            "before": [
+              "",
+              "GGGG",
+              "O",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after": [
+              "O",
+              "GGGG",
+              "",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after_sha256": "e65ca5e30f21b5716548f45ecae22f57160a98bff728b2cfbb6b9fe3d2e8cd06"
+          },
+          {
+            "step": 16,
+            "from_index": 4,
+            "to_index": 0,
+            "color": "O",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "OOO",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "",
+              "PPPP"
+            ],
+            "before": [
+              "O",
+              "GGGG",
+              "",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after": [
+              "OOOO",
+              "GGGG",
+              "",
+              "BBBB",
+              "",
+              "PPPP"
+            ],
+            "after_sha256": "8dee7a971c20fe7a0c42988e6ed33d675081f93cad1b091843357a41680ad299"
+          },
+          {
+            "step": 17,
+            "from_index": 5,
+            "to_index": 2,
+            "color": "P",
+            "units": 4,
+            "source_top_run": 4,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "",
+              ""
+            ],
+            "before": [
+              "OOOO",
+              "GGGG",
+              "",
+              "BBBB",
+              "",
+              "PPPP"
+            ],
+            "after": [
+              "OOOO",
+              "GGGG",
+              "PPPP",
+              "BBBB",
+              "",
+              ""
+            ],
+            "after_sha256": "e4c50681cd3f26d0b5d663522fa13078de8c617d1265eff251182762d33e8f26"
+          }
+        ],
+        "won": true,
+        "initial_sha256": "3526450fb132917fb30ed31dbfce7ce9b8c5e0c8253fc3ce92f5aa38861f4d30",
+        "final": [
+          "OOOO",
+          "GGGG",
+          "PPPP",
+          "BBBB",
+          "",
+          ""
+        ],
+        "extra_bottles": 0
+      }
+    },
+    {
+      "first_move": {
+        "from_index": 1,
+        "to_index": 4
+      },
+      "replay": {
+        "steps": [
+          {
+            "step": 1,
+            "from_index": 1,
+            "to_index": 4,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "",
+              ""
+            ],
+            "buffer_contents_after": [
+              "G",
+              ""
+            ],
+            "before": [
+              "PBOP",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "",
+              ""
+            ],
+            "after": [
+              "PBOP",
+              "GBO",
+              "OGBP",
+              "GOBP",
+              "G",
+              ""
+            ],
+            "after_sha256": "436bb5583a738a64f6be88a438c85bc312437cc3f1f81a8040086a3eedc132cb"
+          },
+          {
+            "step": 2,
+            "from_index": 0,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "G",
+              ""
+            ],
+            "buffer_contents_after": [
+              "G",
+              "P"
+            ],
+            "before": [
+              "PBOP",
+              "GBO",
+              "OGBP",
+              "GOBP",
+              "G",
+              ""
+            ],
+            "after": [
+              "PBO",
+              "GBO",
+              "OGBP",
+              "GOBP",
+              "G",
+              "P"
+            ],
+            "after_sha256": "c885a2262ca4240e0b75324dc537f0e76bdbd8e92b76dec601cbcf70b12588a8"
+          },
+          {
+            "step": 3,
+            "from_index": 0,
+            "to_index": 1,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "G",
+              "P"
+            ],
+            "buffer_contents_after": [
+              "G",
+              "P"
+            ],
+            "before": [
+              "PBO",
+              "GBO",
+              "OGBP",
+              "GOBP",
+              "G",
+              "P"
+            ],
+            "after": [
+              "PB",
+              "GBOO",
+              "OGBP",
+              "GOBP",
+              "G",
+              "P"
+            ],
+            "after_sha256": "d131e24d9f998ef8b48623d671255c0e70ccb8db142e482ce9c2c7afc3780fae"
+          },
+          {
+            "step": 4,
+            "from_index": 2,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "G",
+              "P"
+            ],
+            "buffer_contents_after": [
+              "G",
+              "PP"
+            ],
+            "before": [
+              "PB",
+              "GBOO",
+              "OGBP",
+              "GOBP",
+              "G",
+              "P"
+            ],
+            "after": [
+              "PB",
+              "GBOO",
+              "OGB",
+              "GOBP",
+              "G",
+              "PP"
+            ],
+            "after_sha256": "e9fd4c9f66b980e5ddfb95740c9bbbe06c9156140581667abafbe8be1e1ed32c"
+          },
+          {
+            "step": 5,
+            "from_index": 0,
+            "to_index": 2,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "G",
+              "PP"
+            ],
+            "buffer_contents_after": [
+              "G",
+              "PP"
+            ],
+            "before": [
+              "PB",
+              "GBOO",
+              "OGB",
+              "GOBP",
+              "G",
+              "PP"
+            ],
+            "after": [
+              "P",
+              "GBOO",
+              "OGBB",
+              "GOBP",
+              "G",
+              "PP"
+            ],
+            "after_sha256": "f103df1f4fbf4b8e6d25cda4823981a54cbef434b4c29d2c6754295588ab1e90"
+          },
+          {
+            "step": 6,
+            "from_index": 0,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "G",
+              "PP"
+            ],
+            "buffer_contents_after": [
+              "G",
+              "PPP"
+            ],
+            "before": [
+              "P",
+              "GBOO",
+              "OGBB",
+              "GOBP",
+              "G",
+              "PP"
+            ],
+            "after": [
+              "",
+              "GBOO",
+              "OGBB",
+              "GOBP",
+              "G",
+              "PPP"
+            ],
+            "after_sha256": "3f731a3871c07978e74eaa77356f7972d504df4b1d61b2617cae41db060dfff3"
+          },
+          {
+            "step": 7,
+            "from_index": 1,
+            "to_index": 0,
+            "color": "O",
+            "units": 2,
+            "source_top_run": 2,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "G",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "G",
+              "PPP"
+            ],
+            "before": [
+              "",
+              "GBOO",
+              "OGBB",
+              "GOBP",
+              "G",
+              "PPP"
+            ],
+            "after": [
+              "OO",
+              "GB",
+              "OGBB",
+              "GOBP",
+              "G",
+              "PPP"
+            ],
+            "after_sha256": "28d4f8adbd579d4468155a5d0c0483c87c944b6c2db56d97db091a5a9d8c3523"
+          },
+          {
+            "step": 8,
+            "from_index": 3,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "G",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "G",
+              "PPPP"
+            ],
+            "before": [
+              "OO",
+              "GB",
+              "OGBB",
+              "GOBP",
+              "G",
+              "PPP"
+            ],
+            "after": [
+              "OO",
+              "GB",
+              "OGBB",
+              "GOB",
+              "G",
+              "PPPP"
+            ],
+            "after_sha256": "a7941812cd1e39197d2dd42c04909fa09302d358daa050a1038eee08c8f9d0ed"
+          },
+          {
+            "step": 9,
+            "from_index": 3,
+            "to_index": 1,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "G",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "G",
+              "PPPP"
+            ],
+            "before": [
+              "OO",
+              "GB",
+              "OGBB",
+              "GOB",
+              "G",
+              "PPPP"
+            ],
+            "after": [
+              "OO",
+              "GBB",
+              "OGBB",
+              "GO",
+              "G",
+              "PPPP"
+            ],
+            "after_sha256": "8e6ea94170794f090875970b4bcc37891f87d38bafd2432e28626f04e1c4bb37"
+          },
+          {
+            "step": 10,
+            "from_index": 3,
+            "to_index": 0,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "G",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "G",
+              "PPPP"
+            ],
+            "before": [
+              "OO",
+              "GBB",
+              "OGBB",
+              "GO",
+              "G",
+              "PPPP"
+            ],
+            "after": [
+              "OOO",
+              "GBB",
+              "OGBB",
+              "G",
+              "G",
+              "PPPP"
+            ],
+            "after_sha256": "c52f0940d03a76ee834d1f4fe2fd7c919d1a60329327e9892ae6d21f8604da46"
+          },
+          {
+            "step": 11,
+            "from_index": 3,
+            "to_index": 4,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "G",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "GG",
+              "PPPP"
+            ],
+            "before": [
+              "OOO",
+              "GBB",
+              "OGBB",
+              "G",
+              "G",
+              "PPPP"
+            ],
+            "after": [
+              "OOO",
+              "GBB",
+              "OGBB",
+              "",
+              "GG",
+              "PPPP"
+            ],
+            "after_sha256": "5a5890e903c04bd88c621813d1a818ea6477af1ae064336ed8865b8c0e899178"
+          },
+          {
+            "step": 12,
+            "from_index": 1,
+            "to_index": 3,
+            "color": "B",
+            "units": 2,
+            "source_top_run": 2,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "GG",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "GG",
+              "PPPP"
+            ],
+            "before": [
+              "OOO",
+              "GBB",
+              "OGBB",
+              "",
+              "GG",
+              "PPPP"
+            ],
+            "after": [
+              "OOO",
+              "G",
+              "OGBB",
+              "BB",
+              "GG",
+              "PPPP"
+            ],
+            "after_sha256": "6b7ccc2c244d2e48461662dbcfe378ffdacbdc470f47ff69c39baf40c3213370"
+          },
+          {
+            "step": 13,
+            "from_index": 2,
+            "to_index": 3,
+            "color": "B",
+            "units": 2,
+            "source_top_run": 2,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "GG",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "GG",
+              "PPPP"
+            ],
+            "before": [
+              "OOO",
+              "G",
+              "OGBB",
+              "BB",
+              "GG",
+              "PPPP"
+            ],
+            "after": [
+              "OOO",
+              "G",
+              "OG",
+              "BBBB",
+              "GG",
+              "PPPP"
+            ],
+            "after_sha256": "439109bff376ddb4948a340b234cb751c018d7a6528427acccc268c5e15e14ab"
+          },
+          {
+            "step": 14,
+            "from_index": 2,
+            "to_index": 1,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "GG",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "GG",
+              "PPPP"
+            ],
+            "before": [
+              "OOO",
+              "G",
+              "OG",
+              "BBBB",
+              "GG",
+              "PPPP"
+            ],
+            "after": [
+              "OOO",
+              "GG",
+              "O",
+              "BBBB",
+              "GG",
+              "PPPP"
+            ],
+            "after_sha256": "494d0eba17a48ba43afe50f4d53d4b5fceddf6166f641b8a980f52cb58fad035"
+          },
+          {
+            "step": 15,
+            "from_index": 2,
+            "to_index": 0,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "GG",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "GG",
+              "PPPP"
+            ],
+            "before": [
+              "OOO",
+              "GG",
+              "O",
+              "BBBB",
+              "GG",
+              "PPPP"
+            ],
+            "after": [
+              "OOOO",
+              "GG",
+              "",
+              "BBBB",
+              "GG",
+              "PPPP"
+            ],
+            "after_sha256": "1dc1a5e25fa85445672261cd3bb42cb338850795206d0e3330395904d249875b"
+          },
+          {
+            "step": 16,
+            "from_index": 4,
+            "to_index": 1,
+            "color": "G",
+            "units": 2,
+            "source_top_run": 2,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "GG",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "",
+              "PPPP"
+            ],
+            "before": [
+              "OOOO",
+              "GG",
+              "",
+              "BBBB",
+              "GG",
+              "PPPP"
+            ],
+            "after": [
+              "OOOO",
+              "GGGG",
+              "",
+              "BBBB",
+              "",
+              "PPPP"
+            ],
+            "after_sha256": "8dee7a971c20fe7a0c42988e6ed33d675081f93cad1b091843357a41680ad299"
+          },
+          {
+            "step": 17,
+            "from_index": 5,
+            "to_index": 2,
+            "color": "P",
+            "units": 4,
+            "source_top_run": 4,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "",
+              ""
+            ],
+            "before": [
+              "OOOO",
+              "GGGG",
+              "",
+              "BBBB",
+              "",
+              "PPPP"
+            ],
+            "after": [
+              "OOOO",
+              "GGGG",
+              "PPPP",
+              "BBBB",
+              "",
+              ""
+            ],
+            "after_sha256": "e4c50681cd3f26d0b5d663522fa13078de8c617d1265eff251182762d33e8f26"
+          }
+        ],
+        "won": true,
+        "initial_sha256": "3526450fb132917fb30ed31dbfce7ce9b8c5e0c8253fc3ce92f5aa38861f4d30",
+        "final": [
+          "OOOO",
+          "GGGG",
+          "PPPP",
+          "BBBB",
+          "",
+          ""
+        ],
+        "extra_bottles": 0
+      }
+    },
+    {
+      "first_move": {
+        "from_index": 1,
+        "to_index": 5
+      },
+      "replay": {
+        "steps": [
+          {
+            "step": 1,
+            "from_index": 1,
+            "to_index": 5,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "",
+              ""
+            ],
+            "buffer_contents_after": [
+              "",
+              "G"
+            ],
+            "before": [
+              "PBOP",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "",
+              ""
+            ],
+            "after": [
+              "PBOP",
+              "GBO",
+              "OGBP",
+              "GOBP",
+              "",
+              "G"
+            ],
+            "after_sha256": "5a52dfa97cac7066ace78e48f136103c5ed7e751c8a164b6c08661dfb7f2a234"
+          },
+          {
+            "step": 2,
+            "from_index": 0,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "",
+              "G"
+            ],
+            "buffer_contents_after": [
+              "P",
+              "G"
+            ],
+            "before": [
+              "PBOP",
+              "GBO",
+              "OGBP",
+              "GOBP",
+              "",
+              "G"
+            ],
+            "after": [
+              "PBO",
+              "GBO",
+              "OGBP",
+              "GOBP",
+              "P",
+              "G"
+            ],
+            "after_sha256": "fe75476f9ab7544702722922c1daaf943038fd8900ec9f311f3762387c416db9"
+          },
+          {
+            "step": 3,
+            "from_index": 0,
+            "to_index": 1,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "P",
+              "G"
+            ],
+            "buffer_contents_after": [
+              "P",
+              "G"
+            ],
+            "before": [
+              "PBO",
+              "GBO",
+              "OGBP",
+              "GOBP",
+              "P",
+              "G"
+            ],
+            "after": [
+              "PB",
+              "GBOO",
+              "OGBP",
+              "GOBP",
+              "P",
+              "G"
+            ],
+            "after_sha256": "da9d560936ecb02dea7e3fde4eba3876037e0ccaa4edb6ff348aab7e43abfd26"
+          },
+          {
+            "step": 4,
+            "from_index": 2,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "P",
+              "G"
+            ],
+            "buffer_contents_after": [
+              "PP",
+              "G"
+            ],
+            "before": [
+              "PB",
+              "GBOO",
+              "OGBP",
+              "GOBP",
+              "P",
+              "G"
+            ],
+            "after": [
+              "PB",
+              "GBOO",
+              "OGB",
+              "GOBP",
+              "PP",
+              "G"
+            ],
+            "after_sha256": "a153cc1ce72f7ca5ae08b39ea306ecf57b93f40a6fce1d3e9191b594864a2745"
+          },
+          {
+            "step": 5,
+            "from_index": 0,
+            "to_index": 2,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PP",
+              "G"
+            ],
+            "buffer_contents_after": [
+              "PP",
+              "G"
+            ],
+            "before": [
+              "PB",
+              "GBOO",
+              "OGB",
+              "GOBP",
+              "PP",
+              "G"
+            ],
+            "after": [
+              "P",
+              "GBOO",
+              "OGBB",
+              "GOBP",
+              "PP",
+              "G"
+            ],
+            "after_sha256": "d216088f2f2293e950eb0c2dcc3ebca9ba2f172d63ab1e91a095ea190dd1ff45"
+          },
+          {
+            "step": 6,
+            "from_index": 0,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PP",
+              "G"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "G"
+            ],
+            "before": [
+              "P",
+              "GBOO",
+              "OGBB",
+              "GOBP",
+              "PP",
+              "G"
+            ],
+            "after": [
+              "",
+              "GBOO",
+              "OGBB",
+              "GOBP",
+              "PPP",
+              "G"
+            ],
+            "after_sha256": "58d014e00f518b41f120158e4044aa376b613ed9e20919f0ba689aa56f547737"
+          },
+          {
+            "step": 7,
+            "from_index": 1,
+            "to_index": 0,
+            "color": "O",
+            "units": 2,
+            "source_top_run": 2,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPP",
+              "G"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "G"
+            ],
+            "before": [
+              "",
+              "GBOO",
+              "OGBB",
+              "GOBP",
+              "PPP",
+              "G"
+            ],
+            "after": [
+              "OO",
+              "GB",
+              "OGBB",
+              "GOBP",
+              "PPP",
+              "G"
+            ],
+            "after_sha256": "19ee0f1630d07c250424f7dc50d35544c327553562a91cdf7783a216b140c724"
+          },
+          {
+            "step": 8,
+            "from_index": 3,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPP",
+              "G"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "G"
+            ],
+            "before": [
+              "OO",
+              "GB",
+              "OGBB",
+              "GOBP",
+              "PPP",
+              "G"
+            ],
+            "after": [
+              "OO",
+              "GB",
+              "OGBB",
+              "GOB",
+              "PPPP",
+              "G"
+            ],
+            "after_sha256": "30a7563d76a105a9beff25cf40eadb315321e1c3af85f6ef8668879ebfbdef28"
+          },
+          {
+            "step": 9,
+            "from_index": 3,
+            "to_index": 1,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPPP",
+              "G"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "G"
+            ],
+            "before": [
+              "OO",
+              "GB",
+              "OGBB",
+              "GOB",
+              "PPPP",
+              "G"
+            ],
+            "after": [
+              "OO",
+              "GBB",
+              "OGBB",
+              "GO",
+              "PPPP",
+              "G"
+            ],
+            "after_sha256": "8ab3251679aba9cb5dcd8e061fbd173ac943fc397f2e3e6a1fb1cc395d969f50"
+          },
+          {
+            "step": 10,
+            "from_index": 3,
+            "to_index": 0,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPPP",
+              "G"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "G"
+            ],
+            "before": [
+              "OO",
+              "GBB",
+              "OGBB",
+              "GO",
+              "PPPP",
+              "G"
+            ],
+            "after": [
+              "OOO",
+              "GBB",
+              "OGBB",
+              "G",
+              "PPPP",
+              "G"
+            ],
+            "after_sha256": "8951fce2e23d78cec8892ddd92d7dba5c1715784319f726ac19afc2426951949"
+          },
+          {
+            "step": 11,
+            "from_index": 3,
+            "to_index": 5,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PPPP",
+              "G"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "GG"
+            ],
+            "before": [
+              "OOO",
+              "GBB",
+              "OGBB",
+              "G",
+              "PPPP",
+              "G"
+            ],
+            "after": [
+              "OOO",
+              "GBB",
+              "OGBB",
+              "",
+              "PPPP",
+              "GG"
+            ],
+            "after_sha256": "f4e29f51fa648722baed32607a2eb51366d798bd938c6261aa34cb801ff84146"
+          },
+          {
+            "step": 12,
+            "from_index": 1,
+            "to_index": 3,
+            "color": "B",
+            "units": 2,
+            "source_top_run": 2,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPPP",
+              "GG"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "GG"
+            ],
+            "before": [
+              "OOO",
+              "GBB",
+              "OGBB",
+              "",
+              "PPPP",
+              "GG"
+            ],
+            "after": [
+              "OOO",
+              "G",
+              "OGBB",
+              "BB",
+              "PPPP",
+              "GG"
+            ],
+            "after_sha256": "5cd44a13c7459ba3ff86e5d5a68004cd2a7bbfe2a209ab25afa881a77fc1297f"
+          },
+          {
+            "step": 13,
+            "from_index": 2,
+            "to_index": 3,
+            "color": "B",
+            "units": 2,
+            "source_top_run": 2,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPPP",
+              "GG"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "GG"
+            ],
+            "before": [
+              "OOO",
+              "G",
+              "OGBB",
+              "BB",
+              "PPPP",
+              "GG"
+            ],
+            "after": [
+              "OOO",
+              "G",
+              "OG",
+              "BBBB",
+              "PPPP",
+              "GG"
+            ],
+            "after_sha256": "7ca0305cebf40062ba6ff95a266be571f30f6026cd155b9cbaa9dbed79cbe1d5"
+          },
+          {
+            "step": 14,
+            "from_index": 2,
+            "to_index": 1,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPPP",
+              "GG"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "GG"
+            ],
+            "before": [
+              "OOO",
+              "G",
+              "OG",
+              "BBBB",
+              "PPPP",
+              "GG"
+            ],
+            "after": [
+              "OOO",
+              "GG",
+              "O",
+              "BBBB",
+              "PPPP",
+              "GG"
+            ],
+            "after_sha256": "650060631452fd8e4074cd44f8ff9ff61cb6f018ef4f4126b1fe5563f9242265"
+          },
+          {
+            "step": 15,
+            "from_index": 2,
+            "to_index": 0,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PPPP",
+              "GG"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "GG"
+            ],
+            "before": [
+              "OOO",
+              "GG",
+              "O",
+              "BBBB",
+              "PPPP",
+              "GG"
+            ],
+            "after": [
+              "OOOO",
+              "GG",
+              "",
+              "BBBB",
+              "PPPP",
+              "GG"
+            ],
+            "after_sha256": "13915fa27dc9d955c77874b788faa6e688a8834f7e086692d9a43dd13bc0442e"
+          },
+          {
+            "step": 16,
+            "from_index": 4,
+            "to_index": 2,
+            "color": "P",
+            "units": 4,
+            "source_top_run": 4,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PPPP",
+              "GG"
+            ],
+            "buffer_contents_after": [
+              "",
+              "GG"
+            ],
+            "before": [
+              "OOOO",
+              "GG",
+              "",
+              "BBBB",
+              "PPPP",
+              "GG"
+            ],
+            "after": [
+              "OOOO",
+              "GG",
+              "PPPP",
+              "BBBB",
+              "",
+              "GG"
+            ],
+            "after_sha256": "caa0447f89b4cf3c2e7ee62157eb624c9601532e5849811aaa0435c1cb6075fd"
+          },
+          {
+            "step": 17,
+            "from_index": 5,
+            "to_index": 1,
+            "color": "G",
+            "units": 2,
+            "source_top_run": 2,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "",
+              "GG"
+            ],
+            "buffer_contents_after": [
+              "",
+              ""
+            ],
+            "before": [
+              "OOOO",
+              "GG",
+              "PPPP",
+              "BBBB",
+              "",
+              "GG"
+            ],
+            "after": [
+              "OOOO",
+              "GGGG",
+              "PPPP",
+              "BBBB",
+              "",
+              ""
+            ],
+            "after_sha256": "e4c50681cd3f26d0b5d663522fa13078de8c617d1265eff251182762d33e8f26"
+          }
+        ],
+        "won": true,
+        "initial_sha256": "3526450fb132917fb30ed31dbfce7ce9b8c5e0c8253fc3ce92f5aa38861f4d30",
+        "final": [
+          "OOOO",
+          "GGGG",
+          "PPPP",
+          "BBBB",
+          "",
+          ""
+        ],
+        "extra_bottles": 0
+      }
+    },
+    {
+      "first_move": {
+        "from_index": 2,
+        "to_index": 4
+      },
+      "replay": {
+        "steps": [
+          {
+            "step": 1,
+            "from_index": 2,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "",
+              ""
+            ],
+            "buffer_contents_after": [
+              "P",
+              ""
+            ],
+            "before": [
+              "PBOP",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "",
+              ""
+            ],
+            "after": [
+              "PBOP",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "P",
+              ""
+            ],
+            "after_sha256": "fe3b9119eb3e175f8888ccad260cb7226cdd8b3605cc566321f0c42d15afe40d"
+          },
+          {
+            "step": 2,
+            "from_index": 0,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "P",
+              ""
+            ],
+            "buffer_contents_after": [
+              "PP",
+              ""
+            ],
+            "before": [
+              "PBOP",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "P",
+              ""
+            ],
+            "after": [
+              "PBO",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "PP",
+              ""
+            ],
+            "after_sha256": "1dbab95942025a1bd48ce8951b769b4df7b809c9f2ec312d94d083325b4831ff"
+          },
+          {
+            "step": 3,
+            "from_index": 0,
+            "to_index": 5,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PP",
+              ""
+            ],
+            "buffer_contents_after": [
+              "PP",
+              "O"
+            ],
+            "before": [
+              "PBO",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "PP",
+              ""
+            ],
+            "after": [
+              "PB",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "PP",
+              "O"
+            ],
+            "after_sha256": "8b3600504373727e1ee17155ad87ac758592c0c84c35a7bc1357481e4cf8cb5b"
+          },
+          {
+            "step": 4,
+            "from_index": 2,
+            "to_index": 0,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PP",
+              "O"
+            ],
+            "buffer_contents_after": [
+              "PP",
+              "O"
+            ],
+            "before": [
+              "PB",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "PP",
+              "O"
+            ],
+            "after": [
+              "PBB",
+              "GBOG",
+              "OG",
+              "GOBP",
+              "PP",
+              "O"
+            ],
+            "after_sha256": "c774bc14e44ab3607ba739b2b582ba93592166ec2577c4f34c40e8aff7060485"
+          },
+          {
+            "step": 5,
+            "from_index": 1,
+            "to_index": 2,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PP",
+              "O"
+            ],
+            "buffer_contents_after": [
+              "PP",
+              "O"
+            ],
+            "before": [
+              "PBB",
+              "GBOG",
+              "OG",
+              "GOBP",
+              "PP",
+              "O"
+            ],
+            "after": [
+              "PBB",
+              "GBO",
+              "OGG",
+              "GOBP",
+              "PP",
+              "O"
+            ],
+            "after_sha256": "71b2c1df1cf77da30ff21852073451c7116b867fb0849207f0425dceb924957c"
+          },
+          {
+            "step": 6,
+            "from_index": 1,
+            "to_index": 5,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PP",
+              "O"
+            ],
+            "buffer_contents_after": [
+              "PP",
+              "OO"
+            ],
+            "before": [
+              "PBB",
+              "GBO",
+              "OGG",
+              "GOBP",
+              "PP",
+              "O"
+            ],
+            "after": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOBP",
+              "PP",
+              "OO"
+            ],
+            "after_sha256": "2fa314a0a5d77a8918f1034f59269d13170928b3b8f4cf91767ab06cd54d51ff"
+          },
+          {
+            "step": 7,
+            "from_index": 3,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PP",
+              "OO"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "OO"
+            ],
+            "before": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOBP",
+              "PP",
+              "OO"
+            ],
+            "after": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOB",
+              "PPP",
+              "OO"
+            ],
+            "after_sha256": "07ce32ddfaf8d3146b06bae19807e4ec198d26f3ced5d0e8fd0c1a36a3e853c5"
+          },
+          {
+            "step": 8,
+            "from_index": 3,
+            "to_index": 0,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPP",
+              "OO"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "OO"
+            ],
+            "before": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOB",
+              "PPP",
+              "OO"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "GO",
+              "PPP",
+              "OO"
+            ],
+            "after_sha256": "9d78d37157c1b0c03809946bc77f45a8372c37a4ee23a961c892c733f7c58c09"
+          },
+          {
+            "step": 9,
+            "from_index": 3,
+            "to_index": 5,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPP",
+              "OO"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "OOO"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "GO",
+              "PPP",
+              "OO"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "G",
+              "PPP",
+              "OOO"
+            ],
+            "after_sha256": "934b5c2f3b9d1cf9d00a90dabe05ab91a08eb9c46b2ec42e675d009597b77d31"
+          },
+          {
+            "step": 10,
+            "from_index": 3,
+            "to_index": 2,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "OOO"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "G",
+              "PPP",
+              "OOO"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGGG",
+              "",
+              "PPP",
+              "OOO"
+            ],
+            "after_sha256": "f1b2fbe34bc36e0444db29a0b1ec185f634b36e4ec771dfe716761f0711c1f34"
+          },
+          {
+            "step": 11,
+            "from_index": 0,
+            "to_index": 3,
+            "color": "B",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "OOO"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGGG",
+              "",
+              "PPP",
+              "OOO"
+            ],
+            "after": [
+              "P",
+              "GB",
+              "OGGG",
+              "BBB",
+              "PPP",
+              "OOO"
+            ],
+            "after_sha256": "75d181d277b57bf49f76d89a1e54a8a83ba73d1c106cf0632ac3d48357f26335"
+          },
+          {
+            "step": 12,
+            "from_index": 0,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "OOO"
+            ],
+            "before": [
+              "P",
+              "GB",
+              "OGGG",
+              "BBB",
+              "PPP",
+              "OOO"
+            ],
+            "after": [
+              "",
+              "GB",
+              "OGGG",
+              "BBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after_sha256": "57ed9f17d3ca6d8a0a60a7c434c48d9e0f14b0da01fcf410a34ea25900a962d4"
+          },
+          {
+            "step": 13,
+            "from_index": 1,
+            "to_index": 3,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "OOO"
+            ],
+            "before": [
+              "",
+              "GB",
+              "OGGG",
+              "BBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after": [
+              "",
+              "G",
+              "OGGG",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after_sha256": "17761812fe052513f5506f925766885b1aeca43357168c0d59f8c4b7aac8c691"
+          },
+          {
+            "step": 14,
+            "from_index": 2,
+            "to_index": 1,
+            "color": "G",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "OOO"
+            ],
+            "before": [
+              "",
+              "G",
+              "OGGG",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after": [
+              "",
+              "GGGG",
+              "O",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after_sha256": "c127fd54d5e50fac9f45c1632d94ae8eeac92506ec504d784f321670964cd373"
+          },
+          {
+            "step": 15,
+            "from_index": 2,
+            "to_index": 0,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PPPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "OOO"
+            ],
+            "before": [
+              "",
+              "GGGG",
+              "O",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after": [
+              "O",
+              "GGGG",
+              "",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after_sha256": "966bdb85357265eb4a82c29412df0bee933b8ec5bdaff4e5e876c5f4b42d2a75"
+          },
+          {
+            "step": 16,
+            "from_index": 4,
+            "to_index": 2,
+            "color": "P",
+            "units": 4,
+            "source_top_run": 4,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PPPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "",
+              "OOO"
+            ],
+            "before": [
+              "O",
+              "GGGG",
+              "",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after": [
+              "O",
+              "GGGG",
+              "PPPP",
+              "BBBB",
+              "",
+              "OOO"
+            ],
+            "after_sha256": "eef9f21fdc72d8d88ed02ac4ba46a5888bde04054d1adaadd6b9201502ec3cc5"
+          },
+          {
+            "step": 17,
+            "from_index": 5,
+            "to_index": 0,
+            "color": "O",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "",
+              ""
+            ],
+            "before": [
+              "O",
+              "GGGG",
+              "PPPP",
+              "BBBB",
+              "",
+              "OOO"
+            ],
+            "after": [
+              "OOOO",
+              "GGGG",
+              "PPPP",
+              "BBBB",
+              "",
+              ""
+            ],
+            "after_sha256": "e4c50681cd3f26d0b5d663522fa13078de8c617d1265eff251182762d33e8f26"
+          }
+        ],
+        "won": true,
+        "initial_sha256": "3526450fb132917fb30ed31dbfce7ce9b8c5e0c8253fc3ce92f5aa38861f4d30",
+        "final": [
+          "OOOO",
+          "GGGG",
+          "PPPP",
+          "BBBB",
+          "",
+          ""
+        ],
+        "extra_bottles": 0
+      }
+    },
+    {
+      "first_move": {
+        "from_index": 2,
+        "to_index": 5
+      },
+      "replay": {
+        "steps": [
+          {
+            "step": 1,
+            "from_index": 2,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "",
+              ""
+            ],
+            "buffer_contents_after": [
+              "",
+              "P"
+            ],
+            "before": [
+              "PBOP",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "",
+              ""
+            ],
+            "after": [
+              "PBOP",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "",
+              "P"
+            ],
+            "after_sha256": "b02d61da5c01ef1bf7e57a4da224407c9db893162906c9e2d86928264d98686a"
+          },
+          {
+            "step": 2,
+            "from_index": 0,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "",
+              "P"
+            ],
+            "buffer_contents_after": [
+              "",
+              "PP"
+            ],
+            "before": [
+              "PBOP",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "",
+              "P"
+            ],
+            "after": [
+              "PBO",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "",
+              "PP"
+            ],
+            "after_sha256": "83c6daf7133af1887636ffc81aa01c58bd8125fb1d55681425f1e34cc0f71215"
+          },
+          {
+            "step": 3,
+            "from_index": 0,
+            "to_index": 4,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "",
+              "PP"
+            ],
+            "buffer_contents_after": [
+              "O",
+              "PP"
+            ],
+            "before": [
+              "PBO",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "",
+              "PP"
+            ],
+            "after": [
+              "PB",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "O",
+              "PP"
+            ],
+            "after_sha256": "43c6edab37eef7faa86aa25f590e71fb2eff4d75764c24f3119b3666e644f5ea"
+          },
+          {
+            "step": 4,
+            "from_index": 2,
+            "to_index": 0,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "O",
+              "PP"
+            ],
+            "buffer_contents_after": [
+              "O",
+              "PP"
+            ],
+            "before": [
+              "PB",
+              "GBOG",
+              "OGB",
+              "GOBP",
+              "O",
+              "PP"
+            ],
+            "after": [
+              "PBB",
+              "GBOG",
+              "OG",
+              "GOBP",
+              "O",
+              "PP"
+            ],
+            "after_sha256": "51953f8171b178ca2a2396e176256d6cfd17e82c46c9ff7632b6da03e76c0e48"
+          },
+          {
+            "step": 5,
+            "from_index": 1,
+            "to_index": 2,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "O",
+              "PP"
+            ],
+            "buffer_contents_after": [
+              "O",
+              "PP"
+            ],
+            "before": [
+              "PBB",
+              "GBOG",
+              "OG",
+              "GOBP",
+              "O",
+              "PP"
+            ],
+            "after": [
+              "PBB",
+              "GBO",
+              "OGG",
+              "GOBP",
+              "O",
+              "PP"
+            ],
+            "after_sha256": "debbcaa2cee235ac23362e597a4dfdd862bae112160bb2d0e09f90c5d1455496"
+          },
+          {
+            "step": 6,
+            "from_index": 1,
+            "to_index": 4,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "O",
+              "PP"
+            ],
+            "buffer_contents_after": [
+              "OO",
+              "PP"
+            ],
+            "before": [
+              "PBB",
+              "GBO",
+              "OGG",
+              "GOBP",
+              "O",
+              "PP"
+            ],
+            "after": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOBP",
+              "OO",
+              "PP"
+            ],
+            "after_sha256": "93125122a6f233f965a344b90b36af11a874af0b6c41425909e5822772ee2d67"
+          },
+          {
+            "step": 7,
+            "from_index": 3,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OO",
+              "PP"
+            ],
+            "buffer_contents_after": [
+              "OO",
+              "PPP"
+            ],
+            "before": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOBP",
+              "OO",
+              "PP"
+            ],
+            "after": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOB",
+              "OO",
+              "PPP"
+            ],
+            "after_sha256": "53676146cd86fa5605821c0e1245a2eba10a58d663ccb4dfcc5a8227c833846f"
+          },
+          {
+            "step": 8,
+            "from_index": 3,
+            "to_index": 0,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OO",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OO",
+              "PPP"
+            ],
+            "before": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOB",
+              "OO",
+              "PPP"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "GO",
+              "OO",
+              "PPP"
+            ],
+            "after_sha256": "c4748e3bc07c6ef7ca74561636a00c91f57e5af5ef32814447243c1be71220d0"
+          },
+          {
+            "step": 9,
+            "from_index": 3,
+            "to_index": 4,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OO",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPP"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "GO",
+              "OO",
+              "PPP"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "G",
+              "OOO",
+              "PPP"
+            ],
+            "after_sha256": "02d42ce1456c4c6582ba119c3a2d69b95b1ae0b1c63ec1a7e534cce197444ce1"
+          },
+          {
+            "step": 10,
+            "from_index": 3,
+            "to_index": 2,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "OOO",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPP"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "G",
+              "OOO",
+              "PPP"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGGG",
+              "",
+              "OOO",
+              "PPP"
+            ],
+            "after_sha256": "8b057963138bfe1fc6e24cf4d53ae4225623840b97044955daaa8b38445ec0ac"
+          },
+          {
+            "step": 11,
+            "from_index": 0,
+            "to_index": 3,
+            "color": "B",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OOO",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPP"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGGG",
+              "",
+              "OOO",
+              "PPP"
+            ],
+            "after": [
+              "P",
+              "GB",
+              "OGGG",
+              "BBB",
+              "OOO",
+              "PPP"
+            ],
+            "after_sha256": "50b18efb9f71d685b960c8db85f6ee55f96f13dd3cfd2bee5fdca5d457e7405d"
+          },
+          {
+            "step": 12,
+            "from_index": 0,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "OOO",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPPP"
+            ],
+            "before": [
+              "P",
+              "GB",
+              "OGGG",
+              "BBB",
+              "OOO",
+              "PPP"
+            ],
+            "after": [
+              "",
+              "GB",
+              "OGGG",
+              "BBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after_sha256": "216d46ccf3927ec95c316b8fdb1e1e8977b4c48198951621b5cb039db012b4ef"
+          },
+          {
+            "step": 13,
+            "from_index": 1,
+            "to_index": 3,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OOO",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPPP"
+            ],
+            "before": [
+              "",
+              "GB",
+              "OGGG",
+              "BBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after": [
+              "",
+              "G",
+              "OGGG",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after_sha256": "9ce4700b4d80944e06383e2876cd5c1bfad8596af2952727ccdb6f5028f6a644"
+          },
+          {
+            "step": 14,
+            "from_index": 2,
+            "to_index": 1,
+            "color": "G",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OOO",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPPP"
+            ],
+            "before": [
+              "",
+              "G",
+              "OGGG",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after": [
+              "",
+              "GGGG",
+              "O",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after_sha256": "d8a067edf821fced41de4d723cb3c4211ed97c2c6ada56a524def09592ff1e5f"
+          },
+          {
+            "step": 15,
+            "from_index": 2,
+            "to_index": 0,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "OOO",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPPP"
+            ],
+            "before": [
+              "",
+              "GGGG",
+              "O",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after": [
+              "O",
+              "GGGG",
+              "",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after_sha256": "e65ca5e30f21b5716548f45ecae22f57160a98bff728b2cfbb6b9fe3d2e8cd06"
+          },
+          {
+            "step": 16,
+            "from_index": 4,
+            "to_index": 0,
+            "color": "O",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "OOO",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "",
+              "PPPP"
+            ],
+            "before": [
+              "O",
+              "GGGG",
+              "",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after": [
+              "OOOO",
+              "GGGG",
+              "",
+              "BBBB",
+              "",
+              "PPPP"
+            ],
+            "after_sha256": "8dee7a971c20fe7a0c42988e6ed33d675081f93cad1b091843357a41680ad299"
+          },
+          {
+            "step": 17,
+            "from_index": 5,
+            "to_index": 2,
+            "color": "P",
+            "units": 4,
+            "source_top_run": 4,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "",
+              ""
+            ],
+            "before": [
+              "OOOO",
+              "GGGG",
+              "",
+              "BBBB",
+              "",
+              "PPPP"
+            ],
+            "after": [
+              "OOOO",
+              "GGGG",
+              "PPPP",
+              "BBBB",
+              "",
+              ""
+            ],
+            "after_sha256": "e4c50681cd3f26d0b5d663522fa13078de8c617d1265eff251182762d33e8f26"
+          }
+        ],
+        "won": true,
+        "initial_sha256": "3526450fb132917fb30ed31dbfce7ce9b8c5e0c8253fc3ce92f5aa38861f4d30",
+        "final": [
+          "OOOO",
+          "GGGG",
+          "PPPP",
+          "BBBB",
+          "",
+          ""
+        ],
+        "extra_bottles": 0
+      }
+    },
+    {
+      "first_move": {
+        "from_index": 3,
+        "to_index": 4
+      },
+      "replay": {
+        "steps": [
+          {
+            "step": 1,
+            "from_index": 3,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "",
+              ""
+            ],
+            "buffer_contents_after": [
+              "P",
+              ""
+            ],
+            "before": [
+              "PBOP",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "",
+              ""
+            ],
+            "after": [
+              "PBOP",
+              "GBOG",
+              "OGBP",
+              "GOB",
+              "P",
+              ""
+            ],
+            "after_sha256": "eb52c879340c200b64f5e7e75306c5b2bec27819781601ca204d9167e69871cb"
+          },
+          {
+            "step": 2,
+            "from_index": 0,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "P",
+              ""
+            ],
+            "buffer_contents_after": [
+              "PP",
+              ""
+            ],
+            "before": [
+              "PBOP",
+              "GBOG",
+              "OGBP",
+              "GOB",
+              "P",
+              ""
+            ],
+            "after": [
+              "PBO",
+              "GBOG",
+              "OGBP",
+              "GOB",
+              "PP",
+              ""
+            ],
+            "after_sha256": "9017796b5ac3b651e223fdebdffe4175ae29206b8205b8ed47c70316a4ee7a34"
+          },
+          {
+            "step": 3,
+            "from_index": 0,
+            "to_index": 5,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PP",
+              ""
+            ],
+            "buffer_contents_after": [
+              "PP",
+              "O"
+            ],
+            "before": [
+              "PBO",
+              "GBOG",
+              "OGBP",
+              "GOB",
+              "PP",
+              ""
+            ],
+            "after": [
+              "PB",
+              "GBOG",
+              "OGBP",
+              "GOB",
+              "PP",
+              "O"
+            ],
+            "after_sha256": "c7970a1f91b874c84819e8101a8d12ce50b93cd5e854fc353c087df1865568be"
+          },
+          {
+            "step": 4,
+            "from_index": 2,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PP",
+              "O"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "O"
+            ],
+            "before": [
+              "PB",
+              "GBOG",
+              "OGBP",
+              "GOB",
+              "PP",
+              "O"
+            ],
+            "after": [
+              "PB",
+              "GBOG",
+              "OGB",
+              "GOB",
+              "PPP",
+              "O"
+            ],
+            "after_sha256": "c7939f9db1f3cbe6415b0075b0bc8f1087936e84af01d6829910c59b96e37e4d"
+          },
+          {
+            "step": 5,
+            "from_index": 2,
+            "to_index": 0,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPP",
+              "O"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "O"
+            ],
+            "before": [
+              "PB",
+              "GBOG",
+              "OGB",
+              "GOB",
+              "PPP",
+              "O"
+            ],
+            "after": [
+              "PBB",
+              "GBOG",
+              "OG",
+              "GOB",
+              "PPP",
+              "O"
+            ],
+            "after_sha256": "4f5a6560d1443b99559a04897a5e27ee70a09185b7aed5397e46fa7709d388ce"
+          },
+          {
+            "step": 6,
+            "from_index": 1,
+            "to_index": 2,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPP",
+              "O"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "O"
+            ],
+            "before": [
+              "PBB",
+              "GBOG",
+              "OG",
+              "GOB",
+              "PPP",
+              "O"
+            ],
+            "after": [
+              "PBB",
+              "GBO",
+              "OGG",
+              "GOB",
+              "PPP",
+              "O"
+            ],
+            "after_sha256": "2fd4e845c00f0d97339c8ad8c06c3053c307a43e3f4108ffbe410dc9728ea35e"
+          },
+          {
+            "step": 7,
+            "from_index": 1,
+            "to_index": 5,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPP",
+              "O"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "OO"
+            ],
+            "before": [
+              "PBB",
+              "GBO",
+              "OGG",
+              "GOB",
+              "PPP",
+              "O"
+            ],
+            "after": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOB",
+              "PPP",
+              "OO"
+            ],
+            "after_sha256": "07ce32ddfaf8d3146b06bae19807e4ec198d26f3ced5d0e8fd0c1a36a3e853c5"
+          },
+          {
+            "step": 8,
+            "from_index": 3,
+            "to_index": 0,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPP",
+              "OO"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "OO"
+            ],
+            "before": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOB",
+              "PPP",
+              "OO"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "GO",
+              "PPP",
+              "OO"
+            ],
+            "after_sha256": "9d78d37157c1b0c03809946bc77f45a8372c37a4ee23a961c892c733f7c58c09"
+          },
+          {
+            "step": 9,
+            "from_index": 3,
+            "to_index": 5,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPP",
+              "OO"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "OOO"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "GO",
+              "PPP",
+              "OO"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "G",
+              "PPP",
+              "OOO"
+            ],
+            "after_sha256": "934b5c2f3b9d1cf9d00a90dabe05ab91a08eb9c46b2ec42e675d009597b77d31"
+          },
+          {
+            "step": 10,
+            "from_index": 3,
+            "to_index": 2,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "OOO"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "G",
+              "PPP",
+              "OOO"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGGG",
+              "",
+              "PPP",
+              "OOO"
+            ],
+            "after_sha256": "f1b2fbe34bc36e0444db29a0b1ec185f634b36e4ec771dfe716761f0711c1f34"
+          },
+          {
+            "step": 11,
+            "from_index": 0,
+            "to_index": 3,
+            "color": "B",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPP",
+              "OOO"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGGG",
+              "",
+              "PPP",
+              "OOO"
+            ],
+            "after": [
+              "P",
+              "GB",
+              "OGGG",
+              "BBB",
+              "PPP",
+              "OOO"
+            ],
+            "after_sha256": "75d181d277b57bf49f76d89a1e54a8a83ba73d1c106cf0632ac3d48357f26335"
+          },
+          {
+            "step": 12,
+            "from_index": 0,
+            "to_index": 4,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "OOO"
+            ],
+            "before": [
+              "P",
+              "GB",
+              "OGGG",
+              "BBB",
+              "PPP",
+              "OOO"
+            ],
+            "after": [
+              "",
+              "GB",
+              "OGGG",
+              "BBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after_sha256": "57ed9f17d3ca6d8a0a60a7c434c48d9e0f14b0da01fcf410a34ea25900a962d4"
+          },
+          {
+            "step": 13,
+            "from_index": 1,
+            "to_index": 3,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "OOO"
+            ],
+            "before": [
+              "",
+              "GB",
+              "OGGG",
+              "BBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after": [
+              "",
+              "G",
+              "OGGG",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after_sha256": "17761812fe052513f5506f925766885b1aeca43357168c0d59f8c4b7aac8c691"
+          },
+          {
+            "step": 14,
+            "from_index": 2,
+            "to_index": 1,
+            "color": "G",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "PPPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "OOO"
+            ],
+            "before": [
+              "",
+              "G",
+              "OGGG",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after": [
+              "",
+              "GGGG",
+              "O",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after_sha256": "c127fd54d5e50fac9f45c1632d94ae8eeac92506ec504d784f321670964cd373"
+          },
+          {
+            "step": 15,
+            "from_index": 2,
+            "to_index": 0,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PPPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "PPPP",
+              "OOO"
+            ],
+            "before": [
+              "",
+              "GGGG",
+              "O",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after": [
+              "O",
+              "GGGG",
+              "",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after_sha256": "966bdb85357265eb4a82c29412df0bee933b8ec5bdaff4e5e876c5f4b42d2a75"
+          },
+          {
+            "step": 16,
+            "from_index": 4,
+            "to_index": 2,
+            "color": "P",
+            "units": 4,
+            "source_top_run": 4,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "PPPP",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "",
+              "OOO"
+            ],
+            "before": [
+              "O",
+              "GGGG",
+              "",
+              "BBBB",
+              "PPPP",
+              "OOO"
+            ],
+            "after": [
+              "O",
+              "GGGG",
+              "PPPP",
+              "BBBB",
+              "",
+              "OOO"
+            ],
+            "after_sha256": "eef9f21fdc72d8d88ed02ac4ba46a5888bde04054d1adaadd6b9201502ec3cc5"
+          },
+          {
+            "step": 17,
+            "from_index": 5,
+            "to_index": 0,
+            "color": "O",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "",
+              "OOO"
+            ],
+            "buffer_contents_after": [
+              "",
+              ""
+            ],
+            "before": [
+              "O",
+              "GGGG",
+              "PPPP",
+              "BBBB",
+              "",
+              "OOO"
+            ],
+            "after": [
+              "OOOO",
+              "GGGG",
+              "PPPP",
+              "BBBB",
+              "",
+              ""
+            ],
+            "after_sha256": "e4c50681cd3f26d0b5d663522fa13078de8c617d1265eff251182762d33e8f26"
+          }
+        ],
+        "won": true,
+        "initial_sha256": "3526450fb132917fb30ed31dbfce7ce9b8c5e0c8253fc3ce92f5aa38861f4d30",
+        "final": [
+          "OOOO",
+          "GGGG",
+          "PPPP",
+          "BBBB",
+          "",
+          ""
+        ],
+        "extra_bottles": 0
+      }
+    },
+    {
+      "first_move": {
+        "from_index": 3,
+        "to_index": 5
+      },
+      "replay": {
+        "steps": [
+          {
+            "step": 1,
+            "from_index": 3,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "",
+              ""
+            ],
+            "buffer_contents_after": [
+              "",
+              "P"
+            ],
+            "before": [
+              "PBOP",
+              "GBOG",
+              "OGBP",
+              "GOBP",
+              "",
+              ""
+            ],
+            "after": [
+              "PBOP",
+              "GBOG",
+              "OGBP",
+              "GOB",
+              "",
+              "P"
+            ],
+            "after_sha256": "a38bf929c8fa6cf7fd5252f282d2f0821845341ca67a9c54473d3bc5ea5e83df"
+          },
+          {
+            "step": 2,
+            "from_index": 0,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "",
+              "P"
+            ],
+            "buffer_contents_after": [
+              "",
+              "PP"
+            ],
+            "before": [
+              "PBOP",
+              "GBOG",
+              "OGBP",
+              "GOB",
+              "",
+              "P"
+            ],
+            "after": [
+              "PBO",
+              "GBOG",
+              "OGBP",
+              "GOB",
+              "",
+              "PP"
+            ],
+            "after_sha256": "44d3aeb7a315edfe79f0e27125350cbe3e50822e15edaec7a40655d4682148a7"
+          },
+          {
+            "step": 3,
+            "from_index": 0,
+            "to_index": 4,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "",
+              "PP"
+            ],
+            "buffer_contents_after": [
+              "O",
+              "PP"
+            ],
+            "before": [
+              "PBO",
+              "GBOG",
+              "OGBP",
+              "GOB",
+              "",
+              "PP"
+            ],
+            "after": [
+              "PB",
+              "GBOG",
+              "OGBP",
+              "GOB",
+              "O",
+              "PP"
+            ],
+            "after_sha256": "8ede2109c28048d35d06c1c9ce2d166d46c7bb71b6b25277dd8b3618f177e270"
+          },
+          {
+            "step": 4,
+            "from_index": 2,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "O",
+              "PP"
+            ],
+            "buffer_contents_after": [
+              "O",
+              "PPP"
+            ],
+            "before": [
+              "PB",
+              "GBOG",
+              "OGBP",
+              "GOB",
+              "O",
+              "PP"
+            ],
+            "after": [
+              "PB",
+              "GBOG",
+              "OGB",
+              "GOB",
+              "O",
+              "PPP"
+            ],
+            "after_sha256": "b4b6114168562c146ce5c223a63bfdbc4fa4cc077741c06844799c742f969dd4"
+          },
+          {
+            "step": 5,
+            "from_index": 2,
+            "to_index": 0,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "O",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "O",
+              "PPP"
+            ],
+            "before": [
+              "PB",
+              "GBOG",
+              "OGB",
+              "GOB",
+              "O",
+              "PPP"
+            ],
+            "after": [
+              "PBB",
+              "GBOG",
+              "OG",
+              "GOB",
+              "O",
+              "PPP"
+            ],
+            "after_sha256": "3c07772f6da20f2090c97125132d4ff84647208ed466aa43bb0b0c9ccac63645"
+          },
+          {
+            "step": 6,
+            "from_index": 1,
+            "to_index": 2,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "O",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "O",
+              "PPP"
+            ],
+            "before": [
+              "PBB",
+              "GBOG",
+              "OG",
+              "GOB",
+              "O",
+              "PPP"
+            ],
+            "after": [
+              "PBB",
+              "GBO",
+              "OGG",
+              "GOB",
+              "O",
+              "PPP"
+            ],
+            "after_sha256": "2c9dc5f3887a27447366bde5e9522c00e50f8d8755d5d9aee9172d3db4309add"
+          },
+          {
+            "step": 7,
+            "from_index": 1,
+            "to_index": 4,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "O",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OO",
+              "PPP"
+            ],
+            "before": [
+              "PBB",
+              "GBO",
+              "OGG",
+              "GOB",
+              "O",
+              "PPP"
+            ],
+            "after": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOB",
+              "OO",
+              "PPP"
+            ],
+            "after_sha256": "53676146cd86fa5605821c0e1245a2eba10a58d663ccb4dfcc5a8227c833846f"
+          },
+          {
+            "step": 8,
+            "from_index": 3,
+            "to_index": 0,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OO",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OO",
+              "PPP"
+            ],
+            "before": [
+              "PBB",
+              "GB",
+              "OGG",
+              "GOB",
+              "OO",
+              "PPP"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "GO",
+              "OO",
+              "PPP"
+            ],
+            "after_sha256": "c4748e3bc07c6ef7ca74561636a00c91f57e5af5ef32814447243c1be71220d0"
+          },
+          {
+            "step": 9,
+            "from_index": 3,
+            "to_index": 4,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 2,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OO",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPP"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "GO",
+              "OO",
+              "PPP"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "G",
+              "OOO",
+              "PPP"
+            ],
+            "after_sha256": "02d42ce1456c4c6582ba119c3a2d69b95b1ae0b1c63ec1a7e534cce197444ce1"
+          },
+          {
+            "step": 10,
+            "from_index": 3,
+            "to_index": 2,
+            "color": "G",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": true,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "OOO",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPP"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGG",
+              "G",
+              "OOO",
+              "PPP"
+            ],
+            "after": [
+              "PBBB",
+              "GB",
+              "OGGG",
+              "",
+              "OOO",
+              "PPP"
+            ],
+            "after_sha256": "8b057963138bfe1fc6e24cf4d53ae4225623840b97044955daaa8b38445ec0ac"
+          },
+          {
+            "step": 11,
+            "from_index": 0,
+            "to_index": 3,
+            "color": "B",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OOO",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPP"
+            ],
+            "before": [
+              "PBBB",
+              "GB",
+              "OGGG",
+              "",
+              "OOO",
+              "PPP"
+            ],
+            "after": [
+              "P",
+              "GB",
+              "OGGG",
+              "BBB",
+              "OOO",
+              "PPP"
+            ],
+            "after_sha256": "50b18efb9f71d685b960c8db85f6ee55f96f13dd3cfd2bee5fdca5d457e7405d"
+          },
+          {
+            "step": 12,
+            "from_index": 0,
+            "to_index": 5,
+            "color": "P",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "OOO",
+              "PPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPPP"
+            ],
+            "before": [
+              "P",
+              "GB",
+              "OGGG",
+              "BBB",
+              "OOO",
+              "PPP"
+            ],
+            "after": [
+              "",
+              "GB",
+              "OGGG",
+              "BBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after_sha256": "216d46ccf3927ec95c316b8fdb1e1e8977b4c48198951621b5cb039db012b4ef"
+          },
+          {
+            "step": 13,
+            "from_index": 1,
+            "to_index": 3,
+            "color": "B",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 1,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OOO",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPPP"
+            ],
+            "before": [
+              "",
+              "GB",
+              "OGGG",
+              "BBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after": [
+              "",
+              "G",
+              "OGGG",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after_sha256": "9ce4700b4d80944e06383e2876cd5c1bfad8596af2952727ccdb6f5028f6a644"
+          },
+          {
+            "step": 14,
+            "from_index": 2,
+            "to_index": 1,
+            "color": "G",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": false,
+            "buffer_contents_before": [
+              "OOO",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPPP"
+            ],
+            "before": [
+              "",
+              "G",
+              "OGGG",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after": [
+              "",
+              "GGGG",
+              "O",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after_sha256": "d8a067edf821fced41de4d723cb3c4211ed97c2c6ada56a524def09592ff1e5f"
+          },
+          {
+            "step": 15,
+            "from_index": 2,
+            "to_index": 0,
+            "color": "O",
+            "units": 1,
+            "source_top_run": 1,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "OOO",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "OOO",
+              "PPPP"
+            ],
+            "before": [
+              "",
+              "GGGG",
+              "O",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after": [
+              "O",
+              "GGGG",
+              "",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after_sha256": "e65ca5e30f21b5716548f45ecae22f57160a98bff728b2cfbb6b9fe3d2e8cd06"
+          },
+          {
+            "step": 16,
+            "from_index": 4,
+            "to_index": 0,
+            "color": "O",
+            "units": 3,
+            "source_top_run": 3,
+            "receiver_space_before": 3,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "OOO",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "",
+              "PPPP"
+            ],
+            "before": [
+              "O",
+              "GGGG",
+              "",
+              "BBBB",
+              "OOO",
+              "PPPP"
+            ],
+            "after": [
+              "OOOO",
+              "GGGG",
+              "",
+              "BBBB",
+              "",
+              "PPPP"
+            ],
+            "after_sha256": "8dee7a971c20fe7a0c42988e6ed33d675081f93cad1b091843357a41680ad299"
+          },
+          {
+            "step": 17,
+            "from_index": 5,
+            "to_index": 2,
+            "color": "P",
+            "units": 4,
+            "source_top_run": 4,
+            "receiver_space_before": 4,
+            "capacity_truncated": false,
+            "target_borrowed": false,
+            "source_became_empty": true,
+            "buffer_contents_before": [
+              "",
+              "PPPP"
+            ],
+            "buffer_contents_after": [
+              "",
+              ""
+            ],
+            "before": [
+              "OOOO",
+              "GGGG",
+              "",
+              "BBBB",
+              "",
+              "PPPP"
+            ],
+            "after": [
+              "OOOO",
+              "GGGG",
+              "PPPP",
+              "BBBB",
+              "",
+              ""
+            ],
+            "after_sha256": "e4c50681cd3f26d0b5d663522fa13078de8c617d1265eff251182762d33e8f26"
+          }
+        ],
+        "won": true,
+        "initial_sha256": "3526450fb132917fb30ed31dbfce7ce9b8c5e0c8253fc3ce92f5aa38861f4d30",
+        "final": [
+          "OOOO",
+          "GGGG",
+          "PPPP",
+          "BBBB",
+          "",
+          ""
+        ],
+        "extra_bottles": 0
+      }
+    }
+  ],
+  "extra_rescue": {
+    "board": [
+      "PBOP",
+      "GB",
+      "OGBP",
+      "GOBP",
+      "O",
+      "G"
+    ],
+    "route": [
+      {
+        "from_index": 1,
+        "to_index": 5
+      },
+      {
+        "from_index": 1,
+        "to_index": 4
+      }
+    ],
+    "attempt": 9,
+    "recovery": {
+      "status": "optimal",
+      "steps": 16,
+      "moves": [
+        {
+          "from_index": 0,
+          "to_index": 6
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 6
+        },
+        {
+          "from_index": 2,
+          "to_index": 6
+        },
+        {
+          "from_index": 3,
+          "to_index": 6
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 4,
+          "to_index": 0
+        },
+        {
+          "from_index": 5,
+          "to_index": 1
+        },
+        {
+          "from_index": 6,
+          "to_index": 2
+        }
+      ],
+      "visited": 5074
+    }
+  },
+  "human_playtest": false
+}

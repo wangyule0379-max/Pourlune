@@ -168,6 +168,10 @@ Future<void> openSupportEntry(
 }
 
 Future<void> showExtraBottle(BuildContext context, GameController c) async {
+  if (c.directExtraBottleEnabled) {
+    await c.watchExtraBottle();
+    return;
+  }
   final l = AppLocalizations.of(context), hub = c.services;
   // The first sheet explains the exchange; only its explicit Watch starts it.
   final watch = await showKnitDialog<bool>(

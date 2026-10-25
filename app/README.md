@@ -241,3 +241,25 @@ layout acceptance and its exact implementation CI.
 ADM01 SDK-only native probe: `integration_test/admob_beta_native_test.dart` requires iOS identity `dev.pourlune.admobValidation`, Firebase none, official sample native App ID, explicit test selection and `adm01_native.sqlite`. It records actual UMP eligibility/inventory plus a real local move save; no screenshots, consent/reward substitutes or production configuration. A successful probe exit is not proof of actual ad display/closure/reward. See `docs/development/evidence/admob-beta-integration/` from repository root for the actual outcome.
 
 Normal-size daily closeout (2026-10-25): Daily uses a current-week stamp strip; View history reveals the existing full read-only calendar. Daily settlement has a date/stamp-specific layout with Back to daily, Home and replay. Real dates, midnight refresh, replay receipts and save guards are unchanged. Tutorial steps are visible text. Special-font layouts retain their existing usable branches. Focused guards: `flutter test test/daily_normal_closeout_test.dart test/offline_ui_test.dart test/p10_responsive_completion_test.dart`. Explicit `tool/parent_normal_snapshot.dart` prepares only absent `build/` QA databases, never an installed user's database or production app entrypoint.
+
+### 2026-10-25 difficulty corrections and direct extra bottle
+
+`POURLUNE_AD_MODE=disabled` (including the current release default) now grants the
+eligible Extra bottle immediately through a local, atomic entitlement. Main1–3
+remain tutorial-only; main4+ and daily allow one extra per instance. The same
+bottle survives Undo, Restart and relaunch. No SDK view, reward attempt or
+interstitial timing is fabricated. Configured test/prod advertising retains its
+existing real callback requirement. Saving failure keeps the old board and offers
+Retry; a successful grant alone starts the added-bottle presentation.
+
+The 22 explicit campaign corrections are reproducible with
+`.venv/bin/python tools/content/rebalance_main60_v3.py --check` from the root.
+`--install` accepts only the frozen v2 baseline or the exact generated v3 output,
+and advances only replaced definitions. Do not run the historical v2 installer
+against this pack. First12, daily30 and the daily catalog are unchanged. Old
+instances embed their original puzzle and are never silently replaced.
+
+The isolated `tool/difficulty_bottle_snapshot.dart` prepares a fresh host SQLite
+QA file only when `POURLUNE_DIFFICULTY_QA_OUTPUT` points to a new project build
+path. It seeds19 settlements and new main020 for normal `lib/main.dart` capture;
+this is QA preparation, not evidence of19 manually played levels.

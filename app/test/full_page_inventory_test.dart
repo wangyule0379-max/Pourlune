@@ -165,9 +165,16 @@ void main() {
           await tap('pause-restart');
           record('P09 restart');
           await close();
-          await tap('extra-bottle');
-          record('P16-P17 extra unavailable');
-          await close();
+          await t.runAsync(() async {
+            await t.tap(find.byKey(const Key('extra-bottle')));
+            for (var i = 0; i < 100 && !c.current!.extraBottleGranted; i++) {
+              await Future<void>.delayed(const Duration(milliseconds: 2));
+            }
+          });
+          await t.pumpAndSettle();
+          expect(c.current!.extraBottleGranted, isTrue);
+          expect(find.byType(Dialog), findsNothing);
+          record('P18 direct extra bottle (ads disabled)');
           await t.runAsync(c.goHome);
           await t.pumpAndSettle();
           record('P02 home');

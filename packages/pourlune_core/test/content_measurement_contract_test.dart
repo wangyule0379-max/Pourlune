@@ -57,21 +57,32 @@ void main() {
       final installed = Puzzle.parse(
         File('../../app/assets/puzzles/main/$id.json').readAsStringSync(),
       );
-      // DC02 keeps its historical strategy prose (028 was later revised).
-      // Its playable definition must still match the installed representative.
-      expect(installed.initial, puzzle.initial);
-      expect(installed.targets, puzzle.targets);
-      expect(
-        installed.referenceMoves.map((m) => m.toJson()).toList(),
-        puzzle.referenceMoves.map((m) => m.toJson()).toList(),
-      );
-      expect(installed.contentVersion, puzzle.contentVersion);
       final finalCandidate = Puzzle.parse(
         File(
           '../../docs/development/evidence/main60-content-redesign/full60/levels/$id.runtime.json',
         ).readAsStringSync(),
       );
-      expect(installed.toJson(), finalCandidate.toJson());
+      // Preserve the v2 proof against its frozen definition. Explicit v3
+      // replacements have their own current-content and upgrade checks.
+      expect(finalCandidate.initial, puzzle.initial);
+      expect(finalCandidate.targets, puzzle.targets);
+      expect(finalCandidate.contentVersion, puzzle.contentVersion);
+      expect(
+        finalCandidate.referenceMoves.map((m) => m.toJson()).toList(),
+        puzzle.referenceMoves.map((m) => m.toJson()).toList(),
+      );
+      final baseline = File(
+        '../../docs/development/evidence/difficulty-direct-bottle/v2-baseline/$id.json',
+      );
+      if (baseline.existsSync()) {
+        expect(
+          Puzzle.parse(baseline.readAsStringSync()).toJson(),
+          finalCandidate.toJson(),
+        );
+        expect(installed.contentVersion, finalCandidate.contentVersion + 1);
+      } else {
+        expect(installed.toJson(), finalCandidate.toJson());
+      }
       final traces = [
         card['reference_replay'],
         for (final branch in card['opening_branches'] as List)
@@ -106,5 +117,50 @@ void main() {
         expect(board.length, 6);
       }
     }
+  });
+
+  test('DC03 v3 challenge mistakes have a real one-bottle recovery route', () {
+    final input = jsonDecode(
+      File('../../docs/content/design/main60-rebalance-v3.json')
+          .readAsStringSync(),
+    );
+    var rescued = 0;
+    for (final row in input['levels'] as List) {
+      final rescue = row['extra_rescue'];
+      if (rescue == null) continue;
+      final level = row['level'] as int;
+      final puzzle = Puzzle.parse(
+        File(
+          '../../app/assets/puzzles/main/main-${level.toString().padLeft(3, '0')}.json',
+        ).readAsStringSync(),
+      );
+      var state = GameInstance.create(id: 'rescue-$level', puzzle: puzzle);
+      for (final step in rescue['route'] as List) {
+        final result = state.pour(
+          step['from_index'] as int,
+          step['to_index'] as int,
+        );
+        expect(result.changed, isTrue);
+        state = result.state;
+      }
+      expect(state.completed, isFalse);
+      for (var a = 0; a < state.board.length; a++) {
+        for (var b = 0; b < state.board.length; b++) {
+          expect(state.pour(a, b).changed, isFalse);
+        }
+      }
+      state = state.grantExtraBottle();
+      for (final step in rescue['recovery']['moves'] as List) {
+        final result = state.pour(
+          step['from_index'] as int,
+          step['to_index'] as int,
+        );
+        expect(result.changed, isTrue);
+        state = result.state;
+      }
+      expect(state.completed, isTrue);
+      rescued++;
+    }
+    expect(rescued, greaterThanOrEqualTo(10));
   });
 }

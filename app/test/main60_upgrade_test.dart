@@ -5,9 +5,13 @@ import 'package:pourlune_core/pourlune_core.dart';
 import 'package:pourlune_dev/data/game_store.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-Puzzle definition(int n, {bool old = false}) => Puzzle.parse(
+Puzzle definition(int n, {bool old = false, bool v2 = false}) => Puzzle.parse(
   File(
-    '${old ? '../docs/development/evidence/main60-content-redesign/old-main' : 'assets/puzzles/main'}/main-${n.toString().padLeft(3, '0')}.json',
+    '${v2
+        ? '../docs/development/evidence/difficulty-direct-bottle/v2-baseline'
+        : old
+        ? '../docs/development/evidence/main60-content-redesign/old-main'
+        : 'assets/puzzles/main'}/main-${n.toString().padLeft(3, '0')}.json',
   ).readAsStringSync(),
 );
 
@@ -42,11 +46,18 @@ void main() {
     );
   }
 
-  for (final level in [13, 21]) {
+  for (final (level, v2) in [
+    (13, false),
+    (21, false),
+    (13, true),
+    (20, true),
+    (60, true),
+  ]) {
     test(
-      'DC04 real SQLite old$level nonempty snapshot survives new content and reopen',
+      'DC04 real SQLite old$level (v2=$v2) nonempty snapshot survives new content and reopen',
       () async {
-        final old = definition(level, old: true), latest = definition(level);
+        final old = definition(level, old: !v2, v2: v2),
+            latest = definition(level);
         var active = GameInstance.create(id: 'old-$level', puzzle: old);
         for (final m in old.referenceMoves.take(2)) {
           active = active.pour(m.from, m.to).state;
@@ -65,7 +76,7 @@ void main() {
           catalogVersion: 1,
         );
         await store.save(daily);
-        expect(latest.contentVersion, old.contentVersion + 1);
+        expect(latest.contentVersion, old.contentVersion + (v2 ? 1 : 2));
         expect(latest.initial, isNot(old.initial));
         await reopen();
         final restored = (await store.load('ordinary')).instance!;
