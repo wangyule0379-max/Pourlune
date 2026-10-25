@@ -317,6 +317,23 @@ unknown certificate installation is needed for that route.
 ## ADM01 explicit beta test ads
 
 Default `firebase_build.py` and `beta_build.py` remain `--ad-mode disabled`.
+Android now removes the SDK-merged `AD_ID` permission and explicitly disables
+Analytics advertising-ID collection, including sample-ad QA. This does not
+enable advertising or change the existing explicit test-mode gates. For each
+candidate, decode its **actual AAB** manifest with bundletool, then run:
+
+```sh
+.venv/bin/python tools/validation/admob_config.py --platform android \
+  --native-id com.pourlune.app \
+  --native-app-id ca-app-pub-3940256099942544~3347511713 \
+  --android-manifest build/<candidate>/bundle-manifest.xml
+```
+
+This guard rejects advertising-ID permission in disabled/default builds and
+requires explicit Analytics ad-ID collection off. For a test-mode artifact,
+provide the same validated `DART_DEFINES`/public registration as its build;
+passing this guard does not prove actual ad load/show/reward behavior.
+
 Use `--ad-mode test` only for the authorized ad-testing candidate. Both platforms
 use Google's exact official interstitial/rewarded test units, even on phones that
 have not been registered as test devices; no live-unit flag is provided.

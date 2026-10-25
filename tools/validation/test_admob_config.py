@@ -84,5 +84,39 @@ class AdConfigTest(unittest.TestCase):
         self.assertNotEqual(result.returncode,0,result.stdout)
         self.assertEqual(marker.read_text(),'previous-owned-marker')
 
+    def test_android_packaged_manifest_rejects_unused_ad_id_and_analytics_ad_id_collection(self):
+        # A dependency can reintroduce AD_ID during merging. Check the packaged
+        # manifest, not a string in the source manifest or the selected ad mode.
+        manifest = self.root / 'AndroidManifest.xml'
+        for mode, permission, metadata, expected in [
+            ('disabled', True, 'false', 'disabled_android_ad_id_permission'),
+            ('disabled', False, 'false', None),
+            ('test', True, 'false', None),
+            ('disabled', False, 'true', 'android_analytics_ad_id_collection'),
+        ]:
+            with self.subTest(mode=mode, permission=permission, metadata=metadata):
+                permission_xml = ('<uses-permission android:name="com.google.android.gms.permission.AD_ID" />'
+                                  if permission else '')
+                manifest.write_text(
+                    '<manifest xmlns:android="http://schemas.android.com/apk/res/android">'
+                    + permission_xml + '<application><meta-data '
+                    'android:name="google_analytics_adid_collection_enabled" '
+                    f'android:value="{metadata}" /></application></manifest>')
+                env = {**os.environ, 'DART_DEFINES': encoded([
+                    ('POURLUNE_AD_MODE', mode), ('POURLUNE_AD_PLATFORM', 'android'),
+                    ('POURLUNE_AD_NATIVE_ID', 'com.pourlune.app'),
+                    ('POURLUNE_AD_APP_ID', 'ca-app-pub-3940256099942544~3347511713')])}
+                result = subprocess.run([
+                    sys.executable, str(ROOT / 'tools/validation/admob_config.py'),
+                    '--platform', 'android', '--native-id', 'com.pourlune.app',
+                    '--native-app-id', 'ca-app-pub-3940256099942544~3347511713',
+                    '--android-manifest', str(manifest),
+                ], env=env, capture_output=True, text=True)
+                if expected:
+                    self.assertEqual(result.returncode, 1, result.stderr)
+                    self.assertEqual(json.loads(result.stderr)['code'], expected)
+                else:
+                    self.assertEqual(result.returncode, 0, result.stderr)
+
 
 if __name__=='__main__':unittest.main()

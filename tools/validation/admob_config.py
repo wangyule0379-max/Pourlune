@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import re
 import sys
+import xml.etree.ElementTree as ET
 
 SAMPLES = {
     'ios': {'app_id': 'ca-app-pub-3940256099942544~1458002511',
@@ -91,10 +92,29 @@ def main():
     parser.add_argument('--native-id', required=True)
     parser.add_argument('--native-app-id', required=True)
     parser.add_argument('--registration', type=Path)
+    parser.add_argument('--android-manifest', type=Path,
+                        help='Decoded packaged/merged Android manifest to verify before upload')
     args = parser.parse_args()
     try:
         result = check_build(args.platform, args.native_id, args.native_app_id,
                              os.environ.get('DART_DEFINES', ''), args.registration)
+        if args.android_manifest:
+            require(args.platform == 'android', 'android_manifest_requires_android')
+            try:
+                manifest = ET.parse(args.android_manifest).getroot()
+            except (OSError, ET.ParseError):
+                raise AdConfigError('invalid_android_manifest') from None
+            android = '{http://schemas.android.com/apk/res/android}'
+            has_ad_id = any(node.tag.startswith('uses-permission') and
+                            node.get(android + 'name') == 'com.google.android.gms.permission.AD_ID'
+                            for node in manifest)
+            require(result['mode'] == 'test' or not has_ad_id,
+                    'disabled_android_ad_id_permission')
+            values = [node.get(android + 'value') for node in manifest.findall('application/meta-data')
+                      if node.get(android + 'name') == 'google_analytics_adid_collection_enabled']
+            require(values == ['false'], 'android_analytics_ad_id_collection')
+            result['android_privacy'] = {'ad_id_permission': has_ad_id,
+                                         'analytics_ad_id_collection': False}
         print(json.dumps(result))
         return 0
     except AdConfigError as error:
