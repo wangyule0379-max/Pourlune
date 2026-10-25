@@ -719,12 +719,17 @@ class _DailyPageState extends State<DailyPage> {
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 12),
-          const NavigationPanel(
+          NavigationPanel(
             child: Center(
               child: Text(
-                'A fresh puzzle.\nAt your own pace.',
+                !largeText && c.progress.dailyStamps.contains(c.today.date)
+                    ? l.dailyReplayComplete
+                    : 'A fresh puzzle.\nAt your own pace.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                ),
               ),
             ),
           ),
