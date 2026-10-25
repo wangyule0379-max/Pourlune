@@ -249,7 +249,18 @@ class DailyReferenceCompletion extends StatelessWidget {
                   child: OutlinedButton(
                     key: const Key('home'),
                     onPressed: c.busy ? null : c.goHome,
-                    child: Text(l.home),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(
+                          width: 26,
+                          height: 26,
+                          child: _DailyHomeArt(),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(l.home),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -323,8 +334,8 @@ class _DailyStampClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) =>
       (Path()
-            ..addOval(const Rect.fromLTWH(0, 0, 265, 258))
-            ..addOval(const Rect.fromLTWH(166, 160, 103, 94)))
+            ..addOval(const Rect.fromLTWH(7, 5, 258, 250))
+            ..addOval(const Rect.fromLTWH(166, 160, 94, 87)))
           .transform(
             Matrix4.diagonal3Values(
               size.width / 272,
@@ -334,4 +345,40 @@ class _DailyStampClipper extends CustomClipper<Path> {
           );
   @override
   bool shouldReclip(_DailyStampClipper oldClipper) => false;
+}
+
+/// Original sculpted Home icon; remove its cream surroundings only.
+class _DailyHomeArt extends StatelessWidget {
+  const _DailyHomeArt();
+  @override
+  Widget build(BuildContext context) => const ColorFiltered(
+    colorFilter: ColorFilter.matrix([
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      -25,
+      0,
+      25,
+      0,
+      0,
+    ]),
+    child: ReferencePlayArt(
+      asset: 'assets/art/p05-reference/reference-scene.png',
+      imageSize: Size(1477, 1065),
+      source: Rect.fromLTWH(1167, 923, 46, 45),
+      radius: 0,
+    ),
+  );
 }
