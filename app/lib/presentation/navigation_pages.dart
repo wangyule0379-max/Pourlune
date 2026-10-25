@@ -461,8 +461,8 @@ class ChaptersPage extends StatelessWidget {
   }
 }
 
-/// The original chapter cards use a wide room thumbnail. Crop the lower part
-/// of the decorative square scene instead of stretching its saved composition.
+/// Fit the complete square room inside the wide chapter thumbnail, including
+/// its floor and earned objects, for both unlocked rooms and locked previews.
 class _ChapterSceneThumbnail extends StatelessWidget {
   const _ChapterSceneThumbnail({
     required this.scene,
@@ -479,23 +479,12 @@ class _ChapterSceneThumbnail extends StatelessWidget {
     child: ClipRRect(
       key: Key('chapter-$scene-thumbnail-viewport'),
       borderRadius: BorderRadius.circular(14),
-      child: preview
-          ? Center(
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: SceneArt(scene: scene, pieces: pieces, preview: true),
-              ),
-            )
-          : LayoutBuilder(
-              builder: (context, box) => OverflowBox(
-                alignment: Alignment.topCenter,
-                minWidth: box.maxWidth,
-                maxWidth: box.maxWidth,
-                minHeight: box.maxWidth,
-                maxHeight: box.maxWidth,
-                child: SceneArt(scene: scene, pieces: pieces),
-              ),
-            ),
+      child: Center(
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: SceneArt(scene: scene, pieces: pieces, preview: preview),
+        ),
+      ),
     ),
   );
 }

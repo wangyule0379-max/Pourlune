@@ -198,15 +198,12 @@ class CollectionPage extends StatelessWidget {
                                   alignment: Alignment.center,
                                   children: [
                                     ClipRect(
-                                      child: Transform.scale(
-                                        scale: 1.12,
-                                        child: Opacity(
-                                          opacity: locked ? .55 : 1,
-                                          child: SceneArt(
-                                            scene: scene,
-                                            pieces: controller.progress.pieces,
-                                            preview: locked,
-                                          ),
+                                      child: Opacity(
+                                        opacity: locked ? .55 : 1,
+                                        child: SceneArt(
+                                          scene: scene,
+                                          pieces: controller.progress.pieces,
+                                          preview: locked,
                                         ),
                                       ),
                                     ),

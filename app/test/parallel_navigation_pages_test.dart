@@ -123,6 +123,53 @@ void main() {
     await t.pumpWidget(const SizedBox());
   });
 
+  testWidgets(
+    'unlocked chapter thumbnails retain the floor and owned objects',
+    (t) async {
+      await t.binding.setSurfaceSize(const Size(402, 874));
+      addTearDown(() => t.binding.setSurfaceSize(null));
+      // Every chapter is unlocked and fully furnished: the low floor objects
+      // must remain inside the thumbnail just as they do in locked previews.
+      const scenes = ['color_studio', 'garden_nook', 'seaside_corner'];
+      controller.progress = LocalProgress(
+        60,
+        [
+          for (final scene in scenes)
+            for (var i = 1; i <= 5; i++) '$scene:$i',
+        ],
+        List.generate(60, (i) => i + 1),
+        0,
+        60,
+        [],
+        completedLevels: List.generate(60, (i) => i + 1),
+      );
+      await t.pumpWidget(
+        _screen(ChaptersPage(controller: controller, onPlay: (_) {})),
+      );
+      await t.pumpAndSettle();
+      for (final scene in scenes) {
+        final viewport = find.byKey(Key('chapter-$scene-thumbnail-viewport'));
+        await t.ensureVisible(viewport);
+        final visible = t.getRect(viewport);
+        final base = t.getRect(find.byKey(Key('scene-$scene-base')));
+        expect(base.width, closeTo(base.height, .01));
+        for (final part in ['base', for (var i = 1; i <= 5; i++) 'piece-$i']) {
+          final bounds = t.getRect(find.byKey(Key('scene-$scene-$part')));
+          expect(bounds.left, greaterThanOrEqualTo(visible.left - .01));
+          expect(bounds.right, lessThanOrEqualTo(visible.right + .01));
+          expect(bounds.top, greaterThanOrEqualTo(visible.top - .01));
+          expect(
+            bounds.bottom,
+            lessThanOrEqualTo(visible.bottom + .01),
+            reason: '$scene $part must not be cropped after chapter unlock',
+          );
+        }
+      }
+      expect(t.takeException(), isNull);
+      await t.pumpWidget(const SizedBox());
+    },
+  );
+
   testWidgets('chapter targets stay reachable at 320px and large text', (
     t,
   ) async {

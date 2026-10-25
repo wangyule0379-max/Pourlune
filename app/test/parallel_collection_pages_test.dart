@@ -60,6 +60,35 @@ void main() {
     });
   });
 
+  testWidgets('collection thumbnails keep the whole room inside their clip', (
+    t,
+  ) async {
+    await t.binding.setSurfaceSize(const Size(402, 874));
+    addTearDown(() => t.binding.setSurfaceSize(null));
+    await _withController(t, (c) async {
+      c.progress = _progress(12);
+      await t.pumpWidget(_screen(CollectionPage(controller: c)));
+      await t.pumpAndSettle();
+      for (final scene in ['color_studio', 'garden_nook', 'seaside_corner']) {
+        final art = find.byKey(Key('scene-$scene-composition'));
+        final clip = find
+            .ancestor(of: art, matching: find.byType(ClipRect))
+            .first;
+        final visible = t.getRect(clip);
+        final box = t.renderObject<RenderBox>(art);
+        final painted = MatrixUtils.transformRect(
+          box.getTransformTo(null),
+          Offset.zero & box.size,
+        );
+        expect(painted.left, greaterThanOrEqualTo(visible.left - .01));
+        expect(painted.top, greaterThanOrEqualTo(visible.top - .01));
+        expect(painted.right, lessThanOrEqualTo(visible.right + .01));
+        expect(painted.bottom, lessThanOrEqualTo(visible.bottom + .01));
+      }
+      expect(t.takeException(), isNull);
+    });
+  });
+
   testWidgets(
     'chapter locks follow unlocked levels, including zero-patch entry',
     (t) async {
