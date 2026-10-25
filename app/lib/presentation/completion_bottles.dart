@@ -95,14 +95,17 @@ class _CompletionBottlesState extends State<CompletionBottles> {
     builder: (context, box) {
       final indices = widget.targetIndices;
       final fiveTargets = indices.length == 5;
-      final singleRow = widget.singleRow && !fiveTargets;
+      final maxHeight = box.hasBoundedHeight ? box.maxHeight : 370.0;
+      // Normal small screens keep3+2. Exceptionally short celebration space
+      // uses one bounded row rather than shrinking five targets to points.
+      final compactFive = fiveTargets && widget.singleRow;
+      final singleRow = widget.singleRow && (!fiveTargets || maxHeight < 153);
       final rows = singleRow || indices.length <= 2 ? 1 : 2;
       final perRow = singleRow
           ? indices.length
           : fiveTargets
           ? 3
           : 2;
-      final maxHeight = box.hasBoundedHeight ? box.maxHeight : 370.0;
       const ratio =
           190 / 134; // Measured P10 completed bottle, separate from PLAY.
       double badgeWidth(double width) => (width * 1.12).clamp(68.0, 160.0);
@@ -111,9 +114,12 @@ class _CompletionBottlesState extends State<CompletionBottles> {
           : math.max(4.0, badgeWidth(width) * 147 / 157 - 24);
       // Reserve the complete cushion and a clear gap before the card, rather
       // than counting only the bottle body as available celebration height.
-      const rowGap = 8.0;
-      double footFor(double width) =>
-          singleRow ? (width * .34).clamp(24.0, 34.0) + 7 : 45.0;
+      final rowGap = compactFive && !singleRow ? 4.0 : 8.0;
+      double footFor(double width) => compactFive && !singleRow
+          ? (width * .34).clamp(24.0, 34.0) + 3
+          : singleRow
+          ? (width * .34).clamp(24.0, 34.0) + 7
+          : 45.0;
       double needed(double width) =>
           topFor(width) +
           rows * (width * ratio + footFor(width)) +

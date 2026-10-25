@@ -263,3 +263,24 @@ The isolated `tool/difficulty_bottle_snapshot.dart` prepares a fresh host SQLite
 QA file only when `POURLUNE_DIFFICULTY_QA_OUTPUT` points to a new project build
 path. It seeds19 settlements and new main020 for normal `lib/main.dart` capture;
 this is QA preparation, not evidence of19 manually played levels.
+
+### 主线五色v4专项（2026-10-25）
+
+正常入口与存档schema不变。初始最多7瓶、一次本地加瓶后8瓶；R为浅玫瑰红液体／星形，
+5目标正常结算3+2。极短异常字号庆祝区保留有界单排，避免目标缩成点。
+全60题来源与只读复现见`../tools/content/README.md`，难度和真实画面仍需独立验收。
+
+本批原生专项使用正常`main/Bootstrap`、正式资源与真实sqflite；只清
+`main60_five_color.sqlite`。先前1–59通关是明确QA准备，测试按参考解和Hint操作，非盲玩。
+不启用Firebase或广告。仅在inventory已确认无竞争的专用设备运行，保护F9、Small11b/4188和旧库。
+外部xcconfig设置`POURLUNE_BUNDLE_IDENTIFIER = dev.pourlune.parentNormalValidation`，
+不全局覆盖SDK资源bundle身份。示例（app/）：
+
+```sh
+XCODE_XCCONFIG_FILE=/tmp/pourlune-main60-five-color.xcconfig FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter test integration_test/main60_five_color_test.dart -d <exclusive-qa-id> --dart-define=POURLUNE_DATABASE=main60_five_color.sqlite --dart-define=POURLUNE_AD_MODE=disabled --dart-define=POURLUNE_MAIN60_RUN=<unique-run>
+```
+
+测试在`Documents/main60-five-color-native/runtime.json`发出`evidence_ready`后等待host复制和
+写入`copied`标记（最长55秒）；测试运行器结束可能卸载安装，须先复制截图和一致SQLite备份。
+真实同安装进程恢复另外使用`lib/main.dart`正常构建、同一Runner/kernel与SIGKILL/launch核对，
+不能用测试重新安装或Widget重建替代进程恢复。不得把新候选称为已在TestFlight12/Play13。

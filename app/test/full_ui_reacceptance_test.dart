@@ -123,8 +123,9 @@ void main() {
       await t.pumpAndSettle();
       await t.runAsync(() async {
         c.failNextWrite();
-        await c.tapBottle(0);
-        await c.tapBottle(4);
+        final move = c.current!.puzzle.referenceMoves.first;
+        await c.tapBottle(move.from);
+        await c.tapBottle(move.to);
       });
       await t.pumpAndSettle();
       await settleFlameBoard(t, c);

@@ -55,7 +55,9 @@ void main() {
       expect(puzzle.id, old.id);
       expect(puzzle.contentVersion, old.contentVersion + 1);
       final installed = Puzzle.parse(
-        File('../../docs/development/evidence/main60-five-color-difficulty/old-main/$id.json').readAsStringSync(),
+        File(
+          '../../docs/development/evidence/main60-five-color-difficulty/old-main/$id.json',
+        ).readAsStringSync(),
       );
       final finalCandidate = Puzzle.parse(
         File(
