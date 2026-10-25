@@ -35,7 +35,7 @@ void main() {
           t.getTopLeft(find.byKey(const Key('pause'))).dy,
           lessThan(t.getTopLeft(find.byKey(const Key('bottle-0'))).dy),
         );
-        expect(find.byIcon(Icons.undo_rounded), findsOneWidget);
+        expect(find.byKey(const Key('undo')), findsOneWidget);
         await t.ensureVisible(find.byKey(const Key('pause')));
         await t.tap(find.byKey(const Key('pause')));
         await t.pumpAndSettle();

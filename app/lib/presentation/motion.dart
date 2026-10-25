@@ -169,6 +169,7 @@ final _dialogOpen = Expando<bool>();
 Future<T?> showKnitDialog<T>({
   required BuildContext context,
   required WidgetBuilder builder,
+  Color barrierColor = Colors.black54,
 }) async {
   final navigator = Navigator.of(context, rootNavigator: true);
   // A repeated confirmation must not dispatch the same action twice.
@@ -179,6 +180,7 @@ Future<T?> showKnitDialog<T>({
       _KnitDialogRoute<T>(
         context: context,
         builder: builder,
+        barrierColor: barrierColor,
         themes: InheritedTheme.capture(from: context, to: navigator.context),
       ),
     );
@@ -192,6 +194,7 @@ class _KnitDialogRoute<T> extends DialogRoute<T> {
     required super.context,
     required super.builder,
     required super.themes,
+    required super.barrierColor,
   }) : super(
          requestFocus: true,
          traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop,

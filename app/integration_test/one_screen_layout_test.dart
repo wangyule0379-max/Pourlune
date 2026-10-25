@@ -193,7 +193,6 @@ void main() {
           'pause',
           'undo',
           'hint',
-          'restart',
           if (c.offersExtraBottle) 'extra-bottle',
           for (var i = 0; i < c.current!.board.length; i++) 'bottle-$i',
         ]);

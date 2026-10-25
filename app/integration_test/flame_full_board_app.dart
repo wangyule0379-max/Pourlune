@@ -511,7 +511,8 @@ Future<void> main() async {
     await tap('undo');
     await until(() => !c.busy && c.phase == SavePhase.clean);
     require(c.current!.moveCount == 1, 'undo restores prepared legal prefix');
-    await tap('restart');
+    await tap('pause');
+    await tap('pause-restart');
     await tap('confirm-restart');
     await until(() => !c.busy && c.phase == SavePhase.clean);
     require(c.current!.moveCount == 0, 'restart clears action history');

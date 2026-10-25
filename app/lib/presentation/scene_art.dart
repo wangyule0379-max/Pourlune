@@ -34,8 +34,13 @@ class SceneArt extends StatelessWidget {
     required this.scene,
     required this.pieces,
     this.reveal,
+    this.preview = false,
   });
   final String scene;
+
+  /// Locked collection teasers may display the completed room visually. This
+  /// never changes the owned IDs, progress, reveal state or accessible labels.
+  final bool preview;
   final List<String> pieces;
   final int? reveal;
   @override
@@ -59,16 +64,18 @@ class SceneArt extends StatelessWidget {
                   child: image('base', width),
                 ),
                 for (var i = 1; i <= 5; i++)
-                  if (pieces.contains('$scene:$i'))
+                  if (preview || pieces.contains('$scene:$i'))
                     Positioned.fromRect(
-                      key: Key('scene-$scene-piece-$i'),
+                      key: Key(
+                        'scene-$scene-${preview ? 'preview' : 'piece'}-$i',
+                      ),
                       rect: Rect.fromLTWH(
                         sceneObjectRects[scene]![i - 1].left * width,
                         sceneObjectRects[scene]![i - 1].top * width,
                         sceneObjectRects[scene]![i - 1].width * width,
                         sceneObjectRects[scene]![i - 1].height * width,
                       ),
-                      child: i == reveal
+                      child: !preview && i == reveal
                           ? TweenAnimationBuilder<double>(
                               duration: MediaQuery.disableAnimationsOf(context)
                                   ? const Duration(milliseconds: 150)

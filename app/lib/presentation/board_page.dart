@@ -6,10 +6,13 @@ import '../application/game_controller.dart';
 import '../data/player_settings.dart';
 import '../l10n/app_localizations.dart';
 import 'flame_board/board.dart';
+import 'board_feedback.dart';
 import 'labels.dart';
 import 'knit_components.dart';
 import 'motion.dart';
+import 'reference_play_art.dart';
 import 'service_views.dart';
+import 'large_text_board_page.dart';
 
 bool _hasLegalMove(Board board) {
   for (var from = 0; from < board.length; from++) {
@@ -27,6 +30,8 @@ class BoardView extends StatefulWidget {
     required this.selected,
     required this.onTap,
     this.suggested,
+    this.hintSource,
+    this.addedBottle,
     this.settings = const PlayerSettings(),
     this.keyPrefix = 'bottle',
     this.motion,
@@ -36,7 +41,7 @@ class BoardView extends StatefulWidget {
     this.preview = false,
   });
   final GameInstance state;
-  final int? selected, suggested, rejectedBottle;
+  final int? selected, suggested, hintSource, rejectedBottle, addedBottle;
   final void Function(int)? onTap;
   final PlayerSettings settings;
   final String keyPrefix;
@@ -66,6 +71,8 @@ class _BoardViewState extends State<BoardView> {
           selected: widget.selected,
           onTap: widget.onTap,
           suggested: widget.suggested,
+          hintSource: widget.hintSource,
+          addedBottle: widget.addedBottle,
           settings: widget.settings,
           keyPrefix: widget.keyPrefix,
           motion: widget.motion,
@@ -91,15 +98,20 @@ class BoardPage extends StatefulWidget {
     required this.onRestart,
     required this.onPause,
     this.onExtra,
+    this.debugBoardPresentation,
   });
   final GameController controller;
   final VoidCallback onRestart, onPause;
   final VoidCallback? onExtra;
+
+  /// Isolated presentation review only; normal and release entries ignore it.
+  final Widget Function(BoardView)? debugBoardPresentation;
   @override
   State<BoardPage> createState() => _BoardPageState();
 }
 
 class _BoardPageState extends State<BoardPage> {
+  String? _failedInstance;
   @override
   void initState() {
     super.initState();
@@ -127,6 +139,13 @@ class _BoardPageState extends State<BoardPage> {
         s = c.current!,
         l = AppLocalizations.of(context),
         lesson = s.tutorial;
+    // Keep the unsaved warning during Retry until its transaction acknowledges.
+    if (c.phase == SavePhase.failed) {
+      _failedInstance = s.id;
+    } else if (c.phase == SavePhase.clean || _failedInstance != s.id) {
+      _failedInstance = null;
+    }
+    final showSaveFailure = _failedInstance == s.id;
     final suggestion = c.hint?.move;
     final noMoves = !s.completed && !_hasLegalMove(s.board);
     final unmatched =
@@ -136,146 +155,83 @@ class _BoardPageState extends State<BoardPage> {
         !s.completed;
     return LayoutBuilder(
       builder: (context, box) {
+        if (MediaQuery.textScalerOf(context).scale(14) > 28) {
+          return LargeTextBoardPage(
+            controller: c,
+            onPause: () {
+              final token = c.motion?.token;
+              if (token != null) c.completeMotion(token);
+              widget.onPause();
+            },
+            onExtra: widget.onExtra,
+            showSaveFailure: showSaveFailure,
+          );
+        }
         final bounded = box.hasBoundedHeight;
-        final largeText = MediaQuery.textScalerOf(context).scale(18) > 26;
+        final largeText = MediaQuery.textScalerOf(context).scale(14) > 18.2;
         final hasPriorityNotice =
-            c.phase == SavePhase.failed ||
+            showSaveFailure ||
             c.rewardSaveFailed ||
             c.rewardIssue != null ||
             c.pendingRewards.isNotEmpty;
-        final showHintAction =
-            !hasPriorityNotice && (c.hintSearching || c.hint != null);
-        final showTutorialAction =
-            !hasPriorityNotice && !showHintAction && (lesson?.active ?? false);
+        final extraDetails = <Widget>[
+          if (c.recoveryNotice != null)
+            Text(
+              c.recoveryNotice == 'recovered'
+                  ? l.recoveredSave
+                  : l.unavailableSave,
+            ),
+          if (c.notice != null)
+            Semantics(liveRegion: true, child: Text(noticeLabel(l, c.notice!))),
+          if (kDebugMode)
+            ExpansionTile(
+              key: const PageStorageKey('board-diagnostics-state'),
+              title: const Text('Board diagnostics'),
+              children: [
+                Text(
+                  '${s.puzzle.id} · v${s.puzzle.contentVersion} · revision ${s.revision} · ${s.id}',
+                ),
+              ],
+            ),
+          if (c.library.engineering)
+            Text(l.drawingNotice, style: Theme.of(context).textTheme.bodySmall),
+          if (kDebugMode)
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: OutlinedButton(
+                key: const Key('fail-next'),
+                onPressed: c.busy ? null : c.failNextWrite,
+                child: Text(
+                  c.store.fault == null
+                      ? 'Development: fail next disk write'
+                      : 'Development: failure armed',
+                ),
+              ),
+            ),
+        ];
         final details = Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (c.phase == SavePhase.failed)
+            if (showSaveFailure)
               SaveFailureNotice(
                 key: const Key('save-failed'),
                 controller: c,
                 compact: bounded,
               )
-            else if (c.rewardSaveFailed ||
-                c.rewardIssue != null ||
-                c.pendingRewards.isNotEmpty)
-              RewardStatus(controller: c, compact: bounded)
-            else if (c.hintSearching || c.hint != null)
-              Row(
-                children: [
-                  Expanded(
-                    child: Semantics(
-                      liveRegion: true,
-                      child: Text(
-                        c.hintSearching
-                            ? l.searchingHint
-                            : hintLabel(l, c.hint!),
-                      ),
-                    ),
-                  ),
-                  if (!bounded)
-                    TextButton(
-                      key: const Key('cancel-hint'),
-                      onPressed: c.cancelHint,
-                      child: Text(l.cancelHint),
-                    ),
-                ],
-              )
-            else if (lesson?.active ?? false)
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      l.lessonAction(
-                        lesson!.step + 1,
-                        s.tutorialLength,
-                        s.puzzle.referenceMoves[lesson.step].from + 1,
-                        s.puzzle.referenceMoves[lesson.step].to + 1,
-                      ),
-                    ),
-                  ),
-                  if (!bounded)
-                    TextButton(
-                      key: const Key('skip-tutorial'),
-                      onPressed: c.busy ? null : c.skipTutorial,
-                      child: Text(l.skip),
-                    ),
-                ],
-              )
-            else if (noMoves)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [Text(l.noMoves), Text(l.noMovesBody)],
-              )
-            else if (c.rejection != null)
-              Semantics(
-                liveRegion: true,
-                child: Text(rejectionLabel(l, c.rejection!)),
-              )
             else
-              Text(
-                l.rulesTitle,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            if (c.recoveryNotice != null)
-              Text(
-                c.recoveryNotice == 'recovered'
-                    ? l.recoveredSave
-                    : l.unavailableSave,
-              ),
-            if (c.notice != null)
-              Semantics(
-                liveRegion: true,
-                child: Text(noticeLabel(l, c.notice!)),
-              ),
-            if (unmatched) Text(l.matchLabels),
-            if (suggestion != null)
-              Text(l.hintReason(colorLabel(l, s.board[suggestion.from].last))),
-            if (!bounded || suggestion == null)
-              Text(
-                l.goal,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            if (kDebugMode)
-              ExpansionTile(
-                key: const PageStorageKey('board-diagnostics-state'),
-                title: const Text('Board diagnostics'),
-                children: [
-                  Text(
-                    '${s.puzzle.id} · v${s.puzzle.contentVersion} · revision ${s.revision} · ${s.id}',
-                  ),
-                ],
-              ),
-            if (c.library.engineering)
-              Text(
-                l.drawingNotice,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            if (kDebugMode)
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: OutlinedButton(
-                  key: const Key('fail-next'),
-                  onPressed: c.busy ? null : c.failNextWrite,
-                  child: Text(
-                    c.store.fault == null
-                        ? 'Development: fail next disk write'
-                        : 'Development: failure armed',
-                  ),
-                ),
-              ),
+              RewardStatus(controller: c, compact: bounded),
+            ...extraDetails,
           ],
         );
-        final board = BoardView(
+        final boardView = BoardView(
           key: ValueKey('active-board-${s.id}'),
           state: s,
           selected: c.selectedSource,
           suggested: suggestion?.to,
+          hintSource: suggestion?.from,
+          addedBottle: hasPriorityNotice
+              ? null
+              : c.extraBottlePresentation?.bottleIndex,
           settings: c.settings,
           motion: c.motion,
           onMotionComplete: c.completeMotion,
@@ -283,113 +239,137 @@ class _BoardPageState extends State<BoardPage> {
           rejectionRevision: c.rejectionRevision,
           onTap: c.busy ? null : c.tapBottle,
         );
+        final board = kDebugMode && widget.debugBoardPresentation != null
+            ? widget.debugBoardPresentation!(boardView)
+            : boardView;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            KnitHeader(
-              compact: bounded,
-              title: s.slot == 'daily'
-                  ? l.dailyPuzzle
-                  : s.isReplay
-                  ? l.replayLevel(s.puzzle.mainLevel!)
-                  : l.level(s.puzzle.mainLevel!),
-              onBack: c.phase == SavePhase.saving ? null : c.goHome,
-              backKey: const Key('home'),
-              trailing: KnitIconButton(
-                size: bounded ? 48 : 52,
-                key: const Key('pause'),
-                icon: Icons.pause_rounded,
-                label: l.pause,
-                onPressed: c.phase == SavePhase.saving
-                    ? null
-                    : () {
-                        final token = c.motion?.token;
-                        if (token != null) c.completeMotion(token);
-                        widget.onPause();
-                      },
+            Semantics(
+              label:
+                  '${s.slot == 'daily' ? '${s.puzzleDate} · ${s.moveCount}' : l.levelMoves(s.puzzle.mainLevel!, s.moveCount)}. ${c.phase == SavePhase.saving
+                      ? l.saving
+                      : c.phase == SavePhase.clean
+                      ? l.saved
+                      : l.pauseMemory}',
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 48,
+                    height: 48,
+                    child: IconButton(
+                      key: const Key('home'),
+                      tooltip: l.home,
+                      padding: EdgeInsets.zero,
+                      onPressed: c.phase == SavePhase.saving ? null : c.goHome,
+                      icon: const ReferencePlayArt(
+                        source: Rect.fromLTWH(714, 61, 85, 82),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (!largeText) ...[
+                          const SizedBox(
+                            width: 28,
+                            height: 28,
+                            child: ReferenceMoonArt(),
+                          ),
+                          const SizedBox(width: 4),
+                        ],
+                        Flexible(
+                          child: Text(
+                            s.slot == 'daily'
+                                ? l.dailyPuzzle
+                                : s.isReplay
+                                ? l.replayLevel(s.puzzle.mainLevel!)
+                                : l.level(s.puzzle.mainLevel!),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontFamily: 'Nunito',
+                              fontSize: 22,
+                              height: 1.1,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 48,
+                    height: 48,
+                    child: IconButton(
+                      key: const Key('pause'),
+                      tooltip: l.pause,
+                      padding: EdgeInsets.zero,
+                      onPressed: c.phase == SavePhase.saving
+                          ? null
+                          : () {
+                              final token = c.motion?.token;
+                              if (token != null) c.completeMotion(token);
+                              widget.onPause();
+                            },
+                      icon: const ReferencePlayArt(
+                        source: Rect.fromLTWH(1248, 61, 88, 82),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
 
-            if (bounded && c.phase == SavePhase.failed)
-              SaveFailureNotice(
-                key: const Key('save-failed'),
+            if (hasPriorityNotice)
+              if (!bounded)
+                details
+              else if (showSaveFailure)
+                SaveFailureNotice(
+                  key: const Key('save-failed'),
+                  controller: c,
+                  compact: true,
+                )
+              else
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: box.maxHeight * .4),
+                  child: SingleChildScrollView(
+                    key: PageStorageKey('board-explanations-${s.id}'),
+                    child: details,
+                  ),
+                )
+            else ...[
+              if (c.recoveryNotice != null || c.notice != null)
+                KnitPanel(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(
+                    c.recoveryNotice != null
+                        ? c.recoveryNotice == 'recovered'
+                              ? l.recoveredSave
+                              : l.unavailableSave
+                        : noticeLabel(l, c.notice!),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              BoardFeedback(
                 controller: c,
-                compact: true,
-              )
-            else if (bounded)
-              SizedBox(
-                height: suggestion != null && !largeText && box.maxHeight >= 600
-                    ? 104
-                    : (lesson?.active ?? false) ||
-                          c.hintSearching ||
-                          c.hint != null ||
-                          noMoves ||
-                          c.rejection != null ||
-                          c.phase == SavePhase.failed ||
-                          c.pendingRewards.isNotEmpty ||
-                          c.rewardSaveFailed ||
-                          c.rewardIssue != null
-                    ? 52
-                    : 24,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        key: PageStorageKey('board-explanations-${s.id}'),
-                        child: details,
-                      ),
-                    ),
-                    if (showHintAction)
-                      TextButton(
-                        key: const Key('cancel-hint'),
-                        onPressed: c.cancelHint,
-                        child: Text(l.cancelHint),
-                      )
-                    else if (showTutorialAction)
-                      TextButton(
-                        key: const Key('skip-tutorial'),
-                        onPressed: c.busy ? null : c.skipTutorial,
-                        child: Text(l.skip),
-                      ),
-                  ],
-                ),
-              )
-            else
-              details,
-            if (bounded) Expanded(child: board) else board,
-            if (c.offersExtraBottle)
-              OutlinedButton.icon(
-                style: bounded
-                    ? OutlinedButton.styleFrom(
-                        minimumSize: const Size(48, 48),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        textStyle: const TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      )
-                    : null,
-                key: const Key('extra-bottle'),
-                onPressed: c.busy ? null : widget.onExtra,
-                icon: Icon(
-                  s.extraBottleGranted
-                      ? Icons.check_circle_outline
-                      : Icons.add_circle_outline,
-                ),
-                label: Text(
-                  s.extraBottleGranted ? l.bottleAdded : l.extraBottle,
-                  textAlign: TextAlign.center,
-                ),
+                noMoves: noMoves,
+                unmatched: unmatched,
+                extraDetails: extraDetails,
               ),
-            if (c.offersExtraBottle) const SizedBox(height: 10),
+            ],
+            if (hasPriorityNotice)
+              BoardFeedback(
+                controller: c,
+                noMoves: noMoves,
+                unmatched: unmatched,
+                extraDetails: extraDetails,
+                auxiliaryOnly: true,
+              ),
+            if (bounded) Expanded(child: board) else board,
             LayoutBuilder(
               builder: (context, box) {
-                final labels = <(String, IconData, String, VoidCallback?)>[
+                final actions = <(String, IconData, String, VoidCallback?)>[
                   (
                     'undo',
                     Icons.undo_rounded,
@@ -403,92 +383,109 @@ class _BoardPageState extends State<BoardPage> {
                       l.hint,
                       c.busy || c.hintSearching ? null : c.requestHint,
                     ),
-                  (
-                    'restart',
-                    Icons.replay_rounded,
-                    l.restart,
-                    c.busy ? null : widget.onRestart,
-                  ),
+                  if (c.offersExtraBottle)
+                    (
+                      'extra-bottle',
+                      s.extraBottleGranted
+                          ? Icons.check_circle_outline
+                          : Icons.add_circle_outline,
+                      s.extraBottleGranted ? l.bottleAdded : l.extraBottle,
+                      c.busy || s.extraBottleGranted ? null : widget.onExtra,
+                    ),
                 ];
-                final largeActions =
-                    MediaQuery.textScalerOf(context).scale(bounded ? 14 : 18) >
-                    26;
-                final columns = largeActions ? 2 : labels.length;
-                return Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 8,
-                  runSpacing: 10,
-                  children: [
-                    for (final item in labels)
-                      SizedBox(
-                        width: largeActions && item.$1 == 'restart'
-                            ? box.maxWidth
-                            : (box.maxWidth - (columns - 1) * 8) / columns,
-                        child: OutlinedButton(
-                          style: bounded
-                              ? OutlinedButton.styleFrom(
-                                  minimumSize: const Size(48, 48),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 2,
-                                    vertical: 2,
+                return Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    largeText ? 0 : 20,
+                    0,
+                    largeText ? 0 : 20,
+                    hasPriorityNotice &&
+                            MediaQuery.textScalerOf(context).scale(14) > 22.4
+                        ? 0
+                        : largeText
+                        ? 4
+                        : 12,
+                  ),
+                  child: IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        for (var i = 0; i < actions.length; i++) ...[
+                          if (i > 0) const SizedBox(width: 8),
+                          Expanded(
+                            child: OutlinedButton(
+                              key: Key(actions[i].$1),
+                              style:
+                                  OutlinedButton.styleFrom(
+                                    minimumSize: Size(48, largeText ? 48 : 80),
+                                    padding: largeText
+                                        ? const EdgeInsets.symmetric(
+                                            horizontal: 4,
+                                            vertical: 8,
+                                          )
+                                        : const EdgeInsets.fromLTRB(
+                                            4,
+                                            43,
+                                            4,
+                                            10,
+                                          ),
+                                    textStyle: const TextStyle(
+                                      fontFamily: 'Nunito',
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w900,
+                                      height: 1.1,
+                                    ),
+                                  ).copyWith(
+                                    backgroundBuilder:
+                                        (
+                                          context,
+                                          states,
+                                          child,
+                                        ) => knitPressFeedback(
+                                          context,
+                                          states,
+                                          Stack(
+                                            clipBehavior: Clip.none,
+                                            fit: StackFit.passthrough,
+                                            children: [
+                                              Positioned.fill(
+                                                child: ReferencePlayActionArt(
+                                                  index: actions[i].$1 == 'undo'
+                                                      ? 0
+                                                      : actions[i].$1 == 'hint'
+                                                      ? 1
+                                                      : 2,
+                                                  emphasized:
+                                                      actions[i].$1 == 'hint' &&
+                                                      (c.hintSearching ||
+                                                          c.hint != null),
+                                                  enabled: !states.contains(
+                                                    WidgetState.disabled,
+                                                  ),
+                                                  showIcon: !largeText,
+                                                  usedExtraBottle:
+                                                      actions[i].$1 ==
+                                                          'extra-bottle' &&
+                                                      s.extraBottleGranted,
+                                                ),
+                                              ),
+                                              ?child,
+                                            ],
+                                          ),
+                                        ),
                                   ),
-                                  textStyle: const TextStyle(
-                                    fontFamily: 'Nunito',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                )
-                              : null,
-                          key: Key(item.$1),
-                          onPressed: item.$4,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(item.$2, size: bounded ? 18 : 28),
-                              SizedBox(height: bounded ? 0 : 3),
-                              Text(item.$3, textAlign: TextAlign.center),
-                            ],
+                              onPressed: actions[i].$4,
+                              child: Text(
+                                actions[i].$3,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                  ],
+                        ],
+                      ],
+                    ),
+                  ),
                 );
               },
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    s.slot == 'daily'
-                        ? '${s.puzzleDate} · ${s.moveCount}'
-                        : l.levelMoves(s.puzzle.mainLevel!, s.moveCount),
-                    key: const Key('move-count'),
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodySmall
-                        ?.copyWith(height: 1.1),
-                  ),
-                ),
-                if (c.phase == SavePhase.failed)
-                  Tooltip(
-                    message: l.pauseMemory,
-                    child: Semantics(
-                      label: l.pauseMemory,
-                      child: const Icon(
-                        Icons.warning_amber,
-                        key: Key('save-status'),
-                        size: 20,
-                      ),
-                    ),
-                  )
-                else
-                  Expanded(
-                    child: Text(
-                      c.phase == SavePhase.saving ? l.saving : l.saved,
-                      key: const Key('save-status'),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ),
-              ],
             ),
           ],
         );

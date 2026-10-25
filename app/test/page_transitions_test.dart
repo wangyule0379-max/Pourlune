@@ -235,41 +235,53 @@ void main() {
     }),
   );
   testWidgets(
-    'new board explanation and different scene start at top; returning keeps scroll',
+    'modal help opens fresh per instance and independent scene details retain scroll',
     (t) => appCase(t, (c) async {
       await t.binding.setSurfaceSize(const Size(360, 568));
       addTearDown(() => t.binding.setSurfaceSize(null));
+      await t.pumpWidget(
+        PourluneApp(controller: c, textScaler: const TextScaler.linear(2)),
+      );
       await t.runAsync(() => c.startLevel(1));
       await t.pumpAndSettle();
       Finder scroll() => c.page == GamePage.board
           ? find.byKey(PageStorageKey('board-explanations-${c.current!.id}'))
-          : find.descendant(
-              of: find.byType(PageMotion),
-              matching: find.byType(SingleChildScrollView),
-            );
+          : find.byKey(PageStorageKey('scene-details-${c.selectedScene}'));
       double offset() => t
           .state<ScrollableState>(
             find.descendant(of: scroll(), matching: find.byType(Scrollable)),
           )
           .position
           .pixels;
+      Future<void> openHelp() async {
+        await t.longPress(find.byKey(const Key('feedback-title')));
+        await t.pumpAndSettle();
+        expect(offset(), 0);
+      }
+
+      Future<void> closeHelp() async {
+        await t.ensureVisible(find.text('Close'));
+        await t.tap(find.text('Close'));
+        await t.pumpAndSettle();
+      }
+
+      await openHelp();
       await t.drag(scroll(), const Offset(0, -600));
       await t.pumpAndSettle();
-      final previous = offset();
-      expect(previous, greaterThan(0));
+      expect(offset(), greaterThan(0));
+      await closeHelp();
       await c.goHome();
       await t.pumpAndSettle();
       await c.resumeSlot('ordinary');
       await t.pumpAndSettle();
-      expect(offset(), closeTo(previous, 1));
+      await openHelp();
+      await closeHelp();
+      final previousId = c.current!.id;
       await t.runAsync(() => c.start(c.library.main[1]!, replace: true));
       await t.pumpAndSettle();
-      debugPrint('SCROLL_CHECK previous=$previous, newInstance=${offset()}');
-      expect(
-        offset(),
-        0,
-        reason: 'New instance must not inherit another board scroll',
-      );
+      expect(c.current!.id, isNot(previousId));
+      await openHelp();
+      await closeHelp();
       await c.navigate(GamePage.scene, scene: 'color_studio');
       await t.pumpAndSettle();
       await t.drag(scroll(), const Offset(0, -600));

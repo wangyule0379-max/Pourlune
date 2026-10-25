@@ -14,6 +14,7 @@ import 'package:pourlune_dev/l10n/app_localizations.dart';
 import 'package:pourlune_dev/presentation/board_page.dart';
 import 'package:pourlune_dev/presentation/flame_board/game.dart';
 import 'package:pourlune_dev/presentation/flame_board/frame.dart';
+import 'package:pourlune_dev/presentation/bottle_foot_label.dart';
 
 import 'support/flame_board_support.dart';
 import 'support/flame_board_paint.dart';
@@ -73,8 +74,13 @@ void main() {
           expect(node.label, contains('Bottle ${i + 1}'));
           expect(node.label, contains(i < 4 ? '4 of 4' : '0 of 4'));
         }
-        expect(find.text('◆'), findsOneWidget);
-        expect(find.text('■'), findsOneWidget);
+        for (var i = 0; i < 4; i++) {
+          final target = t.widget<TargetCushion>(
+            find.byKey(Key('bottle-target-$i')),
+          );
+          expect(target.target, state.puzzle.targets[i]);
+          expect(target.symbolsEnabled, isTrue);
+        }
         final bottle = find.byKey(const Key('bottle-6'));
         await t.ensureVisible(bottle);
         await t.tap(bottle);

@@ -80,7 +80,25 @@ void main() {
               final finder = find.byElementPredicate(
                 (candidate) => identical(candidate, e),
               );
-              final rect = t.getRect(finder);
+              var rect = t.getRect(finder);
+              // Scroll content can be partly clipped at a fixed action bar.
+              // Compare its actual visible hit region, retaining the full
+              // overlap guard for controls inside the same viewport.
+              for (final ancestor
+                  in find
+                      .ancestor(
+                        of: finder,
+                        matching: find.byType(SingleChildScrollView),
+                      )
+                      .evaluate()) {
+                rect = rect.intersect(
+                  t.getRect(
+                    find.byElementPredicate(
+                      (candidate) => identical(candidate, ancestor),
+                    ),
+                  ),
+                );
+              }
               for (final other in rects) {
                 expect(
                   rect.overlaps(other),
@@ -118,7 +136,13 @@ void main() {
           }
 
           Future<void> close() async {
-            Navigator.of(t.element(find.byType(AlertDialog))).pop();
+            if (find.byKey(const Key('restart-close')).evaluate().isNotEmpty) {
+              final before = c.current;
+              await t.tap(find.byKey(const Key('restart-close')));
+              expect(c.current, same(before));
+            } else {
+              Navigator.of(t.element(find.byType(Dialog))).pop();
+            }
             await t.pumpAndSettle();
           }
 
@@ -137,7 +161,8 @@ void main() {
           await tap('pause');
           record('P06 pause');
           await tap('resume-pause');
-          await tap('restart');
+          await tap('pause');
+          await tap('pause-restart');
           record('P09 restart');
           await close();
           await tap('extra-bottle');

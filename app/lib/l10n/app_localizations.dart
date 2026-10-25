@@ -340,10 +340,16 @@ abstract class AppLocalizations {
   /// **'Your puzzle is saved.'**
   String get pauseSaved;
 
+  /// No description provided for @progressNotSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress not saved'**
+  String get progressNotSaved;
+
   /// No description provided for @pauseMemory.
   ///
   /// In en, this message translates to:
-  /// **'Some changes are only in memory. Resume and Retry before leaving.'**
+  /// **'Some changes are only in memory. Retry before leaving.'**
   String get pauseMemory;
 
   /// No description provided for @resumeGame.
@@ -445,31 +451,31 @@ abstract class AppLocalizations {
   /// No description provided for @searchingHint.
   ///
   /// In en, this message translates to:
-  /// **'Looking for a hint…'**
+  /// **'Finding a move…'**
   String get searchingHint;
 
   /// No description provided for @hintFound.
   ///
   /// In en, this message translates to:
-  /// **'Try bottle {from} → {to}. Tap the suggested destination to pour.'**
+  /// **'Bottle {from} → {to}'**
   String hintFound(int from, int to);
 
   /// No description provided for @hintReason.
   ///
   /// In en, this message translates to:
-  /// **'This moves the top {color} group along a solution for your current board.'**
-  String hintReason(String color);
+  /// **'Tap {to} to move the top {color} group along a solution.'**
+  String hintReason(int to, String color);
 
   /// No description provided for @hintTimeout.
   ///
   /// In en, this message translates to:
-  /// **'No hint found yet. You can keep playing.'**
+  /// **'No hint found yet'**
   String get hintTimeout;
 
   /// No description provided for @hintUnsolvable.
   ///
   /// In en, this message translates to:
-  /// **'Try undoing a move or restarting.'**
+  /// **'Try Undo'**
   String get hintUnsolvable;
 
   /// No description provided for @noMoves.
@@ -481,7 +487,7 @@ abstract class AppLocalizations {
   /// No description provided for @noMovesBody.
   ///
   /// In en, this message translates to:
-  /// **'Try an earlier move. You can undo or restart.'**
+  /// **'Undo or restart to keep playing.'**
   String get noMovesBody;
 
   /// No description provided for @matchLabels.
@@ -493,19 +499,19 @@ abstract class AppLocalizations {
   /// No description provided for @chooseAnother.
   ///
   /// In en, this message translates to:
-  /// **'Choose another bottle.'**
+  /// **'Choose another'**
   String get chooseAnother;
 
   /// No description provided for @chooseLiquid.
   ///
   /// In en, this message translates to:
-  /// **'Choose a bottle with liquid.'**
+  /// **'Choose a filled bottle.'**
   String get chooseLiquid;
 
   /// No description provided for @bottleFull.
   ///
   /// In en, this message translates to:
-  /// **'That bottle is full.'**
+  /// **'Bottle full'**
   String get bottleFull;
 
   /// No description provided for @matchingTop.
@@ -549,6 +555,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View patch'**
   String get viewPatch;
+
+  /// No description provided for @newPatchCompact.
+  ///
+  /// In en, this message translates to:
+  /// **'New patch'**
+  String get newPatchCompact;
 
   /// No description provided for @newPatch.
   ///
@@ -1257,6 +1269,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No ad is available from the service right now. Free tools still work. Please try later.'**
   String get adNoFill;
+
+  /// No description provided for @cantPourHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t pour here'**
+  String get cantPourHere;
+
+  /// No description provided for @matchingTopBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Use an empty bottle or match its top color.'**
+  String get matchingTopBody;
+
+  /// No description provided for @hintKeepPlaying.
+  ///
+  /// In en, this message translates to:
+  /// **'You can keep playing.'**
+  String get hintKeepPlaying;
+
+  /// No description provided for @hintUnsolvableBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo or restart to try another path.'**
+  String get hintUnsolvableBody;
+
+  /// No description provided for @matchLabelsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the color tags'**
+  String get matchLabelsTitle;
+
+  /// No description provided for @suggestedSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested source'**
+  String get suggestedSource;
+
+  /// No description provided for @hintDirectionSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottle {from} to bottle {to}; tap bottle {to} to pour.'**
+  String hintDirectionSemantics(int from, int to);
+
+  /// No description provided for @moreRoomTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A little more room'**
+  String get moreRoomTitle;
+
+  /// No description provided for @adUnavailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No ad available'**
+  String get adUnavailableTitle;
+
+  /// No description provided for @backToPuzzle.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to puzzle'**
+  String get backToPuzzle;
+
+  /// No description provided for @extraBottleAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra bottle added'**
+  String get extraBottleAdded;
+
+  /// No description provided for @extraOfferBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch an optional ad to add one empty bottle to this puzzle.'**
+  String get extraOfferBody;
+
+  /// No description provided for @extraOfferLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'One per puzzle, kept through Undo and Restart.\nHint, Undo and Restart remain free.'**
+  String get extraOfferLimit;
+
+  /// No description provided for @noAdPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Please try again in a moment.'**
+  String get noAdPrompt;
+
+  /// No description provided for @puzzleUnchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Your puzzle is unchanged. Free tools still work.'**
+  String get puzzleUnchanged;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get tryAgain;
+
+  /// No description provided for @completionLevels.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} / {total} levels'**
+  String completionLevels(int count, int total);
+
+  /// No description provided for @watchAdPlusBottle.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch ad for +1 bottle'**
+  String get watchAdPlusBottle;
+
+  /// No description provided for @compactSearching.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get compactSearching;
+
+  /// No description provided for @compactNoMoves.
+  ///
+  /// In en, this message translates to:
+  /// **'No moves'**
+  String get compactNoMoves;
+
+  /// No description provided for @compactSorted.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorted'**
+  String get compactSorted;
+
+  /// No description provided for @compactFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Full'**
+  String get compactFull;
+
+  /// No description provided for @compactMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Mismatch'**
+  String get compactMismatch;
+
+  /// No description provided for @compactRules.
+  ///
+  /// In en, this message translates to:
+  /// **'Rules'**
+  String get compactRules;
+
+  /// No description provided for @compactCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Check'**
+  String get compactCheck;
+
+  /// No description provided for @compactDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get compactDaily;
+
+  /// No description provided for @compactNotSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Not saved'**
+  String get compactNotSaved;
+
+  /// No description provided for @compactReward.
+  ///
+  /// In en, this message translates to:
+  /// **'Reward'**
+  String get compactReward;
+
+  /// No description provided for @yourCollection.
+  ///
+  /// In en, this message translates to:
+  /// **'Your collection'**
+  String get yourCollection;
+
+  /// No description provided for @sceneLevelsRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 level to complete this scene} other{{count} levels to complete this scene}}'**
+  String sceneLevelsRemaining(int count);
+
+  /// No description provided for @completeSceneToUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete\n{scene}'**
+  String completeSceneToUnlock(String scene);
+
+  /// No description provided for @collectionTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'A little more with every puzzle.'**
+  String get collectionTagline;
+
+  /// No description provided for @backToCollection.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to collection'**
+  String get backToCollection;
 }
 
 class _AppLocalizationsDelegate

@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pourlune_dev/application/game_controller.dart';
 import 'package:pourlune_dev/data/game_store.dart';
 import 'package:pourlune_dev/l10n/app_localizations.dart';
-import 'package:pourlune_dev/presentation/board_page.dart';
+import 'package:pourlune_dev/presentation/completion_bottles.dart';
 import 'package:pourlune_dev/presentation/collection_pages.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -34,10 +34,20 @@ void main() {
         _screen(CompletionPage(controller: c, onPlay: (_) {})),
       );
       await t.pumpAndSettle();
-      expect(find.byType(BoardView), findsOneWidget);
-      final board = t.widget<BoardView>(find.byType(BoardView));
+      expect(find.byType(CompletionBottles), findsOneWidget);
+      final board = t.widget<CompletionBottles>(find.byType(CompletionBottles));
       expect(board.state.toJson(), completed.toJson());
-      expect(board.onTap, isNull);
+      expect(
+        board.targetIndices.length,
+        completed.puzzle.targets.whereType<String>().length,
+      );
+      expect(
+        find.descendant(
+          of: find.byType(CompletionBottles),
+          matching: find.byType(OutlinedButton),
+        ),
+        findsNothing,
+      );
       expect(
         find.bySemanticsLabel('Your progress is saved on this device.'),
         findsOneWidget,

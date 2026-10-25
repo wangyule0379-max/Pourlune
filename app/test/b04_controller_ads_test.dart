@@ -160,6 +160,11 @@ void main() {
     h.callbacks!.closed();
     await watch;
     expect(c.current!.extraBottleGranted, isFalse);
+    expect(
+      c.extraBottlePresentation,
+      isNull,
+      reason: 'A callback whose grant failed to save cannot announce success.',
+    );
     expect(c.busy, isFalse);
     expect(c.canWatchExtraBottle, isFalse);
     await c.pour(0, 2);
@@ -169,9 +174,32 @@ void main() {
     await until(() => !c.rewardSaveFailed && c.current!.extraBottleGranted);
     expect(c.current!.moveCount, 1);
     expect(c.current!.board.length, 5);
+    final presentation = c.extraBottlePresentation!;
+    expect(presentation.instanceId, c.current!.id);
+    expect(presentation.bottleIndex, 4);
     h.callbacks!.reward();
     await Future<void>.delayed(const Duration(milliseconds: 2));
     expect(await store.db.query('reward_entitlements'), hasLength(1));
+    expect(
+      c.extraBottlePresentation,
+      presentation,
+      reason: 'Duplicate confirmation cannot restart the presentation.',
+    );
+    c.dismissExtraBottlePresentation(presentation.token);
+    expect(c.extraBottlePresentation, isNull);
+    await c.goHome();
+    await c.resumeSlot('ordinary');
+    expect(
+      c.extraBottlePresentation,
+      isNull,
+      reason: 'Loading an existing extra bottle is not a new success.',
+    );
+    final reopened = GameController(store, library: c.library);
+    await reopened.initialize();
+    await reopened.resumeSlot('ordinary');
+    expect(reopened.current!.extraBottleGranted, isTrue);
+    expect(reopened.extraBottlePresentation, isNull);
+    reopened.dispose();
   });
   test('AC21 late reward on replaced origin stays pending and cannot be restored without exact explicit replacement identity', () async {
     await init(through: 4);

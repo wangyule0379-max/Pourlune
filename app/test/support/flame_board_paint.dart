@@ -17,6 +17,10 @@ class PaintOrderProbe extends FlameBoardPainter {
     BottleShape shape,
     PlayerSettings settings, {
     required bool highlighted,
+    String? fixedTarget,
+    bool added = false,
+    List<Rect> glowExclusions = const [],
+    bool contentsSymbols = true,
     double wave = 0,
   }) {
     order.add(index);
@@ -28,6 +32,10 @@ class PaintOrderProbe extends FlameBoardPainter {
       shape,
       settings,
       highlighted: highlighted,
+      fixedTarget: fixedTarget,
+      added: added,
+      glowExclusions: glowExclusions,
+      contentsSymbols: contentsSymbols,
       wave: wave,
     );
   }

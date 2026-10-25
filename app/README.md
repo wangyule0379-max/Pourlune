@@ -21,7 +21,7 @@ Run from `app/` (tests load relative fixtures):
 flutter pub get --enforce-lockfile
 dart format --output=none --set-exit-if-changed lib test integration_test
 flutter analyze
-flutter test
+flutter test --concurrency=2
 flutter build apk --debug
 flutter build ios --simulator --debug
 flutter run -d <device-id>

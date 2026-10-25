@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../application/game_controller.dart';
 import '../l10n/app_localizations.dart';
-import 'board_page.dart';
 import 'knit_components.dart';
 import 'labels.dart';
 import 'scene_art.dart';
 import 'motion.dart';
+import 'completion_bottles.dart';
+import 'completion_layout.dart';
+import 'completion_compact_layout.dart';
+import 'parallel_collection/collection_visuals.dart';
+import 'parallel_collection/scene_detail.dart';
 
 Future<void> _finalNavigate(GameController c, GamePage target) async {
   final piece = c.receipt?.piece;
@@ -24,10 +28,11 @@ class ScenePreview extends StatelessWidget {
     required this.pieces,
     this.reveal,
     this.compact = false,
+    this.remainingLevels,
   });
   final String scene;
   final List<String> pieces;
-  final int? reveal;
+  final int? reveal, remainingLevels;
   final bool compact;
   @override
   Widget build(BuildContext context) {
@@ -40,37 +45,100 @@ class ScenePreview extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: Column(
-              children: [
-                Text(
-                  sceneTitle(scene),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                PatchProgress(scene: scene, pieces: pieces, compact: true),
-              ],
+            child: CollectionProgressText(
+              scene: scene,
+              pieces: pieces,
+              showTitle: true,
             ),
           ),
         ],
       );
     }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SceneArt(scene: scene, pieces: pieces, reveal: reveal),
-        Text(
-          sceneTitle(scene),
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-        const SizedBox(height: 12),
-        KnitPanel(
-          child: PatchProgress(scene: scene, pieces: pieces),
-        ),
-      ],
+    final l = AppLocalizations.of(context);
+    final progress = CollectionSurface(
+      key: const Key('scene-progress-tray'),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            l.sceneCount(ownedRegions(pieces, scene).length),
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 20,
+              height: 1.1,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 8),
+          CollectionPatchSlots(
+            scene: scene,
+            pieces: pieces,
+            showLocks: true,
+            raised: false,
+          ),
+          if (remainingLevels != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              remainingLevels == 0
+                  ? l.chapterComplete
+                  : l.sceneLevelsRemaining(remainingLevels!),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 14,
+                height: 1.15,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+    final hero = CollectionSceneDetail(
+      scene: scene,
+      pieces: pieces,
+      reveal: reveal,
+    );
+    final strip = CollectionObjectStrip(scene: scene, pieces: pieces);
+    return LayoutBuilder(
+      builder: (context, box) {
+        final scaler = MediaQuery.textScalerOf(context);
+        final slotHeight = (box.maxWidth - 36 - 24) / 5;
+        final progressHeight =
+            28 +
+            scaler.scale(20) * 1.1 +
+            8 +
+            slotHeight +
+            (remainingLevels == null ? 0 : 8 + scaler.scale(14) * 1.15);
+        final captionHeight = scaler.scale(14) * 1.1 + 2;
+        final stripHeight =
+            (box.maxWidth - 20) / 5 / .92 +
+            (captionHeight < 24 ? 24 : captionHeight);
+        final fixedHeight = progressHeight + stripHeight + 12;
+        final scroll =
+            box.hasBoundedHeight &&
+            box.maxWidth > box.maxHeight &&
+            box.maxHeight < fixedHeight + 128;
+        final content = Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (box.hasBoundedHeight && !scroll)
+              Expanded(child: Center(child: hero))
+            else
+              hero,
+            const SizedBox(height: 4),
+            progress,
+            const SizedBox(height: 8),
+            strip,
+          ],
+        );
+        return scroll
+            ? SingleChildScrollView(
+                key: const Key('scene-preview-scroll'),
+                child: content,
+              )
+            : content;
+      },
     );
   }
 }
@@ -79,78 +147,176 @@ class CollectionPage extends StatelessWidget {
   const CollectionPage({super.key, required this.controller});
   final GameController controller;
   @override
-  Widget build(BuildContext context) => Column(
-    children: [
-      for (final scene in ['color_studio', 'garden_nook', 'seaside_corner'])
-        Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: Semantics(
-            button: true,
-            enabled: !controller.busy,
-            child: InkWell(
-              key: Key('scene-$scene'),
-              borderRadius: BorderRadius.circular(28),
-              onTap: controller.busy
-                  ? null
-                  : () => controller.navigate(GamePage.scene, scene: scene),
-              child: KnitPanel(
-                padding: const EdgeInsets.all(16),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final narrow =
-                        constraints.maxWidth < 280 ||
-                        MediaQuery.textScalerOf(context).scale(1) > 1.4;
-                    final thumbnail = SizedBox(
-                      width: narrow ? 160 : 136,
-                      child: SceneArt(
-                        scene: scene,
-                        pieces: controller.progress.pieces,
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    return Column(
+      children: [
+        for (var index = 0; index < sceneIds.length; index++)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Builder(
+              builder: (context) {
+                final scene = sceneIds[index];
+                final locked = !controller.progress.unlockedLevels.contains(
+                  index * 20 + 1,
+                );
+                final requirement = index == 0
+                    ? null
+                    : l.completeSceneToUnlock(sceneTitle(sceneIds[index - 1]));
+                return Semantics(
+                  button: true,
+                  enabled: !controller.busy,
+                  child: InkWell(
+                    key: Key('scene-$scene'),
+                    borderRadius: BorderRadius.circular(28),
+                    onTap: controller.busy
+                        ? null
+                        : () =>
+                              controller.navigate(GamePage.scene, scene: scene),
+                    child: CollectionSurface(
+                      key: Key('collection-card-$scene'),
+                      locked: locked,
+                      padding: const EdgeInsets.all(12),
+                      child: LayoutBuilder(
+                        builder: (context, box) {
+                          final stacked =
+                              MediaQuery.textScalerOf(context).scale(20) > 28;
+                          final thumbnail = SizedBox(
+                            width: stacked
+                                ? 164
+                                : box.maxWidth * (locked ? .50 : .43),
+                            child: CollectionSurface(
+                              key: Key('collection-art-frame-$scene'),
+                              locked: locked,
+                              padding: const EdgeInsets.all(4),
+                              cornerRadius: 14,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    ClipRect(
+                                      child: Transform.scale(
+                                        scale: 1.12,
+                                        child: Opacity(
+                                          opacity: locked ? .55 : 1,
+                                          child: SceneArt(
+                                            scene: scene,
+                                            pieces: controller.progress.pieces,
+                                            preview: locked,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    if (locked)
+                                      CollectionLock(
+                                        key: Key('collection-lock-$scene'),
+                                        size: 48,
+                                        purple: true,
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                          final details = Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: locked
+                                ? CrossAxisAlignment.center
+                                : CrossAxisAlignment.stretch,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      sceneTitle(scene),
+                                      textAlign: locked
+                                          ? TextAlign.center
+                                          : TextAlign.start,
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        height: 1.1,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                  ),
+                                  if (!locked) const CollectionChevron(),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              if (locked && requirement != null)
+                                Text(
+                                  requirement,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    height: 1.3,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                )
+                              else ...[
+                                Text(
+                                  l.sceneCount(
+                                    ownedRegions(
+                                      controller.progress.pieces,
+                                      scene,
+                                    ).length,
+                                  ),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    height: 1.15,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                CollectionPatchSlots(
+                                  scene: scene,
+                                  pieces: controller.progress.pieces,
+                                ),
+                              ],
+                            ],
+                          );
+                          if (stacked) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Center(child: thumbnail),
+                                details,
+                              ],
+                            );
+                          }
+                          return ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minHeight: box.maxWidth * (locked ? .52 : .44),
+                            ),
+                            child: Row(
+                              children: [
+                                thumbnail,
+                                const SizedBox(width: 8),
+                                Expanded(child: details),
+                              ],
+                            ),
+                          );
+                        },
                       ),
-                    );
-                    final details = Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          sceneTitle(scene),
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 8),
-                        PatchProgress(
-                          scene: scene,
-                          pieces: controller.progress.pieces,
-                          compact: true,
-                        ),
-                      ],
-                    );
-                    if (narrow) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Center(child: thumbnail),
-                          details,
-                          const Align(
-                            alignment: Alignment.centerRight,
-                            child: Icon(Icons.chevron_right),
-                          ),
-                        ],
-                      );
-                    }
-                    return Row(
-                      children: [
-                        thumbnail,
-                        const SizedBox(width: 12),
-                        Expanded(child: details),
-                        const Icon(Icons.chevron_right),
-                      ],
-                    );
-                  },
-                ),
-              ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
+        Text(
+          l.collectionTagline,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 14,
+            height: 1.2,
+            fontWeight: FontWeight.w700,
+          ),
         ),
-    ],
-  );
+      ],
+    );
+  }
 }
 
 class ScenePage extends StatelessWidget {
@@ -160,47 +326,80 @@ class ScenePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = controller, l = AppLocalizations.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        ScenePreview(scene: c.selectedScene, pieces: c.progress.pieces),
-        const SizedBox(height: 16),
-        if (ownedRegions(c.progress.pieces, c.selectedScene).length == 5)
-          Text(l.chapterComplete, textAlign: TextAlign.center),
-        if (c.canContinueOrdinary)
-          FilledButton(
-            key: const Key('scene-continue'),
-            onPressed: c.busy ? null : () => c.resumeSlot('ordinary'),
-            child: Text(
-              c.continueLabelIsReplay
-                  ? l.continueReplay(c.ordinary!.puzzle.mainLevel!)
-                  : l.continueLevel(c.ordinary!.puzzle.mainLevel!),
-            ),
-          )
-        else if (c.progress.storyComplete)
-          FilledButton(
-            key: const Key('scene-daily'),
-            onPressed: c.busy ? null : () => c.navigate(GamePage.daily),
-            child: Text(l.dailyPuzzle),
-          )
-        else
-          FilledButton(
-            key: const Key('play-from-scene'),
-            onPressed:
-                c.busy ||
-                    c.progress.nextUnfinished == null ||
-                    !c.library.main.containsKey(c.progress.nextUnfinished)
-                ? null
-                : () => onPlay(c.progress.nextUnfinished!),
-            child: Text(l.playLevel(c.progress.nextUnfinished ?? 1)),
+    final actions = <Widget>[
+      if (c.canContinueOrdinary)
+        FilledButton(
+          key: const Key('scene-continue'),
+          onPressed: c.busy ? null : () => c.resumeSlot('ordinary'),
+          child: CollectionActionLabel(
+            c.continueLabelIsReplay
+                ? l.continueReplay(c.ordinary!.puzzle.mainLevel!)
+                : l.continueLevel(c.ordinary!.puzzle.mainLevel!),
           ),
-        const SizedBox(height: 8),
-        OutlinedButton(
-          key: const Key('collection-back'),
-          onPressed: c.busy ? null : () => c.navigate(GamePage.collection),
-          child: Text(l.collection),
+        )
+      else if (c.progress.storyComplete)
+        FilledButton(
+          key: const Key('scene-daily'),
+          onPressed: c.busy ? null : () => c.navigate(GamePage.daily),
+          child: CollectionActionLabel(l.dailyPuzzle),
+        )
+      else
+        FilledButton(
+          key: const Key('play-from-scene'),
+          onPressed:
+              c.busy ||
+                  c.progress.nextUnfinished == null ||
+                  !c.library.main.containsKey(c.progress.nextUnfinished)
+              ? null
+              : () => onPlay(c.progress.nextUnfinished!),
+          child: CollectionActionLabel(
+            l.playLevel(c.progress.nextUnfinished ?? 1),
+          ),
         ),
-      ],
+      OutlinedButton(
+        key: const Key('collection-back'),
+        onPressed: c.busy ? null : () => c.navigate(GamePage.collection),
+        child: CollectionActionLabel(
+          l.backToCollection,
+          icon: Icons.collections_bookmark_rounded,
+          leading: true,
+        ),
+      ),
+    ];
+    final preview = ScenePreview(
+      scene: c.selectedScene,
+      pieces: c.progress.pieces,
+      remainingLevels: sceneRemainingLevels(
+        c.selectedScene,
+        c.progress.completedLevels,
+      ),
+    );
+    final controls = CollectionActions(children: actions);
+    return LayoutBuilder(
+      builder: (context, box) {
+        if (!box.hasBoundedHeight) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [preview, const SizedBox(height: 12), controls],
+          );
+        }
+        final enlarged = MediaQuery.textScalerOf(context).scale(18) > 25;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: enlarged
+                  ? SingleChildScrollView(
+                      key: PageStorageKey('scene-details-${c.selectedScene}'),
+                      child: preview,
+                    )
+                  : preview,
+            ),
+            const SizedBox(height: 12),
+            controls,
+          ],
+        );
+      },
     );
   }
 }
@@ -242,7 +441,7 @@ class RewardPage extends StatelessWidget {
         FilledButton(
           key: const Key('next'),
           onPressed: c.busy ? null : c.nextLevel,
-          child: Text(
+          child: CollectionActionLabel(
             c.settlementKind == SettlementKind.chapter
                 ? l.continueChapter
                 : l.nextLevel,
@@ -264,55 +463,76 @@ class RewardPage extends StatelessWidget {
     ];
     return LayoutBuilder(
       builder: (context, box) {
-        final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.4;
-        final heading = Text(
-          unseen ? l.newPatch : sceneTitle(c.selectedScene),
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 26,
-            height: 1.1,
-            fontWeight: FontWeight.w900,
+        final largeText = MediaQuery.textScalerOf(context).scale(18) > 25;
+        final remaining = sceneRemainingLevels(
+          c.selectedScene,
+          c.progress.completedLevels,
+        );
+        final heading = ArcCompletionTitle(
+          ownedRegions(c.progress.pieces, c.selectedScene).length == 5
+              ? l.chapterComplete
+              : unseen
+              ? l.newPatch
+              : sceneTitle(c.selectedScene),
+        );
+        final scene = CollectionCelebrationHero(
+          child: SceneArt(
+            scene: c.selectedScene,
+            pieces: c.progress.pieces,
+            reveal: unseen ? int.parse(piece.split(':').last) : null,
           ),
         );
-        final scene = SceneArt(
-          scene: c.selectedScene,
-          pieces: c.progress.pieces,
-          reveal: unseen ? int.parse(piece.split(':').last) : null,
-        );
-        final progress = KnitPanel(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Column(
-            children: [
-              PatchProgress(
+        final progress = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CollectionSurface(
+              key: const Key('reward-patch-tray'),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+              child: CollectionPatchSlots(
                 scene: c.selectedScene,
                 pieces: c.progress.pieces,
-                compact: box.maxHeight < 560,
               ),
-              Text(
-                sceneTitle(c.selectedScene),
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
+            ),
+            const SizedBox(height: 4),
+            CollectionProgressText(
+              scene: c.selectedScene,
+              pieces: c.progress.pieces,
+              remainingLevels: remaining == 0 ? null : remaining,
+              showTitle: true,
+            ),
+          ],
+        );
+        final controls = CollectionActions(
+          compactSecondary:
+              box.hasBoundedHeight &&
+              actions.length > 2 &&
+              (box.maxHeight < 620 || largeText),
+          children: actions,
+        );
+        final footer = piece != null && c.progress.pieces.contains(piece)
+            ? Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  l.addedCollection,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
-              ),
-            ],
-          ),
-        );
-        final footer = Text(
-          l.addedCollection,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodySmall,
-        );
-        final details = Column(children: [heading, scene, progress, footer]);
+              )
+            : const SizedBox.shrink();
         if (!box.hasBoundedHeight) {
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              details,
-              _SettlementActions(children: actions),
+              heading,
+              scene,
+              progress,
+              const SizedBox(height: 12),
+              controls,
+              footer,
             ],
           );
         }
+        final details = Column(children: [heading, progress, scene, footer]);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -325,15 +545,14 @@ class RewardPage extends StatelessWidget {
                   : Column(
                       children: [
                         heading,
-                        const SizedBox(height: 8),
                         Expanded(child: Center(child: scene)),
                         progress,
-                        footer,
                       ],
                     ),
             ),
-            const SizedBox(height: 8),
-            _SettlementActions(children: actions),
+            SizedBox(height: largeText ? 6 : 10),
+            controls,
+            if (!largeText) footer,
           ],
         );
       },
@@ -357,17 +576,13 @@ class CompletionPage extends StatelessWidget {
         kind = c.settlementKind;
     final finalStory = kind == SettlementKind.finalStory,
         patch = kind == SettlementKind.patch || kind == SettlementKind.chapter;
-    final title = Text(
-      finalStory
-          ? l.storyComplete
-          : kind == SettlementKind.daily
-          ? l.dailyComplete
-          : kind == SettlementKind.replay
-          ? l.puzzleComplete
-          : l.beautifullySorted,
-      textAlign: TextAlign.center,
-      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
-    );
+    final title = finalStory
+        ? l.storyComplete
+        : kind == SettlementKind.daily
+        ? l.dailyComplete
+        : kind == SettlementKind.replay
+        ? l.puzzleComplete
+        : l.beautifullySorted;
     final actions = <Widget>[
       if (finalStory) ...[
         FilledButton(
@@ -432,7 +647,15 @@ class CompletionPage extends StatelessWidget {
         FilledButton(
           key: const Key('view-patch'),
           onPressed: c.busy ? null : c.viewPatch,
-          child: Text(l.viewPatch),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(child: Text(l.viewPatch, textAlign: TextAlign.center)),
+              const SizedBox(width: 8),
+              const Icon(Icons.arrow_forward_rounded),
+            ],
+          ),
         )
       else
         FilledButton(
@@ -440,111 +663,70 @@ class CompletionPage extends StatelessWidget {
           onPressed: c.busy ? null : c.nextLevel,
           child: Text(l.nextLevel),
         ),
-      OutlinedButton(
+      TextButton(
         key: const Key('home'),
         onPressed: c.busy ? null : c.goHome,
         child: Text(l.home),
       ),
     ];
     final saved = c.phase == SavePhase.clean && c.receipt != null;
-    final scene = s.slot == 'daily' ? null : sceneForLevel(s.puzzle.mainLevel!);
-    final status = !saved
-        ? l.pendingCompletion
-        : kind == SettlementKind.daily
-        ? (s.isReplay ? l.dailyReplayComplete : l.stampSaved(s.puzzleDate!))
-        : kind == SettlementKind.replay
-        ? l.replayComplete
-        : l.firstClearSaved;
-    final chapter = kind == SettlementKind.chapter || finalStory;
-    final progress = KnitPanel(
-      key: const Key('completion-progress'),
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      child: Column(
-        children: [
-          if (scene != null && kind != SettlementKind.replay)
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    sceneTitle(scene),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      height: 1.1,
-                      fontWeight: FontWeight.w900,
-                    ),
+    final badge = saved
+        ? _CompletionFeedback(
+            key: Key('completion-feedback-${s.id}'),
+            child: Semantics(
+              label: l.firstClearSaved,
+              liveRegion: true,
+              child: ClipPath(
+                clipper: const CompletionMedallionClipper(),
+                child: const ColorFiltered(
+                  colorFilter: ColorFilter.matrix([
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    4,
+                    0,
+                    -4,
+                    0,
+                    225,
+                  ]),
+                  child: CompletionReferenceArt(
+                    source: Rect.fromLTWH(166, 164, 157, 147),
                   ),
                 ),
-                Text(
-                  '${c.progress.completedLevels.where((n) => sceneForLevel(n) == scene).length} / 20',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    height: 1.1,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ],
-            ),
-          if (!saved ||
-              kind == SettlementKind.daily ||
-              kind == SettlementKind.replay)
-            Text(
-              status,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12, height: 1.1),
-            ),
-          if (patch && saved)
-            Text(
-              chapter ? l.chapterComplete : l.newPatch,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 16,
-                height: 1.1,
-                fontWeight: FontWeight.w900,
               ),
             ),
-          if (finalStory) ...[
-            Text(l.chapterComplete, textAlign: TextAlign.center),
-            Text(
-              l.storyCompleteBody,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12, height: 1.1),
-            ),
-          ],
-        ],
-      ),
-    );
+          )
+        : null;
     return LayoutBuilder(
       builder: (context, box) {
-        final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.4;
-        final short = box.hasBoundedHeight && box.maxHeight < 560;
-        final badge = KnitArt(
-          name: 'success',
-          height: short ? 40 : 72,
-          width: short ? 40 : 72,
+        final compact = compactCompletion(
+          box,
+          MediaQuery.textScalerOf(context),
         );
-        final heading = Column(
-          children: [
-            title,
-            if (saved && kind != SettlementKind.daily)
-              _CompletionFeedback(
-                key: Key('completion-feedback-${s.id}'),
-                child: Semantics(label: status, liveRegion: true, child: badge),
-              ),
-          ],
-        );
-        final hero = kind == SettlementKind.daily
+        final Widget hero = kind == SettlementKind.daily
             ? _CompletionFeedback(
                 key: saved ? Key('completion-feedback-${s.id}') : null,
-                child: FittedBox(
+                child: Center(
                   child: SizedBox(
-                    width: 200,
-                    height: 200,
+                    width: 180,
+                    height: 180,
                     child: Stack(
                       children: [
                         CalendarArt(
                           day: int.parse(s.puzzleDate!.split('-').last),
-                          size: 200,
+                          size: 180,
                         ),
                         if (saved)
                           const Positioned(
@@ -561,59 +743,32 @@ class CompletionPage extends StatelessWidget {
                   ),
                 ),
               )
-            : chapter && saved
-            ? SceneArt(
-                scene: scene!,
-                pieces: c.progress.pieces,
-                reveal:
-                    c.receipt?.piece != null &&
-                        !c.progress.revealedPieces.contains(c.receipt!.piece)
-                    ? int.parse(c.receipt!.piece!.split(':').last)
-                    : null,
-              )
-            : BoardView(
+            : CompletionBottles(
                 key: const Key('completion-preview'),
                 state: s,
-                selected: null,
-                onTap: null,
                 settings: c.settings,
-                preview: true,
-                keyPrefix: 'preview-bottle',
+                badge: compact ? null : badge,
+                singleRow: compact,
               );
-        if (!box.hasBoundedHeight) {
-          return Column(
-            children: [
-              heading,
-              hero,
-              progress,
-              _SettlementActions(children: actions),
-            ],
+        if (compact) {
+          return CompactCompletionLayout(
+            controller: c,
+            title: title,
+            hero: hero,
+            badge: kind == SettlementKind.daily ? null : badge,
+            actions: actions,
+            availableHeight: box.maxHeight,
           );
         }
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: largeText
-                  ? SingleChildScrollView(
-                      key: const Key('completion-details'),
-                      child: Column(children: [heading, hero, progress]),
-                    )
-                  : Column(
-                      children: [
-                        heading,
-                        Expanded(
-                          child: chapter || kind == SettlementKind.daily
-                              ? Center(child: hero)
-                              : hero,
-                        ),
-                        progress,
-                      ],
-                    ),
-            ),
-            const SizedBox(height: 4),
-            _SettlementActions(children: actions),
-          ],
+        return CompletionReferenceLayout(
+          controller: c,
+          title: title,
+          hero: hero,
+          primary: actions.first,
+          secondary: _SettlementActions(
+            referenceCompletion: true,
+            children: actions.skip(1).toList(),
+          ),
         );
       },
     );
@@ -623,8 +778,12 @@ class CompletionPage extends StatelessWidget {
 /// Buttons are laid out from their real text height, never scaled or clipped.
 /// Only the read-only celebration/description region above them can scroll.
 class _SettlementActions extends StatelessWidget {
-  const _SettlementActions({required this.children});
+  const _SettlementActions({
+    required this.children,
+    this.referenceCompletion = false,
+  });
   final List<Widget> children;
+  final bool referenceCompletion;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -648,7 +807,11 @@ class _SettlementActions extends StatelessWidget {
           style: compact(theme.filledButtonTheme.style),
         ),
         outlinedButtonTheme: OutlinedButtonThemeData(
-          style: compact(theme.outlinedButtonTheme.style),
+          style: compact(theme.outlinedButtonTheme.style).copyWith(
+            minimumSize: WidgetStatePropertyAll(
+              Size(48, referenceCompletion ? 60 : 48),
+            ),
+          ),
         ),
       ),
       child: LayoutBuilder(
@@ -659,7 +822,18 @@ class _SettlementActions extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              children.first,
+              if (referenceCompletion)
+                Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 320),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: children.first,
+                    ),
+                  ),
+                )
+              else
+                children.first,
               if (secondary.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 Wrap(

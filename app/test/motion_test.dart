@@ -300,7 +300,28 @@ void main() {
         ),
       );
       await artReady(t);
-      await t.runAsync(() => c.pour(0, 2));
+      await t.tap(find.byKey(const Key('bottle-0')));
+      await t.pumpAndSettle();
+      await t.pump(const Duration(milliseconds: 160));
+      final liftedMouth = boardGame(t).frame.poses[0].mouth;
+      expect(
+        liftedMouth.dy,
+        closeTo(boardGame(t).frame.layout.mouths[0].dy - 8, .01),
+      );
+      await t.runAsync(() => t.tap(find.byKey(const Key('bottle-2'))));
+      await t.pump();
+      expect(
+        boardGame(t).frame.poses[0].mouth,
+        liftedMouth,
+        reason: 'The actual legal pour starts at the current raised pose without a jump.',
+      );
+      await t.runAsync(() async {
+        final deadline = DateTime.now().add(const Duration(seconds: 3));
+        while (c.phase == SavePhase.saving &&
+            DateTime.now().isBefore(deadline)) {
+          await Future<void>.delayed(const Duration(milliseconds: 5));
+        }
+      });
       expect(c.current!.moveCount, 1);
       expect(c.phase, SavePhase.clean);
       expect(

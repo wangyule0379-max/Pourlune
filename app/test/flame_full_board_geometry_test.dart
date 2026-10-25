@@ -42,7 +42,9 @@ void main() {
       for (final width in [288.0, 338.0, 768.0]) {
         final layout = BoardLayout(width: width, count: count, textScale: 2);
         expect(layout.mouths.length, count);
-        expect(layout.cells.map((r) => r.width).toSet(), hasLength(1));
+        for (final cell in layout.cells) {
+          expect(cell.width, closeTo(layout.cells.first.width, .00001));
+        }
         for (final rect in layout.cells) {
           expect(rect.width, greaterThanOrEqualTo(48));
           expect(rect.left, greaterThanOrEqualTo(0));
@@ -71,10 +73,10 @@ void main() {
             for (var ms = 0.0; ms <= g.totalMs; ms += 15) {
               final f = g.frame(ms);
               final corners = [
-                layout.shape.imageRect.topLeft,
-                layout.shape.imageRect.topRight,
-                layout.shape.imageRect.bottomLeft,
-                layout.shape.imageRect.bottomRight,
+                layout.shape.visibleRect.topLeft,
+                layout.shape.visibleRect.topRight,
+                layout.shape.visibleRect.bottomLeft,
+                layout.shape.visibleRect.bottomRight,
               ].map(f.source.transform);
               for (final p in corners) {
                 expect(
@@ -103,7 +105,24 @@ void main() {
     }
   });
 
-  test('all 4–7 bottle flights avoid every capacity label at normal and 2x text', () {
+  test('compact large-text board fits both rows while keeping 48px bottle touch cells', () {
+    for (var count = 4; count <= 7; count++) {
+      final layout = BoardLayout(
+        width: 296,
+        count: count,
+        textScale: 2,
+        maxHeight: 284,
+        footLabels: false,
+      );
+      expect(layout.height, lessThanOrEqualTo(284.01));
+      for (final cell in layout.cells) {
+        expect(cell.width, greaterThanOrEqualTo(48));
+        expect(cell.height, greaterThanOrEqualTo(48));
+      }
+    }
+  });
+
+  test('all 4–7 bottle flights avoid the independent motion readout band', () {
     for (var count = 4; count <= 7; count++) {
       for (final width in [288.0, 370.0, 768.0]) {
         for (final scale in [1.0, 2.0]) {
@@ -142,31 +161,27 @@ void main() {
                 final g = geometryFor(layout, motion, initialLift: 9);
                 for (var ms = 0.0; ms <= g.totalMs; ms += 15) {
                   final f = g.frame(ms);
-                  final corners = [
-                    layout.shape.imageRect.topLeft,
-                    layout.shape.imageRect.topRight,
-                    layout.shape.imageRect.bottomLeft,
-                    layout.shape.imageRect.bottomRight,
-                  ].map(f.source.transform).toList();
-                  final art = Rect.fromLTRB(
-                    corners.map((p) => p.dx).reduce(math.min),
-                    corners.map((p) => p.dy).reduce(math.min),
-                    corners.map((p) => p.dx).reduce(math.max),
-                    corners.map((p) => p.dy).reduce(math.max),
-                  );
-                  for (var label = 0; label < count; label++) {
+                  final art = layout.shape.worldOutline(f.source);
+                  // Quiet captions leave this canvas during flight. The real
+                  // widget test also verifies every readout is below it.
+                  final readouts = Rect.fromLTWH(0, layout.height, width, 160);
+                  {
                     expect(
-                      art.overlaps(layout.labelRect(label)),
+                      Path.combine(
+                        PathOperation.intersect,
+                        art,
+                        Path()..addRect(readouts),
+                      ).computeMetrics().isNotEmpty,
                       isFalse,
                       reason:
-                          '$count $width scale$scale $from→$to units$units at$ms label$label',
+                          '$count $width scale$scale $from→$to units$units at$ms independent motion readouts, actual silhouette',
                     );
                     if (f.inStream > .00001) {
                       expect(
                         Rect.fromPoints(
                           f.streamStart,
                           f.streamEnd,
-                        ).inflate(2).overlaps(layout.labelRect(label)),
+                        ).inflate(2).overlaps(readouts),
                         isFalse,
                       );
                     }

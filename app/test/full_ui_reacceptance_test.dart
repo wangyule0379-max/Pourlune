@@ -9,9 +9,10 @@ import 'package:pourlune_core/pourlune_core.dart';
 import 'package:pourlune_dev/application/game_controller.dart';
 import 'package:pourlune_dev/data/content_library.dart';
 import 'package:pourlune_dev/data/game_store.dart';
-import 'package:pourlune_dev/presentation/knit_components.dart';
 import 'package:pourlune_dev/presentation/pourlune_app.dart';
 import 'package:pourlune_dev/presentation/scene_art.dart';
+import 'package:pourlune_dev/presentation/completion_bottles.dart';
+import 'package:pourlune_dev/presentation/reference_play_art.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'store_test.dart' show fixture, finish;
@@ -114,7 +115,11 @@ void main() {
       );
       await t.pumpAndSettle();
       await settleFlameBoard(t, c);
+      await t.longPress(find.byKey(const Key('feedback-title')));
+      await t.pumpAndSettle();
       await t.ensureVisible(find.byKey(const Key('fail-next')));
+      await t.pumpAndSettle();
+      await t.tap(find.text('Close'));
       await t.pumpAndSettle();
       await t.runAsync(() async {
         c.failNextWrite();
@@ -130,7 +135,9 @@ void main() {
         find.byKey(PageStorageKey('board-viewport-${state.id}')),
       );
       expect(
-        t.getRect(find.byKey(const Key('bottle-count-6'))).bottom,
+        t
+            .getRect(find.byKey(Key('bottle-count-${state.board.length - 1}')))
+            .bottom,
         lessThanOrEqualTo(board.bottom),
       );
       expect(t.takeException(), isNull);
@@ -256,17 +263,21 @@ void main() {
       await t.pumpWidget(PourluneApp(controller: c));
       await t.pumpAndSettle();
       await settleFlameBoard(t, c);
+      await t.longPress(find.byKey(const Key('feedback-title')));
+      await t.pumpAndSettle();
       final viewport = t.getRect(
         find.byKey(PageStorageKey('board-explanations-${c.current!.id}')),
       );
-      final reason = t.getRect(find.textContaining('This moves the top'));
+      final reason = t.getRect(find.textContaining('to move the top'));
       expect(reason.top, greaterThanOrEqualTo(viewport.top));
       expect(reason.bottom, lessThanOrEqualTo(viewport.bottom));
+      await t.tap(find.text('Close'));
+      await t.pumpAndSettle();
       expect(
         find.byKey(const Key('cancel-hint')).hitTestable(),
         findsOneWidget,
       );
-      expect(find.byKey(const Key('restart')).hitTestable(), findsOneWidget);
+      expect(find.byKey(const Key('pause')).hitTestable(), findsOneWidget);
       expect(t.takeException(), isNull);
     } finally {
       await t.pumpWidget(const SizedBox());
@@ -313,10 +324,16 @@ void main() {
           await t.pumpWidget(PourluneApp(controller: c));
           await t.pumpAndSettle();
           final primary = find.byKey(Key(reward ? 'next' : 'view-patch'));
+          final primaryRect = t.getRect(primary);
           expect(
-            t.getSize(primary).width,
-            greaterThanOrEqualTo(350),
+            primaryRect.width / 390,
+            inInclusiveRange(.75, .96),
             reason: 'Primary action must own its own row, independent of secondary action count.',
+          );
+          expect(primaryRect.center.dx, closeTo(195, 1));
+          expect(
+            t.getRect(find.byKey(Key(reward ? 'view-collection' : 'home'))).top,
+            greaterThanOrEqualTo(primaryRect.bottom),
           );
           if (reward) {
             expect(
@@ -327,17 +344,24 @@ void main() {
             );
           } else {
             final success = find.byWidgetPredicate(
-              (w) => w is KnitArt && w.name == 'success',
+              (w) => w is ClipPath && w.clipper is CompletionMedallionClipper,
             );
             expect(t.getSize(success).height, greaterThanOrEqualTo(64));
-            final first = t.getRect(find.byKey(const Key('preview-bottle-0')));
+            final targets = t
+                .widget<CompletionBottles>(find.byType(CompletionBottles))
+                .targetIndices;
+            final first = t.getRect(
+              find.byKey(Key('completion-bottle-${targets.first}')),
+            );
             final last = t.getRect(
-              find.byKey(Key('preview-bottle-${state.board.length - 1}')),
+              find.byKey(Key('completion-bottle-${targets.last}')),
             );
             expect(
               last.top,
-              greaterThan(first.bottom),
-              reason: 'Completed board retains its two-row grouping.',
+              targets.length > 2
+                  ? greaterThan(first.bottom)
+                  : closeTo(first.top, .01),
+              reason: 'Completed targets retain the actual one/two-row grouping; buffers gain no fake target.',
             );
             expect(
               find.byKey(const Key('completion-progress')),
@@ -389,12 +413,12 @@ void main() {
           final extra = find.byKey(const Key('extra-bottle'));
           final extraRect = t.getRect(extra);
           final boxes = <Rect>[];
-          for (final key in ['undo', 'hint', 'restart']) {
+          for (final key in ['undo', 'hint']) {
             final button = find.byKey(Key(key));
             final rect = t.getRect(button);
-            // A visible gutter is part of separating these two control groups.
+            // P05 places Undo/Hint/Extra in one row with a visible gutter.
             expect(
-              rect.top - extraRect.bottom,
+              extraRect.left - rect.right,
               greaterThanOrEqualTo(8),
               reason: '$size/$scale Extra$extraRect $key$rect',
             );
@@ -405,7 +429,7 @@ void main() {
             boxes.add(rect);
             final art = find.descendant(
               of: button,
-              matching: find.byType(KnitArt),
+              matching: find.byType(ReferencePlayActionArt),
             );
             final render = t.renderObject<RenderBox>(art);
             final painted = MatrixUtils.transformRect(

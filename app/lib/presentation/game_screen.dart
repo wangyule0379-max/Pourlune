@@ -17,6 +17,47 @@ import 'knit_components.dart';
 import 'service_views.dart';
 import 'motion.dart';
 import 'scene_art.dart';
+import 'reference_extra_art.dart';
+import 'reference_play_art.dart';
+import 'parallel_navigation/settings_reference_art.dart';
+
+ButtonStyle _gameDialogActionStyle(bool primary, {bool largeText = false}) =>
+    OutlinedButton.styleFrom(
+      minimumSize: Size(48, primary ? 64 : 60),
+      padding: EdgeInsets.symmetric(
+        horizontal: largeText ? 0 : 14,
+        vertical: largeText ? 8 : 12,
+      ),
+      foregroundColor: primary
+          ? const Color(0xff133000)
+          : const Color(0xff080a74),
+      backgroundColor: Colors.transparent,
+      side: BorderSide.none,
+      textStyle: const TextStyle(
+        fontFamily: 'Nunito',
+        fontSize: 22,
+        height: 1.1,
+        fontWeight: FontWeight.w900,
+      ),
+    ).copyWith(
+      backgroundBuilder: (_, states, child) => Stack(
+        fit: StackFit.passthrough,
+        children: [
+          Positioned.fill(
+            child: Opacity(
+              opacity: states.contains(WidgetState.disabled) ? .5 : 1,
+              child: ReferenceExtraSurface(
+                tileEdges: true,
+                kind: primary
+                    ? ExtraSurfaceKind.primary
+                    : ExtraSurfaceKind.secondary,
+              ),
+            ),
+          ),
+          ?child,
+        ],
+      ),
+    );
 
 class GameScreen extends StatefulWidget {
   const GameScreen({
@@ -25,11 +66,15 @@ class GameScreen extends StatefulWidget {
     this.puzzles = const [],
     this.advanceTestDay,
     this.audio,
+    this.debugBoardPresentation,
+    this.debugBoardPagePresentation,
   });
   final GameController controller;
   final List<Puzzle> puzzles;
   final VoidCallback? advanceTestDay;
   final GameAudio? audio;
+  final Widget Function(BoardView)? debugBoardPresentation;
+  final Widget Function(BoardPage)? debugBoardPagePresentation;
   @override
   State<GameScreen> createState() => _GameScreenState();
 }
@@ -144,28 +189,115 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   ) async =>
       await showKnitDialog<bool>(
         context: context,
-        builder: (context) => AlertDialog(
-          scrollable: true,
-          title: Text(title),
-          content: Text(body),
-          actions: key == 'confirm-reset'
-              ? [
-                  FilledButton(
-                    autofocus: true,
-                    style: FilledButton.styleFrom(
-                      backgroundColor: const Color(0xffb9d89f),
-                      foregroundColor: const Color(0xff061b78),
+        barrierColor: key == 'confirm-restart'
+            ? const Color(0x6639659a)
+            : Colors.black54,
+        builder: (context) => key == 'confirm-restart'
+            ? _restartCard(context, title, body, action)
+            : key == 'confirm-reset'
+            ? Builder(
+                builder: (context) {
+                  final largeText =
+                      MediaQuery.textScalerOf(context).scale(22) > 44;
+                  return Dialog(
+                    key: const Key('reset-card'),
+                    backgroundColor: Colors.transparent,
+                    shape: const RoundedRectangleBorder(),
+                    elevation: 0,
+                    insetPadding: EdgeInsets.all(largeText ? 8 : 24),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 340),
+                      child: Stack(
+                        children: [
+                          const Positioned.fill(
+                            child: ReferenceExtraSurface(
+                              kind: ExtraSurfaceKind.pause,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(largeText ? 16 : 24),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Flexible(
+                                  child: SingleChildScrollView(
+                                    key: const Key('reset-details'),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const SettingsReferenceIcon(
+                                          source: Rect.fromLTWH(
+                                            63,
+                                            890,
+                                            53,
+                                            57,
+                                          ),
+                                          destructive: true,
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          title,
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            fontSize: 24,
+                                            height: 1.1,
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 14),
+                                        Text(
+                                          body,
+                                          style: const TextStyle(
+                                            fontSize: 17,
+                                            height: 1.2,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                FilledButton(
+                                  autofocus: true,
+                                  style: _gameDialogActionStyle(
+                                    true,
+                                    largeText: largeText,
+                                  ),
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
+                                  child: Text(
+                                    l.keepProgress,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                OutlinedButton(
+                                  key: Key(key),
+                                  style: _gameDialogActionStyle(
+                                    false,
+                                    largeText: largeText,
+                                  ),
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: Text(
+                                    action,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    onPressed: () => Navigator.pop(context, false),
-                    child: Text(l.keepProgress),
-                  ),
-                  TextButton(
-                    key: Key(key),
-                    onPressed: () => Navigator.pop(context, true),
-                    child: Text(action),
-                  ),
-                ]
-              : [
+                  );
+                },
+              )
+            : AlertDialog(
+                scrollable: true,
+                title: Text(title),
+                content: Text(body),
+                actions: [
                   FilledButton(
                     autofocus: true,
                     onPressed: () => Navigator.pop(context, false),
@@ -177,9 +309,156 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                     child: Text(action),
                   ),
                 ],
-        ),
+              ),
       ) ??
       false;
+  Widget _restartCard(
+    BuildContext context,
+    String title,
+    String body,
+    String action,
+  ) {
+    final largeText = MediaQuery.textScalerOf(context).scale(22) > 44;
+    final details = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (!largeText) ...[
+          const Center(
+            child: SizedBox(
+              width: 84,
+              height: 84,
+              child: ColorFiltered(
+                colorFilter: ColorFilter.matrix([
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  -25,
+                  0,
+                  25,
+                  0,
+                  0,
+                ]),
+                child: ReferencePlayArt(
+                  asset: 'assets/art/p05-reference/reference-recovery.png',
+                  imageSize: Size(1477, 1065),
+                  source: Rect.fromLTWH(1186, 343, 94, 94),
+                  radius: 0,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 24,
+              height: 1.1,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 6),
+        ],
+        Text(
+          body,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 17,
+            height: 1.2,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      ],
+    );
+    final panel = Stack(
+      children: [
+        const Positioned.fill(
+          child: ReferenceExtraSurface(kind: ExtraSurfaceKind.pause),
+        ),
+        Padding(
+          padding: largeText
+              ? const EdgeInsets.fromLTRB(16, 60, 16, 16)
+              : const EdgeInsets.fromLTRB(24, 28, 24, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (largeText)
+                Flexible(
+                  child: SingleChildScrollView(
+                    key: const Key('restart-context'),
+                    child: details,
+                  ),
+                )
+              else
+                details,
+              const SizedBox(height: 16),
+              FilledButton(
+                key: const Key('restart-keep'),
+                autofocus: true,
+                style: _gameDialogActionStyle(true, largeText: largeText),
+                onPressed: () => Navigator.pop(context, false),
+                child: Text(l.keepPlaying, textAlign: TextAlign.center),
+              ),
+              const SizedBox(height: 12),
+              OutlinedButton(
+                key: const Key('confirm-restart'),
+                style: _gameDialogActionStyle(false, largeText: largeText),
+                onPressed: () => Navigator.pop(context, true),
+                child: Text(action, textAlign: TextAlign.center),
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          top: 6,
+          right: 6,
+          child: SizedBox(
+            width: 48,
+            height: 48,
+            child: IconButton(
+              key: const Key('restart-close'),
+              tooltip: l.close,
+              padding: EdgeInsets.zero,
+              onPressed: () => Navigator.pop(context, false),
+              icon: const ReferenceExtraArt(
+                source: Rect.fromLTWH(383, 308, 72, 72),
+                radius: 12,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+    final dialog = Dialog(
+      key: const Key('restart-card'),
+      backgroundColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(),
+      elevation: 0,
+      insetPadding: EdgeInsets.all(largeText ? 8 : 24),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: largeText ? 360 : 340),
+        child: largeText ? panel : SingleChildScrollView(child: panel),
+      ),
+    );
+    return largeText
+        ? Semantics(namesRoute: true, label: title, child: dialog)
+        : dialog;
+  }
+
   Future<void> _info(String title, String body) async {
     await showKnitDialog<void>(
       context: context,
@@ -278,6 +557,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     if (_pauseOpen || !mounted) return;
     _pauseOpen = true;
     String? action;
+    var failureVisible = c.phase == SavePhase.failed;
     if (c.motion != null) c.completeMotion(c.motion!.token);
     c.cancelHint();
     _audioPaused = true;
@@ -287,93 +567,194 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     try {
       action = await showKnitDialog<String>(
         context: context,
+        barrierColor: const Color(0x6639659a),
         builder: (dialogContext) => ListenableBuilder(
           listenable: c,
-          builder: (context, _) => Dialog(
-            key: const Key('pause-card'),
-            backgroundColor: Colors.transparent,
-            shape: const RoundedRectangleBorder(),
-            elevation: 0,
-            insetPadding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 24,
-            ),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 380),
-              child: SingleChildScrollView(
-                child: KnitPanel(
+          builder: (context, _) {
+            if (c.phase == SavePhase.failed) failureVisible = true;
+            if (c.phase == SavePhase.clean) failureVisible = false;
+            final failed = failureVisible;
+            final scaledTitle = MediaQuery.textScalerOf(context).scale(22);
+            final largeText =
+                scaledTitle > 44 || (failed && scaledTitle > 28.6);
+            final saving = c.phase == SavePhase.saving;
+            final status = c.phase == SavePhase.saving
+                ? l.saving
+                : c.phase == SavePhase.clean
+                ? l.pauseSaved
+                : failed && largeText
+                ? l.progressNotSaved
+                : l.pauseMemory;
+            final details = <Widget>[
+              if (!largeText) ...[
+                if (!failed)
+                  const Center(
+                    child: KnitArt(name: 'moon', width: 52, height: 52),
+                  ),
+                if (!failed) const SizedBox(height: 8),
+                Text(
+                  failed ? l.progressNotSaved : l.pauseTitle,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  status,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    height: 1.2,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                if (c.current?.puzzle.mainLevel != null)
+                  Text(
+                    l.levelMoves(
+                      c.current!.puzzle.mainLevel!,
+                      c.current!.moveCount,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+              ] else ...[
+                Semantics(
+                  label: failed && !saving ? l.pauseMemory : null,
+                  excludeSemantics: failed && !saving,
+                  child: Text(
+                    status,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 17,
+                      height: 1.2,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+              ],
+            ];
+            final recoveryAndResume = <Widget>[
+              if (failed) ...[
+                FilledButton(
+                  key: const Key('pause-retry'),
+                  style: _gameDialogActionStyle(true, largeText: largeText),
+                  onPressed: saving ? null : c.retry,
+                  child: Text(l.retry, textAlign: TextAlign.center),
+                ),
+                const SizedBox(height: 8),
+                OutlinedButton(
+                  key: const Key('pause-stay'),
+                  style: _gameDialogActionStyle(false, largeText: largeText),
+                  onPressed: saving ? null : c.stayHere,
+                  child: Text(l.stayHere, textAlign: TextAlign.center),
+                ),
+                const SizedBox(height: 8),
+              ],
+              FilledButton(
+                key: const Key('resume-pause'),
+                style: _gameDialogActionStyle(!failed, largeText: largeText),
+                onPressed: () => Navigator.pop(dialogContext),
+                child: Text(l.resumeGame, textAlign: TextAlign.center),
+              ),
+            ];
+            final navigation = <Widget>[
+              SizedBox(height: largeText ? 12 : 8),
+              OutlinedButton(
+                key: const Key('pause-restart'),
+                style: _gameDialogActionStyle(false, largeText: largeText),
+                onPressed: () {
+                  Navigator.pop(dialogContext, 'restart');
+                },
+                child: Text(l.restart, textAlign: TextAlign.center),
+              ),
+              SizedBox(height: largeText ? 12 : 8),
+              OutlinedButton(
+                key: const Key('pause-home'),
+                style: _gameDialogActionStyle(false, largeText: largeText),
+                onPressed: () {
+                  Navigator.pop(dialogContext, 'home');
+                },
+                child: Text(l.home, textAlign: TextAlign.center),
+              ),
+            ];
+            // At large system text, keep real actions in view and let only
+            // repeated context scroll. Never reduce the user's text scale.
+            final recover = largeText && failed;
+            final panel = Stack(
+              children: [
+                const Positioned.fill(
+                  child: ReferenceExtraSurface(kind: ExtraSurfaceKind.pause),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    largeText && failed ? 8 : 24,
+                    largeText || failed ? 60 : 26,
+                    largeText && failed ? 8 : 24,
+                    largeText || failed ? 24 : 20,
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: IconButton(
-                          tooltip: l.close,
-                          onPressed: () => Navigator.pop(dialogContext),
-                          icon: const Icon(Icons.close_rounded),
-                        ),
-                      ),
-                      const Center(
-                        child: KnitArt(name: 'moon', width: 64, height: 64),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        l.pauseTitle,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        c.phase == SavePhase.clean
-                            ? l.pauseSaved
-                            : l.pauseMemory,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 20),
-                      if (c.phase == SavePhase.failed) ...[
-                        OutlinedButton(
-                          key: const Key('pause-retry'),
-                          onPressed: c.retry,
-                          child: Text(l.retry),
-                        ),
-                        TextButton(
-                          key: const Key('pause-stay'),
-                          onPressed: c.stayHere,
-                          child: Text(l.stayHere),
-                        ),
-                        const SizedBox(height: 8),
-                      ],
-                      FilledButton(
-                        key: const Key('resume-pause'),
-                        onPressed: () => Navigator.pop(dialogContext),
-                        child: Text(l.resumeGame, textAlign: TextAlign.center),
-                      ),
-                      const SizedBox(height: 12),
-                      OutlinedButton(
-                        key: const Key('pause-restart'),
-                        onPressed: () {
-                          Navigator.pop(dialogContext, 'restart');
-                        },
-                        child: Text(l.restart, textAlign: TextAlign.center),
-                      ),
-                      const SizedBox(height: 12),
-                      OutlinedButton(
-                        key: const Key('pause-home'),
-                        onPressed: () {
-                          Navigator.pop(dialogContext, 'home');
-                        },
-                        child: Text(l.home, textAlign: TextAlign.center),
-                      ),
+                      if (largeText)
+                        Flexible(
+                          child: SingleChildScrollView(
+                            key: const Key('pause-context'),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                ...details,
+                                if (recover) ...navigation,
+                              ],
+                            ),
+                          ),
+                        )
+                      else
+                        ...details,
+                      SizedBox(height: largeText || failed ? 16 : 12),
+                      ...recoveryAndResume,
+                      if (!recover) ...navigation,
                     ],
                   ),
                 ),
+                Positioned(
+                  top: 6,
+                  right: 6,
+                  child: SizedBox(
+                    width: 48,
+                    height: 48,
+                    child: IconButton(
+                      key: const Key('pause-close'),
+                      tooltip: l.close,
+                      padding: EdgeInsets.zero,
+                      onPressed: () => Navigator.pop(dialogContext),
+                      icon: const ReferenceExtraArt(
+                        source: Rect.fromLTWH(383, 308, 72, 72),
+                        radius: 12,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+            return Dialog(
+              key: const Key('pause-card'),
+              backgroundColor: Colors.transparent,
+              shape: const RoundedRectangleBorder(),
+              elevation: 0,
+              insetPadding: EdgeInsets.symmetric(
+                horizontal: largeText && failed ? 8 : 24,
+                vertical: 24,
               ),
-            ),
-          ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: largeText && failed ? 360 : 340,
+                ),
+                child: largeText ? panel : SingleChildScrollView(child: panel),
+              ),
+            );
+          },
         ),
       );
     } finally {
@@ -445,7 +826,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       final title = switch (c.page) {
         GamePage.chapters => l.chapters,
         GamePage.daily => l.dailyPuzzle,
-        GamePage.collection => l.collection,
+        GamePage.collection => l.yourCollection,
         GamePage.scene => sceneTitle(c.selectedScene),
         GamePage.settings => l.settings,
         GamePage.rules => l.howToPlay,
@@ -469,11 +850,19 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
           onFeedback: () => openSupportEntry(context, c, feedback: true),
         ),
         GamePage.rules => RulesPage(controller: c),
-        GamePage.board => BoardPage(
-          controller: c,
-          onRestart: _restart,
-          onPause: _pause,
-          onExtra: () => showExtraBottle(context, c),
+        GamePage.board => Builder(
+          builder: (context) {
+            final board = BoardPage(
+              controller: c,
+              onRestart: _restart,
+              onPause: _pause,
+              onExtra: () => showExtraBottle(context, c),
+              debugBoardPresentation: widget.debugBoardPresentation,
+            );
+            return kDebugMode && widget.debugBoardPagePresentation != null
+                ? widget.debugBoardPagePresentation!(board)
+                : board;
+          },
         ),
         GamePage.completion => CompletionPage(controller: c, onPlay: _play),
         GamePage.reward => RewardPage(controller: c),
@@ -531,18 +920,12 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                           GamePage.board,
                           GamePage.completion,
                           GamePage.reward,
+                          GamePage.scene,
                         }.contains(renderedPage);
                         final notices = Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            if (c.phase == SavePhase.failed &&
-                                renderedPage != GamePage.board)
-                              SaveFailureNotice(
-                                key: const Key('save-failed'),
-                                controller: c,
-                                compact: bounded,
-                              ),
                             if (renderedPage != GamePage.board)
                               RewardStatus(controller: c, compact: bounded),
                             if (c.library.engineering &&
@@ -570,19 +953,21 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                         );
                         final header =
                             renderedPage == GamePage.home ||
-                                renderedPage == GamePage.board
+                                renderedPage == GamePage.board ||
+                                renderedPage == GamePage.completion
                             ? null
                             : KnitHeader(
-                                title:
-                                    renderedPage == GamePage.completion ||
-                                        renderedPage == GamePage.reward
+                                title: renderedPage == GamePage.reward
+                                    ? l.yourCollection
+                                    : renderedPage == GamePage.completion
                                     ? (c.current?.slot == 'daily'
                                           ? l.dailyPuzzle
                                           : l.level(
                                               c.current!.puzzle.mainLevel!,
                                             ))
                                     : title,
-                                compact: bounded,
+                                compact:
+                                    bounded && renderedPage != GamePage.scene,
                                 backLabel: renderedPage == GamePage.rules
                                     ? l.settings
                                     : l.home,
@@ -601,6 +986,13 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             if (bounded && header != null) header,
+                            if (c.phase == SavePhase.failed &&
+                                renderedPage != GamePage.board)
+                              SaveFailureNotice(
+                                key: const Key('save-failed'),
+                                controller: c,
+                                compact: bounded,
+                              ),
                             if (bounded)
                               ConstrainedBox(
                                 constraints: const BoxConstraints(
@@ -615,7 +1007,15 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                               notices,
                             if (bounded) Expanded(child: body) else body,
                             SizedBox(height: bounded ? 2 : 14),
-                            if (renderedPage != GamePage.board)
+                            if (renderedPage != GamePage.board &&
+                                !(c.phase == SavePhase.clean &&
+                                    c.receipt != null &&
+                                    (renderedPage == GamePage.completion ||
+                                        (renderedPage == GamePage.reward &&
+                                            c.receipt!.piece != null &&
+                                            c.progress.pieces.contains(
+                                              c.receipt!.piece,
+                                            )))))
                               Text(
                                 c.phase == SavePhase.saving
                                     ? l.saving

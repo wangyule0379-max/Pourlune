@@ -4,6 +4,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:pourlune_core/pourlune_core.dart';
 
 import '../../application/game_controller.dart';
@@ -28,6 +29,9 @@ class FlameBoardGame extends FlameGame {
   FlameBoardGame({this.onMotionComplete});
   final ValueChanged<int>? onMotionComplete;
   final visual = ValueNotifier<BoardVisualFrame?>(null);
+  final poseTick = ValueNotifier(0);
+  bool _posePublishScheduled = false;
+  bool _publishScheduled = false;
   final artStatus = ValueNotifier(BoardArtStatus.loading);
   BottleArt? art;
   FlameBoardPainter? _painter;
@@ -41,12 +45,10 @@ class FlameBoardGame extends FlameGame {
   _ProgressEffect? _selectionEffect, _errorEffect;
   final _pressEffects = List<_ProgressEffect?>.filled(7, null);
   final _press = List<double>.filled(7, 0);
-  double _elapsed = 0,
-      _lift = 0,
-      _initialLift = 0,
-      _shake = 0,
-      _selectionTarget = 0;
-  int? _selected, _suggested, _shaking;
+  final _selectionLifts = List<double>.filled(7, 0);
+  int? _selectionTarget;
+  double _elapsed = 0, _initialLift = 0, _shake = 0;
+  int? _selected, _suggested, _hintSource, _shaking, _addedBottle;
   int _rejectionRevision = 0;
   (String, int, int) _key(PourMotion m) => (m.instanceId, m.revision, m.token);
   BoardVisualFrame get frame => BoardVisualFrame(
@@ -56,6 +58,7 @@ class FlameBoardGame extends FlameGame {
     elapsedMs: _elapsed,
     reduced: _reduced,
     initialLift: _initialLift,
+    selectionLifts: _selectionLifts,
   );
   @override
   Color backgroundColor() => Colors.transparent;
@@ -97,10 +100,13 @@ class FlameBoardGame extends FlameGame {
     PourMotion? motion,
     int? selected,
     int? suggested,
+    int? hintSource,
+    int? addedBottle,
     int? rejectedBottle,
     int rejectionRevision = 0,
   }) {
     if (closed) return;
+    final instanceChanged = _state != null && _state!.id != state.id;
     final previousLayout = _layout;
     final resized =
         previousLayout != null &&
@@ -117,6 +123,11 @@ class FlameBoardGame extends FlameGame {
     _reduced = reduce;
     _selected = selected;
     _suggested = suggested;
+    _hintSource = hintSource;
+    _addedBottle = addedBottle;
+    if (_motion == null && (instanceChanged || resized || reduceChanged)) {
+      _cancel();
+    }
     if (_motion != null &&
         (resized || reduceChanged || !matchesMotion(state, _motion!))) {
       _cancel(release: true);
@@ -128,11 +139,18 @@ class FlameBoardGame extends FlameGame {
     } else if (!_background &&
         _ignored != _key(m) &&
         (_motion == null || _key(_motion!) != _key(m))) {
-      final previousLift = _lift;
+      final previousLift = _selectionLifts[m.from];
+      final returningLifts = List<double>.of(_selectionLifts);
       _cancel();
+      for (var i = 0; i < returningLifts.length; i++) {
+        if (i != m.from) {
+          _selectionLifts[i] = returningLifts[i];
+        }
+      }
       _initialLift = previousLift;
       _motion = m;
       _elapsed = 0;
+      _select();
       if (_failed) {
         _cancel(release: true);
       } else if (art != null) {
@@ -187,7 +205,7 @@ class FlameBoardGame extends FlameGame {
         _ignored = _key(m);
         _motion = null;
         _pourEffect = null;
-        _lift = 0;
+        _selectionLifts.fillRange(0, _selectionLifts.length, 0);
         _elapsed = 0;
         _publish();
         _release(m);
@@ -227,8 +245,8 @@ class FlameBoardGame extends FlameGame {
     }
     _motion = null;
     _elapsed = 0;
-    _lift = 0;
-    _selectionTarget = 0;
+    _selectionLifts.fillRange(0, _selectionLifts.length, 0);
+    _selectionTarget = null;
     _shake = 0;
     _shaking = null;
     if (release && m != null) {
@@ -240,17 +258,44 @@ class FlameBoardGame extends FlameGame {
   }
 
   void _select() {
-    if (_motion != null || art == null || _background) return;
-    final target = _selected != null && !_reduced ? 9.0 : 0.0;
+    if (art == null || _background) return;
+    final target =
+        _motion == null &&
+            !_reduced &&
+            _selected != null &&
+            _selected! >= 0 &&
+            _selected! < _state!.board.length &&
+            _state!.board[_selected!].isNotEmpty
+        ? _selected
+        : null;
+    if (_reduced) {
+      _selectionEffect?.onComplete = null;
+      _selectionEffect?.removeFromParent();
+      _selectionEffect = null;
+      _selectionTarget = null;
+      _selectionLifts.fillRange(0, _selectionLifts.length, 0);
+      return;
+    }
     if (_selectionEffect != null && _selectionTarget == target) return;
-    if ((_lift - target).abs() < .001) return;
+    if (List.generate(
+      _selectionLifts.length,
+      (i) => (_selectionLifts[i] - (i == target ? 8.0 : 0.0)).abs() < .001,
+    ).every((v) => v)) {
+      return;
+    }
     _selectionEffect?.onComplete = null;
     _selectionEffect?.removeFromParent();
     _selectionTarget = target;
-    final from = _lift;
+    final from = List<double>.of(_selectionLifts);
     late final _ProgressEffect effect;
     effect = _ProgressEffect(
-      (p) => _lift = from + (target - from) * Curves.easeOutCubic.transform(p),
+      (p) {
+        final eased = Curves.easeOutCubic.transform(p);
+        for (var i = 0; i < from.length; i++) {
+          _selectionLifts[i] =
+              from[i] + ((i == target ? 8.0 : 0.0) - from[i]) * eased;
+        }
+      },
       .13,
       onComplete: () {
         if (identical(_selectionEffect, effect)) _selectionEffect = null;
@@ -312,6 +357,17 @@ class FlameBoardGame extends FlameGame {
 
   void _publish() {
     if (closed || _state == null || _layout == null) return;
+    if (SchedulerBinding.instance.schedulerPhase ==
+        SchedulerPhase.persistentCallbacks) {
+      if (!_publishScheduled) {
+        _publishScheduled = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _publishScheduled = false;
+          _publish();
+        });
+      }
+      return;
+    }
     final next = frame, old = visual.value;
     if (old == null ||
         old.state.id != next.state.id ||
@@ -323,7 +379,11 @@ class FlameBoardGame extends FlameGame {
   }
 
   void _wake() {
-    if (art != null && !closed && !_background) resumeEngine();
+    if (art != null && !closed && !_background) {
+      // An idle game needs an explicit first frame when its inputs change.
+      if (paused) stepEngine(stepTime: 0);
+      resumeEngine();
+    }
   }
 
   @override
@@ -345,6 +405,20 @@ class FlameBoardGame extends FlameGame {
   void update(double dt) {
     super.update(dt);
     _publish();
+    if (_motion != null && !closed) {
+      if (SchedulerBinding.instance.schedulerPhase ==
+          SchedulerPhase.persistentCallbacks) {
+        if (!_posePublishScheduled) {
+          _posePublishScheduled = true;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _posePublishScheduled = false;
+            if (!closed) poseTick.value++;
+          });
+        }
+      } else {
+        poseTick.value++;
+      }
+    }
     if (_pourEffect == null &&
         _selectionEffect == null &&
         _errorEffect == null &&
@@ -364,8 +438,9 @@ class FlameBoardGame extends FlameGame {
       _settings,
       selected: _selected,
       suggested: _suggested,
+      hintSource: _hintSource,
+      addedBottle: _addedBottle,
       press: _press,
-      lift: _lift,
       shaking: _errorEffect == null ? null : _shaking,
       shake: _shake,
       reduced: _reduced,
@@ -381,6 +456,7 @@ class FlameBoardGame extends FlameGame {
       art = null;
       _painter = null;
       visual.dispose();
+      poseTick.dispose();
       artStatus.dispose();
     }
     super.onRemove();

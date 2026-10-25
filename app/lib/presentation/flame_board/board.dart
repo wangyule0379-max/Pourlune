@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,10 @@ import 'package:pourlune_core/pourlune_core.dart';
 import '../../application/game_controller.dart';
 import '../../data/player_settings.dart';
 import '../../l10n/app_localizations.dart';
-import '../bottle.dart' show ink, cream, liquidColors, symbols;
+import '../bottle.dart' show ink;
+import '../bottle_foot_label.dart';
 import '../labels.dart' show colorLabel;
+import 'readout_dock.dart';
 import 'game.dart';
 import 'geometry.dart';
 
@@ -22,6 +25,8 @@ class FlameBoard extends StatefulWidget {
     required this.selected,
     required this.onTap,
     this.suggested,
+    this.hintSource,
+    this.addedBottle,
     this.settings = const PlayerSettings(),
     this.keyPrefix = 'bottle',
     this.motion,
@@ -31,7 +36,7 @@ class FlameBoard extends StatefulWidget {
     this.preview = false,
   });
   final GameInstance state;
-  final int? selected, suggested, rejectedBottle;
+  final int? selected, suggested, hintSource, rejectedBottle, addedBottle;
   final ValueChanged<int>? onTap, onMotionComplete;
   final PlayerSettings settings;
   final String keyPrefix;
@@ -84,13 +89,61 @@ class _FlameBoardState extends State<FlameBoard> {
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, box) {
       final w = widget, l = AppLocalizations.of(context);
+      final scaler = MediaQuery.textScalerOf(context);
+      final capacityWidth = ReadoutDock.capacityWidth(context);
+      final ordinaryColumns = math.min(
+        w.state.board.length,
+        math.max(1, ((box.maxWidth + 4) / (capacityWidth + 8)).floor()),
+      );
+      final ordinaryRows = (w.state.board.length / ordinaryColumns).ceil();
+      final targetSize = w.settings.colorSymbols
+          ? 28.0
+          : math.max(28.0, scaler.scale(12) + 6);
+      final ordinaryRowHeight =
+          math.max(34, targetSize) +
+          scaler.scale(12) * 1.2 +
+          scaler.scale(14) * 1.2 +
+          8;
+      final ordinaryDockHeight =
+          ordinaryRows * ordinaryRowHeight + (ordinaryRows - 1) * 4;
+      final labelHeight =
+          math.max(34, scaler.scale(12) + 12) + 3 + scaler.scale(14) * 1.2 + 1;
+      final denseDock =
+          !w.preview &&
+          (scaler.scale(14) > 28 ||
+              box.maxHeight <
+                  ordinaryDockHeight + 2 * (48 + labelHeight + 5) + 28);
+      final columns = denseDock
+          ? math.min(
+              w.state.board.length,
+              math.max(
+                1,
+                ((box.maxWidth + 4) /
+                        (ReadoutDock.denseWidth(context, targetSize) + 8))
+                    .floor(),
+              ),
+            )
+          : ordinaryColumns;
+      final rows = (w.state.board.length / columns).ceil();
+      final rowHeight = denseDock
+          ? math.max(scaler.scale(12) * 1.2, targetSize) +
+                scaler.scale(14) * 1.2 +
+                2
+          : ordinaryRowHeight;
+      final dockHeight = w.preview ? 0.0 : rows * rowHeight + (rows - 1) * 4;
       final layout = BoardLayout(
         width: box.maxWidth,
-        maxHeight: box.maxHeight,
+        maxHeight: math.max(0, box.maxHeight - dockHeight),
         count: w.state.board.length,
         textScale: MediaQuery.textScalerOf(context).scale(14) / 14,
         preview: w.preview,
+        footLabels: !denseDock,
+        // Quiet lower captions use the same band as the temporary dock. The
+        // painted flight ends above that band; every bottle keeps its pose.
+        bottomCaptionsExternal: !w.preview && !denseDock,
       );
+      // Reconcile all inputs atomically before building controls. The game
+      // defers notifier publication during layout, rather than its state.
       game.show(
         state: w.state,
         layout: layout,
@@ -99,10 +152,13 @@ class _FlameBoardState extends State<FlameBoard> {
         motion: w.motion,
         selected: w.selected,
         suggested: w.suggested,
+        hintSource: w.hintSource,
+        addedBottle: w.addedBottle,
         rejectedBottle: w.rejectedBottle,
         rejectionRevision: w.rejectionRevision,
       );
       final board = SizedBox(
+        key: const Key('dock-canvas'),
         width: box.maxWidth,
         height: layout.height,
         child: AnimatedBuilder(
@@ -120,7 +176,7 @@ class _FlameBoardState extends State<FlameBoard> {
             ),
           ),
           builder: (context, canvas) {
-            final visual = game.visual.value ?? game.frame;
+            final visual = game.frame;
             final canTap =
                 w.onTap != null &&
                 game.artStatus.value == BoardArtStatus.ready &&
@@ -130,14 +186,11 @@ class _FlameBoardState extends State<FlameBoard> {
               children: [
                 Positioned.fill(child: canvas!),
                 for (var i = 0; i < w.state.board.length; i++)
-                  Positioned(
-                    left: layout.cells[i].left,
-                    top: layout.cells[i].top,
-                    width: layout.cells[i].width,
-                    height: layout.shape.height,
+                  Positioned.fromRect(
+                    rect: w.preview ? layout.cells[i] : layout.hitRect(i),
                     child: Semantics(
                       label:
-                          '${l.bottleSemantics(i + 1, i < w.state.puzzle.targets.length && w.state.puzzle.targets[i] != null ? l.targetLabel(colorLabel(l, w.state.puzzle.targets[i]!)) : l.bufferLabel, visual.contents[i].isEmpty ? l.emptyLabel : l.contentsLabel(visual.contents[i].map((c) => colorLabel(l, c)).join(', ')), visual.counts[i])}${w.suggested == i ? ' ${l.suggestedTarget}' : ''}',
+                          '${l.bottleSemantics(i + 1, i < w.state.puzzle.targets.length && w.state.puzzle.targets[i] != null ? l.targetLabel(colorLabel(l, w.state.puzzle.targets[i]!)) : l.bufferLabel, visual.contents[i].isEmpty ? l.emptyLabel : l.contentsLabel(visual.contents[i].map((c) => colorLabel(l, c)).join(', ')), visual.counts[i])}${w.hintSource == i ? ' ${l.suggestedSource}' : ''}${w.suggested == i ? ' ${l.suggestedTarget}' : ''}',
                       button: !w.preview,
                       enabled: canTap,
                       selected: w.selected == i,
@@ -186,24 +239,56 @@ class _FlameBoardState extends State<FlameBoard> {
                       ),
                     ),
                   ),
-                for (var i = 0; i < w.state.board.length; i++)
-                  Positioned.fromRect(
-                    rect: layout.labelRect(i),
-                    child: IgnorePointer(
-                      child: ExcludeSemantics(
-                        child: _CapacityLabel(
-                          index: i,
-                          target: i < w.state.puzzle.targets.length
-                              ? w.state.puzzle.targets[i]
-                              : null,
-                          count: visual.counts[i],
-                          prefix: w.keyPrefix,
-                          symbolsEnabled: w.settings.colorSymbols,
-                          strongContrast: w.settings.strongContrast,
+                if (!denseDock && visual.active == null)
+                  for (var i = 0; i < w.state.board.length; i++)
+                    Positioned.fromRect(
+                      rect: layout.labelRect(i),
+                      child: IgnorePointer(
+                        child: ExcludeSemantics(
+                          child: BottleFootLabel(
+                            index: i,
+                            target: i < w.state.puzzle.targets.length
+                                ? w.state.puzzle.targets[i]
+                                : null,
+                            count: visual.counts[i],
+                            prefix: w.keyPrefix,
+                            symbolsEnabled: w.settings.colorSymbols,
+                            strongContrast: w.settings.strongContrast,
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                if (!w.preview)
+                  if (visual.active case final active?)
+                    AnimatedBuilder(
+                      animation: game.poseTick,
+                      builder: (context, _) => Positioned(
+                        left: (game.frame.poses[active.from].mouth.dx - 22)
+                            .clamp(0.0, math.max(0, box.maxWidth - 44)),
+                        top: (game.frame.poses[active.from].mouth.dy - 48)
+                            .clamp(0.0, math.max(0, layout.height - 44)),
+                        child: ExcludeSemantics(
+                          child: DecoratedBox(
+                            key: const Key('dock-moving-index'),
+                            decoration: BoxDecoration(
+                              color: const Color(0xfffff9ed),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: ink, width: 2),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 5,
+                                vertical: 2,
+                              ),
+                              child: Text(
+                                '${active.from + 1}',
+                                style: dockNumberStyle,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
               ],
             );
           },
@@ -215,88 +300,34 @@ class _FlameBoardState extends State<FlameBoard> {
         key: const Key('board-accessibility-viewport'),
         child: SingleChildScrollView(
           key: PageStorageKey('board-viewport-${w.state.id}'),
-          child: board,
+          child: Column(
+            children: [
+              board,
+              if (!w.preview)
+                SizedBox(
+                  height: dockHeight,
+                  child: ValueListenableBuilder(
+                    valueListenable: game.visual,
+                    builder: (context, _, _) {
+                      final frame = game.frame;
+                      return (!denseDock && frame.active == null)
+                          ? const SizedBox.expand()
+                          : ReadoutDock(
+                              state: frame.state,
+                              frame: frame,
+                              settings: w.settings,
+                              prefix: w.keyPrefix,
+                              columns: columns,
+                              rowHeight: rowHeight,
+                              dense: denseDock,
+                            );
+                    },
+                  ),
+                ),
+            ],
+          ),
         ),
       );
     },
-  );
-}
-
-class _CapacityLabel extends StatelessWidget {
-  const _CapacityLabel({
-    required this.index,
-    required this.target,
-    required this.count,
-    required this.prefix,
-    required this.symbolsEnabled,
-    required this.strongContrast,
-  });
-  final int index, count;
-  final String? target;
-  final String prefix;
-  final bool symbolsEnabled, strongContrast;
-  @override
-  Widget build(BuildContext context) => Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '${index + 1} ·',
-              style: const TextStyle(
-                color: ink,
-                fontSize: 12,
-                height: 1.2,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: target == null ? cream : liquidColors[target],
-                border: Border.all(
-                  color: ink,
-                  width: strongContrast ? 1.4 : .7,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                child: Text(
-                  target == null
-                      ? '—'
-                      : symbolsEnabled
-                      ? symbols[target]!
-                      : target!,
-                  style: const TextStyle(
-                    color: ink,
-                    fontSize: 12,
-                    height: 1.2,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      const SizedBox(height: 3),
-      FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Text(
-          '$count/4',
-          key: Key('$prefix-count-$index'),
-          style: const TextStyle(
-            color: ink,
-            fontSize: 14,
-            height: 1.2,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-      ),
-    ],
   );
 }

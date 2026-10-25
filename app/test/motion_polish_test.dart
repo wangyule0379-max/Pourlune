@@ -103,12 +103,7 @@ void main() {
       await t.runAsync(() => c.startLevel(1));
       await t.pumpAndSettle();
       final pause = t
-          .widget<OutlinedButton>(
-            find.descendant(
-              of: find.byKey(const Key('pause')),
-              matching: find.byType(OutlinedButton),
-            ),
-          )
+          .widget<IconButton>(find.byKey(const Key('pause')))
           .onPressed!;
       pause();
       pause();

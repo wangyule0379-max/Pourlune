@@ -157,8 +157,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pauseSaved => 'Your puzzle is saved.';
 
   @override
+  String get progressNotSaved => 'Progress not saved';
+
+  @override
   String get pauseMemory =>
-      'Some changes are only in memory. Resume and Retry before leaving.';
+      'Some changes are only in memory. Retry before leaving.';
 
   @override
   String get resumeGame => 'Resume';
@@ -213,41 +216,41 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancelHint => 'Cancel hint';
 
   @override
-  String get searchingHint => 'Looking for a hint…';
+  String get searchingHint => 'Finding a move…';
 
   @override
   String hintFound(int from, int to) {
-    return 'Try bottle $from → $to. Tap the suggested destination to pour.';
+    return 'Bottle $from → $to';
   }
 
   @override
-  String hintReason(String color) {
-    return 'This moves the top $color group along a solution for your current board.';
+  String hintReason(int to, String color) {
+    return 'Tap $to to move the top $color group along a solution.';
   }
 
   @override
-  String get hintTimeout => 'No hint found yet. You can keep playing.';
+  String get hintTimeout => 'No hint found yet';
 
   @override
-  String get hintUnsolvable => 'Try undoing a move or restarting.';
+  String get hintUnsolvable => 'Try Undo';
 
   @override
   String get noMoves => 'No moves available';
 
   @override
-  String get noMovesBody => 'Try an earlier move. You can undo or restart.';
+  String get noMovesBody => 'Undo or restart to keep playing.';
 
   @override
   String get matchLabels => 'Match each color to its label.';
 
   @override
-  String get chooseAnother => 'Choose another bottle.';
+  String get chooseAnother => 'Choose another';
 
   @override
-  String get chooseLiquid => 'Choose a bottle with liquid.';
+  String get chooseLiquid => 'Choose a filled bottle.';
 
   @override
-  String get bottleFull => 'That bottle is full.';
+  String get bottleFull => 'Bottle full';
 
   @override
   String get matchingTop => 'Empty or matching top color only.';
@@ -271,6 +274,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get viewPatch => 'View patch';
+
+  @override
+  String get newPatchCompact => 'New patch';
 
   @override
   String get newPatch => 'New patch unlocked';
@@ -688,4 +694,120 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get adNoFill =>
       'No ad is available from the service right now. Free tools still work. Please try later.';
+
+  @override
+  String get cantPourHere => 'Can\'t pour here';
+
+  @override
+  String get matchingTopBody => 'Use an empty bottle or match its top color.';
+
+  @override
+  String get hintKeepPlaying => 'You can keep playing.';
+
+  @override
+  String get hintUnsolvableBody => 'Undo or restart to try another path.';
+
+  @override
+  String get matchLabelsTitle => 'Check the color tags';
+
+  @override
+  String get suggestedSource => 'Suggested source';
+
+  @override
+  String hintDirectionSemantics(int from, int to) {
+    return 'Bottle $from to bottle $to; tap bottle $to to pour.';
+  }
+
+  @override
+  String get moreRoomTitle => 'A little more room';
+
+  @override
+  String get adUnavailableTitle => 'No ad available';
+
+  @override
+  String get backToPuzzle => 'Back to puzzle';
+
+  @override
+  String get extraBottleAdded => 'Extra bottle added';
+
+  @override
+  String get extraOfferBody =>
+      'Watch an optional ad to add one empty bottle to this puzzle.';
+
+  @override
+  String get extraOfferLimit =>
+      'One per puzzle, kept through Undo and Restart.\nHint, Undo and Restart remain free.';
+
+  @override
+  String get noAdPrompt => 'Please try again in a moment.';
+
+  @override
+  String get puzzleUnchanged =>
+      'Your puzzle is unchanged. Free tools still work.';
+
+  @override
+  String get tryAgain => 'Try again';
+
+  @override
+  String completionLevels(int count, int total) {
+    return '$count / $total levels';
+  }
+
+  @override
+  String get watchAdPlusBottle => 'Watch ad for +1 bottle';
+
+  @override
+  String get compactSearching => 'Search';
+
+  @override
+  String get compactNoMoves => 'No moves';
+
+  @override
+  String get compactSorted => 'Sorted';
+
+  @override
+  String get compactFull => 'Full';
+
+  @override
+  String get compactMismatch => 'Mismatch';
+
+  @override
+  String get compactRules => 'Rules';
+
+  @override
+  String get compactCheck => 'Check';
+
+  @override
+  String get compactDaily => 'Daily';
+
+  @override
+  String get compactNotSaved => 'Not saved';
+
+  @override
+  String get compactReward => 'Reward';
+
+  @override
+  String get yourCollection => 'Your collection';
+
+  @override
+  String sceneLevelsRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count levels to complete this scene',
+      one: '1 level to complete this scene',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String completeSceneToUnlock(String scene) {
+    return 'Complete\n$scene';
+  }
+
+  @override
+  String get collectionTagline => 'A little more with every puzzle.';
+
+  @override
+  String get backToCollection => 'Back to collection';
 }

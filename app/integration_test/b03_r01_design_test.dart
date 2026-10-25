@@ -175,7 +175,7 @@ void main() {
       for (final size in sizes) {
         expect(size, sizes.first);
       }
-      for (final key in ['undo', 'hint', 'restart', 'pause']) {
+      for (final key in ['undo', 'hint', 'pause']) {
         final finder = find.byKey(Key(key));
         await t.ensureVisible(finder);
         expect(finder.hitTestable(), findsOneWidget, reason: key);

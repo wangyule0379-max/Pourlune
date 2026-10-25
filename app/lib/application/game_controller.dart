@@ -87,6 +87,22 @@ class GameController extends ChangeNotifier {
   final void Function(GameFeedback)? onFeedback;
   PourMotion? motion;
   int _motionToken = 0;
+  int _extraBottlePresentationToken = 0;
+  ({int token, String instanceId, int bottleIndex})? _extraBottlePresentation;
+
+  /// Ephemeral proof of a newly saved grant, never reconstructed from a save.
+  ({int token, String instanceId, int bottleIndex})?
+  get extraBottlePresentation =>
+      _foreground && page == GamePage.board && phase == SavePhase.clean && !busy
+      ? _extraBottlePresentation
+      : null;
+
+  void dismissExtraBottlePresentation(int token) {
+    if (_extraBottlePresentation?.token != token) return;
+    _extraBottlePresentation = null;
+    _notify();
+  }
+
   int _motionPresenters = 0;
   ({String instanceId, int revision})? _pendingCompletionFeedback;
   int? rejectedBottle;
@@ -316,6 +332,12 @@ class GameController extends ChangeNotifier {
 
   void _notify() {
     if (!_alive) return;
+    if (_extraBottlePresentation != null &&
+        (current?.id != _extraBottlePresentation!.instanceId ||
+            current?.extraBottleGranted != true ||
+            page != GamePage.board)) {
+      _extraBottlePresentation = null;
+    }
     _syncMetrics();
     notifyListeners();
     if (_rewardConfirmations.isNotEmpty &&
@@ -568,6 +590,7 @@ class GameController extends ChangeNotifier {
     final s = current;
     if (!_canMutate || s == null || s.completed) return;
     if (index < 0 || index >= s.board.length) return;
+    _extraBottlePresentation = null;
     if (hintSearching) _cancelHint(clearSelection: false);
     if (selectedSource == index) {
       _cancelHint();
@@ -594,6 +617,7 @@ class GameController extends ChangeNotifier {
       !busy && _candidate == null && _write == _Write.snapshot;
   Future<void> pour(int from, int to) async {
     if (!_canMutate || current == null) return;
+    _extraBottlePresentation = null;
     final result = current!.pour(from, to);
     rejection = result.rejection;
     if (result.changed) {
@@ -643,6 +667,7 @@ class GameController extends ChangeNotifier {
   }
 
   Future<void> _change(GameInstance state) async {
+    _extraBottlePresentation = null;
     if (identical(current, state)) return;
     _cancelHint();
     if (current?.tutorial?.active == true && state.tutorial?.finished == true) {
@@ -1018,6 +1043,7 @@ class GameController extends ChangeNotifier {
   }
 
   Future<void> _reloadRewardSlots() async {
+    final before = current;
     for (final slot in ['ordinary', 'daily']) {
       _slots[slot] = (await store.load(slot)).instance;
     }
@@ -1025,6 +1051,20 @@ class GameController extends ChangeNotifier {
     if (s != null && _slots[s.slot]?.id == s.id) current = _slots[s.slot];
     pendingRewards = await store.pendingRewards();
     await _refresh();
+    final after = current;
+    if (before != null &&
+        after != null &&
+        before.id == after.id &&
+        !before.extraBottleGranted &&
+        after.extraBottleGranted &&
+        !after.completed &&
+        page == GamePage.board) {
+      _extraBottlePresentation = (
+        token: ++_extraBottlePresentationToken,
+        instanceId: after.id,
+        bottleIndex: after.board.length - 1,
+      );
+    }
   }
 
   Future<void> _drainRewards() async {
@@ -1146,6 +1186,7 @@ class GameController extends ChangeNotifier {
         (state.tutorial?.active ?? false)) {
       return;
     }
+    _extraBottlePresentation = null;
     _cancelHint();
     final generation = _hintGeneration;
     _hintEvent = (

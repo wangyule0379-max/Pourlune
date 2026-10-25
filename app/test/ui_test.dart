@@ -53,7 +53,8 @@ void main() {
       expect(c.current!.moveCount, 0);
       await tap(const Key('bottle-0'));
       await tap(const Key('bottle-2'));
-      await tap(const Key('restart'));
+      await tap(const Key('pause'));
+      await tap(const Key('pause-restart'));
       expect(find.text('Start this level again?'), findsOneWidget);
       await tap(const Key('confirm-restart'));
       expect(c.current!.moveCount, 0);
@@ -69,7 +70,7 @@ void main() {
         find.descendant(
           of: find.byKey(const Key('pause-card')),
           matching: find.text(
-            'Some changes are only in memory. Resume and Retry before leaving.',
+            'Some changes are only in memory. Retry before leaving.',
           ),
         ),
         findsOneWidget,
@@ -88,7 +89,7 @@ void main() {
         await tap(Key('bottle-${m.from}'));
         await tap(Key('bottle-${m.to}'));
       }
-      expect(find.text('Beautifully sorted.'), findsOneWidget);
+      expect(find.bySemanticsLabel('Beautifully sorted.'), findsOneWidget);
       expect(c.receipt, isNotNull);
       await tap(const Key('home'));
       await tap(const Key('progress'));
@@ -133,10 +134,10 @@ void main() {
       for (var i = 0; i < 7; i++) {
         expect(find.byKey(Key('bottle-$i')), findsOneWidget);
       }
-      expect(
-        t.getSize(find.byKey(const Key('bottle-0'))),
-        t.getSize(find.byKey(const Key('bottle-6'))),
-      );
+      final firstSize = t.getSize(find.byKey(const Key('bottle-0')));
+      final lastSize = t.getSize(find.byKey(const Key('bottle-6')));
+      expect(firstSize.width, closeTo(lastSize.width, .00001));
+      expect(firstSize.height, closeTo(lastSize.height, .00001));
       expect(find.bySemanticsLabel(RegExp('Bottle 7.*Buffer')), findsOneWidget);
       expect(t.takeException(), isNull);
       semantics.dispose();

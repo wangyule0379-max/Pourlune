@@ -81,7 +81,12 @@ void main() {
         }
       }
       await tap('view-patch');
-      expect(find.text('New patch unlocked'), findsOneWidget);
+      final patchSemantics = t.ensureSemantics();
+      try {
+        expect(find.bySemanticsLabel('New patch unlocked'), findsOneWidget);
+      } finally {
+        patchSemantics.dispose();
+      }
       expect(c.progress.pieces, ['color_studio:1']);
       expect(c.progress.revealedPieces, isEmpty);
       await tap('view-collection');
@@ -168,7 +173,8 @@ void main() {
         day = LocalDay('2026-10-24', 'Test', 480);
         await t.pump(const Duration(minutes: 1));
         expect(c.today.date, '2026-10-24');
-        expect(find.textContaining('2026-10-24'), findsWidgets);
+        expect(find.text('Sat, Oct 24, 2026'), findsOneWidget);
+        expect(find.byKey(const Key('date-2026-10-24')), findsOneWidget);
         expect(t.takeException(), isNull);
       } finally {
         await t.pumpWidget(const SizedBox());
@@ -267,7 +273,7 @@ void main() {
     await t.pumpWidget(PourluneApp(controller: c));
     await t.pumpAndSettle();
     expect(find.text('No moves available'), findsOneWidget);
-    expect(find.byKey(const Key('restart')), findsOneWidget);
+    expect(find.byKey(const Key('pause')).hitTestable(), findsOneWidget);
     await t.runAsync(c.requestHint);
     await t.pumpAndSettle();
     expect(c.hint!.status, HintStatus.noMoves);

@@ -114,7 +114,8 @@ Future<void> main() async {
     await tap('pause');
     await record('pause', screenshot: true);
     await tap('resume-pause');
-    await tap('restart');
+    await tap('pause');
+    await tap('pause-restart');
     await tap('confirm-restart');
     await record('restart-same-instance');
     await tap('pause');

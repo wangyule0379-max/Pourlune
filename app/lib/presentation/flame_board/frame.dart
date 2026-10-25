@@ -1,4 +1,7 @@
 import 'package:flutter/foundation.dart';
+
+import 'dart:ui' show Offset;
+
 import 'package:pourlune_core/pourlune_core.dart';
 
 import '../../application/game_controller.dart';
@@ -15,6 +18,7 @@ class BoardVisualFrame {
     this.elapsedMs = 0,
     bool reduced = false,
     double initialLift = 0,
+    List<double> selectionLifts = const [],
   }) {
     final m = motion != null && matchesMotion(state, motion) ? motion : null;
     active = m;
@@ -39,10 +43,29 @@ class BoardVisualFrame {
         ? state.board
         : presentedContents(m.before, m.from, m.to, out, arrived);
     counts = contents.map((b) => b.length).toList(growable: false);
-    poses = [for (final mouth in layout.mouths) BottlePose(mouth, 0)];
+    poses = [
+      for (var i = 0; i < layout.mouths.length; i++)
+        BottlePose(
+          layout.mouths[i] +
+              Offset(
+                0,
+                !reduced && i < selectionLifts.length ? -selectionLifts[i] : 0,
+              ),
+          0,
+        ),
+    ];
     if (pour != null) {
       poses[source!] = pour!.source;
-      poses[target!] = pour!.target;
+      poses[target!] = BottlePose(
+        pour!.target.mouth +
+            Offset(
+              0,
+              !reduced && target < selectionLifts.length
+                  ? -selectionLifts[target]
+                  : 0,
+            ),
+        pour!.target.angle,
+      );
     }
     bands = [
       for (var i = 0; i < state.board.length; i++)

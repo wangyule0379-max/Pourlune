@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pourlune_dev/application/game_controller.dart';
 import 'package:pourlune_dev/data/game_store.dart';
@@ -21,6 +22,11 @@ Future<void> tap(WidgetTester t, Finder finder) async {
 
 void main() {
   sqfliteFfiInit();
+  setUpAll(() async {
+    await (FontLoader(
+      'Nunito',
+    )..addFont(rootBundle.load('assets/fonts/nunito/Nunito[wght].ttf'))).load();
+  });
   late Directory dir;
   late GameStore store;
   late GameController c;
@@ -97,6 +103,8 @@ void main() {
       });
       await t.pumpAndSettle();
       expect(c.current!.extraBottleGranted, isTrue);
+      expect(find.text('Extra bottle added'), findsOneWidget);
+      expect(find.byKey(const Key('extra-added-feedback')), findsOneWidget);
       expect(find.byKey(const Key('undo')), findsOneWidget);
       expect(find.byKey(const Key('hint')), findsOneWidget);
       await t.pumpWidget(const SizedBox());
@@ -133,7 +141,7 @@ void main() {
     },
   );
   testWidgets(
-    'AC07 Restart stays full width at320px/2x; levels1-3 hide extra offer',
+    'AC07 Pause Restart stays full width at320px/2x; levels1-3 hide extra offer',
     (t) async {
       await t.binding.setSurfaceSize(const Size(320, 900));
       addTearDown(() => t.binding.setSurfaceSize(null));
@@ -141,11 +149,15 @@ void main() {
         PourluneApp(controller: c, textScaler: TextScaler.linear(2)),
       );
       await t.pumpAndSettle();
+      await tap(t, find.byKey(const Key('pause')));
+      await t.pumpAndSettle();
       expect(
-        t.getSize(find.byKey(const Key('restart'))).width,
-        greaterThan(270),
+        t.getSize(find.byKey(const Key('pause-restart'))).width,
+        greaterThan(210),
       );
       expect(t.takeException(), isNull);
+      await tap(t, find.byKey(const Key('resume-pause')));
+      await t.pumpAndSettle();
       await t.runAsync(() => c.startLevel(3, replace: true));
       await t.pumpAndSettle();
       expect(find.byKey(const Key('extra-bottle')), findsNothing);

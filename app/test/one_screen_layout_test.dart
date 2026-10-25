@@ -11,6 +11,7 @@ import 'package:pourlune_dev/data/content_library.dart';
 import 'package:pourlune_dev/data/game_store.dart';
 import 'package:pourlune_dev/l10n/app_localizations.dart';
 import 'package:pourlune_dev/presentation/scene_art.dart';
+import 'package:pourlune_dev/presentation/labels.dart';
 import 'package:pourlune_dev/presentation/pourlune_app.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -186,7 +187,6 @@ void main() {
           'extra-bottle',
           'undo',
           'hint',
-          'restart',
         ]) {
           final finder = find.byKey(Key(key));
           expect(finder, findsOneWidget);
@@ -266,7 +266,6 @@ void main() {
               'extra-bottle',
               'undo',
               'hint',
-              'restart',
             ]) {
               visible(t, key, bounds);
             }
@@ -293,7 +292,6 @@ void main() {
                   'extra-bottle',
                   'undo',
                   'hint',
-                  'restart',
                 ]) {
                   visible(t, key, bounds);
                 }
@@ -369,7 +367,6 @@ void main() {
           'extra-bottle',
           'undo',
           'hint',
-          'restart',
           for (var i = 0; i < 7; i++) 'bottle-$i',
         ]) {
           visible(t, key, bounds);
@@ -568,7 +565,6 @@ void main() {
           'home',
           'pause',
           'undo',
-          'restart',
           if (situation != 'tutorial') 'hint',
           if (situation == 'hint') 'cancel-hint',
           if (situation == 'tutorial') 'skip-tutorial',
@@ -653,7 +649,7 @@ void main() {
             final pane = find.byKey(
               PageStorageKey('board-explanations-${c.current!.id}'),
             );
-            final paneRect = t.getRect(pane);
+            final paneRect = t.getRect(find.byKey(const Key('board-feedback')));
             final bounds = Rect.fromLTRB(
               0,
               spec.top,
@@ -673,7 +669,12 @@ void main() {
               control: true,
             );
             final before = t.getRect(action);
+            await t.longPress(find.byKey(const Key('feedback-title')));
+            await t.pumpAndSettle();
             await t.drag(pane, const Offset(0, -160));
+            await t.pumpAndSettle();
+            await t.ensureVisible(find.text('Close'));
+            await t.tap(find.text('Close'));
             await t.pumpAndSettle();
             expect(
               t.getRect(action),
@@ -685,7 +686,6 @@ void main() {
               'home',
               'pause',
               'undo',
-              'restart',
               if (situation == 'hint') 'hint',
             ]) {
               visible(t, fixed, bounds);
@@ -731,6 +731,9 @@ void main() {
     'final-seven',
   ]) {
     testWidgets('LY03 $branch completion actions need no scroll', (t) async {
+      final titleSemantics = branch.startsWith('reward')
+          ? t.ensureSemantics()
+          : null;
       addTearDown(t.view.reset);
       final dir = Directory.systemTemp.createTempSync('ly-completion-');
       final store = (await t.runAsync(
@@ -791,7 +794,7 @@ void main() {
           'reward-final' => ['daily-final', 'replay-levels', 'view-collection'],
           _ => ['next', 'home'],
         };
-        for (final scale in [1.0, 1.3, 1.5, 2.0]) {
+        for (final scale in [1.0, 1.3, 1.5, 2.0, 2.35]) {
           for (final screen in screens) {
             t.view.devicePixelRatio = 1;
             t.view.physicalSize = screen.size;
@@ -812,28 +815,49 @@ void main() {
             for (final key in keys) {
               visible(t, key, bounds);
             }
+            if (!branch.startsWith('reward') &&
+                branch != 'daily' &&
+                branch != 'replay') {
+              fullyVisible(
+                t,
+                find.textContaining(RegExp(r'^\d+ / 20 levels$')),
+                bounds,
+                label:
+                    '$branch/$scale/${screen.size}: core settlement progress belongs on the first screen.',
+              );
+            }
             if (scale <= 1.3) {
               final l = AppLocalizations.of(
                 t.element(find.byKey(Key(keys.first))),
               );
               if (branch.startsWith('reward')) {
-                for (final text in [l.newPatch, l.addedCollection]) {
-                  fullyVisible(
-                    t,
-                    find.text(text),
-                    bounds,
-                    label: '$branch/$scale/${screen.size}/$text',
-                  );
-                }
+                final heading =
+                    ownedRegions(c.progress.pieces, c.selectedScene).length == 5
+                    ? l.chapterComplete
+                    : l.newPatch;
+                fullyVisible(
+                  t,
+                  find.bySemanticsLabel(heading),
+                  bounds,
+                  label: '$branch/$scale/${screen.size}/$heading',
+                );
+                fullyVisible(
+                  t,
+                  find.text(l.addedCollection),
+                  bounds,
+                  label: '$branch/$scale/${screen.size}/${l.addedCollection}',
+                );
               } else {
                 final status = branch == 'daily'
                     ? l.stampSaved(state.puzzleDate!)
                     : branch == 'replay'
                     ? l.replayComplete
-                    : l.saved;
+                    : l.firstClearSaved;
                 fullyVisible(
                   t,
-                  find.text(status),
+                  branch == 'daily' || branch == 'replay'
+                      ? find.text(status)
+                      : find.bySemanticsLabel(status),
                   bounds,
                   label: '$branch/$scale/${screen.size}/saved status',
                 );
@@ -857,19 +881,47 @@ void main() {
                 );
               }
             }
-            if (scale <= 1.3 &&
-                !branch.startsWith('reward') &&
-                !branch.startsWith('chapter') &&
-                !branch.startsWith('final') &&
-                branch != 'daily') {
+            if (!branch.startsWith('reward') && branch != 'daily') {
               final actionsTop = keys
                   .map((k) => t.getRect(find.byKey(Key(k))).top)
                   .reduce((a, b) => a < b ? a : b);
-              for (var i = 0; i < state.board.length; i++) {
-                visible(t, 'preview-bottle-$i', bounds, control: false);
-                visible(t, 'preview-bottle-count-$i', bounds, control: false);
+              for (var i = 0; i < state.puzzle.targets.length; i++) {
+                if (state.puzzle.targets[i] == null) continue;
+                visible(t, 'completion-bottle-$i', bounds, control: false);
+                visible(t, 'completion-target-$i', bounds, control: false);
+                if (t.getRect(find.byKey(Key('completion-bottle-$i'))).width <
+                    32) {
+                  // Diagnose the real allocated celebration space rather than
+                  // weakening the minimum or silently accepting a zero hero.
+                  // ignore: avoid_print
+                  print({
+                    'branch': branch,
+                    'scale': scale,
+                    'screen': screen.size.toString(),
+                    'preview': t
+                        .getRect(find.byKey(const Key('completion-preview')))
+                        .toString(),
+                    'card': t
+                        .getRect(find.byKey(const Key('completion-progress')))
+                        .toString(),
+                    'actions': {
+                      for (final k in keys)
+                        k: t.getRect(find.byKey(Key(k))).toString(),
+                    },
+                  });
+                }
                 expect(
-                  t.getRect(find.byKey(Key('preview-bottle-$i'))).bottom,
+                  t.getRect(find.byKey(Key('completion-bottle-$i'))).width,
+                  greaterThanOrEqualTo(32),
+                  reason:
+                      '$branch/$scale/${screen.size}: readable completed bottles cannot collapse into points.',
+                );
+                expect(
+                  t.getSemantics(find.byKey(Key('completion-bottle-$i'))).label,
+                  contains('4 of 4'),
+                );
+                expect(
+                  t.getRect(find.byKey(Key('completion-bottle-$i'))).bottom,
                   lessThanOrEqualTo(actionsTop),
                   reason:
                       '$branch/$scale/${screen.size} preview ${t.getRect(find.byKey(const Key('completion-preview')))} actionsTop $actionsTop',
@@ -890,6 +942,7 @@ void main() {
         c.dispose();
         await t.runAsync(store.close);
         dir.deleteSync(recursive: true);
+        titleSemantics?.dispose();
       }
     });
   }

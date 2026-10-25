@@ -41,7 +41,8 @@
   "replace": "Replace",
   "pauseTitle": "Take your time.",
   "pauseSaved": "Your puzzle is saved.",
-  "pauseMemory": "Some changes are only in memory. Resume and Retry before leaving.",
+  "progressNotSaved": "Progress not saved",
+  "pauseMemory": "Some changes are only in memory. Retry before leaving.",
   "resumeGame": "Resume",
   "restartTitle": "Start this level again?",
   "restartBody": "Your board will reset.",
@@ -58,17 +59,17 @@
   "rulesBack": "Back to settings",
   "hint": "Hint",
   "cancelHint": "Cancel hint",
-  "searchingHint": "Looking for a hint…",
-  "hintFound": "Try bottle {from} → {to}. Tap the suggested destination to pour.",
-  "hintReason": "This moves the top {color} group along a solution for your current board.",
-  "hintTimeout": "No hint found yet. You can keep playing.",
-  "hintUnsolvable": "Try undoing a move or restarting.",
+  "searchingHint": "Finding a move…",
+  "hintFound": "Bottle {from} → {to}",
+  "hintReason": "Tap {to} to move the top {color} group along a solution.",
+  "hintTimeout": "No hint found yet",
+  "hintUnsolvable": "Try Undo",
   "noMoves": "No moves available",
-  "noMovesBody": "Try an earlier move. You can undo or restart.",
+  "noMovesBody": "Undo or restart to keep playing.",
   "matchLabels": "Match each color to its label.",
-  "chooseAnother": "Choose another bottle.",
-  "chooseLiquid": "Choose a bottle with liquid.",
-  "bottleFull": "That bottle is full.",
+  "chooseAnother": "Choose another",
+  "chooseLiquid": "Choose a filled bottle.",
+  "bottleFull": "Bottle full",
   "matchingTop": "Empty or matching top color only.",
   "puzzleComplete": "Puzzle complete",
   "beautifullySorted": "Beautifully sorted.",
@@ -76,6 +77,7 @@
   "firstClearSaved": "Your progress is saved on this device.",
   "replayComplete": "Your collection and story progress are unchanged.",
   "viewPatch": "View patch",
+  "newPatchCompact": "New patch",
   "newPatch": "New patch unlocked",
   "addedCollection": "Added to your collection",
   "nextLevel": "Next level",
@@ -221,6 +223,9 @@
   },
   "@hintReason": {
     "placeholders": {
+      "to": {
+        "type": "int"
+      },
       "color": {
         "type": "String"
       }
@@ -384,5 +389,72 @@
   "supportWebsite": "Help website",
   "servicesDisabled": "Optional diagnostics are unavailable in this build. Choices are saved locally.",
   "adNetwork": "The ad network could not be reached. Free tools still work. Try again when connected.",
-  "adNoFill": "No ad is available from the service right now. Free tools still work. Please try later."
+  "adNoFill": "No ad is available from the service right now. Free tools still work. Please try later.",
+  "cantPourHere": "Can't pour here",
+  "matchingTopBody": "Use an empty bottle or match its top color.",
+  "hintKeepPlaying": "You can keep playing.",
+  "hintUnsolvableBody": "Undo or restart to try another path.",
+  "matchLabelsTitle": "Check the color tags",
+  "suggestedSource": "Suggested source",
+  "hintDirectionSemantics": "Bottle {from} to bottle {to}; tap bottle {to} to pour.",
+  "@hintDirectionSemantics": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "moreRoomTitle": "A little more room",
+  "adUnavailableTitle": "No ad available",
+  "backToPuzzle": "Back to puzzle",
+  "extraBottleAdded": "Extra bottle added",
+  "extraOfferBody": "Watch an optional ad to add one empty bottle to this puzzle.",
+  "extraOfferLimit": "One per puzzle, kept through Undo and Restart.\nHint, Undo and Restart remain free.",
+  "noAdPrompt": "Please try again in a moment.",
+  "puzzleUnchanged": "Your puzzle is unchanged. Free tools still work.",
+  "tryAgain": "Try again",
+  "completionLevels": "{count} / {total} levels",
+  "@completionLevels": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "watchAdPlusBottle": "Watch ad for +1 bottle",
+  "compactSearching": "Search",
+  "compactNoMoves": "No moves",
+  "compactSorted": "Sorted",
+  "compactFull": "Full",
+  "compactMismatch": "Mismatch",
+  "compactRules": "Rules",
+  "compactCheck": "Check",
+  "compactDaily": "Daily",
+  "compactNotSaved": "Not saved",
+  "compactReward": "Reward",
+  "yourCollection": "Your collection",
+  "sceneLevelsRemaining": "{count, plural, =1{1 level to complete this scene} other{{count} levels to complete this scene}}",
+  "@sceneLevelsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "completeSceneToUnlock": "Complete\n{scene}",
+  "@completeSceneToUnlock": {
+    "placeholders": {
+      "scene": {
+        "type": "String"
+      }
+    }
+  },
+  "collectionTagline": "A little more with every puzzle.",
+  "backToCollection": "Back to collection"
 }

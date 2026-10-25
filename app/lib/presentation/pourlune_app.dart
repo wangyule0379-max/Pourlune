@@ -5,6 +5,7 @@ import '../application/game_controller.dart';
 import '../application/game_audio.dart';
 import '../l10n/app_localizations.dart';
 import 'bottle.dart';
+import 'board_page.dart';
 import 'motion.dart';
 import 'game_screen.dart';
 import 'knit_components.dart';
@@ -17,12 +18,16 @@ class PourluneApp extends StatelessWidget {
     this.textScaler,
     this.advanceTestDay,
     this.audio,
+    this.debugBoardPresentation,
+    this.debugBoardPagePresentation,
   });
   final GameController controller;
   final List<Puzzle> puzzles;
   final TextScaler? textScaler;
   final VoidCallback? advanceTestDay;
   final GameAudio? audio;
+  final Widget Function(BoardView)? debugBoardPresentation;
+  final Widget Function(BoardPage)? debugBoardPagePresentation;
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: controller,
@@ -146,6 +151,8 @@ class PourluneApp extends StatelessWidget {
         puzzles: puzzles,
         advanceTestDay: advanceTestDay,
         audio: audio,
+        debugBoardPresentation: debugBoardPresentation,
+        debugBoardPagePresentation: debugBoardPagePresentation,
       ),
     ),
   );

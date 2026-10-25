@@ -4,6 +4,7 @@ import '../l10n/app_localizations.dart';
 import 'bottle.dart';
 import 'labels.dart';
 import 'motion.dart';
+import 'reference_play_art.dart';
 
 // Display bounds remove transparent canvas margins, without altering raw PNGs.
 const _art = <String, (Size, Rect)>{
@@ -139,18 +140,49 @@ class KnitIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final double size;
   @override
-  Widget build(BuildContext context) => Tooltip(
-    message: label,
-    child: SizedBox(
-      width: size,
-      height: size,
-      child: OutlinedButton(
-        style: OutlinedButton.styleFrom(padding: EdgeInsets.zero),
-        onPressed: onPressed,
-        child: Icon(icon, semanticLabel: label, size: 28),
+  Widget build(BuildContext context) {
+    final source = icon == Icons.arrow_back_rounded
+        ? const Rect.fromLTWH(714, 61, 85, 82)
+        : icon == Icons.settings_rounded
+        ? const Rect.fromLTWH(575, 54, 82, 80)
+        : null;
+    return Tooltip(
+      message: label,
+      excludeFromSemantics: true,
+      child: Semantics(
+        label: label,
+        button: true,
+        enabled: onPressed != null,
+        onTap: onPressed,
+        excludeSemantics: true,
+        child: SizedBox(
+          width: size,
+          height: size,
+          child: OutlinedButton(
+            style:
+                OutlinedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: const Size(48, 48),
+                  side: BorderSide.none,
+                  backgroundColor: Colors.transparent,
+                ).copyWith(
+                  backgroundBuilder: (context, states, child) =>
+                      knitPressFeedback(context, states, child!),
+                ),
+            onPressed: onPressed,
+            child: source == null
+                ? Icon(icon, size: 28)
+                : Opacity(
+                    opacity: onPressed == null ? .45 : 1,
+                    child: SizedBox.expand(
+                      child: ReferencePlayArt(source: source, radius: 12),
+                    ),
+                  ),
+          ),
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class KnitHeader extends StatelessWidget {
@@ -162,9 +194,10 @@ class KnitHeader extends StatelessWidget {
     this.backLabel,
     this.trailing,
     this.compact = false,
+    this.showMoon = false,
   });
   final String title;
-  final bool compact;
+  final bool compact, showMoon;
   final String? backLabel;
   final VoidCallback? onBack;
   final Key? backKey;
@@ -192,7 +225,8 @@ class KnitHeader extends StatelessWidget {
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (MediaQuery.textScalerOf(context).scale(1) <= 1.4) ...[
+                      if (showMoon &&
+                          MediaQuery.textScalerOf(context).scale(1) <= 1.4) ...[
                         const KnitArt(name: 'moon', width: 20, height: 20),
                         const SizedBox(width: 4),
                       ],
@@ -290,6 +324,9 @@ class PatchProgress extends StatelessWidget {
                             ),
                           ],
                         ),
+                        child: const CustomPaint(
+                          painter: _PatchProgressStitches(),
+                        ),
                       ),
                     ),
                   ),
@@ -309,6 +346,33 @@ class PatchProgress extends StatelessWidget {
       ],
     );
   }
+}
+
+class _PatchProgressStitches extends CustomPainter {
+  const _PatchProgressStitches();
+  @override
+  void paint(Canvas canvas, Size size) {
+    final path = Path()
+      ..addRRect(
+        RRect.fromRectAndRadius(
+          (Offset.zero & size).deflate(5),
+          const Radius.circular(7),
+        ),
+      );
+    final paint = Paint()
+      ..color = const Color(0xffbaa185)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.1
+      ..strokeCap = StrokeCap.round;
+    for (final metric in path.computeMetrics()) {
+      for (var at = 0.0; at < metric.length; at += 6) {
+        canvas.drawPath(metric.extractPath(at, at + 3), paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_PatchProgressStitches old) => false;
 }
 
 class CalendarArt extends StatelessWidget {
