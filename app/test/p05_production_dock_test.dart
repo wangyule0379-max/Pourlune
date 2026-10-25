@@ -22,7 +22,7 @@ void main() {
   ]) {
     final scale = screen.$2;
     testWidgets(
-      'production dock full page holds seven separated readouts at ${screen.$1}/$scale',
+      'production labels stay readable without a temporary strip at ${screen.$1}/$scale',
       (t) async {
         t.view.devicePixelRatio = 1;
         t.view.physicalSize = screen.$1;
@@ -85,19 +85,52 @@ void main() {
           final initialMouths = [...game.frame.layout.mouths];
           expect(game.frame.layout.shape.width, greaterThanOrEqualTo(48));
           final canvas = t.getRect(find.byKey(const Key('dock-canvas')));
-          if (screen.$1.width == 375 && scale == 1) {
-            expect(
-              game.frame.layout.shape.visibleRect.height,
-              greaterThanOrEqualTo(130),
-              reason: 'Reuse the resting lower-caption area instead of shrinking seven bottles to reserve an empty second strip.',
-            );
-            for (var i = game.frame.layout.topRowCount; i < 7; i++) {
-              expect(
-                t.getRect(find.byKey(Key('bottle-count-$i'))).top,
-                greaterThanOrEqualTo(canvas.bottom),
-                reason: 'Quiet lower captions fill the same future dock band.',
-              );
+          if (scale == 1) {
+            final initialLabels = [
+              for (var i = 0; i < 7; i++)
+                t.getRect(find.byKey(Key('bottle-count-$i'))),
+            ];
+            final initialTargets = [
+              for (var i = 0; i < 4; i++)
+                t.getRect(find.byKey(Key('bottle-target-$i'))),
+            ];
+            await t.runAsync(() => c.pour(4, 6));
+            await t.pump();
+            for (final elapsed in [100, 280, 320]) {
+              await t.pump(Duration(milliseconds: elapsed));
+              expect(c.motion, isNotNull);
+              for (var i = 0; i < 7; i++) {
+                expect(find.byKey(Key('dock-readout-$i')), findsNothing);
+                expect(
+                  t.getRect(find.byKey(Key('bottle-count-$i'))),
+                  initialLabels[i],
+                  reason: 'capacity stays beside its bottle during pouring',
+                );
+              }
+              for (var i = 0; i < 4; i++) {
+                expect(
+                  t.getRect(find.byKey(Key('bottle-target-$i'))),
+                  initialTargets[i],
+                );
+              }
+              expect(find.byKey(const Key('dock-moving-index')), findsNothing);
+              expect(game.frame.layout.mouths, initialMouths);
             }
+            await t.pump(const Duration(seconds: 2));
+            await t.pump();
+            expect(c.current!.board[4], isEmpty);
+            expect(c.current!.board[6], ['O', 'O', 'O', 'O']);
+            expect(game.frame.layout.mouths, initialMouths);
+            expect(
+              t.widget<Text>(find.byKey(const Key('bottle-count-4'))).data,
+              '0/4',
+            );
+            expect(
+              t.widget<Text>(find.byKey(const Key('bottle-count-6'))).data,
+              '4/4',
+            );
+            expect(t.takeException(), isNull);
+            return;
           }
 
           await t.runAsync(() => c.pour(4, 6));

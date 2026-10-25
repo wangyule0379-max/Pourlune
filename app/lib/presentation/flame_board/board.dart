@@ -130,7 +130,9 @@ class _FlameBoardState extends State<FlameBoard> {
                 scaler.scale(14) * 1.2 +
                 2
           : ordinaryRowHeight;
-      final dockHeight = w.preview ? 0.0 : rows * rowHeight + (rows - 1) * 4;
+      // Only the existing large-text fallback needs a permanent readout area.
+      // Ordinary play keeps labels at each bottle, including during a pour.
+      final dockHeight = denseDock ? rows * rowHeight + (rows - 1) * 4 : 0.0;
       final layout = BoardLayout(
         width: box.maxWidth,
         maxHeight: math.max(0, box.maxHeight - dockHeight),
@@ -138,9 +140,6 @@ class _FlameBoardState extends State<FlameBoard> {
         textScale: MediaQuery.textScalerOf(context).scale(14) / 14,
         preview: w.preview,
         footLabels: !denseDock,
-        // Quiet lower captions use the same band as the temporary dock. The
-        // painted flight ends above that band; every bottle keeps its pose.
-        bottomCaptionsExternal: !w.preview && !denseDock,
       );
       // Reconcile all inputs atomically before building controls. The game
       // defers notifier publication during layout, rather than its state.
@@ -239,7 +238,7 @@ class _FlameBoardState extends State<FlameBoard> {
                       ),
                     ),
                   ),
-                if (!denseDock && visual.active == null)
+                if (!denseDock)
                   for (var i = 0; i < w.state.board.length; i++)
                     Positioned.fromRect(
                       rect: layout.labelRect(i),
@@ -258,7 +257,7 @@ class _FlameBoardState extends State<FlameBoard> {
                         ),
                       ),
                     ),
-                if (!w.preview)
+                if (denseDock)
                   if (visual.active case final active?)
                     AnimatedBuilder(
                       animation: game.poseTick,
@@ -303,24 +302,22 @@ class _FlameBoardState extends State<FlameBoard> {
           child: Column(
             children: [
               board,
-              if (!w.preview)
+              if (denseDock)
                 SizedBox(
                   height: dockHeight,
                   child: ValueListenableBuilder(
                     valueListenable: game.visual,
                     builder: (context, _, _) {
                       final frame = game.frame;
-                      return (!denseDock && frame.active == null)
-                          ? const SizedBox.expand()
-                          : ReadoutDock(
-                              state: frame.state,
-                              frame: frame,
-                              settings: w.settings,
-                              prefix: w.keyPrefix,
-                              columns: columns,
-                              rowHeight: rowHeight,
-                              dense: denseDock,
-                            );
+                      return ReadoutDock(
+                        state: frame.state,
+                        frame: frame,
+                        settings: w.settings,
+                        prefix: w.keyPrefix,
+                        columns: columns,
+                        rowHeight: rowHeight,
+                        dense: denseDock,
+                      );
                     },
                   ),
                 ),
