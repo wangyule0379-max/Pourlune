@@ -37,8 +37,8 @@ void main() {
       (source: 1, target: 4),
     );
   });
-  test('4–7 bottles preserve equal sizes, accessible cells and two-row content at narrow 2x text', () {
-    for (var count = 4; count <= 7; count++) {
+  test('4–8 bottles preserve equal sizes, accessible cells and two-row content at narrow 2x text', () {
+    for (var count = 4; count <= 8; count++) {
       for (final width in [288.0, 338.0, 768.0]) {
         final layout = BoardLayout(width: width, count: count, textScale: 2);
         expect(layout.mouths.length, count);
@@ -57,9 +57,9 @@ void main() {
   });
   test('every edge/cross-row trajectory stays in the canvas and shares a vertical lip-aligned stream', () {
     for (final width in [288.0, 338.0, 370.0, 379.42857142857144, 768.0]) {
-      final layout = BoardLayout(width: width, count: 7, textScale: 2);
-      for (var from = 0; from < 7; from++) {
-        for (var to = 0; to < 7; to++) {
+      final layout = BoardLayout(width: width, count: 8, textScale: 2);
+      for (var from = 0; from < 8; from++) {
+        for (var to = 0; to < 8; to++) {
           if (from == to) continue;
           for (final units in [1, 2, 4]) {
             final g = PourGeometry(
@@ -106,7 +106,7 @@ void main() {
   });
 
   test('compact large-text board fits both rows while keeping 48px bottle touch cells', () {
-    for (var count = 4; count <= 7; count++) {
+    for (var count = 4; count <= 8; count++) {
       final layout = BoardLayout(
         width: 296,
         count: count,
@@ -122,8 +122,8 @@ void main() {
     }
   });
 
-  test('all 4–7 bottle flights avoid the independent motion readout band', () {
-    for (var count = 4; count <= 7; count++) {
+  test('all 4–8 bottle flights avoid the independent motion readout band', () {
+    for (var count = 4; count <= 8; count++) {
       for (final width in [288.0, 370.0, 768.0]) {
         for (final scale in [1.0, 2.0]) {
           final layout = BoardLayout(

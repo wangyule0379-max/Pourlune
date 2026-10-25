@@ -129,6 +129,41 @@ void main() {
     }
   });
 
+  testWidgets('five-target badge stays above every first-row bottle', (
+    t,
+  ) async {
+    var state = boardFixture(colors: 5);
+    for (final move in state.puzzle.referenceMoves) {
+      state = state.pour(move.from, move.to).state;
+    }
+    await t.pumpWidget(
+      shell(
+        SizedBox(
+          width: 360,
+          height: 400,
+          child: CompletionBottles(
+            state: state,
+            settings: const PlayerSettings(),
+            badge: const ColoredBox(
+              key: Key('five-target-badge'),
+              color: Colors.green,
+            ),
+          ),
+        ),
+      ),
+    );
+    final badge = t.getRect(find.byKey(const Key('five-target-badge')));
+    for (var i = 0; i < 3; i++) {
+      expect(
+        t.getRect(find.byKey(Key('completion-bottle-$i'))).top,
+        greaterThanOrEqualTo(badge.bottom + 4),
+        reason:
+            'the middle target mouth must remain fully visible below the badge',
+      );
+    }
+    await t.pumpWidget(const SizedBox());
+  });
+
   for (final compact in [false, true]) {
     testWidgets(
       'five completed targets use bounded 3+2 rows (compact=$compact)',

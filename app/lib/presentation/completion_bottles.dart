@@ -111,7 +111,10 @@ class _CompletionBottlesState extends State<CompletionBottles> {
       double badgeWidth(double width) => (width * 1.12).clamp(68.0, 160.0);
       double topFor(double width) => widget.badge == null
           ? 4.0
-          : math.max(4.0, badgeWidth(width) * 147 / 157 - 24);
+          : math.max(
+              4.0,
+              badgeWidth(width) * 147 / 157 + (fiveTargets ? 8 : -24),
+            );
       // Reserve the complete cushion and a clear gap before the card, rather
       // than counting only the bottle body as available celebration height.
       final rowGap = compactFive && !singleRow ? 4.0 : 8.0;
