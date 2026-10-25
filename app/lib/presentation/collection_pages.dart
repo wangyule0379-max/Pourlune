@@ -1,3 +1,5 @@
+import 'completion_feedback.dart';
+
 import 'package:flutter/material.dart';
 
 import '../application/game_controller.dart';
@@ -5,7 +7,6 @@ import '../l10n/app_localizations.dart';
 import 'knit_components.dart';
 import 'labels.dart';
 import 'scene_art.dart';
-import 'motion.dart';
 import 'completion_bottles.dart';
 import 'completion_layout.dart';
 import 'daily_reference.dart';
@@ -576,7 +577,7 @@ class CompletionPage extends StatelessWidget {
         s = c.current!,
         kind = c.settlementKind;
     if (kind == SettlementKind.daily &&
-        MediaQuery.textScalerOf(context).scale(16) <= 22) {
+        MediaQuery.textScalerOf(context).scale(16) <= 16) {
       return DailyReferenceCompletion(controller: c);
     }
     final finalStory = kind == SettlementKind.finalStory,
@@ -676,7 +677,7 @@ class CompletionPage extends StatelessWidget {
     ];
     final saved = c.phase == SavePhase.clean && c.receipt != null;
     final badge = saved
-        ? _CompletionFeedback(
+        ? CompletionFeedback(
             key: Key('completion-feedback-${s.id}'),
             child: Semantics(
               label: l.firstClearSaved,
@@ -721,7 +722,7 @@ class CompletionPage extends StatelessWidget {
           MediaQuery.textScalerOf(context),
         );
         final Widget hero = kind == SettlementKind.daily
-            ? _CompletionFeedback(
+            ? CompletionFeedback(
                 key: saved ? Key('completion-feedback-${s.id}') : null,
                 child: Center(
                   child: SizedBox(
@@ -868,29 +869,3 @@ class _SettlementActions extends StatelessWidget {
 }
 
 /// Pure presentation: rebuilding or finishing this animation never writes progress.
-class _CompletionFeedback extends StatelessWidget {
-  const _CompletionFeedback({super.key, required this.child});
-  final Widget child;
-  @override
-  Widget build(BuildContext context) {
-    final reduced = MediaQuery.disableAnimationsOf(context);
-    return TweenAnimationBuilder<double>(
-      duration: reduced
-          ? const Duration(milliseconds: 150)
-          : KnitMotion.success,
-      tween: Tween(begin: 0, end: 1),
-      curve: Curves.easeOutCubic,
-      child: child,
-      builder: (_, value, child) => Opacity(
-        opacity: value,
-        child: reduced
-            ? child
-            : Transform.scale(
-                scale: .94 + .06 * value,
-                alignment: Alignment.centerLeft,
-                child: child,
-              ),
-      ),
-    );
-  }
-}

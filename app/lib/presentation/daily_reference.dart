@@ -7,6 +7,7 @@ import 'package:pourlune_core/pourlune_core.dart';
 
 import '../l10n/app_localizations.dart';
 import 'knit_components.dart';
+import 'completion_feedback.dart';
 import 'parallel_navigation/navigation_materials.dart';
 import 'reference_extra_art.dart';
 import 'reference_play_art.dart';
@@ -154,7 +155,8 @@ class DailyReferenceCompletion extends StatelessWidget {
     return NavigationMaterials(
       child: LayoutBuilder(
         builder: (context, box) {
-          final size = ((box.maxHeight - 410).clamp(100.0, 210.0)).toDouble();
+          final compact = box.maxHeight < 600;
+          final size = ((box.maxHeight - 520).clamp(64.0, 210.0)).toDouble();
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -168,18 +170,23 @@ class DailyReferenceCompletion extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      const SizedBox(height: 10),
+                      SizedBox(height: compact ? 2 : 10),
                       SizedBox(
                         width: size,
                         height: size,
                         child: saved
-                            ? _DailyStampArt(day: parseCalendarDate(date).day)
+                            ? CompletionFeedback(
+                                key: Key('completion-feedback-${s.id}'),
+                                child: _DailyStampArt(
+                                  day: parseCalendarDate(date).day,
+                                ),
+                              )
                             : CalendarArt(
                                 day: parseCalendarDate(date).day,
                                 size: size,
                               ),
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: compact ? 4 : 12),
                       Text(
                         l.dailyDone,
                         textAlign: TextAlign.center,
@@ -200,12 +207,12 @@ class DailyReferenceCompletion extends StatelessWidget {
                           fontWeight: FontWeight.w800,
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: compact ? 4 : 20),
                       DailyWeekStrip(
                         date: date,
                         stamps: c.progress.dailyStamps,
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: compact ? 6 : 14),
                       SizedBox(
                         width: double.infinity,
                         child: NavigationPanel(
