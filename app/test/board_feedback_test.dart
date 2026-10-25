@@ -106,8 +106,11 @@ void main() {
                 final bytes = await image.toByteData(
                   format: ui.ImageByteFormat.png,
                 );
-                File('../build/fidelity-320-2x-actual-flutter-render.png')
-                    .writeAsBytesSync(bytes!.buffer.asUint8List());
+                final output = File(
+                  '../build/fidelity-320-2x-actual-flutter-render.png',
+                );
+                output.parent.createSync(recursive: true);
+                output.writeAsBytesSync(bytes!.buffer.asUint8List());
                 image.dispose();
               });
             }

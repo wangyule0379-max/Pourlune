@@ -181,8 +181,9 @@ void main() {
             final bytes = await image.toByteData(
               format: ui.ImageByteFormat.png,
             );
-            File('../build/p05-max-c17-widget-3.2.png')
-                .writeAsBytesSync(bytes!.buffer.asUint8List());
+            final output = File('../build/p05-max-c17-widget-3.2.png');
+            output.parent.createSync(recursive: true);
+            output.writeAsBytesSync(bytes!.buffer.asUint8List());
             image.dispose();
           });
         }
