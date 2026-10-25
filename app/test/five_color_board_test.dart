@@ -164,6 +164,40 @@ void main() {
     await t.pumpWidget(const SizedBox());
   });
 
+  testWidgets('260px five-target hero keeps all bottles readable below badge', (
+    t,
+  ) async {
+    var state = boardFixture(colors: 5);
+    for (final move in state.puzzle.referenceMoves) {
+      state = state.pour(move.from, move.to).state;
+    }
+    await t.pumpWidget(
+      shell(
+        SizedBox(
+          width: 366,
+          height: 260,
+          child: CompletionBottles(
+            state: state,
+            settings: const PlayerSettings(),
+            badge: const ColoredBox(color: Colors.green),
+          ),
+        ),
+      ),
+    );
+    final bounds = t.getRect(find.byType(CompletionBottles));
+    for (var i = 0; i < 5; i++) {
+      expect(
+        t.getRect(find.byKey(Key('completion-bottle-$i'))).width,
+        greaterThanOrEqualTo(32),
+      );
+      expect(
+        t.getRect(find.byKey(Key('completion-target-$i'))).bottom,
+        lessThanOrEqualTo(bounds.bottom),
+      );
+    }
+    await t.pumpWidget(const SizedBox());
+  });
+
   for (final compact in [false, true]) {
     testWidgets(
       'five completed targets use bounded 3+2 rows (compact=$compact)',

@@ -120,7 +120,7 @@ class _CompletionBottlesState extends State<CompletionBottles> {
       final rowGap = compactFive && !singleRow ? 4.0 : 8.0;
       double footFor(double width) => compactFive && !singleRow
           ? (width * .34).clamp(24.0, 34.0) + 3
-          : singleRow
+          : singleRow || fiveTargets
           ? (width * .34).clamp(24.0, 34.0) + 7
           : 45.0;
       double needed(double width) =>
