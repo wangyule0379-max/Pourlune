@@ -1,0 +1,252 @@
+{
+  "scope": "Debug Simulator/AVD diagnostics, not physical/profile performance or a60fps claim. Same dedicated devices/settings,27 native pours per phase without PNG,3 cold launches, hot N=1 each. Before is the old renderer/current accepted UI; after is the final repaired source. Before QA source is preserved; after adds diagnostic elapsed JSON, initial lifecycle log and early-flow recovery guard. Gesture/route/timed/startup endpoint policy unchanged.",
+  "percentile": "nearest-rank ceil(N*p)-1; milliseconds",
+  "rows": [
+    {
+      "platform": "ios",
+      "phase": "before",
+      "route_steps": 43,
+      "native_pours": 27,
+      "frames": 2240,
+      "frame_ms": {
+        "build": {
+          "p50": 5.267,
+          "p95": 10.867,
+          "max": 26.248
+        },
+        "raster": {
+          "p50": 0.683,
+          "p95": 1.048,
+          "max": 23.42
+        },
+        "total": {
+          "p50": 23.5815,
+          "p95": 28.983,
+          "max": 45.453
+        }
+      },
+      "cold_main_to_host_frame_ms": [
+        890.91,
+        843.196,
+        789.595
+      ],
+      "hot_pointer_up_to_ready_ms": {
+        "normal-first-board": 261.021,
+        "next-level-board": 277.922
+      },
+      "idle_recorded_framework_frames": 98,
+      "idle_flame": null,
+      "rss_native_pours_bytes": {
+        "min": 592707584,
+        "max": 660406272
+      }
+    },
+    {
+      "platform": "ios",
+      "phase": "after",
+      "route_steps": 43,
+      "native_pours": 27,
+      "frames": 2151,
+      "frame_ms": {
+        "build": {
+          "p50": 6.795,
+          "p95": 14.794,
+          "max": 27.02
+        },
+        "raster": {
+          "p50": 0.723,
+          "p95": 1.059,
+          "max": 12.908
+        },
+        "total": {
+          "p50": 24.961,
+          "p95": 32.568,
+          "max": 43.69
+        }
+      },
+      "cold_main_to_host_frame_ms": [
+        786.549,
+        755.873,
+        805.44
+      ],
+      "hot_pointer_up_to_ready_ms": {
+        "normal-first-board": 276.545,
+        "next-level-board": 276.197
+      },
+      "idle_recorded_framework_frames": 79,
+      "idle_flame": {
+        "view_instance": "full-board-qa-9-1792674059044486",
+        "view_revision": 7,
+        "counts": [
+          0,
+          4,
+          4,
+          4,
+          0,
+          4,
+          0
+        ],
+        "active_token": null,
+        "elapsed_geometry_ms": 0.0,
+        "stage": "idle",
+        "out": null,
+        "arrived": null,
+        "in_stream": null,
+        "stream_start": null,
+        "stream_end": null,
+        "continuous_units": [
+          0.0,
+          4.0,
+          4.0,
+          4.0,
+          0.0,
+          4.0,
+          0.0
+        ],
+        "closed": false,
+        "paused": true,
+        "art_present": true,
+        "canvas": [
+          370.0,
+          531.8
+        ],
+        "cell_widths": [
+          90.0,
+          90.0,
+          90.0,
+          90.0,
+          90.0,
+          90.0,
+          90.0
+        ]
+      },
+      "rss_native_pours_bytes": {
+        "min": 646168576,
+        "max": 767131648
+      }
+    },
+    {
+      "platform": "android",
+      "phase": "before",
+      "route_steps": 43,
+      "native_pours": 27,
+      "frames": 1412,
+      "frame_ms": {
+        "build": {
+          "p50": 11.805,
+          "p95": 31.891,
+          "max": 175.211
+        },
+        "raster": {
+          "p50": 5.121,
+          "p95": 17.755,
+          "max": 55.702
+        },
+        "total": {
+          "p50": 26.197499999999998,
+          "p95": 58.641,
+          "max": 295.565
+        }
+      },
+      "cold_main_to_host_frame_ms": [
+        3494.744,
+        3514.008,
+        3402.701
+      ],
+      "hot_pointer_up_to_ready_ms": {
+        "normal-first-board": 885.728,
+        "next-level-board": 587.45
+      },
+      "idle_recorded_framework_frames": 177,
+      "idle_flame": null,
+      "rss_native_pours_bytes": {
+        "min": 501211136,
+        "max": 518352896
+      }
+    },
+    {
+      "platform": "android",
+      "phase": "after",
+      "route_steps": 43,
+      "native_pours": 27,
+      "frames": 1907,
+      "frame_ms": {
+        "build": {
+          "p50": 9.971,
+          "p95": 26.226,
+          "max": 79.92
+        },
+        "raster": {
+          "p50": 1.815,
+          "p95": 10.522,
+          "max": 87.836
+        },
+        "total": {
+          "p50": 14.005,
+          "p95": 29.93,
+          "max": 129.015
+        }
+      },
+      "cold_main_to_host_frame_ms": [
+        1361.444,
+        1463.198,
+        1274.181
+      ],
+      "hot_pointer_up_to_ready_ms": {
+        "normal-first-board": 354.114,
+        "next-level-board": 325.656
+      },
+      "idle_recorded_framework_frames": 193,
+      "idle_flame": {
+        "view_instance": "full-board-qa-9-1792674210899187",
+        "view_revision": 7,
+        "counts": [
+          0,
+          4,
+          4,
+          4,
+          0,
+          4,
+          0
+        ],
+        "active_token": null,
+        "elapsed_geometry_ms": 0.0,
+        "stage": "idle",
+        "out": null,
+        "arrived": null,
+        "in_stream": null,
+        "stream_start": null,
+        "stream_end": null,
+        "continuous_units": [
+          0.0,
+          4.0,
+          4.0,
+          4.0,
+          0.0,
+          4.0,
+          0.0
+        ],
+        "closed": false,
+        "paused": true,
+        "art_present": true,
+        "canvas": [
+          379.42857142857144,
+          531.8
+        ],
+        "cell_widths": [
+          90.0,
+          90.0,
+          90.0,
+          90.0,
+          90.0,
+          90.0,
+          90.0
+        ]
+      },
+      "rss_native_pours_bytes": {
+        "min": 499429376,
+        "max": 566325248
+      }
+    }
+  ]
+}

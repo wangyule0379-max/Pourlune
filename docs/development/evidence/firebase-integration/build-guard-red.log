@@ -1,0 +1,53 @@
+test_bad_selection_does_not_overwrite_previous_native_resource (test_firebase_config.FirebaseConfigTest.test_bad_selection_does_not_overwrite_previous_native_resource) ... ok
+test_build_defines_and_actual_native_id_must_match_selected_environment (test_firebase_config.FirebaseConfigTest.test_build_defines_and_actual_native_id_must_match_selected_environment) ... FAIL
+test_dev_prod_dev_and_offline_restage_resource_without_stale_plist (test_firebase_config.FirebaseConfigTest.test_dev_prod_dev_and_offline_restage_resource_without_stale_plist) ... FAIL
+test_four_matching_native_configs_pass_and_output_only_public_summary (test_firebase_config.FirebaseConfigTest.test_four_matching_native_configs_pass_and_output_only_public_summary) ... ok
+test_malformed_native_xml_is_a_redacted_failure_not_a_traceback (test_firebase_config.FirebaseConfigTest.test_malformed_native_xml_is_a_redacted_failure_not_a_traceback) ... ok
+test_missing_fields_or_service_account_shapes_are_rejected (test_firebase_config.FirebaseConfigTest.test_missing_fields_or_service_account_shapes_are_rejected) ... ok
+test_missing_or_malformed_files_fail_without_echoing_contents (test_firebase_config.FirebaseConfigTest.test_missing_or_malformed_files_fail_without_echoing_contents) ... ok
+test_native_bundle_and_android_client_must_match_registration (test_firebase_config.FirebaseConfigTest.test_native_bundle_and_android_client_must_match_registration) ... ok
+test_native_project_sender_and_app_are_checked_even_if_options_agree (test_firebase_config.FirebaseConfigTest.test_native_project_sender_and_app_are_checked_even_if_options_agree) ... ok
+test_native_ready_alone_cannot_enable_an_unconfigured_build (test_firebase_config.FirebaseConfigTest.test_native_ready_alone_cannot_enable_an_unconfigured_build) ... FAIL
+test_options_cannot_choose_another_project_platform_app_or_bundle (test_firebase_config.FirebaseConfigTest.test_options_cannot_choose_another_project_platform_app_or_bundle) ... ok
+test_registration_cannot_rebind_pourlune_to_foreign_project_or_identity (test_firebase_config.FirebaseConfigTest.test_registration_cannot_rebind_pourlune_to_foreign_project_or_identity) ... ok
+
+======================================================================
+FAIL: test_build_defines_and_actual_native_id_must_match_selected_environment (test_firebase_config.FirebaseConfigTest.test_build_defines_and_actual_native_id_must_match_selected_environment)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_firebase_config.py", line 228, in test_build_defines_and_actual_native_id_must_match_selected_environment
+    self.assertEqual(good.returncode, 0, good.stderr)
+AssertionError: 2 != 0 : usage: firebase_config.py [-h] --environment {dev,prod} --platform
+                          {ios,android} --config-dir CONFIG_DIR
+                          [--registry REGISTRY]
+firebase_config.py: error: unrecognized arguments: --check-build --native-id dev.pourlune.pourluneDev
+
+
+======================================================================
+FAIL: test_dev_prod_dev_and_offline_restage_resource_without_stale_plist (test_firebase_config.FirebaseConfigTest.test_dev_prod_dev_and_offline_restage_resource_without_stale_plist)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_firebase_config.py", line 247, in test_dev_prod_dev_and_offline_restage_resource_without_stale_plist
+    self.assertEqual(r.returncode, 0, r.stderr)
+AssertionError: 2 != 0 : usage: firebase_config.py [-h] --environment {dev,prod} --platform
+                          {ios,android} --config-dir CONFIG_DIR
+                          [--registry REGISTRY]
+firebase_config.py: error: unrecognized arguments: --check-build --native-id dev.pourlune.pourluneDev --stage-ios /var/folders/0f/87xwdcwj6vn47_5j0pn3fzdm0000gn/T/tmps1g2g5pl/Runner.app
+
+
+======================================================================
+FAIL: test_native_ready_alone_cannot_enable_an_unconfigured_build (test_firebase_config.FirebaseConfigTest.test_native_ready_alone_cannot_enable_an_unconfigured_build)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_firebase_config.py", line 224, in test_native_ready_alone_cannot_enable_an_unconfigured_build
+    self.assertEqual(clean.returncode, 0, clean.stderr)
+AssertionError: 2 != 0 : usage: firebase_config.py [-h] --environment {dev,prod} --platform
+                          {ios,android} --config-dir CONFIG_DIR
+                          [--registry REGISTRY]
+firebase_config.py: error: argument --environment: invalid choice: 'none' (choose from dev, prod)
+
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.834s
+
+FAILED (failures=3)

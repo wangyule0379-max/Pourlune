@@ -1,0 +1,63 @@
+[
+  {
+    "name": "r03-targeted",
+    "command": [
+      "flutter",
+      "test",
+      "test/b04_r03_controller_test.dart",
+      "test/b04_architecture_regression_test.dart",
+      "test/b04_controller_ads_test.dart",
+      "--reporter",
+      "expanded"
+    ],
+    "exit_code": 0,
+    "seconds": 3.74
+  },
+  {
+    "name": "final-format",
+    "command": [
+      "dart",
+      "format",
+      "--output=none",
+      "--set-exit-if-changed",
+      "lib",
+      "test",
+      "integration_test"
+    ],
+    "exit_code": 0,
+    "seconds": 0.35
+  },
+  {
+    "name": "final-analyze",
+    "command": [
+      "flutter",
+      "analyze"
+    ],
+    "exit_code": 0,
+    "seconds": 3.24
+  },
+  {
+    "name": "android-build",
+    "command": [
+      "flutter",
+      "build",
+      "apk",
+      "--debug"
+    ],
+    "exit_code": 0,
+    "seconds": 9.77
+  },
+  {
+    "name": "ios-normal-build",
+    "command": [
+      "flutter",
+      "build",
+      "ios",
+      "--simulator",
+      "--debug",
+      "--dart-define=POURLUNE_DATABASE=b04_review_r2.sqlite"
+    ],
+    "exit_code": 0,
+    "seconds": 65.72
+  }
+]

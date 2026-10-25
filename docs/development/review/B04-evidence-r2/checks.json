@@ -1,0 +1,85 @@
+[
+  {
+    "name": "app-lock",
+    "cwd": "/Volumes/data/App Development/Pourlune/app",
+    "command": [
+      "flutter",
+      "pub",
+      "get",
+      "--enforce-lockfile"
+    ],
+    "exit_code": 0,
+    "seconds": 1.88
+  },
+  {
+    "name": "app-format",
+    "cwd": "/Volumes/data/App Development/Pourlune/app",
+    "command": [
+      "dart",
+      "format",
+      "--output=none",
+      "--set-exit-if-changed",
+      "lib",
+      "test",
+      "integration_test"
+    ],
+    "exit_code": 0,
+    "seconds": 0.3
+  },
+  {
+    "name": "app-analyze",
+    "cwd": "/Volumes/data/App Development/Pourlune/app",
+    "command": [
+      "flutter",
+      "analyze"
+    ],
+    "exit_code": 0,
+    "seconds": 3.34
+  },
+  {
+    "name": "app-tests",
+    "cwd": "/Volumes/data/App Development/Pourlune/app",
+    "command": [
+      "flutter",
+      "test",
+      "--reporter",
+      "expanded"
+    ],
+    "exit_code": 0,
+    "seconds": 58.46
+  },
+  {
+    "name": "core-lock",
+    "cwd": "/Volumes/data/App Development/Pourlune/packages/pourlune_core",
+    "command": [
+      "dart",
+      "pub",
+      "get",
+      "--enforce-lockfile"
+    ],
+    "exit_code": 0,
+    "seconds": 0.17
+  },
+  {
+    "name": "core-analyze",
+    "cwd": "/Volumes/data/App Development/Pourlune/packages/pourlune_core",
+    "command": [
+      "dart",
+      "analyze"
+    ],
+    "exit_code": 0,
+    "seconds": 0.55
+  },
+  {
+    "name": "core-tests",
+    "cwd": "/Volumes/data/App Development/Pourlune/packages/pourlune_core",
+    "command": [
+      "dart",
+      "test",
+      "--reporter",
+      "expanded"
+    ],
+    "exit_code": 0,
+    "seconds": 0.74
+  }
+]

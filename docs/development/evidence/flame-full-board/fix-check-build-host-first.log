@@ -1,0 +1,11 @@
+fix-final-format-write.log
+fix-full-tests.log
+Traceback (most recent call last):
+  File "/tmp/pourlune-full-board-fix-check-build.py", line 8, in <module>
+    step('fix-full-tests.log',[f,'test','--no-pub'])
+  File "/tmp/pourlune-full-board-fix-check-build.py", line 6, in step
+    with (e/name).open('w') as log:subprocess.run(args,cwd=a,env=environment,stdout=log,stderr=subprocess.STDOUT,check=True)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/Users/wangyule/development/flutter/bin/flutter', 'test', '--no-pub']' returned non-zero exit status 1.

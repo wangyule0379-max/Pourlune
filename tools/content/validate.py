@@ -4,6 +4,7 @@ from collections import Counter
 from datetime import date
 import hashlib
 import json
+from itertools import permutations
 from pathlib import Path
 import sys
 
@@ -128,6 +129,52 @@ def daily_id(catalog, puzzle_date):
     return catalog['puzzle_ids'][offset % len(catalog['puzzle_ids'])]
 
 
+def canonical_board(puzzle, include_labels=True):
+    """Ignore global color names and permutation of whole labeled bottles.
+
+    A bottle moves with its target label. Changing the liquid/target relation is
+    a different puzzle; buffer identities are interchangeable for this audit.
+    """
+    board, labels = puzzle['initial_bottom_to_top'], puzzle['target_labels']
+    colors = sorted({c for b in board for c in b})
+    variants = []
+    for order in permutations(range(len(colors))):
+        rename = dict(zip(colors, order))
+        variants.append(tuple(sorted(
+            ((rename[label] if label is not None else -1) if include_labels else -1,
+             tuple(rename[c] for c in bottle))
+            for label, bottle in zip(labels, board))))
+    return min(variants)
+
+
+def repetition_audit(puzzles):
+    exact, equivalent, liquid = {}, {}, {}
+    for puzzle in puzzles:
+        pid = puzzle['puzzle_id']
+        raw = json.dumps([puzzle['initial_bottom_to_top'], puzzle['target_labels']])
+        exact.setdefault(raw, []).append(pid)
+        equivalent.setdefault(canonical_board(puzzle), []).append(pid)
+        liquid.setdefault(canonical_board(puzzle, include_labels=False), []).append(pid)
+    return {'exact_groups': [sorted(v) for v in exact.values() if len(v) > 1],
+            'equivalent_groups': [sorted(v) for v in equivalent.values() if len(v) > 1],
+            'liquid_structure_groups': [sorted(v) for v in liquid.values() if len(v) > 1],
+            'unique_equivalent_boards': len(equivalent),
+            'definition': 'global color bijections and whole labeled bottle permutations; buffers interchangeable'}
+
+
+def verify_packaging(source, target):
+    """Compare relative JSON paths and bytes, rejecting stale or extra assets."""
+    def hashes(root):
+        return {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest()
+                for p in sorted(Path(root).rglob('*.json'))}
+    original, packaged = hashes(source), hashes(target)
+    if not original or original != packaged:
+        raise ContentError(f'packaging differs: missing={sorted(original.keys() - packaged.keys())}, '
+                           f'extra={sorted(packaged.keys() - original.keys())}, '
+                           f'changed={sorted(k for k in original.keys() & packaged.keys() if original[k] != packaged[k])}')
+    return {'count': len(original), 'sha256_by_path': original}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('puzzles', nargs='+', type=Path)
@@ -173,6 +220,11 @@ def main():
         except (ContentError, OSError) as error:
             report['errors'].append(f'catalog: {error}')
     if args.release:
+        report['repetition_audit'] = repetition_audit(known.values())
+        for group in report['repetition_audit']['equivalent_groups']:
+            report['errors'].append(f'equivalent duplicate candidates: {group}')
+        for group in report['repetition_audit']['liquid_structure_groups']:
+            report['errors'].append(f'liquid structure duplicate candidates: {group}')
         missing = sorted(set(range(1, 61)) - {p['main_level'] for p in known.values() if p['mode'] == 'main'})
         if missing:
             report['errors'].append(f'main coverage missing levels: {missing}')

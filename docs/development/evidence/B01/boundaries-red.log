@@ -1,0 +1,60 @@
+Resolving dependencies...
+Downloading packages...
+  code_assets 1.2.1 (2.1.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  record_use 0.6.0 (1.1.1 available)
+  sqlite3 3.5.2 (3.7.1 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+Got dependencies!
+9 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Volumes/data/App Development/Pourlune/app/test/store_test.dart
+00:00 +0: /Volumes/data/App Development/Pourlune/app/test/controller_test.dart: AC-09 failed save retains current board; Retry commits same result then navigates once
+00:00 +1: /Volumes/data/App Development/Pourlune/app/test/controller_test.dart: AC-09 failed save retains current board; Retry commits same result then navigates once
+00:00 +2: /Volumes/data/App Development/Pourlune/app/test/store_test.dart: AC-24 recovery uses valid backup only, isolates daily and progress
+00:00 +3: /Volumes/data/App Development/Pourlune/app/test/controller_test.dart: completion failure grants nothing until Retry and repeated Retry is idempotent
+00:00 +4: /Volumes/data/App Development/Pourlune/app/test/store_test.dart: replacement failure rolls back prior slot and rejects stale snapshots
+00:00 +5: /Volumes/data/App Development/Pourlune/app/test/controller_test.dart: failed replacement freezes the old board until the same candidate is committed
+00:00 +5 -1: /Volumes/data/App Development/Pourlune/app/test/store_test.dart: AC-09/10 atomic settlement rollback at every write boundary
+00:00 +5 -1: /Volumes/data/App Development/Pourlune/app/test/controller_test.dart: failed replacement freezes the old board until the same candidate is committed [E]
+  Expected: GamePage:<GamePage.home>
+    Actual: GamePage:<GamePage.board>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/controller_test.dart 102:5                     main.<fn>
+  
+00:00 +6 -1: /Volumes/data/App Development/Pourlune/app/test/store_test.dart: AC-11/12 count first ten protection, replay/version idempotence and daily isolation
+00:00 +7 -1: /Volumes/data/App Development/Pourlune/app/test/store_test.dart: completed snapshot corruption recovers a completed board without reopening rewards
+00:00 +7 -2: /Volumes/data/App Development/Pourlune/app/test/store_test.dart: completed snapshot corruption recovers a completed board without reopening rewards [E]
+  Expected: true
+    Actual: <false>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/store_test.dart 216:5                          main.<fn>
+  
+00:00 +7 -2: /Volumes/data/App Development/Pourlune/app/test/store_test.dart: persisted entitlement cannot be revoked by a newer malformed producer
+00:00 +7 -3: /Volumes/data/App Development/Pourlune/app/test/store_test.dart: persisted entitlement cannot be revoked by a newer malformed producer [E]
+  Expected: throws <Instance of 'StateError'>
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+  
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test/store_test.dart 226:13                        main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                         _CustomZone.registerUnaryCallback
+  test/store_test.dart 224:7                         main.<fn>
+  
+00:00 +7 -3: /Volumes/data/App Development/Pourlune/app/test/store_test.dart: AC-33 nonempty v1 migration preserves both slots, history, counts and derives rewards
+00:00 +8 -3: Some tests failed.
+
+Failing tests:
+  /Volumes/data/App Development/Pourlune/app/test/controller_test.dart: failed replacement freezes the old board until the same candidate is committed
+  /Volumes/data/App Development/Pourlune/app/test/store_test.dart: completed snapshot corruption recovers a completed board without reopening rewards
+  /Volumes/data/App Development/Pourlune/app/test/store_test.dart: persisted entitlement cannot be revoked by a newer malformed producer

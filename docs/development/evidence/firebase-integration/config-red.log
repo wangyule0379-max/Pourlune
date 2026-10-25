@@ -1,0 +1,52 @@
+test_four_matching_native_configs_pass_and_output_only_public_summary (test_firebase_config.FirebaseConfigTest.test_four_matching_native_configs_pass_and_output_only_public_summary) ... 
+  test_four_matching_native_configs_pass_and_output_only_public_summary (test_firebase_config.FirebaseConfigTest.test_four_matching_native_configs_pass_and_output_only_public_summary) (env='dev', platform='ios') ... FAIL
+  test_four_matching_native_configs_pass_and_output_only_public_summary (test_firebase_config.FirebaseConfigTest.test_four_matching_native_configs_pass_and_output_only_public_summary) (env='dev', platform='android') ... FAIL
+  test_four_matching_native_configs_pass_and_output_only_public_summary (test_firebase_config.FirebaseConfigTest.test_four_matching_native_configs_pass_and_output_only_public_summary) (env='prod', platform='ios') ... FAIL
+  test_four_matching_native_configs_pass_and_output_only_public_summary (test_firebase_config.FirebaseConfigTest.test_four_matching_native_configs_pass_and_output_only_public_summary) (env='prod', platform='android') ... FAIL
+test_missing_fields_or_service_account_shapes_are_rejected (test_firebase_config.FirebaseConfigTest.test_missing_fields_or_service_account_shapes_are_rejected) ... ok
+test_missing_or_malformed_files_fail_without_echoing_contents (test_firebase_config.FirebaseConfigTest.test_missing_or_malformed_files_fail_without_echoing_contents) ... ok
+test_native_bundle_and_android_client_must_match_registration (test_firebase_config.FirebaseConfigTest.test_native_bundle_and_android_client_must_match_registration) ... ok
+test_native_project_sender_and_app_are_checked_even_if_options_agree (test_firebase_config.FirebaseConfigTest.test_native_project_sender_and_app_are_checked_even_if_options_agree) ... ok
+test_options_cannot_choose_another_project_platform_app_or_bundle (test_firebase_config.FirebaseConfigTest.test_options_cannot_choose_another_project_platform_app_or_bundle) ... ok
+test_registration_cannot_rebind_pourlune_to_foreign_project_or_identity (test_firebase_config.FirebaseConfigTest.test_registration_cannot_rebind_pourlune_to_foreign_project_or_identity) ... ok
+
+======================================================================
+FAIL: test_four_matching_native_configs_pass_and_output_only_public_summary (test_firebase_config.FirebaseConfigTest.test_four_matching_native_configs_pass_and_output_only_public_summary) (env='dev', platform='ios')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_firebase_config.py", line 110, in test_four_matching_native_configs_pass_and_output_only_public_summary
+    self.assertEqual(result.returncode, 0, result.stderr)
+AssertionError: 1 != 0 : configuration validation is not implemented
+
+
+======================================================================
+FAIL: test_four_matching_native_configs_pass_and_output_only_public_summary (test_firebase_config.FirebaseConfigTest.test_four_matching_native_configs_pass_and_output_only_public_summary) (env='dev', platform='android')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_firebase_config.py", line 110, in test_four_matching_native_configs_pass_and_output_only_public_summary
+    self.assertEqual(result.returncode, 0, result.stderr)
+AssertionError: 1 != 0 : configuration validation is not implemented
+
+
+======================================================================
+FAIL: test_four_matching_native_configs_pass_and_output_only_public_summary (test_firebase_config.FirebaseConfigTest.test_four_matching_native_configs_pass_and_output_only_public_summary) (env='prod', platform='ios')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_firebase_config.py", line 110, in test_four_matching_native_configs_pass_and_output_only_public_summary
+    self.assertEqual(result.returncode, 0, result.stderr)
+AssertionError: 1 != 0 : configuration validation is not implemented
+
+
+======================================================================
+FAIL: test_four_matching_native_configs_pass_and_output_only_public_summary (test_firebase_config.FirebaseConfigTest.test_four_matching_native_configs_pass_and_output_only_public_summary) (env='prod', platform='android')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_firebase_config.py", line 110, in test_four_matching_native_configs_pass_and_output_only_public_summary
+    self.assertEqual(result.returncode, 0, result.stderr)
+AssertionError: 1 != 0 : configuration validation is not implemented
+
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.330s
+
+FAILED (failures=4)

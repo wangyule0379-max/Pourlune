@@ -1,0 +1,112 @@
+# 最终冻结候选双端逐步覆盖
+
+iOS、Android均102步、errors为空；每条name/action与页面顺序一致。来源为空的记录是受控QA准备/检查点，不能称为用户点击。完整记录保留实例ID、revision、保存阶段和拼片；无真实SDK发奖宣称。
+
+|序号|操作／检查点|来源→目的|iOS|Android|
+|---|---|---|---|---|
+|1|startup-home|— → home|运行通过|运行通过|
+|2|sample-main-001|home → board|运行通过|运行通过|
+|3|welcome-start-board|— → board|运行通过|运行通过|
+|4|pause|board → board|运行通过|运行通过|
+|5|pause-home|board → home|运行通过|运行通过|
+|6|chapters|home → chapters|运行通过|运行通过|
+|7|home-chapters|— → chapters|运行通过|运行通过|
+|8|level-1|chapters → board|运行通过|运行通过|
+|9|chapters-board|— → board|运行通过|运行通过|
+|10|pause|board → board|运行通过|运行通过|
+|11|pause|— → board|运行通过|运行通过|
+|12|resume-pause|board → board|运行通过|运行通过|
+|13|restart|board → board|运行通过|运行通过|
+|14|confirm-restart|board → board|运行通过|运行通过|
+|15|restart-same-instance|— → board|运行通过|运行通过|
+|16|pause|board → board|运行通过|运行通过|
+|17|pause-home|board → home|运行通过|运行通过|
+|18|board-home|— → home|运行通过|运行通过|
+|19|settings|home → settings|运行通过|运行通过|
+|20|rules|settings → rules|运行通过|运行通过|
+|21|settings-rules|— → rules|运行通过|运行通过|
+|22|home|rules → settings|运行通过|运行通过|
+|23|privacy|settings → settings|运行通过|运行通过|
+|24|privacy|— → settings|运行通过|运行通过|
+|25|reset-progress|settings → settings|运行通过|运行通过|
+|26|reset-cancel|— → settings|运行通过|运行通过|
+|27|licenses|settings → settings|运行通过|运行通过|
+|28|licenses|— → settings|运行通过|运行通过|
+|29|license-detail|— → settings|运行通过|运行通过|
+|30|home|settings → home|运行通过|运行通过|
+|31|progress|home → progress|运行通过|运行通过|
+|32|progress|— → progress|运行通过|运行通过|
+|33|home|progress → home|运行通过|运行通过|
+|34|collection|home → collection|运行通过|运行通过|
+|35|scene-color_studio|collection → scene|运行通过|运行通过|
+|36|scene|— → scene|运行通过|运行通过|
+|37|scene-continue|scene → board|运行通过|运行通过|
+|38|scene-continue-board|— → board|运行通过|运行通过|
+|39|pause|board → board|运行通过|运行通过|
+|40|pause-home|board → home|运行通过|运行通过|
+|41|collection|home → collection|运行通过|运行通过|
+|42|scene-color_studio|collection → scene|运行通过|运行通过|
+|43|collection-back|scene → collection|运行通过|运行通过|
+|44|scene-collection|— → collection|运行通过|运行通过|
+|45|home|collection → home|运行通过|运行通过|
+|46|daily|home → daily|运行通过|运行通过|
+|47|date-2026-10-21|daily → daily|运行通过|运行通过|
+|48|daily-history|— → daily|运行通过|运行通过|
+|49|date-2026-10-23|daily → daily|运行通过|运行通过|
+|50|daily-future|— → daily|运行通过|运行通过|
+|51|today|daily → board|运行通过|运行通过|
+|52|daily-board|— → board|运行通过|运行通过|
+|53|pause|board → board|运行通过|运行通过|
+|54|pause-home|board → home|运行通过|运行通过|
+|55|resume|home → board|运行通过|运行通过|
+|56|ordinary-resume|— → board|运行通过|运行通过|
+|57|controlled-main2|— → board|运行通过|运行通过|
+|58|bottle-2|board → board|运行通过|运行通过|
+|59|bottle-0|board → completion|运行通过|运行通过|
+|60|completion-2|— → completion|运行通过|运行通过|
+|61|next|completion → board|运行通过|运行通过|
+|62|ordinary-next|— → board|运行通过|运行通过|
+|63|controlled-main4|— → board|运行通过|运行通过|
+|64|bottle-2|board → board|运行通过|运行通过|
+|65|bottle-1|board → completion|运行通过|运行通过|
+|66|completion-4|— → completion|运行通过|运行通过|
+|67|view-patch|completion → reward|运行通过|运行通过|
+|68|reward|— → reward|运行通过|运行通过|
+|69|view-collection|reward → scene|运行通过|运行通过|
+|70|reward-scene|— → scene|运行通过|运行通过|
+|71|view-patch|completion → reward|运行通过|运行通过|
+|72|saved-patch-revisit|— → reward|运行通过|运行通过|
+|73|next|reward → board|运行通过|运行通过|
+|74|next-board|— → board|运行通过|运行通过|
+|75|extra-bottle|board → board|运行通过|运行通过|
+|76|extra-explanation|— → board|运行通过|运行通过|
+|77|controlled-main20|— → board|运行通过|运行通过|
+|78|bottle-4|board → board|运行通过|运行通过|
+|79|bottle-3|board → completion|运行通过|运行通过|
+|80|completion-20|— → completion|运行通过|运行通过|
+|81|view-collection|completion → scene|运行通过|运行通过|
+|82|chapter-scene|— → scene|运行通过|运行通过|
+|83|controlled-main60|— → board|运行通过|运行通过|
+|84|bottle-5|board → board|运行通过|运行通过|
+|85|bottle-0|board → completion|运行通过|运行通过|
+|86|completion-60|— → completion|运行通过|运行通过|
+|87|daily-final|completion → daily|运行通过|运行通过|
+|88|final-daily|— → daily|运行通过|运行通过|
+|89|daily-completion|— → completion|运行通过|运行通过|
+|90|daily-calendar|completion → daily|运行通过|运行通过|
+|91|today|daily → board|运行通过|运行通过|
+|92|daily-replay-board|— → board|运行通过|运行通过|
+|93|replay-completion|— → completion|运行通过|运行通过|
+|94|replay-again|completion → board|运行通过|运行通过|
+|95|replay-new-instance|— → board|运行通过|运行通过|
+|96|save-failed|— → board|运行通过|运行通过|
+|97|retry|board → home|运行通过|运行通过|
+|98|settings|home → settings|运行通过|运行通过|
+|99|rules|settings → rules|运行通过|运行通过|
+|100|reduced-rules|— → rules|运行通过|运行通过|
+|101|home|rules → settings|运行通过|运行通过|
+|102|home|settings → home|运行通过|运行通过|
+
+主录像仅是代表连续路径，Android180秒上限不覆盖尾部全部操作；减少动态/系统返回另见补录与PNG。通关/新实例准备、每日/重玩参考解直接控制器执行在QA源码明确标注。
+
+未实际在native发起的分支（信息不可用、主线/跨日替换、待确认SDK奖励实例恢复）通过共用DialogRoute覆盖和既有host分支验证；不能将其写为真实SDK或逐分支native操作通过。入口枚举见交付文档T04。

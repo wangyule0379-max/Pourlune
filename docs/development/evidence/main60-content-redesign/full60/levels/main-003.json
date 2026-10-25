@@ -1,0 +1,369 @@
+{
+  "puzzle_id": "main-003",
+  "level": 3,
+  "status": "authored_and_rule_measured_not_human_difficulty_or_visual_accepted",
+  "contract": {
+    "level": 3,
+    "puzzle_id": "main-003",
+    "chapter": 1,
+    "scene": "color_studio",
+    "title": "顶色与标签",
+    "colors": 2,
+    "initial_bottles": 4,
+    "capacity": 4,
+    "empty_buffers": 2,
+    "pace": "入门",
+    "learning_goal": "允许在不同标签瓶临时放同色",
+    "board_constraints": "两色，合理短路线含一次向非本色标签瓶的合法同色合并",
+    "intended_strategy": "先按顶部相容合并，最后才按标签归位",
+    "required_evidence": "给出临时错标签合法动作和最终标签修正；解释为何不是规则错误",
+    "reject_if": "把标签误实现为接收限制，或只改第2关的标签",
+    "milestone_piece": null,
+    "preserve_exact_existing_definition": false,
+    "status": "design_contract_not_authored_or_validated_board"
+  },
+  "author_strategy_notes": "步骤3将2号G1倒入O目标1号的G3，合法性取决于顶色与余量。随后步骤4清空2号，步骤5/6才把G/O送回各自标签。",
+  "old_content_version": 1,
+  "new_content_version": 2,
+  "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+  "new_definition_sha256": "78bfa063394f92903b013a98eaa90c89bf16db8333dd690a993e03446a8dc4ae",
+  "search": {
+    "algorithm": "exact BFS, ordered bottle and colour identities; no pruning",
+    "status": "found",
+    "depth_limit": 6,
+    "excluded_through": 5,
+    "visited": 129,
+    "expanded": 110,
+    "generated": 494,
+    "layer_states": {
+      "0": 1,
+      "1": 4,
+      "2": 8,
+      "3": 22,
+      "4": 34,
+      "5": 41,
+      "6": 19
+    },
+    "layer_legal_edges": {
+      "0": 4,
+      "1": 16,
+      "2": 34,
+      "3": 94,
+      "4": 155,
+      "5": 191
+    },
+    "max_frontier": 46,
+    "max_states": 500000,
+    "time_budget_seconds": 30,
+    "elapsed_ms": 0.702,
+    "moves": [
+      {
+        "from_index": 0,
+        "to_index": 2
+      },
+      {
+        "from_index": 1,
+        "to_index": 2
+      },
+      {
+        "from_index": 1,
+        "to_index": 0
+      },
+      {
+        "from_index": 1,
+        "to_index": 2
+      },
+      {
+        "from_index": 0,
+        "to_index": 1
+      },
+      {
+        "from_index": 2,
+        "to_index": 0
+      }
+    ],
+    "shortest_within_bound": 6
+  },
+  "reference_replay": {
+    "steps": [
+      {
+        "step": 1,
+        "from_index": 0,
+        "to_index": 2,
+        "color": "O",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 4,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "",
+          ""
+        ],
+        "buffer_contents_after": [
+          "O",
+          ""
+        ],
+        "before": [
+          "GGGO",
+          "OGOO",
+          "",
+          ""
+        ],
+        "after": [
+          "GGG",
+          "OGOO",
+          "O",
+          ""
+        ],
+        "after_sha256": "4c4fa75a5965884cc3ec62e6873a73a63ad901c0de82827baa1cbc119ff5f29f"
+      },
+      {
+        "step": 2,
+        "from_index": 1,
+        "to_index": 2,
+        "color": "O",
+        "units": 2,
+        "source_top_run": 2,
+        "receiver_space_before": 3,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "O",
+          ""
+        ],
+        "buffer_contents_after": [
+          "OOO",
+          ""
+        ],
+        "before": [
+          "GGG",
+          "OGOO",
+          "O",
+          ""
+        ],
+        "after": [
+          "GGG",
+          "OG",
+          "OOO",
+          ""
+        ],
+        "after_sha256": "8bf948796144bb6cf0e2b8d3410d9378a706f2ff149b0a0c394773e1f08af76d"
+      },
+      {
+        "step": 3,
+        "from_index": 1,
+        "to_index": 0,
+        "color": "G",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 1,
+        "capacity_truncated": false,
+        "target_borrowed": true,
+        "source_became_empty": false,
+        "buffer_contents_before": [
+          "OOO",
+          ""
+        ],
+        "buffer_contents_after": [
+          "OOO",
+          ""
+        ],
+        "before": [
+          "GGG",
+          "OG",
+          "OOO",
+          ""
+        ],
+        "after": [
+          "GGGG",
+          "O",
+          "OOO",
+          ""
+        ],
+        "after_sha256": "667e76c206229b93478560b64479e2806f315d2e9ea6570d2aca14e195b8d2fd"
+      },
+      {
+        "step": 4,
+        "from_index": 1,
+        "to_index": 2,
+        "color": "O",
+        "units": 1,
+        "source_top_run": 1,
+        "receiver_space_before": 1,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": true,
+        "buffer_contents_before": [
+          "OOO",
+          ""
+        ],
+        "buffer_contents_after": [
+          "OOOO",
+          ""
+        ],
+        "before": [
+          "GGGG",
+          "O",
+          "OOO",
+          ""
+        ],
+        "after": [
+          "GGGG",
+          "",
+          "OOOO",
+          ""
+        ],
+        "after_sha256": "d742fa8ed01e8975d6cf8002a9081fce19395b98991f5cd892fc63c00be2c775"
+      },
+      {
+        "step": 5,
+        "from_index": 0,
+        "to_index": 1,
+        "color": "G",
+        "units": 4,
+        "source_top_run": 4,
+        "receiver_space_before": 4,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": true,
+        "buffer_contents_before": [
+          "OOOO",
+          ""
+        ],
+        "buffer_contents_after": [
+          "OOOO",
+          ""
+        ],
+        "before": [
+          "GGGG",
+          "",
+          "OOOO",
+          ""
+        ],
+        "after": [
+          "",
+          "GGGG",
+          "OOOO",
+          ""
+        ],
+        "after_sha256": "ef0d0d32d1c7417ca48fcd66665679d1634ce90719f9883a1c7bde927bb7f0a7"
+      },
+      {
+        "step": 6,
+        "from_index": 2,
+        "to_index": 0,
+        "color": "O",
+        "units": 4,
+        "source_top_run": 4,
+        "receiver_space_before": 4,
+        "capacity_truncated": false,
+        "target_borrowed": false,
+        "source_became_empty": true,
+        "buffer_contents_before": [
+          "OOOO",
+          ""
+        ],
+        "buffer_contents_after": [
+          "",
+          ""
+        ],
+        "before": [
+          "",
+          "GGGG",
+          "OOOO",
+          ""
+        ],
+        "after": [
+          "OOOO",
+          "GGGG",
+          "",
+          ""
+        ],
+        "after_sha256": "563ab4060c3320da6f4166594a4ccf580e311b244170a050500aaa8af4f1db83"
+      }
+    ],
+    "won": true,
+    "initial_sha256": "10199e89a0b9fd2b99b5b4d5dffc75980947d3386bb6c1d4c22ec0d43881b92d",
+    "final": [
+      "OOOO",
+      "GGGG",
+      "",
+      ""
+    ],
+    "extra_bottles": 0
+  },
+  "route_observations": {
+    "buffer_roles": {
+      "2": [
+        "O"
+      ],
+      "3": []
+    },
+    "both_buffers_used": false,
+    "buffer_reused": false,
+    "strategic_buffer_reuse_steps": [],
+    "target_space_freed_while_mixed_steps": [],
+    "target_borrow_steps": [
+      3
+    ],
+    "truncation_steps": [],
+    "nonbuffer_empty_steps": [
+      4,
+      5
+    ],
+    "space_links": [
+      {
+        "empty_step": 4,
+        "use_step": 5,
+        "bottle": 1
+      },
+      {
+        "empty_step": 5,
+        "use_step": 6,
+        "bottle": 0
+      }
+    ],
+    "reveal_events": [
+      {
+        "step": 1,
+        "bottle": 0,
+        "removed": "O",
+        "exposed": "G",
+        "exposed_run": 3
+      },
+      {
+        "step": 2,
+        "bottle": 1,
+        "removed": "O",
+        "exposed": "G",
+        "exposed_run": 1
+      },
+      {
+        "step": 3,
+        "bottle": 1,
+        "removed": "G",
+        "exposed": "O",
+        "exposed_run": 1
+      }
+    ],
+    "stable_goal_events": [
+      {
+        "step": 5,
+        "bottle": 1,
+        "color": "G"
+      },
+      {
+        "step": 6,
+        "bottle": 0,
+        "color": "O"
+      }
+    ],
+    "target_reborrow": [],
+    "goal_order_choice_nodes": []
+  },
+  "single_action_deletion_findings": [],
+  "human_playtest": "not performed; algorithmic replay is not play experience"
+}

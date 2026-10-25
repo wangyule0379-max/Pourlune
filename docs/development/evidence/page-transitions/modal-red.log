@@ -1,0 +1,36 @@
+00:00 +0: loading /Volumes/data/App Development/Pourlune/app/test/page_transitions_test.dart
+00:00 +0: one active modal rejects a repeated request without duplicating actions
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TypeWidgetFinder:<Found 2 widgets with type "AlertDialog": [
+            AlertDialog(dependencies: [Directionality, InheritedCupertinoTheme, MediaQuery,
+_InheritedTheme, _LocalizationsScope-[GlobalKey#4c276]]),
+            AlertDialog(dependencies: [Directionality, InheritedCupertinoTheme, MediaQuery,
+_InheritedTheme, _LocalizationsScope-[GlobalKey#4c276]]),
+          ]>
+   Which: is too many
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Volumes/data/App%20Development/Pourlune/app/test/page_transitions_test.dart:118:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Volumes/data/App%20Development/Pourlune/app/test/page_transitions_test.dart line 118
+The test description was:
+  one active modal rejects a repeated request without duplicating actions
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:06 +0 -1: one active modal rejects a repeated request without duplicating actions [E]
+  Test failed. See exception logs above.
+  The test description was: one active modal rejects a repeated request without duplicating actions
+  
+00:06 +0 -1: Some tests failed.
+
+Failing tests:
+  /Volumes/data/App Development/Pourlune/app/test/page_transitions_test.dart: one active modal rejects a repeated request without duplicating actions

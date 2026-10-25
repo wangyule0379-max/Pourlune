@@ -1,0 +1,1166 @@
+--- frozen-M/app/lib/presentation/motion.dart
++++ app/lib/presentation/motion.dart
+@@ -1,4 +1,5 @@
+ import 'package:flutter/material.dart';
++import 'package:animations/animations.dart';
+ 
+ /// Presentation only. These never gate a save or dispatch a game action.
+ abstract final class KnitMotion {
+@@ -12,6 +13,8 @@
+   static const curve = Curves.easeOutCubic;
+ }
+ 
++enum KnitPageTransition { fadeThrough, horizontal, scaled }
++
+ /// Two visual pages at most. The outgoing page cannot receive any input/focus
+ /// or contribute semantics. No animation callback performs navigation.
+ class PageMotion extends StatefulWidget {
+@@ -20,10 +23,14 @@
+     required this.page,
+     required this.child,
+     this.back = false,
++    this.transition = KnitPageTransition.fadeThrough,
++    this.animateInitial = false,
+     this.immediate = false,
+     this.retainPrevious = true,
+   });
+   final Object page;
++  final KnitPageTransition transition;
++  final bool animateInitial;
+   final Widget child;
+   final bool back, immediate, retainPrevious;
+   @override
+@@ -35,7 +42,8 @@
+   late final AnimationController _animation =
+       AnimationController(vsync: this, duration: KnitMotion.page, value: 1)
+         ..addStatusListener((status) {
+-          if (status == AnimationStatus.completed &&
++          if ((status == AnimationStatus.completed ||
++                  status == AnimationStatus.dismissed) &&
+               _outgoing != null &&
+               mounted) {
+             setState(() => _outgoing = null);
+@@ -43,11 +51,15 @@
+         });
+   Widget? _outgoing;
+   Object? _oldPage;
+-  bool _reduced = false;
++  bool _reduced = false, _back = false;
+   @override
+   void initState() {
+     super.initState();
+     WidgetsBinding.instance.addObserver(this);
++    if (widget.animateInitial) {
++      _animation.duration = KnitMotion.shortFade;
++      _animation.forward(from: 0);
++    }
+   }
+ 
+   @override
+@@ -59,7 +71,7 @@
+ 
+   void _finish() {
+     _outgoing = null;
+-    _animation.value = 1;
++    _animation.value = _back ? 0 : 1;
+   }
+ 
+   @override
+@@ -68,9 +80,16 @@
+     if (widget.immediate || _reduced) {
+       _finish();
+     } else if (oldWidget.page != widget.page) {
++      _outgoing = null;
++      _oldPage = oldWidget.page;
++      _back = widget.back;
++      _animation.duration = KnitMotion.page;
++      if (_back) {
++        _animation.reverse(from: 1);
++      } else {
++        _animation.forward(from: 0);
++      }
+       _outgoing = widget.retainPrevious ? oldWidget.child : null;
+-      _oldPage = oldWidget.page;
+-      _animation.forward(from: 0);
+     }
+   }
+ 
+@@ -86,71 +105,86 @@
+     super.dispose();
+   }
+ 
+-  @override
+-  Widget build(BuildContext context) {
+-    final ease = _animation.drive(CurveTween(curve: KnitMotion.curve));
+-    final direction = widget.back ? -1.0 : 1.0;
+-    return Stack(
+-      fit: StackFit.expand,
+-      children: [
+-        if (_outgoing != null)
+-          IgnorePointer(
+-            key: const Key('page-outgoing'),
+-            child: ExcludeSemantics(
+-              child: ExcludeFocus(
+-                child: TickerMode(
+-                  enabled: false,
+-                  child: FadeTransition(
+-                    opacity: ReverseAnimation(ease),
+-                    child: SlideTransition(
+-                      position: ease.drive(
+-                        Tween(
+-                          begin: Offset.zero,
+-                          end: Offset(-.025 * direction, 0),
+-                        ),
+-                      ),
+-                      child: KeyedSubtree(
+-                        key: ValueKey(_oldPage),
+-                        child: _outgoing!,
+-                      ),
+-                    ),
+-                  ),
++  Widget _transition(Widget child, {required bool incoming}) {
++    // Same primary/secondary contract as a pushed/popped PageRoute. We keep a
++    // bounded host because PageTransitionSwitcher may retain many old children.
++    final Animation<double> primary = _back
++        ? (incoming ? kAlwaysCompleteAnimation : _animation)
++        : (incoming ? _animation : kAlwaysCompleteAnimation);
++    final Animation<double> secondary = _back
++        ? (incoming ? _animation : kAlwaysDismissedAnimation)
++        : (incoming ? kAlwaysDismissedAnimation : _animation);
++    if (widget.transition == KnitPageTransition.fadeThrough) {
++      return FadeThroughTransition(
++        animation: primary,
++        secondaryAnimation: secondary,
++        fillColor: Colors.transparent,
++        child: child,
++      );
++    }
++    return SharedAxisTransition(
++      animation: primary,
++      secondaryAnimation: secondary,
++      transitionType: widget.transition == KnitPageTransition.horizontal
++          ? SharedAxisTransitionType.horizontal
++          : SharedAxisTransitionType.scaled,
++      fillColor: Colors.transparent,
++      child: child,
++    );
++  }
++
++  @override
++  Widget build(BuildContext context) => Stack(
++    fit: StackFit.expand,
++    children: [
++      if (_outgoing != null)
++        IgnorePointer(
++          key: const Key('page-outgoing'),
++          child: ExcludeSemantics(
++            child: ExcludeFocus(
++              child: TickerMode(
++                enabled: false,
++                child: _transition(
++                  KeyedSubtree(key: ValueKey(_oldPage), child: _outgoing!),
++                  incoming: false,
+                 ),
+               ),
+             ),
+           ),
+-        FocusScope(
+-          key: ValueKey(widget.page),
+-          autofocus: true,
+-          child: FadeTransition(
+-            key: const Key('page-enter'),
+-            opacity: ease,
+-            alwaysIncludeSemantics: true,
+-            child: SlideTransition(
+-              position: ease.drive(
+-                Tween(begin: Offset(.04 * direction, 0), end: Offset.zero),
+-              ),
+-              child: widget.child,
+-            ),
+-          ),
+         ),
+-      ],
+-    );
+-  }
+-}
++      FocusScope(
++        key: ValueKey(widget.page),
++        autofocus: true,
++        child: KeyedSubtree(
++          key: const Key('page-enter'),
++          child: _transition(widget.child, incoming: true),
++        ),
++      ),
++    ],
++  );
++}
++
++final _dialogOpen = Expando<bool>();
+ 
+ Future<T?> showKnitDialog<T>({
+   required BuildContext context,
+   required WidgetBuilder builder,
+-}) {
++}) async {
+   final navigator = Navigator.of(context, rootNavigator: true);
+-  return navigator.push<T>(
+-    _KnitDialogRoute<T>(
+-      context: context,
+-      builder: builder,
+-      themes: InheritedTheme.capture(from: context, to: navigator.context),
+-    ),
+-  );
++  // A repeated confirmation must not dispatch the same action twice.
++  if (_dialogOpen[navigator] == true) return null;
++  _dialogOpen[navigator] = true;
++  try {
++    return await navigator.push<T>(
++      _KnitDialogRoute<T>(
++        context: context,
++        builder: builder,
++        themes: InheritedTheme.capture(from: context, to: navigator.context),
++      ),
++    );
++  } finally {
++    _dialogOpen[navigator] = null;
++  }
+ }
+ 
+ class _KnitDialogRoute<T> extends DialogRoute<T> {
+@@ -177,13 +211,29 @@
+     Widget child,
+   ) {
+     if (MediaQuery.disableAnimationsOf(context)) return child;
+-    final eased = animation.drive(CurveTween(curve: KnitMotion.curve));
+-    return FadeTransition(
+-      opacity: eased,
+-      child: ScaleTransition(
+-        scale: eased.drive(Tween(begin: .96, end: 1.0)),
+-        child: child,
+-      ),
++    return FadeScaleTransition(animation: animation, child: child);
++  }
++}
++
++/// Covers framework-owned routes (licenses and license detail) without migrating
++/// the existing Material widgets to material_ui or adding a second navigation.
++class KnitRouteTransitions extends PageTransitionsBuilder {
++  const KnitRouteTransitions();
++  @override
++  Widget buildTransitions<T>(
++    PageRoute<T> route,
++    BuildContext context,
++    Animation<double> animation,
++    Animation<double> secondaryAnimation,
++    Widget child,
++  ) {
++    if (MediaQuery.disableAnimationsOf(context)) return child;
++    return SharedAxisTransition(
++      animation: animation,
++      secondaryAnimation: secondaryAnimation,
++      transitionType: SharedAxisTransitionType.horizontal,
++      fillColor: Colors.transparent,
++      child: child,
+     );
+   }
+ }
+--- frozen-M/app/lib/presentation/game_screen.dart
++++ app/lib/presentation/game_screen.dart
+@@ -40,6 +40,8 @@
+   bool _inForeground = true, _audioPaused = false;
+   bool _pauseOpen = false;
+   GamePage _motionPage = GamePage.home;
++  String? _motionInstance;
++  KnitPageTransition _transition = KnitPageTransition.fadeThrough;
+   bool _motionBack = false, _retainPrevious = true;
+   String? _warmedInstance;
+   void _warmUpcoming() {
+@@ -143,6 +145,7 @@
+       await showKnitDialog<bool>(
+         context: context,
+         builder: (context) => AlertDialog(
++          scrollable: true,
+           title: Text(title),
+           content: Text(body),
+           actions: key == 'confirm-reset'
+@@ -180,6 +183,7 @@
+     await showKnitDialog<void>(
+       context: context,
+       builder: (context) => AlertDialog(
++        scrollable: true,
+         title: Text(title),
+         content: Text(body),
+         actions: [
+@@ -396,7 +400,31 @@
+   Widget build(BuildContext context) => ListenableBuilder(
+     listenable: c,
+     builder: (context, _) {
+-      if (_motionPage != c.page) {
++      final instance =
++          {
++            GamePage.board,
++            GamePage.completion,
++            GamePage.reward,
++          }.contains(c.page)
++          ? c.current?.id
++          : null;
++      if (_motionPage != c.page || _motionInstance != instance) {
++        final previous = _motionPage;
++        final related =
++            (previous == GamePage.settings && c.page == GamePage.rules) ||
++            (previous == GamePage.rules && c.page == GamePage.settings);
++        final detail =
++            (previous == GamePage.collection && c.page == GamePage.scene) ||
++            (previous == GamePage.scene && c.page == GamePage.collection);
++        _transition = c.page == GamePage.board || related
++            ? KnitPageTransition.horizontal
++            : detail ||
++                  c.page == GamePage.completion ||
++                  c.page == GamePage.reward ||
++                  (previous == GamePage.reward && c.page == GamePage.scene) ||
++                  (previous == GamePage.completion && c.page == GamePage.scene)
++            ? KnitPageTransition.scaled
++            : KnitPageTransition.fadeThrough;
+         _motionBack =
+             c.page == GamePage.home ||
+             (_motionPage == GamePage.rules && c.page == GamePage.settings) ||
+@@ -406,6 +434,7 @@
+         _retainPrevious =
+             _motionPage != GamePage.board && c.page != GamePage.board;
+         _motionPage = c.page;
++        _motionInstance = instance;
+       }
+       final title = switch (c.page) {
+         GamePage.chapters => l.chapters,
+@@ -483,12 +512,21 @@
+                     page: (
+                       c.page,
+                       c.page == GamePage.scene ? c.selectedScene : '',
++                      instance,
+                     ),
+                     back: _motionBack,
++                    transition: _transition,
++                    animateInitial: c.page == GamePage.home,
+                     retainPrevious: _retainPrevious,
+                     immediate: c.phase == SavePhase.failed,
+                     child: SingleChildScrollView(
+-                      key: PageStorageKey('scroll-${c.page.name}'),
++                      key: PageStorageKey(
++                        instance != null
++                            ? 'scroll-${c.page.name}-$instance'
++                            : c.page == GamePage.scene
++                            ? 'scroll-scene-${c.selectedScene}'
++                            : 'scroll-${c.page.name}',
++                      ),
+                       padding: const EdgeInsets.all(16),
+                       child: Column(
+                         crossAxisAlignment: CrossAxisAlignment.stretch,
+--- frozen-M/app/lib/presentation/navigation_pages.dart
++++ app/lib/presentation/navigation_pages.dart
+@@ -2,6 +2,9 @@
+ 
+ import 'package:flutter/foundation.dart';
+ import 'package:flutter/material.dart';
++
++import 'motion.dart';
++
+ import 'package:intl/intl.dart';
+ import 'package:pourlune_core/pourlune_core.dart';
+ 
+@@ -369,7 +372,7 @@
+       widget.onToday();
+       return;
+     }
+-    await showDialog<void>(
++    await showKnitDialog<void>(
+       context: context,
+       builder: (context) => AlertDialog(
+         title: Text(date),
+--- frozen-M/app/lib/presentation/pourlune_app.dart
++++ app/lib/presentation/pourlune_app.dart
+@@ -5,6 +5,7 @@
+ import '../application/game_audio.dart';
+ import '../l10n/app_localizations.dart';
+ import 'bottle.dart';
++import 'motion.dart';
+ import 'game_screen.dart';
+ import 'knit_components.dart';
+ 
+@@ -42,6 +43,12 @@
+             ? Colors.white
+             : const Color(0xff82dff1),
+         useMaterial3: true,
++        pageTransitionsTheme: PageTransitionsTheme(
++          builders: {
++            for (final platform in TargetPlatform.values)
++              platform: const KnitRouteTransitions(),
++          },
++        ),
+         textTheme: ThemeData.light().textTheme.apply(
+           fontFamily: 'Nunito',
+           bodyColor: ink,
+--- frozen-M/app/pubspec.yaml
++++ app/pubspec.yaml
+@@ -22,6 +22,7 @@
+   firebase_remote_config: 7.0.0
+   url_launcher: 6.3.3
+   flame: 1.38.2
++  animations: 3.0.0
+ dev_dependencies:
+   flutter_test:
+     sdk: flutter
+--- frozen-M/app/pubspec.lock
++++ app/pubspec.lock
+@@ -9,6 +9,14 @@
+       url: "https://pub.dev"
+     source: hosted
+     version: "1.3.78"
++  animations:
++    dependency: "direct main"
++    description:
++      name: animations
++      sha256: "5ec868ffa78851e6f3f32e9377b780c7ae2087a5523d8b5e6df59bd8287ac5dd"
++      url: "https://pub.dev"
++    source: hosted
++    version: "3.0.0"
+   args:
+     dependency: transitive
+     description:
+@@ -129,6 +137,14 @@
+       url: "https://pub.dev"
+     source: hosted
+     version: "3.0.7"
++  cupertino_ui:
++    dependency: transitive
++    description:
++      name: cupertino_ui
++      sha256: a47c4e7c66fd7444a063a602597fceb238f705c3f6b1322bc0053d0a2638ee6e
++      url: "https://pub.dev"
++    source: hosted
++    version: "1.1.4"
+   fake_async:
+     dependency: transitive
+     description:
+@@ -428,6 +444,14 @@
+       url: "https://pub.dev"
+     source: hosted
+     version: "0.13.0"
++  material_ui:
++    dependency: transitive
++    description:
++      name: material_ui
++      sha256: e4031746f96c8316864d9b92bce375f1320a36ed56e166307e1e1bda9d90b4ab
++      url: "https://pub.dev"
++    source: hosted
++    version: "1.8.0"
+   meta:
+     dependency: transitive
+     description:
+--- frozen-M/app/test/motion_primitives_test.dart
++++ app/test/motion_primitives_test.dart
+@@ -1,4 +1,5 @@
+ import 'package:flutter/material.dart';
++import 'package:animations/animations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:pourlune_dev/presentation/motion.dart';
+ 
+@@ -54,8 +55,13 @@
+       expect(find.byKey(const Key('page-outgoing')), findsNothing);
+       expect(
+         t
+-            .widget<FadeTransition>(find.byKey(const Key('page-enter')))
+-            .opacity
++            .widget<FadeThroughTransition>(
++              find.descendant(
++                of: find.byKey(const Key('page-enter')),
++                matching: find.byType(FadeThroughTransition),
++              ),
++            )
++            .animation
+             .value,
+         1,
+       );
+@@ -83,8 +89,13 @@
+       expect(find.byKey(const Key('page-outgoing')), findsNothing);
+       expect(
+         t
+-            .widget<FadeTransition>(find.byKey(const Key('page-enter')))
+-            .opacity
++            .widget<FadeThroughTransition>(
++              find.descendant(
++                of: find.byKey(const Key('page-enter')),
++                matching: find.byType(FadeThroughTransition),
++              ),
++            )
++            .animation
+             .value,
+         1,
+       );
+--- frozen-M/app/test/motion_polish_test.dart
++++ app/test/motion_polish_test.dart
+@@ -1,6 +1,7 @@
+ import 'dart:io';
+ 
+ import 'package:flutter/material.dart';
++import 'package:animations/animations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:pourlune_dev/application/game_controller.dart';
+ import 'package:pourlune_dev/data/game_store.dart';
+@@ -67,7 +68,18 @@
+       await t.pump();
+       final entry = find.byKey(const Key('page-enter'));
+       expect(entry, findsOneWidget);
+-      expect(t.widget<FadeTransition>(entry).opacity.value, lessThan(1));
++      expect(
++        t
++            .widget<FadeThroughTransition>(
++              find.descendant(
++                of: entry,
++                matching: find.byType(FadeThroughTransition),
++              ),
++            )
++            .animation
++            .value,
++        lessThan(1),
++      );
+       expect(find.byKey(const Key('home')).hitTestable(), findsOneWidget);
+       await t.tap(find.byKey(const Key('home')));
+       await t.pump();
+@@ -125,8 +137,13 @@
+       expect(find.byKey(const Key('save-failed')), findsOneWidget);
+       expect(
+         t
+-            .widget<FadeTransition>(find.byKey(const Key('page-enter')))
+-            .opacity
++            .widget<SharedAxisTransition>(
++              find.descendant(
++                of: find.byKey(const Key('page-enter')),
++                matching: find.byType(SharedAxisTransition),
++              ),
++            )
++            .animation
+             .value,
+         1,
+       );
+--- frozen-M/app/test/page_transitions_test.dart
++++ app/test/page_transitions_test.dart
+@@ -0,0 +1,281 @@
++import 'dart:io';
++
++import 'package:animations/animations.dart';
++import 'package:pourlune_dev/presentation/motion.dart';
++
++import 'package:flutter/material.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:pourlune_dev/application/game_controller.dart';
++import 'package:pourlune_dev/data/game_store.dart';
++import 'package:pourlune_dev/presentation/pourlune_app.dart';
++import 'package:sqflite_common_ffi/sqflite_ffi.dart';
++
++import 'offline_controller_test.dart' show testLibrary;
++
++void main() {
++  sqfliteFfiInit();
++  Future<void> appCase(
++    WidgetTester t,
++    Future<void> Function(GameController) check,
++  ) async {
++    final dir = Directory.systemTemp.createTempSync('motion-polish-');
++    final store = (await t.runAsync(
++      () => GameStore.open('${dir.path}/g.db', factory: databaseFactoryFfi),
++    ))!;
++    final c = GameController(store, library: testLibrary());
++    try {
++      await t.runAsync(c.initialize);
++      await t.pumpWidget(PourluneApp(controller: c));
++      await t.pumpAndSettle();
++      await check(c);
++    } finally {
++      await t.pumpWidget(const SizedBox());
++      c.dispose();
++      await t.runAsync(store.close);
++      dir.deleteSync(recursive: true);
++    }
++  }
++
++  testWidgets(
++    'official page patterns retain transparent woven background',
++    (t) => appCase(t, (c) async {
++      await c.navigate(GamePage.chapters);
++      await t.pump();
++      expect(find.byType(FadeThroughTransition), findsWidgets);
++      expect(
++        t
++            .widgetList<FadeThroughTransition>(
++              find.byType(FadeThroughTransition),
++            )
++            .every((w) => w.fillColor == Colors.transparent),
++        isTrue,
++      );
++      await t.pumpAndSettle();
++      await c.navigate(GamePage.settings);
++      await t.pumpAndSettle();
++      await c.navigate(GamePage.rules);
++      await t.pump();
++      expect(find.byType(SharedAxisTransition), findsWidgets);
++      await t.pumpAndSettle();
++      await t.tap(find.byKey(const Key('home')));
++      await t.pump();
++      final shared = t.widgetList<SharedAxisTransition>(
++        find.byType(SharedAxisTransition),
++      );
++      expect(shared, isNotEmpty);
++      expect(shared.every((w) => w.fillColor == Colors.transparent), isTrue);
++      await t.pumpAndSettle();
++      expect(c.page, GamePage.settings);
++    }),
++  );
++  testWidgets(
++    'instance replacement transitions while actions retain page identity',
++    (t) => appCase(t, (c) async {
++      await t.runAsync(() => c.startLevel(1));
++      await t.pumpAndSettle();
++      Object key() => t.widget<PageMotion>(find.byType(PageMotion)).page;
++      final first = key();
++      await t.runAsync(() => c.pour(0, 2));
++      await t.pumpAndSettle();
++      expect(key(), first);
++      await t.runAsync(() => c.start(c.library.main[1]!, replace: true));
++      await t.pump();
++      expect(key(), isNot(first));
++      expect(find.byKey(const Key('page-outgoing')), findsNothing);
++      expect(find.byType(SharedAxisTransition), findsWidgets);
++      await t.pumpAndSettle();
++      expect(find.byKey(const Key('bottle-0')).hitTestable(), findsOneWidget);
++    }),
++  );
++  testWidgets(
++    'pause uses official modal and returns focus and board input',
++    (t) => appCase(t, (c) async {
++      await t.runAsync(() => c.startLevel(1));
++      await t.pumpAndSettle();
++      await t.tap(find.byKey(const Key('pause')));
++      await t.pump(const Duration(milliseconds: 50));
++      expect(find.byType(FadeScaleTransition), findsOneWidget);
++      await t.pumpAndSettle();
++      await t.tap(find.byKey(const Key('resume-pause')));
++      await t.pumpAndSettle();
++      expect(find.byKey(const Key('bottle-0')).hitTestable(), findsOneWidget);
++    }),
++  );
++  testWidgets(
++    'one active modal rejects a repeated request without duplicating actions',
++    (t) async {
++      late BuildContext context;
++      await t.pumpWidget(
++        MaterialApp(
++          home: Builder(
++            builder: (c) {
++              context = c;
++              return const SizedBox();
++            },
++          ),
++        ),
++      );
++      var confirmations = 0;
++      Future<void> request() async {
++        final yes = await showKnitDialog<bool>(
++          context: context,
++          builder: (c) => AlertDialog(
++            actions: [
++              TextButton(
++                onPressed: () => Navigator.pop(c, true),
++                child: const Text('Confirm once'),
++              ),
++            ],
++          ),
++        );
++        if (yes == true) confirmations++;
++      }
++
++      final first = request(), duplicate = request();
++      await t.pumpAndSettle();
++      expect(find.byType(AlertDialog), findsOneWidget);
++      await t.tap(find.text('Confirm once'));
++      await t.pumpAndSettle();
++      await Future.wait([first, duplicate]);
++      expect(confirmations, 1);
++    },
++  );
++
++  testWidgets(
++    'license route and date dialogs use shared official transitions',
++    (t) => appCase(t, (c) async {
++      await c.navigate(GamePage.settings);
++      await t.pumpAndSettle();
++      await t.ensureVisible(find.byKey(const Key('licenses')));
++      await t.tap(find.byKey(const Key('licenses')));
++      await t.pump();
++      await t.pump(const Duration(milliseconds: 60));
++      expect(find.byType(LicensePage), findsOneWidget);
++      expect(find.byType(SharedAxisTransition), findsWidgets);
++      await t.pumpAndSettle();
++      await t.pageBack();
++      await t.pumpAndSettle();
++      expect(c.page, GamePage.settings);
++      await c.navigate(GamePage.daily);
++      await t.pumpAndSettle();
++      final dates = find.byWidgetPredicate(
++        (w) =>
++            w is TextButton &&
++            w.key is ValueKey<String> &&
++            (w.key! as ValueKey<String>).value.startsWith('date-'),
++      );
++      final other = dates
++          .evaluate()
++          .map((e) => (e.widget.key! as ValueKey<String>).value)
++          .firstWhere((key) => key != 'date-${c.today.date}');
++      await t.ensureVisible(find.byKey(Key(other)));
++      await t.tap(find.byKey(Key(other)));
++      await t.pump();
++      await t.pump(const Duration(milliseconds: 60));
++      expect(find.byType(FadeScaleTransition), findsOneWidget);
++      await t.pumpAndSettle();
++      await t.tap(find.text('Close'));
++      await t.pumpAndSettle();
++      expect(c.current, isNull);
++    }),
++  );
++  testWidgets(
++    'application reduced motion removes route animation and rapid returns keep one old view',
++    (t) => appCase(t, (c) async {
++      await t.runAsync(() => c.updateSetting('reduced_motion', true));
++      await t.pumpAndSettle();
++      await c.navigate(GamePage.settings);
++      await t.pump();
++      expect(find.byKey(const Key('page-outgoing')), findsNothing);
++      await t.ensureVisible(find.byKey(const Key('licenses')));
++      await t.tap(find.byKey(const Key('licenses')));
++      await t.pump();
++      expect(find.byType(SharedAxisTransition), findsNothing);
++      await t.pumpAndSettle();
++      await t.pageBack();
++      await t.pumpAndSettle();
++      expect(c.page, GamePage.settings);
++    }),
++  );
++  testWidgets(
++    'narrow large text keeps destinations and modal controls usable',
++    (t) => appCase(t, (c) async {
++      await t.binding.setSurfaceSize(const Size(360, 568));
++      addTearDown(() => t.binding.setSurfaceSize(null));
++      await t.pumpWidget(
++        PourluneApp(controller: c, textScaler: TextScaler.linear(2)),
++      );
++      for (final page in [
++        GamePage.home,
++        GamePage.chapters,
++        GamePage.daily,
++        GamePage.collection,
++        GamePage.scene,
++        GamePage.settings,
++        GamePage.rules,
++      ]) {
++        await c.navigate(page);
++        await t.pumpAndSettle();
++        expect(t.takeException(), isNull, reason: page.name);
++      }
++      await c.navigate(GamePage.settings);
++      await t.pumpAndSettle();
++      await t.ensureVisible(find.byKey(const Key('reset-progress')));
++      await t.tap(find.byKey(const Key('reset-progress')));
++      await t.pumpAndSettle();
++      await t.ensureVisible(find.text('Keep progress'));
++      await t.tap(find.text('Keep progress'));
++      await t.pumpAndSettle();
++      expect(c.page, GamePage.settings);
++      expect(t.takeException(), isNull);
++    }),
++  );
++  testWidgets(
++    'new board instance and different scene start at top; returning keeps scroll',
++    (t) => appCase(t, (c) async {
++      await t.binding.setSurfaceSize(const Size(360, 568));
++      addTearDown(() => t.binding.setSurfaceSize(null));
++      await t.runAsync(() => c.startLevel(1));
++      await t.pumpAndSettle();
++      Finder scroll() => find.descendant(
++        of: find.byType(PageMotion),
++        matching: find.byType(SingleChildScrollView),
++      );
++      double offset() => t
++          .state<ScrollableState>(
++            find.descendant(of: scroll(), matching: find.byType(Scrollable)),
++          )
++          .position
++          .pixels;
++      await t.drag(scroll(), const Offset(0, -600));
++      await t.pumpAndSettle();
++      final previous = offset();
++      expect(previous, greaterThan(0));
++      await c.goHome();
++      await t.pumpAndSettle();
++      await c.resumeSlot('ordinary');
++      await t.pumpAndSettle();
++      expect(offset(), closeTo(previous, 1));
++      await t.runAsync(() => c.start(c.library.main[1]!, replace: true));
++      await t.pumpAndSettle();
++      debugPrint('SCROLL_CHECK previous=$previous, newInstance=${offset()}');
++      expect(
++        offset(),
++        0,
++        reason: 'New instance must not inherit another board scroll',
++      );
++      await c.navigate(GamePage.scene, scene: 'color_studio');
++      await t.pumpAndSettle();
++      await t.drag(scroll(), const Offset(0, -600));
++      await t.pumpAndSettle();
++      final sceneOffset = offset();
++      expect(sceneOffset, greaterThan(0));
++      await c.navigate(GamePage.scene, scene: 'garden_nook');
++      await t.pumpAndSettle();
++      expect(offset(), 0);
++      await c.navigate(GamePage.scene, scene: 'color_studio');
++      await t.pumpAndSettle();
++      expect(offset(), closeTo(sceneOffset, 1));
++    }),
++  );
++}
+--- frozen-M/app/integration_test/page_transitions_app.dart
++++ app/integration_test/page_transitions_app.dart
+@@ -0,0 +1,314 @@
++// Standalone debug QA: actual Flutter gestures, bundled content and sqflite.
++// Only page_transitions.sqlite is disposable. No SDK rewards or business mocks.
++import 'dart:convert';
++import 'dart:io';
++
++import 'package:flutter/foundation.dart';
++import 'package:flutter/material.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:pourlune_core/pourlune_core.dart';
++import 'package:pourlune_dev/main.dart' as product;
++import 'package:pourlune_dev/application/game_controller.dart';
++import 'package:sqflite/sqflite.dart';
++
++import 'support/b05_support.dart' show b05Seed, b05Finish, b05Capture;
++
++void verify(bool condition, String message) {
++  if (!condition) throw StateError(message);
++}
++
++Future<void> main() async {
++  const database = String.fromEnvironment('POURLUNE_DATABASE');
++  if (!kDebugMode ||
++      database != 'page_transitions.sqlite' ||
++      const String.fromEnvironment('POURLUNE_AD_MODE') != 'disabled') {
++    throw StateError('Isolated transition QA only');
++  }
++  final binding = WidgetsFlutterBinding.ensureInitialized();
++  final tester = LiveWidgetController(binding);
++  final base = await getDatabasesPath();
++  await deleteDatabase('$base/$database');
++  final out = Directory('$base/page-transitions')..createSync(recursive: true);
++  final capture = GlobalKey();
++  final steps = <Map<String, Object?>>[];
++  final errors = <String>[];
++  final previousError = FlutterError.onError;
++  FlutterError.onError = (details) {
++    errors.add(details.exceptionAsString());
++    previousError?.call(details);
++  };
++  runApp(RepaintBoundary(key: capture, child: const product.Bootstrap()));
++  await tester.pump(const Duration(milliseconds: 100));
++  GameController? controller;
++  Future<void> settled() async {
++    for (var n = 0; n < 240 && (n < 10 || controller?.busy == true); n++) {
++      await tester.pump(const Duration(milliseconds: 40));
++    }
++    // A pour can finish on this very frame and only now start the page switch.
++    // This is QA observation time, never an input or product navigation delay.
++    await tester.pump(const Duration(milliseconds: 320));
++  }
++
++  Future<void> record(String name, {bool screenshot = false}) async {
++    final c = controller!;
++    steps.add({
++      'name': name,
++      'page': c.page.name,
++      'phase': c.phase.name,
++      'instance': c.current?.id,
++      'revision': c.current?.revision,
++      'first_clears': c.progress.firstClears,
++      'pieces': c.progress.pieces,
++    });
++    if (screenshot) await b05Capture(capture, '${out.path}/$name.png');
++  }
++
++  Future<void> tapFinder(Finder finder) async {
++    verify(finder.evaluate().length == 1, 'Unique pointer target: $finder');
++    await tester.ensureVisible(finder);
++    await tester.pump(const Duration(milliseconds: 100));
++    await tester.tap(finder);
++    await settled();
++  }
++
++  Future<void> tap(String key) async {
++    final from = controller?.page.name;
++    await tapFinder(find.byKey(Key(key)));
++    steps.add({
++      'action': key,
++      'from': from,
++      'page': controller?.page.name,
++      'phase': controller?.phase.name,
++      'instance': controller?.current?.id,
++    });
++  }
++
++  Future<void> close() => tapFinder(find.text('Close').last);
++  try {
++    for (
++      var n = 0;
++      n < 300 && find.byType(product.PourluneApp).evaluate().isEmpty;
++      n++
++    ) {
++      await tester.pump(const Duration(milliseconds: 50));
++    }
++    verify(
++      find.byType(product.PourluneApp).evaluate().length == 1,
++      'Offline bootstrap',
++    );
++    final c = controller = tester
++        .widget<product.PourluneApp>(find.byType(product.PourluneApp))
++        .controller;
++    await settled();
++    await record('startup-home', screenshot: true);
++    // Host starts recording before this bounded QA pacing, never product delay.
++    await Future<void>.delayed(const Duration(seconds: 3));
++    await tap('sample-main-001');
++    await record('welcome-start-board');
++    await tap('pause');
++    await tap('pause-home');
++    await tap('chapters');
++    await record('home-chapters');
++    await tap('level-1');
++    await record('chapters-board');
++    await tap('pause');
++    await record('pause', screenshot: true);
++    await tap('resume-pause');
++    await tap('restart');
++    await tap('confirm-restart');
++    await record('restart-same-instance');
++    await tap('pause');
++    await tap('pause-home');
++    await record('board-home');
++    await tap('settings');
++    await tap('rules');
++    await record('settings-rules', screenshot: true);
++    await tap('home');
++    verify(c.page == GamePage.settings, 'Rules back to Settings');
++    await tap('privacy');
++    await record('privacy', screenshot: true);
++    await close();
++    await tap('reset-progress');
++    await tapFinder(find.text('Keep progress'));
++    await record('reset-cancel');
++    await tap('licenses');
++    verify(
++      find.byType(LicensePage).evaluate().isNotEmpty,
++      'Actual license route',
++    );
++    await record('licenses', screenshot: true);
++    final package = find.text('animations');
++    if (package.evaluate().isNotEmpty) {
++      await tapFinder(package);
++      await record('license-detail', screenshot: true);
++      await tapFinder(find.byType(BackButton).last);
++      await settled();
++    }
++    // Framework route and detail return are exercised using actual native back.
++    await tapFinder(find.byType(BackButton).last);
++    await settled();
++    await tap('home');
++    await tap('progress');
++    await record('progress');
++    await tap('home');
++    await tap('collection');
++    await tap('scene-color_studio');
++    await record('scene', screenshot: true);
++    await tap('scene-continue');
++    await record('scene-continue-board');
++    await tap('pause');
++    await tap('pause-home');
++    await tap('collection');
++    await tap('scene-color_studio');
++    await tap('collection-back');
++    await record('scene-collection');
++    await tap('home');
++    await tap('daily');
++    final today = parseCalendarDate(c.today.date);
++    for (final delta in [-1, 1]) {
++      final date = calendarDate(today.add(Duration(days: delta)));
++      if (parseCalendarDate(date).month == today.month) {
++        await tap('date-$date');
++        await record(
++          delta < 0 ? 'daily-history' : 'daily-future',
++          screenshot: true,
++        );
++        await close();
++      }
++    }
++    await tap('today');
++    await record('daily-board');
++    await tap('pause');
++    await tap('pause-home');
++    await tap('resume');
++    await record('ordinary-resume');
++    // Full settlement transactions prepare formal content boundaries. These are
++    // controlled QA progress, not natural player progression or ad evidence.
++    for (final level in [2, 4, 20, 60]) {
++      await c.goHome();
++      await settled();
++      await b05Seed(c.store, c.library, level - 1);
++      final puzzle = c.library.main[level]!;
++      await c.store.save(
++        b05Finish(
++          GameInstance.create(id: 'transitions-main$level', puzzle: puzzle),
++          take: puzzle.referenceMoves.length - 1,
++        ),
++        replace: true,
++      );
++      await c.initialize();
++      c.resume();
++      await settled();
++      await record('controlled-main$level');
++      final move = puzzle.referenceMoves.last;
++      await tap('bottle-${move.from}');
++      await tap('bottle-${move.to}');
++      verify(
++        c.page == GamePage.completion && c.phase == SavePhase.clean,
++        'Saved completion $level',
++      );
++      await record('completion-$level', screenshot: true);
++      if (level == 2) {
++        await tap('next');
++        verify(c.current!.puzzle.mainLevel == 3, 'Ordinary next');
++        await record('ordinary-next');
++      } else if (level == 4) {
++        await tap('view-patch');
++        await record('reward', screenshot: true);
++        await tap('view-collection');
++        await record('reward-scene');
++        await c.resumeSlot('ordinary');
++        await settled();
++        await tap('view-patch');
++        await record('saved-patch-revisit');
++        await tap('next');
++        verify(c.current!.puzzle.mainLevel == 5, 'Next once');
++        await record('next-board');
++        await tap('extra-bottle');
++        await record('extra-explanation', screenshot: true);
++        await tapFinder(find.text('Not now'));
++      } else if (level == 20) {
++        await tap('view-collection');
++        await record('chapter-scene');
++      } else {
++        verify(
++          find.byKey(const Key('next')).evaluate().isEmpty,
++          'No final Next',
++        );
++        await tap('daily-final');
++        await record('final-daily');
++      }
++    }
++    // Daily completion and replay use their own slot and retain ordinary state.
++    await c.startToday();
++    await settled();
++    var state = c.current!;
++    for (final move in state.puzzle.referenceMoves) {
++      await c.pour(move.from, move.to);
++      await settled();
++    }
++    verify(c.current!.completed, 'Daily completed');
++    await record('daily-completion', screenshot: true);
++    await tap('daily-calendar');
++    await tap('today');
++    await record('daily-replay-board');
++    await c.goHome();
++    await settled();
++    await c.startLevel(1, replace: true);
++    await settled();
++    state = c.current!;
++    for (final move in state.puzzle.referenceMoves) {
++      await c.pour(move.from, move.to);
++      await settled();
++    }
++    await record('replay-completion');
++    await tap('replay-again');
++    await record('replay-new-instance');
++    // Actual SQLite failure hook: no navigation before successful retry.
++    c.store.fault = (stage) {
++      if (stage == 'snapshot') throw StateError('QA disk full');
++    };
++    final move = c.current!.puzzle.referenceMoves.first;
++    await c.pour(move.from, move.to);
++    await c.goHome();
++    await settled();
++    verify(
++      c.page == GamePage.board && c.phase == SavePhase.failed,
++      'Save failure blocks Home',
++    );
++    await record('save-failed', screenshot: true);
++    c.store.fault = null;
++    await tap('retry');
++    verify(
++      c.page == GamePage.home && c.phase == SavePhase.clean,
++      'Retry then Home',
++    );
++    await tap('settings');
++    await c.updateSetting('reduced_motion', true);
++    await settled();
++    await tap('rules');
++    await record('reduced-rules', screenshot: true);
++    await tap('home');
++    await tap('home');
++    verify(errors.isEmpty, 'No Flutter errors: $errors');
++  } catch (error, stack) {
++    errors.add('$error\n$stack');
++  } finally {
++    final report = {
++      'platform': Platform.operatingSystem,
++      'mode': 'debug standalone LiveWidgetController',
++      'database': database,
++      'controlled_progress': [2, 4, 20, 60],
++      'steps': steps,
++      'errors': errors,
++      'physical_performance_pass': false,
++    };
++    await File('${out.path}/route.json').writeAsString(
++      const JsonEncoder.withIndent('  ').convert(report),
++      flush: true,
++    );
++    // ignore: avoid_print
++    print('PAGE_TRANSITIONS_DONE:${errors.isEmpty}:${steps.length}');
++    FlutterError.onError = previousError;
++  }
++}
+--- frozen-M/app/README.md
++++ app/README.md
+@@ -140,3 +140,18 @@
+ `integration_test/flame_sample_app.dart` is a separate standalone instrumentation entry with real Flutter pointer gestures, PNG/frame timing and file commands. It does not represent a passing DDS integration-test run. Root helper `tools/validation/flame_sample.py` is restricted to iOS `9B172C50-E5CB-4F3F-8F16-0A3DB04F495D` and Android `emulator-5584`; actions `state`, `route`, `capture`, `prepare-restore`, `startups`. Its command files stay inside the QA sandbox. Do not point it at an ordinary installation. Same-install termination/relaunch proves a different property from installing a new binary.
+ 
+ Independent acceptance and the user's approval of the sample's appearance are required before extending to the complete board. M01–M08 remains a separate, unfinished checkpoint. Evidence and actual run results belong in `../docs/development/deliveries/flame-sample.md`; source existence is not a performance, native-audio, physical-haptics or release conclusion.
++
++## Page transitions (T01–T06)
++
++The existing controller remains the navigation authority. `presentation/motion.dart` uses the exactly pinned official `animations 3.0.0`: FadeThrough for independent destinations, horizontal SharedAxis for play/next/rules, scaled SharedAxis for collection details and settlement, and FadeScale for all custom dialogs. Transparent fills preserve the knitted background. The bounded host retires older outgoing pages and immediately disposes departing boards; page identity includes instance ID, never move revision. Scroll storage is scoped to each instance and scene; returning to the same instance/destination restores its offset, while a new instance starts at the top. Framework license routes use the same SharedAxis through the existing Material theme. No Material widget library migration is required for these transition-only widgets.
++
++Focused host checks: `flutter test test/page_transitions_test.dart test/motion_primitives_test.dart test/motion_polish_test.dart test/startup_motion_test.dart`. Run Flutter CLI and native builds serially with `FIREBASE_ANALYTICS_WITHOUT_ADID=1`.
++
++`integration_test/page_transitions_app.dart` is an isolated standalone debug QA runner using actual Flutter pointer gestures, bundled formal content and sqflite. It requires `--dart-define=POURLUNE_DATABASE=page_transitions.sqlite --dart-define=POURLUNE_AD_MODE=disabled`; it clears only that database and writes `page-transitions/route.json` plus PNGs under `getDatabasesPath()`. Controlled progress prepares main002/004/020/060; it is not natural progression, real advertising evidence or a production entrypoint. Use the dedicated transition devices recorded in `docs/development/deliveries/ui-transition-handoff.md`; preserve the ordinary, Firebase and Flame installations. The iOS runner uses external `/tmp/pourlune-transitions.xcconfig` containing only `PRODUCT_BUNDLE_IDENTIFIER = dev.pourlune.transitionsValidation`. Commands from app/:
++
++```sh
++XCODE_XCCONFIG_FILE=/tmp/pourlune-transitions.xcconfig FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter build ios --simulator --debug -t integration_test/page_transitions_app.dart --dart-define=POURLUNE_DATABASE=page_transitions.sqlite --dart-define=POURLUNE_AD_MODE=disabled
++FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter build apk --debug -t integration_test/page_transitions_app.dart --dart-define=POURLUNE_DATABASE=page_transitions.sqlite --dart-define=POURLUNE_AD_MODE=disabled
++```
++
++Copy screenshots/reports before any runner replacement. Execution evidence and limits live in `../docs/development/deliveries/page-transitions.md`; architecture owns independent acceptance.

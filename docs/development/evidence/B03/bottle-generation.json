@@ -1,0 +1,835 @@
+{
+  "schema_version": 1,
+  "task": "B03-04 / ART-01 bottle runtime raster layers",
+  "date": "2026-10-22",
+  "tool": "built-in image_gen.imagegen",
+  "transparent_background": true,
+  "source_references": [
+    "/Volumes/data/App Development/Pourlune/docs/design/original/Pourlune_Design_Pack/boards/00_Approved_Style_Reference.png",
+    "/Volumes/data/App Development/Pourlune/docs/design/original/Pourlune_Design_Pack/boards/02_Tutorial_Play_Pause.png"
+  ],
+  "rights": {
+    "status": "production_candidate_unconfirmed_commercial_authorization",
+    "basis": "AI-generated derivatives of user-supplied approved reference artwork. Original reference commercial rights are not established; no commercial-authorization claim."
+  },
+  "pixel_policy": "Original imagegen output bytes copied unchanged. No cropping, resizing, alpha thresholding, compositing, or programmatic drawing/editing.",
+  "requested_canvas": {
+    "width": 512,
+    "height": 768,
+    "aspect": "2:3"
+  },
+  "runtime_canvas": "Root renderer stretches the full source canvas into its width x 148 artwork canvas; calibrate layer placement/clip to measured output.",
+  "generations": [
+    {
+      "asset": "back",
+      "selected": true,
+      "raw_path": "/Users/wangyule/.codex/generated_images/01a15ff6-8e0d-7c82-be2d-bef39393b37e/exec-6f0d3fe9-63aa-4d6a-8235-70a7f4df64bb.png",
+      "prompt": "Use case: stylized-concept.\nAsset type: runtime game sprite, BACK layer of a layered empty bottle for Pourlune. The two supplied images are STYLE REFERENCES ONLY, not edit targets. Match the softly rendered 3D clear-glass and thick cream yarn material of the empty bottles in those approved references. Remove every liquid, target disc, symbol, colored cap and UI element.\nPrimary request: a single symmetrical upright EMPTY transparent glass bottle rear shell, without any knitted sleeve (the sleeve will be a separate FRONT layer). Only faint clear aqua glass back surface, very subtle side thickness, the BACK HALF of the open elliptical mouth rim, and faint curved rear bottom glass are visible. The central empty cavity is extremely transparent; background must show through. No white-filled interior.\nComposition: isolated sprite on genuinely transparent alpha background. Portrait 2:3 canvas, target 512x768. The bottle is centered; its whole silhouette occupies normalized x=0.18 to 0.82 and y=0.16 to 0.94. Mouth center x=0.50,y=0.16; mouth rim about x=0.34..0.66. Neck descends to rounded shoulders around y=0.28, cylindrical rounded body to y=0.88, curved bottom y=0.94. Keep a long straight-sided viewing cavity x=0.26..0.74,y=0.30..0.85. Full object fully inside canvas with generous transparent margins.\nStyle: friendly polished toy-like 3D game render, soft top-left illumination, cream/white neutral light and an extremely faint aqua glass tint. Front-facing, modest elevated view of mouth ellipse, no perspective lean. One bottle only.\nConstraints: produce BACK shell only, no front rim or strong front highlights, NO knit, no liquid, water, contents, fill line, symbols, circles/discs, tags, letters, numbers, text, logo, watermark, contact shadow, ground plane, scene, border, or UI. Truly transparent background and semitransparent glass; do not paint a checkerboard. Preserve a crisp silhouette with antialiased translucent glass edges.",
+      "reference_images": [
+        "/Volumes/data/App Development/Pourlune/docs/design/original/Pourlune_Design_Pack/boards/00_Approved_Style_Reference.png",
+        "/Volumes/data/App Development/Pourlune/docs/design/original/Pourlune_Design_Pack/boards/02_Tutorial_Play_Pause.png"
+      ],
+      "observation": "Selected for faint central glass alpha (center13/255). Exterior alpha1-4 residue remains.",
+      "inspection": {
+        "dimensions": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "sha256": "4138cee477a9cb253b4f40470d8b7e36a1519b29a7c8ce960927261b5ac95000",
+        "bytes": 1412194,
+        "alpha_min": 0,
+        "alpha_max": 254,
+        "alpha_zero_pixels": 867603,
+        "alpha_zero_fraction": 0.55160713,
+        "alpha_255_pixels": 0,
+        "bbox_by_alpha_greater_than": {
+          "0": [
+            0,
+            0,
+            1023,
+            1536
+          ],
+          "4": [
+            214,
+            195,
+            810,
+            1430
+          ],
+          "16": [
+            216,
+            197,
+            809,
+            1429
+          ],
+          "64": [
+            216,
+            197,
+            808,
+            1428
+          ],
+          "128": [
+            216,
+            197,
+            808,
+            1428
+          ],
+          "200": [
+            217,
+            198,
+            807,
+            1428
+          ]
+        },
+        "normalized_bbox_by_alpha_greater_than": {
+          "0": [
+            0.0,
+            0.0,
+            0.999023,
+            1.0
+          ],
+          "4": [
+            0.208984,
+            0.126953,
+            0.791016,
+            0.93099
+          ],
+          "16": [
+            0.210938,
+            0.128255,
+            0.790039,
+            0.930339
+          ],
+          "64": [
+            0.210938,
+            0.128255,
+            0.789062,
+            0.929688
+          ],
+          "128": [
+            0.210938,
+            0.128255,
+            0.789062,
+            0.929688
+          ],
+          "200": [
+            0.211914,
+            0.128906,
+            0.788086,
+            0.929688
+          ]
+        },
+        "center_rgba": [
+          225,
+          245,
+          251,
+          13
+        ]
+      }
+    },
+    {
+      "asset": "back",
+      "selected": false,
+      "raw_path": "/Users/wangyule/.codex/generated_images/01a15ff6-8e0d-7c82-be2d-bef39393b37e/exec-e1db893c-12c6-4293-ad1a-418db4ec343c.png",
+      "prompt": "Use case: precise-object-edit. Edit target is this generated EMPTY bottle BACK sprite. Make one focused correction: remove every exterior blue glow, bloom, haze, shadow and aura. Outside the exact hard glass silhouette all pixels must be alpha zero, including the wide margins. Preserve the current empty bottle shape, centered orientation, open mouth, faint aqua translucent glass, semitransparent empty central cavity and 1024x1536 portrait canvas. The silhouette is roughly x .21..79, mouth top .13 and base .93. Keep only the faint physical BACK surface and rear glass edges; tone down frontal reflections if necessary to leave it a rear shell. No ground shadow, no knit, no liquid, no label, no icon, no text. This is a real layered runtime asset: outer background must be genuinely fully transparent, never a black or checkerboard backdrop. No halo.",
+      "reference_images": [
+        "/Users/wangyule/.codex/generated_images/01a15ff6-8e0d-7c82-be2d-bef39393b37e/exec-6f0d3fe9-63aa-4d6a-8235-70a7f4df64bb.png"
+      ],
+      "observation": "Targeted glow-removal retry did not eliminate all low-alpha residue and increased glass center alpha to82/255; discarded in favor of first render.",
+      "inspection": {
+        "dimensions": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "sha256": "ccf2dcc35281ee406d88eb4f51c7628aa8c15dd49e0e1d0a7a3172f628da4c28",
+        "bytes": 1470489,
+        "alpha_min": 0,
+        "alpha_max": 254,
+        "alpha_zero_pixels": 893519,
+        "alpha_zero_fraction": 0.56808408,
+        "alpha_255_pixels": 0,
+        "bbox_by_alpha_greater_than": {
+          "0": [
+            0,
+            9,
+            1024,
+            1536
+          ],
+          "4": [
+            215,
+            194,
+            810,
+            1428
+          ],
+          "16": [
+            217,
+            195,
+            808,
+            1427
+          ],
+          "64": [
+            217,
+            196,
+            807,
+            1427
+          ],
+          "128": [
+            217,
+            196,
+            807,
+            1427
+          ],
+          "200": [
+            218,
+            196,
+            807,
+            1426
+          ]
+        },
+        "normalized_bbox_by_alpha_greater_than": {
+          "0": [
+            0.0,
+            0.005859,
+            1.0,
+            1.0
+          ],
+          "4": [
+            0.209961,
+            0.126302,
+            0.791016,
+            0.929688
+          ],
+          "16": [
+            0.211914,
+            0.126953,
+            0.789062,
+            0.929036
+          ],
+          "64": [
+            0.211914,
+            0.127604,
+            0.788086,
+            0.929036
+          ],
+          "128": [
+            0.211914,
+            0.127604,
+            0.788086,
+            0.929036
+          ],
+          "200": [
+            0.212891,
+            0.127604,
+            0.788086,
+            0.928385
+          ]
+        },
+        "center_rgba": [
+          218,
+          249,
+          251,
+          82
+        ]
+      }
+    },
+    {
+      "asset": "front",
+      "selected": true,
+      "raw_path": "/Users/wangyule/.codex/generated_images/01a15ff6-8e0d-7c82-be2d-bef39393b37e/exec-40f54284-046f-42a5-94f9-8b74d310522d.png",
+      "prompt": "Use case: stylized-concept.\nAsset type: FRONT overlay layer of an empty knitted glass bottle, transparent runtime sprite for Pourlune.\nInput images: Image 1 is the generated EMPTY bottle BACK layer: use ONLY its exact silhouette, neck, mouth and base placement for registration. Image 2 and Image 3 are original approved style references: use their cream knitted sleeve material, rounded soft 3D toy rendering, and bottle design. Colored liquids/symbols/UI in references MUST NOT appear.\nPrimary request: create ONLY the independent FRONT overlay, like an open U-shaped cream knitted frame with an open cream yarn ring around the mouth, cream knitted side rails, cream curved bottom rim, and two very thin longitudinal white-glass glints. There must be a genuinely transparent large CUT-OUT HOLE where liquid will be drawn by game code. Do NOT include the glass BACK pane or any translucent blue fill across this hole.\nCanvas: exactly match Image 1 portrait 1024x1536, centered upright bottle. Rear glass silhouette from Image 1 is x~.21..79, mouth ellipse top~.13, base~.93; the cream sleeve outer silhouette can extend to x .18..82. Mouth center (.5,.16). Cream mouth ring x .33..67,y .13..20 with a transparent elliptical open hole. Narrow neck descends to shoulders. Rounded knitted shoulder rails spread to body side rails at y .30; body rails approximately x .18..26 and .74..82 down to y .85, then a curved cream bottom rim y .86..94. Main liquid viewing window x .26..74,y .30..85 MUST BE CLEAR ALPHA ZERO across its entire center. Its cutout should have straight sides and rounded lower corners. The narrow white-glass highlights may sit just inside the window edges at x .28 and .72, never cover its central area.\nStyle: approved thick cream yarn knit stitches, warm ivory/cream sleeve identical on every bottle, soft 3D rounded plush edging, top-left lighting, transparent background with antialiased object edges. Front-facing symmetrical bottle, moderate visible mouth ellipse. No target-color-coded bands.\nConstraints: FRONT OVERLAY ONLY, absolutely no solid or translucent pane filling the window. All pixels outside the knitted/glint structure and within its large open center must have actual alpha 0, not checkerboard imagery. No liquid, water, fill line, colored contents, labels, target badges, symbols, text, numbers, scenery, ground, contact shadow, haze or exterior glow. Preserve shared alignment with Image 1.",
+      "reference_images": [
+        "/Users/wangyule/.codex/generated_images/01a15ff6-8e0d-7c82-be2d-bef39393b37e/exec-6f0d3fe9-63aa-4d6a-8235-70a7f4df64bb.png",
+        "/Volumes/data/App Development/Pourlune/docs/design/original/Pourlune_Design_Pack/boards/00_Approved_Style_Reference.png",
+        "/Volumes/data/App Development/Pourlune/docs/design/original/Pourlune_Design_Pack/boards/02_Tutorial_Play_Pause.png"
+      ],
+      "observation": "Cream knit side rails, open mouth ring and bottom rim; no contents/badges/text. Center pixel alpha0; central open window has only occasional alpha1 noise, no pane.",
+      "inspection": {
+        "dimensions": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "sha256": "5851426b3d145d33bc08b42ff075c0885461869b26e36717d75ba2c5d8c28db5",
+        "bytes": 1417620,
+        "alpha_min": 0,
+        "alpha_max": 254,
+        "alpha_zero_pixels": 1183390,
+        "alpha_zero_fraction": 0.7523791,
+        "alpha_255_pixels": 0,
+        "bbox_by_alpha_greater_than": {
+          "0": [
+            0,
+            23,
+            1009,
+            1536
+          ],
+          "4": [
+            198,
+            163,
+            828,
+            1410
+          ],
+          "16": [
+            200,
+            165,
+            825,
+            1410
+          ],
+          "64": [
+            200,
+            165,
+            824,
+            1410
+          ],
+          "128": [
+            200,
+            166,
+            824,
+            1409
+          ],
+          "200": [
+            201,
+            166,
+            823,
+            1409
+          ]
+        },
+        "normalized_bbox_by_alpha_greater_than": {
+          "0": [
+            0.0,
+            0.014974,
+            0.985352,
+            1.0
+          ],
+          "4": [
+            0.193359,
+            0.10612,
+            0.808594,
+            0.917969
+          ],
+          "16": [
+            0.195312,
+            0.107422,
+            0.805664,
+            0.917969
+          ],
+          "64": [
+            0.195312,
+            0.107422,
+            0.804688,
+            0.917969
+          ],
+          "128": [
+            0.195312,
+            0.108073,
+            0.804688,
+            0.917318
+          ],
+          "200": [
+            0.196289,
+            0.108073,
+            0.803711,
+            0.917318
+          ]
+        },
+        "center_rgba": [
+          21,
+          21,
+          21,
+          0
+        ]
+      }
+    },
+    {
+      "asset": "shadow",
+      "selected": true,
+      "raw_path": "/Users/wangyule/.codex/generated_images/01a15ff6-8e0d-7c82-be2d-bef39393b37e/exec-fe3c7719-215f-4354-ba82-7dc01c8d1e74.png",
+      "prompt": "Use case: stylized-concept.\nAsset type: a separate soft contact-shadow sprite for a layered Pourlune bottle.\nCreate ONLY ONE soft elliptical contact shadow, nothing else. The entire rest of the image is genuinely alpha-transparent. No bottle, no object, no glass, no yarn, no liquid, no icons, no text, no ground plane, no visible floor, no scene, no glow.\nCanvas: portrait 2:3, target1024x1536. Use the SAME full-canvas registration as a bottle occupying x .20..80 and base y .93. The small shadow ellipse is centered at normalized(.50,.94); horizontal diameter .68canvaswidth, vertical diameter .050canvasheight, with gentle falloff and fully transparent outer margins. It sits immediately under the bottle base, not in the middle of the canvas. At least the upper88%ofcanvas is completely alpha0.\nAppearance: subtle neutral blue-gray contact shadow, diffuse feathered outer edge, maximum center opacity about25%, transparent softness without white or cyan halo. Smooth oval, softly grounded, high-quality 3D game asset. The shadow itself is a gradient of semitransparent dark neutral blue-gray, not an opaque gray patch. Actual transparent PNG background, not checkerboard.\nConstraints: shadow only, isolated precisely at specified position; no object casting it, no glass, no ellipse outline, no highlight or illumination.",
+      "reference_images": [],
+      "observation": "Only a soft blue-gray oval near y.94. Actual peak alpha167 exceeds requested25%; root can reduce opacity if needed.",
+      "inspection": {
+        "dimensions": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "sha256": "e435d06a32f3c836abb779ea33c4be8a69e119cc32db7c634bdf3d572d036280",
+        "bytes": 571993,
+        "alpha_min": 0,
+        "alpha_max": 167,
+        "alpha_zero_pixels": 1466439,
+        "alpha_zero_fraction": 0.93233681,
+        "alpha_255_pixels": 0,
+        "bbox_by_alpha_greater_than": {
+          "0": [
+            55,
+            101,
+            972,
+            1512
+          ],
+          "4": [
+            71,
+            1367,
+            952,
+            1500
+          ],
+          "16": [
+            101,
+            1376,
+            918,
+            1491
+          ],
+          "64": [
+            205,
+            1397,
+            798,
+            1476
+          ],
+          "128": [
+            385,
+            1417,
+            638,
+            1458
+          ],
+          "200": null
+        },
+        "normalized_bbox_by_alpha_greater_than": {
+          "0": [
+            0.053711,
+            0.065755,
+            0.949219,
+            0.984375
+          ],
+          "4": [
+            0.069336,
+            0.889974,
+            0.929688,
+            0.976562
+          ],
+          "16": [
+            0.098633,
+            0.895833,
+            0.896484,
+            0.970703
+          ],
+          "64": [
+            0.200195,
+            0.909505,
+            0.779297,
+            0.960938
+          ],
+          "128": [
+            0.375977,
+            0.922526,
+            0.623047,
+            0.949219
+          ],
+          "200": null
+        },
+        "center_rgba": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  ],
+  "assets": {
+    "back": {
+      "candidate_path": "docs/design/production-candidates/runtime/bottles/back.png",
+      "app_path": "app/assets/art/bottles/back.png",
+      "raw_path": "/Users/wangyule/.codex/generated_images/01a15ff6-8e0d-7c82-be2d-bef39393b37e/exec-6f0d3fe9-63aa-4d6a-8235-70a7f4df64bb.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "4138cee477a9cb253b4f40470d8b7e36a1519b29a7c8ce960927261b5ac95000",
+      "bytes": 1412194,
+      "alpha_min": 0,
+      "alpha_max": 254,
+      "alpha_zero_pixels": 867603,
+      "alpha_zero_fraction": 0.55160713,
+      "alpha_255_pixels": 0,
+      "bbox_by_alpha_greater_than": {
+        "0": [
+          0,
+          0,
+          1023,
+          1536
+        ],
+        "4": [
+          214,
+          195,
+          810,
+          1430
+        ],
+        "16": [
+          216,
+          197,
+          809,
+          1429
+        ],
+        "64": [
+          216,
+          197,
+          808,
+          1428
+        ],
+        "128": [
+          216,
+          197,
+          808,
+          1428
+        ],
+        "200": [
+          217,
+          198,
+          807,
+          1428
+        ]
+      },
+      "normalized_bbox_by_alpha_greater_than": {
+        "0": [
+          0.0,
+          0.0,
+          0.999023,
+          1.0
+        ],
+        "4": [
+          0.208984,
+          0.126953,
+          0.791016,
+          0.93099
+        ],
+        "16": [
+          0.210938,
+          0.128255,
+          0.790039,
+          0.930339
+        ],
+        "64": [
+          0.210938,
+          0.128255,
+          0.789062,
+          0.929688
+        ],
+        "128": [
+          0.210938,
+          0.128255,
+          0.789062,
+          0.929688
+        ],
+        "200": [
+          0.211914,
+          0.128906,
+          0.788086,
+          0.929688
+        ]
+      },
+      "center_rgba": [
+        225,
+        245,
+        251,
+        13
+      ]
+    },
+    "front": {
+      "candidate_path": "docs/design/production-candidates/runtime/bottles/front.png",
+      "app_path": "app/assets/art/bottles/front.png",
+      "raw_path": "/Users/wangyule/.codex/generated_images/01a15ff6-8e0d-7c82-be2d-bef39393b37e/exec-40f54284-046f-42a5-94f9-8b74d310522d.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "5851426b3d145d33bc08b42ff075c0885461869b26e36717d75ba2c5d8c28db5",
+      "bytes": 1417620,
+      "alpha_min": 0,
+      "alpha_max": 254,
+      "alpha_zero_pixels": 1183390,
+      "alpha_zero_fraction": 0.7523791,
+      "alpha_255_pixels": 0,
+      "bbox_by_alpha_greater_than": {
+        "0": [
+          0,
+          23,
+          1009,
+          1536
+        ],
+        "4": [
+          198,
+          163,
+          828,
+          1410
+        ],
+        "16": [
+          200,
+          165,
+          825,
+          1410
+        ],
+        "64": [
+          200,
+          165,
+          824,
+          1410
+        ],
+        "128": [
+          200,
+          166,
+          824,
+          1409
+        ],
+        "200": [
+          201,
+          166,
+          823,
+          1409
+        ]
+      },
+      "normalized_bbox_by_alpha_greater_than": {
+        "0": [
+          0.0,
+          0.014974,
+          0.985352,
+          1.0
+        ],
+        "4": [
+          0.193359,
+          0.10612,
+          0.808594,
+          0.917969
+        ],
+        "16": [
+          0.195312,
+          0.107422,
+          0.805664,
+          0.917969
+        ],
+        "64": [
+          0.195312,
+          0.107422,
+          0.804688,
+          0.917969
+        ],
+        "128": [
+          0.195312,
+          0.108073,
+          0.804688,
+          0.917318
+        ],
+        "200": [
+          0.196289,
+          0.108073,
+          0.803711,
+          0.917318
+        ]
+      },
+      "center_rgba": [
+        21,
+        21,
+        21,
+        0
+      ],
+      "window_rois": {
+        "clear_central_window": {
+          "normalized_box": [
+            0.32,
+            0.32,
+            0.68,
+            0.82
+          ],
+          "pixels": [
+            328,
+            492,
+            696,
+            1260
+          ],
+          "alpha_min": 0,
+          "alpha_max": 1,
+          "alpha_zero_fraction": 0.96612107,
+          "alpha_greater_than_4_pixels": 0
+        },
+        "inner_center": {
+          "normalized_box": [
+            0.35,
+            0.32,
+            0.65,
+            0.8
+          ],
+          "pixels": [
+            358,
+            492,
+            666,
+            1229
+          ],
+          "alpha_min": 0,
+          "alpha_max": 1,
+          "alpha_zero_fraction": 0.98031683,
+          "alpha_greater_than_4_pixels": 0
+        },
+        "requested_full_window": {
+          "normalized_box": [
+            0.26,
+            0.3,
+            0.74,
+            0.85
+          ],
+          "pixels": [
+            266,
+            461,
+            758,
+            1306
+          ],
+          "alpha_min": 0,
+          "alpha_max": 254,
+          "alpha_zero_fraction": 0.72525376,
+          "alpha_greater_than_4_pixels": 77650
+        }
+      }
+    },
+    "shadow": {
+      "candidate_path": "docs/design/production-candidates/runtime/bottles/shadow.png",
+      "app_path": "app/assets/art/bottles/shadow.png",
+      "raw_path": "/Users/wangyule/.codex/generated_images/01a15ff6-8e0d-7c82-be2d-bef39393b37e/exec-fe3c7719-215f-4354-ba82-7dc01c8d1e74.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "sha256": "e435d06a32f3c836abb779ea33c4be8a69e119cc32db7c634bdf3d572d036280",
+      "bytes": 571993,
+      "alpha_min": 0,
+      "alpha_max": 167,
+      "alpha_zero_pixels": 1466439,
+      "alpha_zero_fraction": 0.93233681,
+      "alpha_255_pixels": 0,
+      "bbox_by_alpha_greater_than": {
+        "0": [
+          55,
+          101,
+          972,
+          1512
+        ],
+        "4": [
+          71,
+          1367,
+          952,
+          1500
+        ],
+        "16": [
+          101,
+          1376,
+          918,
+          1491
+        ],
+        "64": [
+          205,
+          1397,
+          798,
+          1476
+        ],
+        "128": [
+          385,
+          1417,
+          638,
+          1458
+        ],
+        "200": null
+      },
+      "normalized_bbox_by_alpha_greater_than": {
+        "0": [
+          0.053711,
+          0.065755,
+          0.949219,
+          0.984375
+        ],
+        "4": [
+          0.069336,
+          0.889974,
+          0.929688,
+          0.976562
+        ],
+        "16": [
+          0.098633,
+          0.895833,
+          0.896484,
+          0.970703
+        ],
+        "64": [
+          0.200195,
+          0.909505,
+          0.779297,
+          0.960938
+        ],
+        "128": [
+          0.375977,
+          0.922526,
+          0.623047,
+          0.949219
+        ],
+        "200": null
+      },
+      "center_rgba": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "registration": {
+    "reference_coordinate_space": [
+      1024,
+      1536
+    ],
+    "back_physical_alpha_gt4_bbox": [
+      214,
+      195,
+      810,
+      1430
+    ],
+    "front_physical_alpha_gt4_bbox": [
+      198,
+      163,
+      828,
+      1410
+    ],
+    "front_recommended_offset_normalized": [
+      0,
+      0.013020833333333334
+    ],
+    "front_offset_reason": "Observed front bottom1410 vs back1430; shifting front20px down aligns base and the cream mouth wraps the glass mouth. Runtime must visually verify this suggested registration.",
+    "observed_mouth_anchor_normalized": [
+      0.5,
+      0.15
+    ],
+    "recommended_liquid_window_normalized": [
+      0.3,
+      0.31,
+      0.7,
+      0.85
+    ],
+    "front_clear_central_roi_normalized": [
+      0.32,
+      0.32,
+      0.68,
+      0.82
+    ],
+    "bottle_body_glass_normalized": [
+      0.211,
+      0.3,
+      0.789,
+      0.93
+    ],
+    "shadow_center_normalized": [
+      0.5,
+      0.936
+    ],
+    "shadow_recommended_draw_opacity": 0.4,
+    "calibration_status": "measured_source_candidates_not_runtime_verified"
+  }
+}

@@ -1,0 +1,22 @@
+00:00 +0: loading /Volumes/data/App Development/Pourlune/app/test/b04_reward_store_test.dart
+00:00 +0: AC19 closure order=false grants once to original, undo/restart retain and duplicate callbacks do not change revision
+00:00 +1: AC19 closure order=true grants once to original, undo/restart retain and duplicate callbacks do not change revision
+00:00 +2: AC19 close without confirmation is not a grant; later request then old callback never grants two
+00:00 +3: AC21 late origin confirmation retains latest moves, never overwrites new slot, and restore is explicitly guarded and idempotent
+00:00 +4: AC19/21 historical late confirmation can be durably pending while a later original-slot request is already showing
+00:00 +4 -1: AC19/21 historical late confirmation can be durably pending while a later original-slot request is already showing [E]
+  SqfliteFfiException(sqlite_error: 2067, , SqliteException(2067): while executing statement, UNIQUE constraint failed: reward_attempts.slot, constraint failed (code 2067)
+    Causing statement: UPDATE reward_attempts SET confirmed = ?, status = ? WHERE attempt_id = ?, parameters: 1, pending_restore, A}) DatabaseException(SqliteException(2067): while executing statement, UNIQUE constraint failed: reward_attempts.slot, constraint failed (code 2067)
+    Causing statement: UPDATE reward_attempts SET confirmed = ?, status = ? WHERE attempt_id = ?, parameters: 1, pending_restore, A) sql 'UPDATE reward_attempts SET confirmed = ?, status = ? WHERE attempt_id = ?' args [1, pending_restore, A] {details: {database: {path: /var/folders/0f/87xwdcwj6vn47_5j0pn3fzdm0000gn/T/b04-reward-GSls04/g.db, id: 8, readOnly: false, singleInstance: true}}}
+  package:sqflite_common_ffi/src/method_call.dart 126:9  responseToResultOrThrow
+  package:sqflite_common_ffi/src/isolate_io.dart 84:12   SqfliteIsolate.handle
+  
+00:00 +4 -1: AC21 completed origin only records entitlement, does not reopen or change first-clear rewards
+00:00 +5 -1: AC20 failed confirmation transaction rolls everything back; same request retry and reload grant once
+00:00 +6 -1: AC20 interrupted unconfirmed attempt needs explicit end; neither restart nor close invents reward; daily independent
+00:01 +7 -1: AC13/17/36 only actual shown id resets count; reward shares time and never clears qualification; show and event claims dedup
+00:01 +8 -1: AC19 reset or unknown callback cannot restore deleted old progress
+00:01 +9 -1: Some tests failed.
+
+Failing tests:
+  /Volumes/data/App Development/Pourlune/app/test/b04_reward_store_test.dart: AC19/21 historical late confirmation can be durably pending while a later original-slot request is already showing

@@ -1,0 +1,37 @@
+00:00 +0: loading /Volumes/data/App Development/Pourlune/app/test/b04_review_regressions_test.dart
+00:00 +0: foreground return replenishes invalidated inventory without extra manual consent
+00:00 +0 -1: foreground return replenishes invalidated inventory without extra manual consent [E]
+  Expected: a value greater than <1>
+    Actual: <1>
+     Which: is not a value greater than <1>
+  return to foreground must load replacement inventory
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/b04_review_regressions_test.dart 29:3          main.<fn>
+  
+00:00 +0 -1: completed tutorial emits completion event
+00:00 +0 -2: completed tutorial emits completion event [E]
+  Expected: contains 'pl_tutorial_complete'
+    Actual: ['pl_puzzle_start', 'pl_puzzle_complete']
+     Which: does not contain 'pl_tutorial_complete'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/b04_review_regressions_test.dart 40:3          main.<fn>
+  
+00:00 +0 -2: reset clears pending restore presentation and eligibility gate
+00:00 +0 -3: reset clears pending restore presentation and eligibility gate [E]
+  Expected: empty
+    Actual: [Instance of 'RewardAttempt']
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/b04_review_regressions_test.dart 47:3          main.<fn>
+  
+00:00 +0 -3: Some tests failed.
+
+Failing tests:
+  /Volumes/data/App Development/Pourlune/app/test/b04_review_regressions_test.dart: completed tutorial emits completion event
+  /Volumes/data/App Development/Pourlune/app/test/b04_review_regressions_test.dart: foreground return replenishes invalidated inventory without extra manual consent
+  /Volumes/data/App Development/Pourlune/app/test/b04_review_regressions_test.dart: reset clears pending restore presentation and eligibility gate

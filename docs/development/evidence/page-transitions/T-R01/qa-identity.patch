@@ -1,0 +1,24 @@
+--- a/app/android/app/build.gradle.kts
++++ b/app/android/app/build.gradle.kts
+@@ -16,7 +16,9 @@
+     .getOrElse(pourluneRepo.resolve("app/config/firebase").path))
+ val firebaseRegistry = providers.gradleProperty("POURLUNE_FIREBASE_REGISTRY")
+     .getOrElse(pourluneRepo.resolve("docs/development/evidence/firebase-integration/registration.json").path)
+-val pourluneApplicationId = if (firebaseEnvironment == "prod") "com.pourlune.app" else "dev.pourlune.pourlune_dev"
++// Local R01 QA identity overlay only; never copied into production source.
++check(firebaseEnvironment == "none") { "R01 QA requires Firebase none" }
++val pourluneApplicationId = "dev.pourlune.transitionsr01"
+ val pourlunePython = System.getenv("POURLUNE_PYTHON")
+     ?: pourluneRepo.resolve(".venv/bin/python").takeIf { it.exists() }?.path ?: "python3"
+ val firebaseCheck = providers.exec {
+--- a/app/android/app/src/main/AndroidManifest.xml
++++ b/app/android/app/src/main/AndroidManifest.xml
+@@ -13,7 +13,7 @@
+         <meta-data android:name="google_analytics_default_allow_ad_personalization_signals" android:value="false" />
+         <meta-data android:name="google_analytics_automatic_screen_reporting_enabled" android:value="false" />
+         <activity
+-            android:name=".MainActivity"
++            android:name="dev.pourlune.pourlune_dev.MainActivity"
+             android:exported="true"
+             android:launchMode="singleTop"
+             android:taskAffinity=""

@@ -1,0 +1,22 @@
+dev.pourlune.fullBoardValidation: 85686
+{"ok": true, "path": "/Volumes/data/App Development/Pourlune/docs/development/evidence/flame-full-board/ios/after/final-installed-seven.json", "steps": 0, "frames": 0, "error": null}
+{"ok": true, "path": "/Volumes/data/App Development/Pourlune/docs/development/evidence/flame-full-board/ios/after/final-installed-seven.json", "steps": 0, "frames": 0, "error": null}
+Detected file type from extension: PNG
+Note: No display specified. Defaulting to display: E38DB242-39AC-42C1-830B-A2D56D35EDDA (screenID: 1, name: LCD)
+An error was encountered processing the command (domain=NSCocoaErrorDomain, code=513):
+You don’t have permission to save the file “final-fullscreen.png” in the folder “after”.
+You don’t have permission.
+To view or change permissions, select the item in the Finder and choose File > Get Info.
+Underlying error (domain=NSPOSIXErrorDomain, code=1):
+	The operation couldn’t be completed. Operation not permitted
+	Operation not permitted
+Traceback (most recent call last):
+  File "/tmp/pourlune-full-board-final-install.py", line 13, in <module>
+    if p=='ios':run(['xcrun','simctl','io',s,'screenshot',str(r/'docs/development/evidence/flame-full-board/ios/after/final-fullscreen.png')])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/pourlune-full-board-final-install.py", line 4, in run
+    def run(args,check=True):subprocess.run(args,check=check)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['xcrun', 'simctl', 'io', 'F9C16DE7-01D8-4740-B796-A3A2DB8C3265', 'screenshot', '/Volumes/data/App Development/Pourlune/docs/development/evidence/flame-full-board/ios/after/final-fullscreen.png']' returned non-zero exit status 1.

@@ -1,0 +1,22 @@
+00:00 +0: loading /Volumes/data/App Development/Pourlune/app/test/b04_ads_test.dart
+00:00 +0: AC18/34 no consent no loading; ready/late loading never auto shows; stale result disposed
+00:00 +1: AC19/32 double intent, duplicate callbacks and closure do not award; old delivered confirmation retains own request after next show
+00:00 +2: AC17/32 actual shown starts180 even when save fails; Retry persists once and blocks further fullscreens until safe
+00:00 +3: AC18/32 failed show does not consume timestamp and unlocks once; future ready stock is not displayed
+00:00 +4: AC32 dispose ends pending native callback wait and timer exactly once
+00:01 +4 -1: AC32 dispose ends pending native callback wait and timer exactly once [E]
+  TimeoutException after 0:00:00.050000: Future not completed
+  dart:async  _startMicrotaskLoop
+  
+  A AdCoordinator was used after being disposed.
+  Once you have called dispose() on a AdCoordinator, it can no longer be used.
+  package:flutter/src/foundation/change_notifier.dart 184:9   ChangeNotifier.debugAssertNotDisposed.<fn>
+  package:flutter/src/foundation/change_notifier.dart 191:6   ChangeNotifier.debugAssertNotDisposed
+  package:flutter/src/foundation/change_notifier.dart 377:27  ChangeNotifier.dispose
+  package:pourlune_dev/services/ad_coordinator.dart 289:11    AdCoordinator.dispose
+  test/b04_ads_test.dart 78:9                                 main.<fn>
+  
+00:01 +4 -1: Some tests failed.
+
+Failing tests:
+  /Volumes/data/App Development/Pourlune/app/test/b04_ads_test.dart: AC32 dispose ends pending native callback wait and timer exactly once

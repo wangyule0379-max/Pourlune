@@ -1,0 +1,48 @@
+name: Offline foundation
+on:
+  push:
+    paths: ['app/**', 'packages/**', '.flutter-version', '.github/workflows/flutter.yml', 'docs/content/fixtures/**', 'tools/validation/**']
+  pull_request:
+    paths: ['app/**', 'packages/**', '.flutter-version', '.github/workflows/flutter.yml', 'docs/content/fixtures/**', 'tools/validation/**']
+permissions:
+  contents: read
+jobs:
+  tests-and-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install fixed Flutter SDK
+        run: |
+          git clone --depth 1 --branch 3.47.2 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
+          test "$(git -C "$RUNNER_TEMP/flutter" rev-parse HEAD)" = d3b14c876900e553bc736ca19295fc09e3853e8e
+          echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
+      - name: Release configuration guards (no credentials)
+        run: python3 -m unittest discover -s tools/validation -v
+      - name: Core
+        working-directory: packages/pourlune_core
+        run: |
+          dart pub get --enforce-lockfile
+          dart format --output=none --set-exit-if-changed .
+          dart analyze
+          dart test
+      - name: Flutter
+        working-directory: app
+        run: |
+          flutter pub get --enforce-lockfile
+          dart format --output=none --set-exit-if-changed lib test integration_test
+          flutter analyze
+          flutter test --concurrency=2
+          flutter build apk --debug
+  ios-build:
+    runs-on: macos-latest
+    env:
+      FIREBASE_ANALYTICS_WITHOUT_ADID: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install fixed Flutter SDK
+        run: |
+          git clone --depth 1 --branch 3.47.2 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
+          test "$(git -C "$RUNNER_TEMP/flutter" rev-parse HEAD)" = d3b14c876900e553bc736ca19295fc09e3853e8e
+          echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
+      - run: flutter pub get --enforce-lockfile && flutter build ios --simulator --debug
+        working-directory: app

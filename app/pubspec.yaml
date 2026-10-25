@@ -1,0 +1,53 @@
+name: pourlune_dev
+description: Pourlune offline content and visual candidate build.
+publish_to: none
+version: 0.5.0+11
+environment:
+  sdk: '>=3.13.2 <4.0.0'
+  flutter: '>=3.47.2'
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  pourlune_core:
+    path: ../packages/pourlune_core
+  sqflite: 2.4.5
+  intl: 0.20.3
+  audioplayers: 6.8.1
+  google_mobile_ads: 9.2.0
+  firebase_core: 5.0.0
+  firebase_analytics: 13.0.0
+  firebase_crashlytics: 6.0.0
+  firebase_remote_config: 7.0.0
+  url_launcher: 6.3.3
+  flame: 1.38.2
+  animations: 3.0.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: 6.0.0
+  sqflite_common_ffi: 2.4.4
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/fixtures/
+    - assets/puzzles/main/
+    - assets/puzzles/daily/
+    - assets/catalog/
+    - assets/art/ui/
+    - assets/art/p05-reference/
+    - assets/art/bottles/
+    - assets/art/backgrounds/
+    - assets/art/scenes/color_studio/
+    - assets/art/scenes/garden_nook/
+    - assets/art/scenes/seaside_corner/
+    - assets/audio/
+    - assets/fonts/nunito/
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/nunito/Nunito[wght].ttf

@@ -1,0 +1,68 @@
+test_android_12_light_and_night_explicitly_brand_system_splash (test_startup_native.StartupNativeTest.test_android_12_light_and_night_explicitly_brand_system_splash) ... FAIL
+test_ios_launch_and_engine_container_have_same_opaque_blue (test_startup_native.StartupNativeTest.test_ios_launch_and_engine_container_have_same_opaque_blue) ... 
+  test_ios_launch_and_engine_container_have_same_opaque_blue (test_startup_native.StartupNativeTest.test_ios_launch_and_engine_container_have_same_opaque_blue) (storyboard='LaunchScreen') ... FAIL
+  test_ios_launch_and_engine_container_have_same_opaque_blue (test_startup_native.StartupNativeTest.test_ios_launch_and_engine_container_have_same_opaque_blue) (storyboard='Main') ... FAIL
+test_legacy_normal_day_and_night_never_use_system_surface_color (test_startup_native.StartupNativeTest.test_legacy_normal_day_and_night_never_use_system_surface_color) ... FAIL
+test_native_wordmark_is_not_empty_or_clipped_by_android_icon_mask (test_startup_native.StartupNativeTest.test_native_wordmark_is_not_empty_or_clipped_by_android_icon_mask) ... FAIL
+
+======================================================================
+FAIL: test_android_12_light_and_night_explicitly_brand_system_splash (test_startup_native.StartupNativeTest.test_android_12_light_and_night_explicitly_brand_system_splash)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_startup_native.py", line 39, in test_android_12_light_and_night_explicitly_brand_system_splash
+    self.assertTrue(path.exists(), f'{folder} must cover Android12 system splash')
+AssertionError: False is not true : values-v31 must cover Android12 system splash
+
+======================================================================
+FAIL: test_ios_launch_and_engine_container_have_same_opaque_blue (test_startup_native.StartupNativeTest.test_ios_launch_and_engine_container_have_same_opaque_blue) (storyboard='LaunchScreen')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_startup_native.py", line 21, in test_ios_launch_and_engine_container_have_same_opaque_blue
+    self.assertEqual(rgb, BLUE)
+AssertionError: Tuples differ: (255, 255, 255) != (130, 223, 241)
+
+First differing element 0:
+255
+130
+
+- (255, 255, 255)
++ (130, 223, 241)
+
+======================================================================
+FAIL: test_ios_launch_and_engine_container_have_same_opaque_blue (test_startup_native.StartupNativeTest.test_ios_launch_and_engine_container_have_same_opaque_blue) (storyboard='Main')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_startup_native.py", line 21, in test_ios_launch_and_engine_container_have_same_opaque_blue
+    self.assertEqual(rgb, BLUE)
+AssertionError: Tuples differ: (255, 255, 255) != (130, 223, 241)
+
+First differing element 0:
+255
+130
+
+- (255, 255, 255)
++ (130, 223, 241)
+
+======================================================================
+FAIL: test_legacy_normal_day_and_night_never_use_system_surface_color (test_startup_native.StartupNativeTest.test_legacy_normal_day_and_night_never_use_system_surface_color)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_startup_native.py", line 27, in test_legacy_normal_day_and_night_never_use_system_surface_color
+    self.assertEqual(xml.findtext("style[@name='NormalTheme']/item[@name='android:windowBackground']"),
+AssertionError: '?android:colorBackground' != '@color/startup_background'
+- ?android:colorBackground
++ @color/startup_background
+
+
+======================================================================
+FAIL: test_native_wordmark_is_not_empty_or_clipped_by_android_icon_mask (test_startup_native.StartupNativeTest.test_native_wordmark_is_not_empty_or_clipped_by_android_icon_mask)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/assets/test_startup_native.py", line 50, in test_native_wordmark_is_not_empty_or_clipped_by_android_icon_mask
+    self.assertEqual(im.width, 176 * scale)
+AssertionError: 1 != 176
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.009s
+
+FAILED (failures=5)

@@ -1,0 +1,59 @@
+Resolving dependencies...
+Downloading packages...
+  code_assets 1.2.1 (2.1.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  record_use 0.6.0 (1.1.1 available)
+  sqlite3 3.5.2 (3.7.1 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+Got dependencies!
+9 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Volumes/data/App Development/Pourlune/app/integration_test/offline_flows_test.dart
+Running Xcode build...                                          
+Xcode build done.                                           14.2s
+00:00 +0: B02 real Flutter/SQLite/isolate debug scenario flow
+B02_HINT_MEASURE: mode=debug simulator; scenario=flow; response_us=40134; worker_wall_us=6879; visited=16; status=found; logical_size=Size(402.0, 874.0)
+B02_HINT_MEASURE: mode=debug simulator; scenario=flow; response_us=42194; worker_wall_us=1896; visited=12; status=found; logical_size=Size(402.0, 874.0)
+B02_HINT_MEASURE: mode=debug simulator; scenario=flow; response_us=41311; worker_wall_us=2661; visited=8; status=found; logical_size=Size(402.0, 874.0)
+B02_HINT_MEASURE: mode=debug simulator; scenario=flow; response_us=42642; worker_wall_us=1488; visited=6; status=found; logical_size=Size(402.0, 874.0)
+B02_HINT_MEASURE: mode=debug simulator; scenario=flow; response_us=39984; worker_wall_us=1432; visited=4; status=found; logical_size=Size(402.0, 874.0)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextContainingWidgetFinder:<Found 2 widgets with text containing History is read-only.
+Past puzzles cannot be started.: [
+            Text("History is read-only. Past puzzles cannot be started.", dependencies:
+[DefaultSelectionStyle, DefaultTextStyle, MediaQuery]),
+            Text("History is read-only. Past puzzles cannot be started.\nStamp collected",
+dependencies: [DefaultSelectionStyle, DefaultTextStyle, MediaQuery]),
+          ]>
+   Which: is too many
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Volumes/data/App%20Development/Pourlune/app/integration_test/offline_flows_test.dart:187:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Volumes/data/App%20Development/Pourlune/app/integration_test/offline_flows_test.dart line 187
+The test description was:
+  B02 real Flutter/SQLite/isolate debug scenario flow
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:34 +0 -1: B02 real Flutter/SQLite/isolate debug scenario flow [E]
+  Test failed. See exception logs above.
+  The test description was: B02 real Flutter/SQLite/isolate debug scenario flow
+  
+00:34 +0 -1: (tearDownAll)
+00:34 +0 -1: Some tests failed.
+
+Failing tests:
+  /Volumes/data/App Development/Pourlune/app/integration_test/offline_flows_test.dart: B02 real Flutter/SQLite/isolate debug scenario flow

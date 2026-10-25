@@ -1,0 +1,103 @@
+{
+  "finding": "B02-R01",
+  "status": "implementation verified; awaiting independent re-acceptance",
+  "owner_head": "401e17054bafbb6691cca9c00de802d96f0866dc",
+  "host_tests": {
+    "core": 26,
+    "app": 59,
+    "original_review_program_author_rerun": 1
+  },
+  "native_ios": {
+    "replay_failure_suite": 1,
+    "offline_flow": 1,
+    "sqlite": "3.51.0",
+    "simulator": "4DF92321-95EC-4C8E-849C-0CF0AA6FE1D2"
+  },
+  "review_inputs_match_captured_sha": {
+    "docs/development/review/B02-acceptance.md": true,
+    "docs/development/review/B02-evidence/source-manifest.json": true,
+    "docs/development/review/B02-evidence/app-format.log": true,
+    "docs/development/review/B02-evidence/core-format.log": true,
+    "docs/development/review/B02-evidence/app-tests.log": true,
+    "docs/development/review/B02-evidence/core-analyze.log": true,
+    "docs/development/review/B02-evidence/replay-navigation-regression.log": true,
+    "docs/development/review/B02-evidence/checks.json": true,
+    "docs/development/review/B02-evidence/native-flow.log": true,
+    "docs/development/review/B02-evidence/ui-03-hint-preserves-board.txt": true,
+    "docs/development/review/B02-evidence/ui-01-tutorial-saved.txt": true,
+    "docs/development/review/B02-evidence/ui-04-hint-cancelled.txt": true,
+    "docs/development/review/B02-evidence/ui-02-tutorial-restored.txt": true,
+    "docs/development/review/B02-evidence/app-analyze.log": true,
+    "docs/development/review/B02-evidence/ios-build.log": true,
+    "docs/development/review/B02-evidence/replay-navigation-regression.dart": true,
+    "docs/development/review/B02-evidence/ui-03-hint-preserves-board.png": true,
+    "docs/development/review/B02-evidence/ui-01-tutorial-saved.png": true,
+    "docs/development/review/B02-evidence/ui-04-hint-cancelled.png": true,
+    "docs/development/review/B02-evidence/ui-02-tutorial-restored.png": true,
+    "docs/development/review/B02-evidence/core-tests.log": true
+  },
+  "source_sha256": {
+    "app/lib/main.dart": "8e5bbb97724dcf79d9d3afb453bf4516b84f0e1941e1800a2950b9ea3aed411c",
+    "app/lib/l10n/app_localizations.dart": "a6a13c88907bbfae6f45e88bd06db79e332014dda33390e500702af64710f7c9",
+    "app/lib/l10n/app_en.arb": "dc8e3364f568f18aaa0653e6322b92aaf39b5231c5b7110323766b89efa59bd9",
+    "app/lib/l10n/app_localizations_en.dart": "391cf3e542f62caa049272a6422c8163fd1ff78ac014caa156895e181d77274c",
+    "app/lib/development/scenarios.dart": "de0a145d7c1b26de96f89b9b730064aea47d67dfbce075670c317a65e72235d3",
+    "app/lib/application/game_controller.dart": "3e838757641c3e43749534763f603e7ce0ac35cfd487f9877d4a53837bbbd260",
+    "app/lib/application/hint_worker.dart": "073cec338723a463ac344d9528ee093c78e64bf95a05ceb29e37913480f8e357",
+    "app/lib/data/game_store.dart": "c4f27d5871b32945e0ef813e9e1de2f192a2a31c1ed9cb3b6113cc88a88485d0",
+    "app/lib/data/content_library.dart": "ab7c3dac79113802f4b99673ffa67c457696a357a3073423abafc6e03351ee2e",
+    "app/lib/data/player_settings.dart": "3e8c1aceb9e036534a45de6fb28a0bd65b7ebb50a8effd5b9c9f8f2f521b459f",
+    "app/lib/data/scenes.dart": "03dad9346d1017f28a35e0bdb046b91997d05da5727fb096a266652aef57d7dc",
+    "app/lib/presentation/navigation_pages.dart": "77589c08ab57d9daec864cdffccdb8e0b1d747ae43e20af011edd6cab5eb2d9d",
+    "app/lib/presentation/game_screen.dart": "f10a3bbd1b484daca3215e5d31d327c8da5ae3eb922dd8ec04a68a5900e4c0ce",
+    "app/lib/presentation/bottle.dart": "960c50abd7bfdd9ec266b31568d7689d2e76056a375f54d63510843c81511d47",
+    "app/lib/presentation/pourlune_app.dart": "fefeea10b3918ccef1aa568da56db98435a384c15a13d8d7185975746531f502",
+    "app/lib/presentation/collection_pages.dart": "93530b619d895518f2a48c16c0b220cb754eb1a2f4d9795f5f003d11d5b57666",
+    "app/lib/presentation/settings_page.dart": "341750d12925e646eb1abc082c730840ce83f549b5d8b68d9719cfb94085626c",
+    "app/lib/presentation/labels.dart": "0705915b58d515a16b462966fc3bfa38e3956a297073511470ab06b824794ed6",
+    "app/lib/presentation/board_page.dart": "3ec08af71cf4cd54cb9fdfdd217f4e657707576d0bae44f007928d17903ae164",
+    "app/test/offline_store_test.dart": "13f14b6e8a6631c3edc3192b73f6f7e0f60722f2c5e56d3c6b0b0f3488dd8fe2",
+    "app/test/store_test.dart": "4b32c04ab1d56dd6a2799f46b8acf53e7041da54ed8c11f34fee6b88bf23ebd9",
+    "app/test/ui_test.dart": "fc08f668304f04cabbd4488388d9d1d49e6ea21128257b044b41fb0142b374ac",
+    "app/test/hint_worker_test.dart": "3f832733e4c5447d87e0245a2e7cc2a1c53cab973afc00cfc0cf86386354569e",
+    "app/test/replay_navigation_test.dart": "28f1f44de96d777a627c67f7983defa874ee0aea52f3135faefac949de15c509",
+    "app/test/offline_ui_test.dart": "066001ad57f2bbefd7e9e3852274a840639a3f0c46401d245904d919cf28575d",
+    "app/test/offline_controller_test.dart": "0ac3cc55f824af1698231c84ea3fbe3ff01a95749d0429bf32c9f76fabd0ff63",
+    "app/test/controller_test.dart": "2765be38db8dc84ae8d96d2106f090a2b4c87afc947b191167f2c350b9495bda",
+    "app/test/content_library_test.dart": "e1b25fb9fb719a03fb984c86e70bd806a2a20ec9ec4025e4fe64b89cf8349b35",
+    "app/test/history_recovery_test.dart": "b271b874f2833b89b63f0d105e60270dc9df2531d57d7a1d747a5fcc4b946727",
+    "app/integration_test/offline_test.dart": "15b3c287ba06784b2f12a96328c5fd898127ab1543f654f2713374681437a223",
+    "app/integration_test/replay_navigation_test.dart": "44fb9007465df7cfbafc26fe9c8bd1cf227f26e4f9dd973ee4005ca8e66e40fd",
+    "app/integration_test/offline_flows_test.dart": "3056871687a935b2b31f7a0e82518f4a9e8e25758c081a21d3ff7c107d21ac65",
+    "app/integration_test/history_recovery_test.dart": "4d0c0efd6b5a66c97893fb2b1f5577f4049f99912b344080b2ca04701fa082c8",
+    "packages/pourlune_core/lib/pourlune_core.dart": "a05fb20941833b98dcef99ca8ca8fc32efe938c14e5eb0614bc4368f12a29060",
+    "packages/pourlune_core/lib/src/tutorial.dart": "d985137bc953ed09e26ad44a3dc251dc5dd96b1f7084d0e214740667d7338163",
+    "packages/pourlune_core/lib/src/daily_catalog.dart": "7ca2feabe3832b01b15da28513d98e0abca9dd80a2beb8339e4c8da8e1b00b07",
+    "packages/pourlune_core/lib/src/pour.dart": "158d6893b7d6233c6c3cd5e48b29d176cbca2244b59a6c44f3b3d78e6ae61542",
+    "packages/pourlune_core/lib/src/instance.dart": "c7d9e5e85d80a14f2a1d4460a6324ce00367c24e137ac8ee8cf402a6818d2a10",
+    "packages/pourlune_core/lib/src/hint.dart": "bff27db69147a44e10298d520122d77f8b273d0839af945c96e53528319555fb",
+    "packages/pourlune_core/lib/src/puzzle.dart": "6b830403b776dc071ae6e675c24ec95a0ca6a4858d2dafebc79269f03fab5115",
+    "packages/pourlune_core/test/hint_test.dart": "d5f7717f210f0bcb7022f1f5875e15048a4a999fcb566a86cf16535df88d2711",
+    "packages/pourlune_core/test/offline_contract_test.dart": "2d5de002a1a2606e1aca23b28a96652311dffd805ce383c3aa8cac3c191b5999",
+    "packages/pourlune_core/test/history_validation_test.dart": "d54b867d507bd57231d38aed3ba6f13b0a2c9ee549869c7d0f67fac3eb2dc36c",
+    "packages/pourlune_core/test/core_test.dart": "c15cb3b53013d72e7d7859cefbd8926a3cfb316b10f57d94a1ee4c893f8ec43b",
+    "app/pubspec.yaml": "17b3424a5dadcc29cdbf2eccb0c9f7510d4c0332b2d23545a09b501c598b627a",
+    "app/pubspec.lock": "a2de70479253dc95ccad307309fde04674e338671c95e8bd048c420d48064dce",
+    "packages/pourlune_core/pubspec.yaml": "2060ddbcaad71133efd970fca3e63db439f584d5c94b66811bdf113ba479ebf7",
+    "packages/pourlune_core/pubspec.lock": "16601f6e6eeda4a75dc32ac1e56f40b200f9a4fb0dd29680fc1b7d5081074e8d"
+  },
+  "artifacts": {
+    "app/build/ios/iphonesimulator/Runner.app/Info.plist": {
+      "bytes": 2005,
+      "sha256": "29939f2bf0f8ac2dedb6aa8e89320d6e398c962dc11c61409a3bec95a92ca1e0"
+    },
+    "app/build/ios/iphonesimulator/Runner.app/Frameworks/App.framework/flutter_assets/kernel_blob.bin": {
+      "bytes": 49976032,
+      "sha256": "62ff556a697686d182cd0d2380c777ebf7d5f187e81c48df7634b41fb9bb6145"
+    },
+    "app/build/app/outputs/flutter-apk/app-debug.apk": {
+      "bytes": 159069547,
+      "sha256": "d8c0eda9018d2f984db0e774df50a5600ccef3f66ba614e46cafa9c73a8beb7e"
+    }
+  }
+}

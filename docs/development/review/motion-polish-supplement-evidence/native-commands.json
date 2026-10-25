@@ -1,0 +1,426 @@
+[
+  {
+    "argv": [
+      "xcrun",
+      "simctl",
+      "list",
+      "devices",
+      "255890D5-B4A3-42F9-B1A2-409E77118348"
+    ],
+    "code": 0,
+    "stdout": "== Devices ==\n-- iOS 26.5 --\n    Pourlune-FB-Review-20261022 (255890D5-B4A3-42F9-B1A2-409E77118348) (Booted) \n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "emu",
+      "avd",
+      "name"
+    ],
+    "code": 0,
+    "stdout": "Pourlune_FullBoard_API36\nOK\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "xcrun",
+      "simctl",
+      "get_app_container",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation",
+      "data"
+    ],
+    "code": 0,
+    "stdout": "/Users/wangyule/Library/Developer/CoreSimulator/Devices/255890D5-B4A3-42F9-B1A2-409E77118348/data/Containers/Data/Application/2047F9D9-77EA-41A9-90AC-DD8F21733DA3\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "xcrun",
+      "simctl",
+      "get_app_container",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation",
+      "app"
+    ],
+    "code": 0,
+    "stdout": "/Users/wangyule/Library/Developer/CoreSimulator/Devices/255890D5-B4A3-42F9-B1A2-409E77118348/data/Containers/Bundle/Application/4A4899E3-6AE1-4367-8E94-EF7BC084F037/Runner.app\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "xcrun",
+      "simctl",
+      "terminate",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation"
+    ],
+    "code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "xcrun",
+      "simctl",
+      "launch",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation"
+    ],
+    "code": 0,
+    "stdout": "dev.pourlune.motionSupplementValidation: 21988\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "xcrun",
+      "simctl",
+      "get_app_container",
+      "255890D5-B4A3-42F9-B1A2-409E77118348",
+      "dev.pourlune.motionSupplementValidation",
+      "data"
+    ],
+    "code": 0,
+    "stdout": "/Users/wangyule/Library/Developer/CoreSimulator/Devices/255890D5-B4A3-42F9-B1A2-409E77118348/data/Containers/Data/Application/2047F9D9-77EA-41A9-90AC-DD8F21733DA3\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "pm",
+      "path",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 0,
+    "stdout": "package:/data/app/~~mmra6wTny75lnBdk88T4OQ==/dev.pourlune.motion_supplement-0S-0hsXExO7NJFi9tu-Njw==/base.apk\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "sha256sum",
+      "/data/app/~~mmra6wTny75lnBdk88T4OQ==/dev.pourlune.motion_supplement-0S-0hsXExO7NJFi9tu-Njw==/base.apk"
+    ],
+    "code": 0,
+    "stdout": "7eb67079a7bdddcf2a8b6f361bdef6bbc46c0a5c55cb64017869f4b8d58378cd  /data/app/~~mmra6wTny75lnBdk88T4OQ==/dev.pourlune.motion_supplement-0S-0hsXExO7NJFi9tu-Njw==/base.apk\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "am",
+      "force-stop",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "am",
+      "start",
+      "-n",
+      "dev.pourlune.motion_supplement/dev.pourlune.pourlune_dev.MainActivity"
+    ],
+    "code": 0,
+    "stdout": "Starting: Intent { cmp=dev.pourlune.motion_supplement/dev.pourlune.pourlune_dev.MainActivity }\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "pidof",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "pidof",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 0,
+    "stdout": "6770\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-6770.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-6770.json: No such file or directory\n"
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-6770.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-6770.json: No such file or directory\n"
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-6770.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-6770.json: No such file or directory\n"
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-6770.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-6770.json: No such file or directory\n"
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-6770.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-6770.json: No such file or directory\n"
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-6770.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-6770.json: No such file or directory\n"
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-6770.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-6770.json: No such file or directory\n"
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-6770.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-6770.json: No such file or directory\n"
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-6770.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-6770.json: No such file or directory\n"
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-6770.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-6770.json: No such file or directory\n"
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-6770.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-6770.json: No such file or directory\n"
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-6770.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-6770.json: No such file or directory\n"
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-6770.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-6770.json: No such file or directory\n"
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-6770.json"
+    ],
+    "code": 1,
+    "stdout": "",
+    "stderr": "cat: databases/motion-supplement/startup-6770.json: No such file or directory\n"
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.motion_supplement",
+      "cat",
+      "databases/motion-supplement/startup-6770.json"
+    ],
+    "code": 0,
+    "stdout": "{\"ok\":true,\"pid\":6770,\"platform\":\"android\",\"mode\":\"debug standalone normal product.main, Flutter pointer + native sqflite\",\"database\":\"/data/user/0/dev.pourlune.motion_supplement/databases/motion_supplement.sqlite\",\"dart_began_utc\":\"2026-10-22T14:48:30.524344Z\",\"clock\":\"one Dart Stopwatch at QA Dart entry; includes guard/binding/probe setup; excludes native pre-Dart\",\"product_main_call_us\":83820,\"dart_start_us\":0,\"app_controller_found_us\":1417770,\"home_probe_started_us\":1417774,\"first_flutter_post_frame_us\":382602,\"initialization_shell_first_post_frame_us\":384471,\"home_first_post_frame_us\":1395687,\"home_enabled_hit_testable_us\":1423442,\"pointer_down_request_us\":1424590,\"pointer_down_sent_us\":1441809,\"pointer_up_request_us\":1489540,\"pointer_up_sent_us\":1500833,\"first_controller_response_us\":1498983,\"first_accepted_committed_navigation_us\":1881910,\"gesture_count\":1,\"requested_hold_ms\":16,\"requested_poll_interval_ms\":5,\"home_probe_timestamps_us\":[1423442],\"controller_changes\":[{\"us\":1498989,\"page\":\"home\",\"phase\":\"saving\",\"busy\":true,\"instance\":null,\"revision\":null},{\"us\":1881876,\"page\":\"board\",\"phase\":\"clean\",\"busy\":false,\"instance\":\"dev-1792680512019085-976560691\",\"revision\":0}],\"before_gesture\":{\"page\":\"home\",\"phase\":\"clean\",\"busy\":false,\"ordinary\":null,\"daily\":null,\"first_clears\":0,\"tutorial_complete\":false,\"settings\":{\"music\":true,\"sound\":true,\"haptics\":true,\"reduced_motion\":false,\"color_symbols\":true,\"strong_contrast\":false},\"firebase_status\":\"disabled\",\"logical_size\":[411.42857142857144,914.2857142857143],\"dpr\":2.625,\"font14_scaled\":14.0,\"ancestor_fade_values\":[1.0,1.0,1.0,0.0,1.0,1.0,1.0,1.0],\"ancestor_opacity\":[]},\"accepted\":{\"page\":\"board\",\"phase\":\"clean\",\"busy\":false,\"instance\":\"dev-1792680512019085-976560691\",\"saved_instance\":\"dev-1792680512019085-976560691\",\"revision\":0,\"moves\":0,\"snapshot_writes\":1,\"new_instance_count\":1},\"prepared_for_next_launch\":true,\"excludes_native_pre_dart\":true,\"theoretical_earliest_interactive_claim\":false,\"captures_screen_or_audio\":false}",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "pm",
+      "path",
+      "dev.pourlune.motion_supplement"
+    ],
+    "code": 0,
+    "stdout": "package:/data/app/~~mmra6wTny75lnBdk88T4OQ==/dev.pourlune.motion_supplement-0S-0hsXExO7NJFi9tu-Njw==/base.apk\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/wangyule/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5588",
+      "shell",
+      "run-as",
+      "dev.pourlune.pourlune_dev",
+      "sha256sum",
+      "databases/flame_full_board.sqlite"
+    ],
+    "code": 0,
+    "stdout": "858e1a4a9ae2d84329fa86ab345c59b72e5a6e688b2411032f0b0a3765b7e1f0  databases/flame_full_board.sqlite\n",
+    "stderr": ""
+  }
+]

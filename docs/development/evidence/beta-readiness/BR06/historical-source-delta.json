@@ -1,0 +1,52 @@
+{
+  "from": "BR01 frozen build5; BR05 only signed that payload",
+  "to": "BR06 build6, using already-accepted BR04 tools",
+  "differences": [
+    {
+      "path": "app/pubspec.yaml",
+      "build5": "0506f17367ad2114a917bab7b5e99c37c63a0f2b420ba1d008903c2e1d9a88e3",
+      "build6": "91c6430a4b809d87decdf1e08d9df85012f246a836b80a3317951e3793be3724"
+    },
+    {
+      "path": "tools/validation/README.md",
+      "build5": "26a644150026354e92830d3d9f38e74994ff3a331f2f5828da286cf6cc9b6f1f",
+      "build6": "10aeaca8e73343181b6ae0322ea3c6f18f20c76d55348ff5dff5392a273ba55d"
+    },
+    {
+      "path": "tools/validation/android_signing.py",
+      "build5": null,
+      "build6": "c15dce7b69a02feda7b0ff034d85c769fc472856b3458eec3a142830947da4a8"
+    },
+    {
+      "path": "tools/validation/beta_build.py",
+      "build5": "824355461eb09549642e2946e50cf02cec5843d8113809d5b20511eae72458b5",
+      "build6": "cfc57b3702d14f34e25660ef348386d52b4709cce064d867ec2dc0eb93fa72f6"
+    },
+    {
+      "path": "tools/validation/firebase_build.py",
+      "build5": "a521d91d212c67097c705dfaffd69356bee1b92ede9e420956791294ca8750df",
+      "build6": "21345c8a93dd98f5e9e7d49e2e2621d8debca9b6a02b82f983a89a7507c9b247"
+    },
+    {
+      "path": "tools/validation/public_destinations.py",
+      "build5": null,
+      "build6": "a30eac2c69105414b9647bedf43f9100ae03f52bb49755375991f1660a4de2be"
+    },
+    {
+      "path": "tools/validation/test_android_signing.py",
+      "build5": null,
+      "build6": "503ab4b5bd4db4f5dc233598e10e5d6f70ec72bc285d0488a86206472467fd3f"
+    },
+    {
+      "path": "tools/validation/test_beta_build.py",
+      "build5": "45db82123174a37f1f38c25e7b9d05e6d971466a4c25b5bae45d6d59a027bc5f",
+      "build6": "aba9d13d745056a3edf08ce87b340c63ab264f34b8c582a22c7a4266d444e5ca"
+    },
+    {
+      "path": "tools/validation/test_firebase_config.py",
+      "build5": "7d88c62ceccb548179f5d734bc4a9d9e6c32ba632f5c1af8d5819b63e118ed84",
+      "build6": "e4d89bf1fa7a2bf29063fcde4ce6dd861f721df47074e75bf84913a279ee9f68"
+    }
+  ],
+  "meaning": "Most tool differences were already accepted BR04; this batch app delta is pubspec build5->6 plus explicit URLs passed by controlled builder, not a new SDK revision"
+}

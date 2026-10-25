@@ -1,0 +1,12 @@
+# B03 content and runtime visual implementation plan
+
+Goal: deliver approved eight-task B03 candidate content/resources integrated in real Flutter without changing original UI or product rules. Spec: approved B03 execution package, data contracts, original Visual_and_Motion_Spec, ART01–09, AC35/31/33 and preserved B01/B02 invariants. No commit/push, protected files unchanged; architecture owns acceptance.
+
+1. Generate60+30 actual canonical-unique candidates (preserve original main012 and early tutorial), verified refs, exact/equivalent duplicate audit, deterministic copies/catalog; Python+Dart all replay and search-budget reports. Actual representative application evaluation by root, no human-play claims.
+2. Inspect original bottle/scene/style images. Produce transparent layered bottle back/front/shadow and static background; liquid/labels remain native dynamic drawing. Geometry manifest with clip/mouth/pivot. Real1–4unit/empty/mixed/mismatch and6/7 equal sizes.
+3. Generate three knit scenes preserving approved reference composition: base +five actual transparent objects each, stable identities,18 progress composites/thumbnail/full proof. Replace numeric scene probes with same source layers shared everywhere.
+4. Nunito existing original bytes+OFL copy. Original synthetic audio select/pour/error/win/reveal+loop, exact source/metrics; minimum real playback service pinned from official package docs. Root wires settings, pause/background and nonblocking events; real plugin evidence separate from test transport.
+5. Local motion presentation after atomic business commit,0.7–1s, reduced motion, cancel/snap, lock board only during presentation; no re-awards at animationend. Token/lifecycle/failed persistence regression meaningful tests.
+6. Bootstrap default formal assets, candidate identity accurate, release excludes fixture/debug fallback. Settings/license/copy reflect real resource availability; platform brand icon from approved brand motif/derivative source with rights status. Asset manifest hashes/formats/licensing/anchors.
+7. Full Python release/Dart90 replay, app regressions, formats/analyzes, double-platformdebug, native no-seed content main/daily/scene/cold; actual representative play and screenshots,320/2x/reduced/audiooff/animationlifecycle,18 scene states and15piece milestones.
+8. Final fresh review once, fix Important/Critical via RED→GREEN, record declines/minors/rulings; B03 delivery/evidence/README/AGENTS updated. Candidate dependencies precisely listed; no B04 work or acceptance self-mark.

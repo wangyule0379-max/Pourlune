@@ -1,0 +1,52 @@
+Resolving dependencies...
+Downloading packages...
+  code_assets 1.2.1 (2.1.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  record_use 0.6.0 (1.1.1 available)
+  sqlite3 3.5.2 (3.7.1 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+Got dependencies!
+9 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Volumes/data/App Development/Pourlune/app/test/hint_worker_test.dart
+test/hint_worker_test.dart:3:8: Error: Error when reading 'lib/application/hint_worker.dart': No such file or directory
+import 'package:pourlune_dev/application/hint_worker.dart';
+       ^
+test/hint_worker_test.dart:8:15: Error: Method not found: 'runHint'.
+    final job=runHint(s);final result=await job.result;await job.released;
+              ^^^^^^^
+test/hint_worker_test.dart:14:37: Error: Method not found: 'runHint'.
+    final jobs=List.generate(8,(_)=>runHint(sample('cancel')));
+                                    ^^^^^^^
+test/hint_worker_test.dart:19:17: Error: Method not found: 'runHint'.
+    final retry=runHint(sample('retry'));expect((await retry.result).status,HintStatus.found);await retry.released;
+                ^^^^^^^
+test/hint_worker_test.dart:22:15: Error: Method not found: 'runHint'.
+    final job=runHint(sample('timeout'),budget:Duration.zero);
+              ^^^^^^^
+00:00 +0 -1: loading /Volumes/data/App Development/Pourlune/app/test/hint_worker_test.dart [E]
+  Failed to load "/Volumes/data/App Development/Pourlune/app/test/hint_worker_test.dart":
+  Compilation failed for testPath=/Volumes/data/App Development/Pourlune/app/test/hint_worker_test.dart: test/hint_worker_test.dart:3:8: Error: Error when reading 'lib/application/hint_worker.dart': No such file or directory
+  import 'package:pourlune_dev/application/hint_worker.dart';
+         ^
+  test/hint_worker_test.dart:8:15: Error: Method not found: 'runHint'.
+      final job=runHint(s);final result=await job.result;await job.released;
+                ^^^^^^^
+  test/hint_worker_test.dart:14:37: Error: Method not found: 'runHint'.
+      final jobs=List.generate(8,(_)=>runHint(sample('cancel')));
+                                      ^^^^^^^
+  test/hint_worker_test.dart:19:17: Error: Method not found: 'runHint'.
+      final retry=runHint(sample('retry'));expect((await retry.result).status,HintStatus.found);await retry.released;
+                  ^^^^^^^
+  test/hint_worker_test.dart:22:15: Error: Method not found: 'runHint'.
+      final job=runHint(sample('timeout'),budget:Duration.zero);
+                ^^^^^^^
+  .
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Volumes/data/App Development/Pourlune/app/test/hint_worker_test.dart: loading /Volumes/data/App Development/Pourlune/app/test/hint_worker_test.dart

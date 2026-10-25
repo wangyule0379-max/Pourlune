@@ -1,0 +1,61 @@
+00:00 +0: loading test/core_test.dart
+00:00 +0 -1: loading test/core_test.dart [E]
+  Failed to load "test/core_test.dart":
+  lib/pourlune_core.dart:4:1: Error: Error when reading 'lib/src/puzzle.dart': No such file or directory
+  export 'src/puzzle.dart';
+  ^
+  lib/pourlune_core.dart:5:1: Error: Error when reading 'lib/src/instance.dart': No such file or directory
+  export 'src/instance.dart';
+  ^
+  test/core_test.dart:6:1: Error: Type 'Puzzle' not found.
+  Puzzle fixture([String id='001']) => Puzzle.parse(File('../../docs/content/fixtures/main-$id.reference.json').readAsStringSync());
+  ^^^^^^
+  test/core_test.dart:7:1: Error: Type 'GameInstance' not found.
+  GameInstance game([Puzzle? puzzle]) => GameInstance.create(id:'test-instance',puzzle:puzzle??fixture());
+  ^^^^^^^^^^^^
+  test/core_test.dart:7:20: Error: Type 'Puzzle' not found.
+  GameInstance game([Puzzle? puzzle]) => GameInstance.create(id:'test-instance',puzzle:puzzle??fixture());
+                     ^^^^^^
+  test/core_test.dart:27:14: Error: Type 'GameInstance' not found.
+  extension on GameInstance {
+               ^^^^^^^^^^^^
+  test/core_test.dart:28:2: Error: Type 'GameInstance' not found.
+   GameInstance withBoardForTest(List<List<String>> board){final data=toJson();data['board']=board;return GameInstance.fromJson(data);}
+   ^^^^^^^^^^^^
+  test/core_test.dart:6:38: Error: Undefined name 'Puzzle'.
+  Puzzle fixture([String id='001']) => Puzzle.parse(File('../../docs/content/fixtures/main-$id.reference.json').readAsStringSync());
+                                       ^^^^^^
+  test/core_test.dart:7:20: Error: 'Puzzle' isn't a type.
+  GameInstance game([Puzzle? puzzle]) => GameInstance.create(id:'test-instance',puzzle:puzzle??fixture());
+                     ^^^^^^
+  test/core_test.dart:7:40: Error: Undefined name 'GameInstance'.
+  GameInstance game([Puzzle? puzzle]) => GameInstance.create(id:'test-instance',puzzle:puzzle??fixture());
+                                         ^^^^^^^^^^^^
+  test/core_test.dart:12:581: Error: Undefined name 'Puzzle'.
+    test('reject duplicate escaped keys and non-integer JSON tokens',(){final raw=File('../../docs/content/fixtures/main-001.reference.json').readAsStringSync();for(final bad in [raw.replaceFirst('"schema_version": 1','"schema_version": 1, "schema_version": 1'),raw.replaceFirst('"schema_version": 1','"schema_version": 1, "\\u0073chema_version": 1'),raw.replaceFirst('"capacity": 4','"capacity": 4.0'),raw.replaceFirst('"capacity": 4','"capacity": 4e0'),raw.replaceFirst('"capacity": 4','"capacity": NaN'),raw.replaceFirst('"schema_version": 1','"schema_version": 2')]){expect(()=>Puzzle.parse(bad),throwsFormatException);}});
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ^^^^^^
+  test/core_test.dart:13:568: Error: Undefined name 'Puzzle'.
+    test('reject shape, counts, labels, range and unknown fields',(){for(final edit in <void Function(Map<String,dynamic>)>[(m)=>m['surprise']=1,(m)=>m['target_labels']=['O','O',null,null],(m)=>m['initial_bottom_to_top']=[['G','O'],['O','O','G','G'],[],[]],(m)=>m['reference_moves']=[{'from_index':4,'to_index':0}],(m)=>m['reference_moves']=[{'from_index':0.0,'to_index':1}],(m)=>m['main_level']=2,(m)=>m['content_version']=0]){final m=jsonDecode(File('../../docs/content/fixtures/main-001.reference.json').readAsStringSync()) as Map<String,dynamic>;edit(m);expect(()=>Puzzle.fromJson(m),throwsFormatException);}});
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ^^^^^^
+  test/core_test.dart:24:147: Error: Undefined name 'GameInstance'.
+    test('AC-23 round trip pins original definition and rejects corrupt snapshot',(){final s=game().pour(0,2).state.grantExtraBottle();final loaded=GameInstance.parse(jsonEncode(s.toJson()));expect(loaded.board,s.board);expect(loaded.puzzle.toJson(),s.puzzle.toJson());expect(loaded.undo().board.length,5);final bad=s.toJson();bad['board']=[[],[],[],[],[]];expect(()=>GameInstance.fromJson(bad),throwsFormatException);expect(()=>loaded.board[0].add('O'),throwsUnsupportedError);});
+                                                                                                                                                    ^^^^^^^^^^^^
+  test/core_test.dart:24:367: Error: Undefined name 'GameInstance'.
+    test('AC-23 round trip pins original definition and rejects corrupt snapshot',(){final s=game().pour(0,2).state.grantExtraBottle();final loaded=GameInstance.parse(jsonEncode(s.toJson()));expect(loaded.board,s.board);expect(loaded.puzzle.toJson(),s.puzzle.toJson());expect(loaded.undo().board.length,5);final bad=s.toJson();bad['board']=[[],[],[],[],[]];expect(()=>GameInstance.fromJson(bad),throwsFormatException);expect(()=>loaded.board[0].add('O'),throwsUnsupportedError);});
+                                                                                                                                                                                                                                                                                                                                                                                ^^^^^^^^^^^^
+  test/core_test.dart:23:425: Error: An expression whose value can be 'null' must be null-checked before it can be dereferenced.
+    test('AC-07 undo before/after extra bottle and restart keep entitlement',(){final original=game();final one=original.pour(0,2).state;final added=one.grantExtraBottle();expect(added.board.length,5);expect(added.revision,2);final two=added.pour(1,0).state;final undone=two.undo();expect(undone.board,added.board);expect(undone.extraBottleGranted,isTrue);final beforeGrant=undone.undo();expect(beforeGrant.board,[...original.board,<String>[]]);expect(beforeGrant.revision,5);expect(beforeGrant.extraBottleGranted,isTrue);final restarted=two.restart();expect(restarted.id,original.id);expect(restarted.board,[...original.board,<String>[]]);expect(restarted.moveCount,0);expect(restarted.history,isEmpty);expect(restarted.revision,4);expect(identical(restarted.grantExtraBottle(),restarted),isTrue);});
+                                                                                                                                                                                                                                                                                                                                                                                                                                          ^
+  test/core_test.dart:23:425: Error: Unexpected type 'invalid-type' of a spread.  Expected 'dynamic' or an Iterable.
+    test('AC-07 undo before/after extra bottle and restart keep entitlement',(){final original=game();final one=original.pour(0,2).state;final added=one.grantExtraBottle();expect(added.board.length,5);expect(added.revision,2);final two=added.pour(1,0).state;final undone=two.undo();expect(undone.board,added.board);expect(undone.extraBottleGranted,isTrue);final beforeGrant=undone.undo();expect(beforeGrant.board,[...original.board,<String>[]]);expect(beforeGrant.revision,5);expect(beforeGrant.extraBottleGranted,isTrue);final restarted=two.restart();expect(restarted.id,original.id);expect(restarted.board,[...original.board,<String>[]]);expect(restarted.moveCount,0);expect(restarted.history,isEmpty);expect(restarted.revision,4);expect(identical(restarted.grantExtraBottle(),restarted),isTrue);});
+                                                                                                                                                                                                                                                                                                                                                                                                                                          ^
+  test/core_test.dart:23:620: Error: An expression whose value can be 'null' must be null-checked before it can be dereferenced.
+    test('AC-07 undo before/after extra bottle and restart keep entitlement',(){final original=game();final one=original.pour(0,2).state;final added=one.grantExtraBottle();expect(added.board.length,5);expect(added.revision,2);final two=added.pour(1,0).state;final undone=two.undo();expect(undone.board,added.board);expect(undone.extraBottleGranted,isTrue);final beforeGrant=undone.undo();expect(beforeGrant.board,[...original.board,<String>[]]);expect(beforeGrant.revision,5);expect(beforeGrant.extraBottleGranted,isTrue);final restarted=two.restart();expect(restarted.id,original.id);expect(restarted.board,[...original.board,<String>[]]);expect(restarted.moveCount,0);expect(restarted.history,isEmpty);expect(restarted.revision,4);expect(identical(restarted.grantExtraBottle(),restarted),isTrue);});
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ^
+  test/core_test.dart:23:620: Error: Unexpected type 'invalid-type' of a spread.  Expected 'dynamic' or an Iterable.
+    test('AC-07 undo before/after extra bottle and restart keep entitlement',(){final original=game();final one=original.pour(0,2).state;final added=one.grantExtraBottle();expect(added.board.length,5);expect(added.revision,2);final two=added.pour(1,0).state;final undone=two.undo();expect(undone.board,added.board);expect(undone.extraBottleGranted,isTrue);final beforeGrant=undone.undo();expect(beforeGrant.board,[...original.board,<String>[]]);expect(beforeGrant.revision,5);expect(beforeGrant.extraBottleGranted,isTrue);final restarted=two.restart();expect(restarted.id,original.id);expect(restarted.board,[...original.board,<String>[]]);expect(restarted.moveCount,0);expect(restarted.history,isEmpty);expect(restarted.revision,4);expect(identical(restarted.grantExtraBottle(),restarted),isTrue);});
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ^
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  test/core_test.dart: loading test/core_test.dart

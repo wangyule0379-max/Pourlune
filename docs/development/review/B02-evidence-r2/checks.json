@@ -1,0 +1,121 @@
+[
+  {
+    "name": "core-format",
+    "cwd": "packages/pourlune_core",
+    "command": [
+      "dart",
+      "format",
+      "--output=none",
+      "--set-exit-if-changed",
+      "."
+    ],
+    "exit_code": 0,
+    "seconds": 0.1
+  },
+  {
+    "name": "core-analyze",
+    "cwd": "packages/pourlune_core",
+    "command": [
+      "dart",
+      "analyze"
+    ],
+    "exit_code": 0,
+    "seconds": 0.6
+  },
+  {
+    "name": "core-tests",
+    "cwd": "packages/pourlune_core",
+    "command": [
+      "dart",
+      "test"
+    ],
+    "exit_code": 0,
+    "seconds": 0.6
+  },
+  {
+    "name": "app-format",
+    "cwd": "app",
+    "command": [
+      "dart",
+      "format",
+      "--output=none",
+      "--set-exit-if-changed",
+      "."
+    ],
+    "exit_code": 0,
+    "seconds": 0.3
+  },
+  {
+    "name": "app-analyze",
+    "cwd": "app",
+    "command": [
+      "flutter",
+      "analyze"
+    ],
+    "exit_code": 0,
+    "seconds": 1.9
+  },
+  {
+    "name": "app-tests",
+    "cwd": "app",
+    "command": [
+      "flutter",
+      "test"
+    ],
+    "exit_code": 0,
+    "seconds": 8.0
+  },
+  {
+    "name": "independent-regression",
+    "cwd": "app",
+    "command": [
+      "flutter",
+      "test",
+      "/Volumes/data/App Development/Pourlune/docs/development/review/B02-evidence/replay-navigation-regression.dart"
+    ],
+    "exit_code": 0,
+    "seconds": 2.1
+  },
+  {
+    "name": "native-replay",
+    "cwd": "app",
+    "command": [
+      "flutter",
+      "test",
+      "integration_test/replay_navigation_test.dart",
+      "-d",
+      "4DF92321-95EC-4C8E-849C-0CF0AA6FE1D2",
+      "--dart-define=POURLUNE_SCENARIO=flow",
+      "--dart-define=POURLUNE_DATABASE=b02_native_review_r2.sqlite"
+    ],
+    "exit_code": 0,
+    "seconds": 45.3
+  },
+  {
+    "name": "android-build",
+    "cwd": "app",
+    "command": [
+      "flutter",
+      "build",
+      "apk",
+      "--debug"
+    ],
+    "exit_code": 0,
+    "seconds": 2.9
+  },
+  {
+    "name": "ios-build",
+    "cwd": "app",
+    "command": [
+      "flutter",
+      "build",
+      "ios",
+      "--simulator",
+      "--debug",
+      "--dart-define=POURLUNE_SCENARIO=final",
+      "--dart-define=POURLUNE_DATABASE=b02_review_final_r2.sqlite"
+    ],
+    "exit_code": 0,
+    "seconds": 14.3
+  }
+]

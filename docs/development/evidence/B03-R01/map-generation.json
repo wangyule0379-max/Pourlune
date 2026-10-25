@@ -1,0 +1,84 @@
+{
+  "task": "B03-R01 map asset only",
+  "status": "candidate; independent visual acceptance and rights unconfirmed",
+  "tool": {
+    "mode": "built-in image_gen",
+    "name": "image_gen__imagegen",
+    "transparent_background": true
+  },
+  "prompt": "Use case: stylized-concept\nAsset type: one isolated small in-game Chapters navigation icon, for an existing Flutter game.\nInput image: reference only, the approved Pourlune UI board. Follow the folded map icon at the bottom left of P02 HOME, and the soft handmade material palette of P03 CHAPTERS. Do not reproduce the board or any screen.\nPrimary request: recreate only that little folded knitted map as a standalone asset, with three gently zigzag-folded panels, cream knitted edging, bright soft green land, a gently winding sky-blue path, and one small coral-red location pin with a round open center above the right half.\nStyle/medium: polished soft 3D knitted yarn and stuffed textile, chunky visible knit loops, tactile rounded edges, handmade toy-like material matching the reference. Keep the compact slightly frontal elevated view and the original friendly saturated green, pale blue, warm ivory, coral red palette.\nComposition: one complete centered map icon filling approximately 80 percent of a square canvas, with clean transparent margin on all sides; recognizable at 44–56 logical pixels. No separate ground shadow.\nLighting: diffuse soft studio light from upper left, subtle yarn self-shading and gentle warm highlights, matching the approved reference.\nScene/backdrop: genuinely transparent background, RGBA alpha, no opaque background or simulated checkerboard.\nConstraints: ONLY the independent folded map and pin. No cream button frame or tile behind it. No words, letters, numerals, labels, UI, controls, border, watermarks, objects beside the map, complete pages, or redesigned interface. Preserve true transparency and do not bake any background color into the icon edge.",
+  "input": {
+    "role": "reference only; no original pixels edited",
+    "path": "docs/design/original/Pourlune_Design_Pack/boards/01_Entry_and_Chapters.png",
+    "areas": "P02 HOME bottom Chapters folded map icon; P03 CHAPTERS material/palette",
+    "sha256": "8fc04b49e44c6a742fc57e886ec6d733484e7874c76199ee32819fa8e3cb70f8",
+    "dimensions_px": [
+      1475,
+      1067
+    ]
+  },
+  "source": {
+    "path": "/Users/wangyule/.codex/generated_images/01a1604b-de1d-7d70-beb7-73a9a49b6875/exec-46fc0c0c-483e-47f1-a096-3caa89c0f033.png",
+    "selection": "only generated output; copied byte-for-byte; original generation file preserved",
+    "sha256": "82aa3f2b7c88549a8e0e4c89696341ffb241854eced63fce01e2cfdccb44d592"
+  },
+  "destinations": [
+    "docs/design/production-candidates/runtime/ui/chapters.png",
+    "app/assets/art/ui/chapters.png"
+  ],
+  "rights": {
+    "status": "UNCONFIRMED",
+    "basis": "AI-generated, reference-derived from approved original UI board; commercial ownership/license not verified"
+  },
+  "qa": {
+    "visual_observation": "One standalone folded knitted map, three green panels with ivory yarn edges, blue winding path and coral-red location pin. Soft diffuse highlights and chunky yarn material match the intended reference vocabulary. No button tile, letters, numerals, caption or complete UI. Map is wider and has chunkier yarn than the small source icon; reference-derived approximation, not exact original extraction.",
+    "intended_display": "44–56 logical pixels within native cream knit button; caption remains native Flutter text",
+    "alpha_limitation": "Generated faint low-alpha residue expands full nonzero bbox close to canvas edges. Raw alpha preserved without cleanup; use alpha>16 bbox as main silhouette diagnostic only.",
+    "scope": "File mode, alpha histogram/bboxes and byte identity inspected. No Flutter rendering, simulator, platform build, SDK, or independent acceptance performed.",
+    "pixels_modified": false
+  },
+  "output": {
+    "format": "PNG",
+    "mode": "RGBA",
+    "dimensions_px": [
+      1474,
+      1067
+    ],
+    "file_bytes": 1947825,
+    "bbox_convention": "[left, top, right-exclusive, bottom-exclusive]",
+    "alpha_nonzero_bbox": [
+      0,
+      9,
+      1472,
+      1067
+    ],
+    "alpha_gt16_bbox": [
+      165,
+      118,
+      1372,
+      1004
+    ],
+    "alpha_gt128_bbox": [
+      167,
+      122,
+      1371,
+      1003
+    ],
+    "alpha_min_max": [
+      0,
+      255
+    ],
+    "alpha_pixel_counts": {
+      "zero": 695630,
+      "one_to_16": 30374,
+      "17_to_127": 5796,
+      "128_to_254": 840888,
+      "255": 70
+    },
+    "low_alpha_1_to_16_fraction_of_canvas": 0.019312570656134002,
+    "total_pixels": 1572758,
+    "copies_byte_identical": true,
+    "resized_or_cleaned": false
+  },
+  "recorded_at_utc": "2026-10-21T21:10:57.197173+00:00"
+}

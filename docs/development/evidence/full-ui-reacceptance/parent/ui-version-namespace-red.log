@@ -1,0 +1,30 @@
+..F...FE.......................
+======================================================================
+ERROR: test_display_version_uses_pubspec_when_no_override (test_firebase_config.FirebaseConfigTest.test_display_version_uses_pubspec_when_no_override)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_firebase_config.py", line 462, in test_display_version_uses_pubspec_when_no_override
+    self.assertEqual((sent['POURLUNE_VERSION_NAME'], sent['POURLUNE_VERSION_CODE']),
+                      ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'POURLUNE_VERSION_NAME'
+
+======================================================================
+FAIL: test_caller_cannot_spoof_display_version (test_firebase_config.FirebaseConfigTest.test_caller_cannot_spoof_display_version)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_firebase_config.py", line 468, in test_caller_cannot_spoof_display_version
+    self.assertNotEqual(r.returncode, 0)
+AssertionError: 0 == 0
+
+======================================================================
+FAIL: test_display_version_matches_native_build_override (test_firebase_config.FirebaseConfigTest.test_display_version_matches_native_build_override)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/tools/validation/test_firebase_config.py", line 452, in test_display_version_matches_native_build_override
+    self.assertFalse(any(key.startswith('FLUTTER_BUILD_') for key in sent))
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 31 tests in 7.776s
+
+FAILED (failures=2, errors=1)

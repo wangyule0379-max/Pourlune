@@ -1,0 +1,364 @@
+--- a/app/android/app/src/main/kotlin/dev/pourlune/pourlune_dev/MainActivity.kt
++++ b/app/android/app/src/main/kotlin/dev/pourlune/pourlune_dev/MainActivity.kt
+@@ -1,5 +1,18 @@
+ package dev.pourlune.pourlune_dev
+ 
++import android.os.Build
++import android.os.Bundle
++import androidx.core.view.WindowCompat
+ import io.flutter.embedding.android.FlutterActivity
+ 
+-class MainActivity : FlutterActivity()
++class MainActivity : FlutterActivity() {
++    override fun onCreate(savedInstanceState: Bundle?) {
++        WindowCompat.setDecorFitsSystemWindows(window, false)
++        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
++            // The matching Flutter shell replaces the static system mark on readiness.
++            // No timer, retained splash or artificial initialization wait.
++            splashScreen.setOnExitAnimationListener { view -> view.remove() }
++        }
++        super.onCreate(savedInstanceState)
++    }
++}
+--- a/app/android/app/src/main/res/drawable-v21/launch_background.xml
++++ b/app/android/app/src/main/res/drawable-v21/launch_background.xml
+@@ -1,12 +1,7 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<!-- Modify this file to customize your launch splash screen -->
+ <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+-    <item android:drawable="?android:colorBackground" />
+-
+-    <!-- You can insert your own image assets here -->
+-    <!-- <item>
+-        <bitmap
+-            android:gravity="center"
+-            android:src="@mipmap/launch_image" />
+-    </item> -->
++    <item android:drawable="@color/startup_background" />
++    <item>
++        <bitmap android:gravity="center" android:src="@drawable/startup_wordmark" />
++    </item>
+ </layer-list>
+--- a/app/android/app/src/main/res/drawable/launch_background.xml
++++ b/app/android/app/src/main/res/drawable/launch_background.xml
+@@ -1,12 +1,7 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<!-- Modify this file to customize your launch splash screen -->
+ <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+-    <item android:drawable="@android:color/white" />
+-
+-    <!-- You can insert your own image assets here -->
+-    <!-- <item>
+-        <bitmap
+-            android:gravity="center"
+-            android:src="@mipmap/launch_image" />
+-    </item> -->
++    <item android:drawable="@color/startup_background" />
++    <item>
++        <bitmap android:gravity="center" android:src="@drawable/startup_wordmark" />
++    </item>
+ </layer-list>
+--- a/app/android/app/src/main/res/values-night/styles.xml
++++ b/app/android/app/src/main/res/values-night/styles.xml
+@@ -1,18 +1,15 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+-    <!-- Theme applied to the Android Window while the process is starting when the OS's Dark Mode setting is on -->
+     <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
+-        <!-- Show a splash screen on the activity. Automatically removed when
+-             the Flutter engine draws its first frame -->
+         <item name="android:windowBackground">@drawable/launch_background</item>
++        <item name="android:statusBarColor">@color/startup_background</item>
++        <item name="android:navigationBarColor">@color/startup_background</item>
++        <item name="android:windowLightStatusBar">true</item>
+     </style>
+-    <!-- Theme applied to the Android Window as soon as the process has started.
+-         This theme determines the color of the Android Window while your
+-         Flutter UI initializes, as well as behind your Flutter UI while its
+-         running.
+-
+-         This Theme is only used starting with V2 of Flutter's Android embedding. -->
+     <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
+-        <item name="android:windowBackground">?android:colorBackground</item>
++        <item name="android:windowBackground">@color/startup_background</item>
++        <item name="android:statusBarColor">@color/startup_background</item>
++        <item name="android:navigationBarColor">@color/startup_background</item>
++        <item name="android:windowLightStatusBar">true</item>
+     </style>
+ </resources>
+--- a/app/android/app/src/main/res/values/styles.xml
++++ b/app/android/app/src/main/res/values/styles.xml
+@@ -1,18 +1,15 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+-    <!-- Theme applied to the Android Window while the process is starting when the OS's Dark Mode setting is off -->
+     <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
+-        <!-- Show a splash screen on the activity. Automatically removed when
+-             the Flutter engine draws its first frame -->
+         <item name="android:windowBackground">@drawable/launch_background</item>
++        <item name="android:statusBarColor">@color/startup_background</item>
++        <item name="android:navigationBarColor">@color/startup_background</item>
++        <item name="android:windowLightStatusBar">true</item>
+     </style>
+-    <!-- Theme applied to the Android Window as soon as the process has started.
+-         This theme determines the color of the Android Window while your
+-         Flutter UI initializes, as well as behind your Flutter UI while its
+-         running.
+-
+-         This Theme is only used starting with V2 of Flutter's Android embedding. -->
+     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
+-        <item name="android:windowBackground">?android:colorBackground</item>
++        <item name="android:windowBackground">@color/startup_background</item>
++        <item name="android:statusBarColor">@color/startup_background</item>
++        <item name="android:navigationBarColor">@color/startup_background</item>
++        <item name="android:windowLightStatusBar">true</item>
+     </style>
+ </resources>
+--- a/app/ios/Runner/Base.lproj/LaunchScreen.storyboard
++++ b/app/ios/Runner/Base.lproj/LaunchScreen.storyboard
+@@ -16,11 +16,13 @@
+                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                         <subviews>
+-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="YRO-k0-Ey4">
++                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="YRO-k0-Ey4">
+                             </imageView>
+                         </subviews>
+-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
++                        <color key="backgroundColor" red="0.5098039215686274" green="0.8745098039215686" blue="0.9450980392156862" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                         <constraints>
++                            <constraint firstItem="YRO-k0-Ey4" firstAttribute="width" constant="176" id="startup-width"/>
++                            <constraint firstItem="YRO-k0-Ey4" firstAttribute="height" constant="70.2913" id="startup-height"/>
+                             <constraint firstItem="YRO-k0-Ey4" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="1a2-6s-vTC"/>
+                             <constraint firstItem="YRO-k0-Ey4" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="4X2-HB-R7a"/>
+                         </constraints>
+@@ -32,6 +34,6 @@
+         </scene>
+     </scenes>
+     <resources>
+-        <image name="LaunchImage" width="168" height="185"/>
++        <image name="LaunchImage" width="176" height="70"/>
+     </resources>
+ </document>
+--- a/app/ios/Runner/Base.lproj/Main.storyboard
++++ b/app/ios/Runner/Base.lproj/Main.storyboard
+@@ -16,7 +16,7 @@
+                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
++                        <color key="backgroundColor" red="0.5098039215686274" green="0.8745098039215686" blue="0.9450980392156862" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                     </view>
+                 </viewController>
+                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+--- a/app/lib/main.dart
++++ b/app/lib/main.dart
+@@ -258,6 +258,7 @@
+       localizationsDelegates: AppLocalizations.localizationsDelegates,
+       debugShowCheckedModeBanner: false,
+       theme: ThemeData(
++        scaffoldBackgroundColor: startupBackground,
+         fontFamily: 'Nunito',
+         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff061b78)),
+       ),
+--- a/app/lib/presentation/startup_view.dart
++++ b/app/lib/presentation/startup_view.dart
+@@ -4,7 +4,11 @@
+ import 'bottle.dart';
+ import 'knit_components.dart';
+ 
+-/// The local bootstrap has no invented progress or mandatory animation delay.
++// Also used by native Launch/Normal themes and the engine container storyboard.
++const startupBackground = Color(0xff82dff1);
++const startupMarkSize = Size(176, 176 * 776 / 1943);
++
++/// Matches the native static launch frame. Local readiness alone opens Home.
+ class StartupView extends StatelessWidget {
+   const StartupView({super.key, required this.failed, required this.onRetry});
+   final bool failed;
+@@ -12,50 +16,47 @@
+   @override
+   Widget build(BuildContext context) {
+     final l = AppLocalizations.of(context);
++    final brand = Semantics(
++      label: 'Pourlune',
++      header: true,
++      child: KnitArt(
++        name: 'logo',
++        width: startupMarkSize.width,
++        height: startupMarkSize.height,
++      ),
++    );
+     return Scaffold(
+-      backgroundColor: const Color(0xff82dff1),
+-      body: DecoratedBox(
+-        decoration: const BoxDecoration(
+-          image: DecorationImage(
+-            image: AssetImage('assets/art/backgrounds/game.png'),
+-            fit: BoxFit.cover,
+-          ),
+-        ),
+-        child: SizedBox.expand(
+-          child: SafeArea(
+-            child: SingleChildScrollView(
+-              padding: const EdgeInsets.all(16),
+-              child: Column(
+-                children: [
+-                  const SizedBox(height: 16),
+-                  Semantics(
+-                    label: 'Pourlune',
+-                    header: true,
+-                    child: const KnitArt(name: 'logo', height: 116),
++      backgroundColor: startupBackground,
++      body: failed
++          ? SafeArea(
++              child: Center(
++                child: SingleChildScrollView(
++                  padding: const EdgeInsets.all(16),
++                  child: Column(
++                    mainAxisSize: MainAxisSize.min,
++                    children: [
++                      brand,
++                      const SizedBox(height: 24),
++                      Semantics(
++                        liveRegion: true,
++                        child: Text(
++                          l.openFailed,
++                          textAlign: TextAlign.center,
++                          style: const TextStyle(color: ink, fontSize: 20),
++                        ),
++                      ),
++                      const SizedBox(height: 16),
++                      FilledButton(
++                        key: const Key('startup-retry'),
++                        onPressed: onRetry,
++                        child: Text(l.retry),
++                      ),
++                    ],
+                   ),
+-                  const SizedBox(height: 24),
+-                  if (failed) ...[
+-                    Semantics(
+-                      liveRegion: true,
+-                      child: Text(
+-                        l.openFailed,
+-                        textAlign: TextAlign.center,
+-                        style: const TextStyle(color: ink, fontSize: 20),
+-                      ),
+-                    ),
+-                    const SizedBox(height: 16),
+-                    FilledButton(
+-                      key: const Key('startup-retry'),
+-                      onPressed: onRetry,
+-                      child: Text(l.retry),
+-                    ),
+-                  ],
+-                ],
++                ),
+               ),
+-            ),
+-          ),
+-        ),
+-      ),
++            )
++          : Center(child: brand),
+     );
+   }
+ }
+--- a/app/test/startup_shell_test.dart
++++ b/app/test/startup_shell_test.dart
+@@ -0,0 +1,58 @@
++import 'package:flutter/material.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:pourlune_dev/l10n/app_localizations.dart';
++import 'package:pourlune_dev/presentation/knit_components.dart';
++import 'package:pourlune_dev/presentation/startup_view.dart';
++
++void main() {
++  testWidgets(
++    'initial Flutter shell matches centered native wordmark on blue',
++    (t) async {
++      await t.binding.setSurfaceSize(const Size(402, 874));
++      addTearDown(() => t.binding.setSurfaceSize(null));
++      await t.pumpWidget(
++        MaterialApp(
++          localizationsDelegates: AppLocalizations.localizationsDelegates,
++          supportedLocales: AppLocalizations.supportedLocales,
++          home: StartupView(failed: false, onRetry: () {}),
++        ),
++      );
++      final brand = find.byWidgetPredicate(
++        (w) => w is KnitArt && w.name == 'logo',
++      );
++      expect(t.getCenter(brand), const Offset(201, 437));
++      expect(t.getSize(brand).width, 176);
++      expect(
++        t.widget<Scaffold>(find.byType(Scaffold)).backgroundColor,
++        const Color(0xff82dff1),
++      );
++      expect(find.byType(CircularProgressIndicator), findsNothing);
++    },
++  );
++
++  testWidgets(
++    'small large-text startup failure keeps real retry action usable',
++    (t) async {
++      await t.binding.setSurfaceSize(const Size(320, 568));
++      addTearDown(() => t.binding.setSurfaceSize(null));
++      var retries = 0;
++      await t.pumpWidget(
++        MaterialApp(
++          localizationsDelegates: AppLocalizations.localizationsDelegates,
++          supportedLocales: AppLocalizations.supportedLocales,
++          builder: (context, child) => MediaQuery(
++            data: MediaQuery.of(context)
++                .copyWith(textScaler: TextScaler.linear(2)),
++            child: child!,
++          ),
++          home: StartupView(failed: true, onRetry: () => retries++),
++        ),
++      );
++      await t.pumpAndSettle();
++      await t.ensureVisible(find.byKey(const Key('startup-retry')));
++      await t.tap(find.byKey(const Key('startup-retry')));
++      expect(retries, 1);
++      expect(t.takeException(), isNull);
++    },
++  );
++}
+--- a/app/android/app/src/main/res/values-night-v31/styles.xml
++++ b/app/android/app/src/main/res/values-night-v31/styles.xml
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
++        <item name="android:windowBackground">@drawable/launch_background</item>
++        <item name="android:windowSplashScreenBackground">@color/startup_background</item>
++        <item name="android:windowSplashScreenAnimatedIcon">@drawable/startup_icon</item>
++        <item name="android:statusBarColor">@color/startup_background</item>
++        <item name="android:navigationBarColor">@color/startup_background</item>
++        <item name="android:windowLightStatusBar">true</item>
++    </style>
++</resources>
+--- a/app/android/app/src/main/res/values/colors.xml
++++ b/app/android/app/src/main/res/values/colors.xml
+@@ -0,0 +1,5 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <!-- Fixed light woven palette, also during OS dark-mode launch. -->
++    <color name="startup_background">#82DFF1</color>
++</resources>
+--- a/app/android/app/src/main/res/values-v31/styles.xml
++++ b/app/android/app/src/main/res/values-v31/styles.xml
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
++        <item name="android:windowBackground">@drawable/launch_background</item>
++        <item name="android:windowSplashScreenBackground">@color/startup_background</item>
++        <item name="android:windowSplashScreenAnimatedIcon">@drawable/startup_icon</item>
++        <item name="android:statusBarColor">@color/startup_background</item>
++        <item name="android:navigationBarColor">@color/startup_background</item>
++        <item name="android:windowLightStatusBar">true</item>
++    </style>
++</resources>

@@ -1,0 +1,14 @@
+{"ok": false, "path": "/Volumes/data/App Development/Pourlune/docs/development/review/flame-full-board-evidence/android/after/restore-during.json", "steps": 0, "frames": 0, "error": "Bad state: Native condition timed out"}
+Traceback (most recent call last):
+  File "/Volumes/data/App Development/Pourlune/docs/development/review/flame-full-board-evidence/review_driver.py", line 348, in <module>
+    main()
+  File "/Volumes/data/App Development/Pourlune/docs/development/review/flame-full-board-evidence/review_driver.py", line 284, in main
+    restore(args.platform, output, args.phase, background=args.action == 'background')
+  File "/Volumes/data/App Development/Pourlune/docs/development/review/flame-full-board-evidence/review_driver.py", line 129, in restore
+    before = command('prepare-restore', prefix + '-during')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/data/App Development/Pourlune/docs/development/review/flame-full-board-evidence/review_driver.py", line 91, in command
+    subprocess.run([str(Path(__import__('sys').executable)), str(script), platform, action,
+  File "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/Volumes/data/App Development/Pourlune/.venv/bin/python', '/Volumes/data/App Development/Pourlune/docs/development/review/flame-full-board-evidence/review_driver.py', 'android', 'prepare-restore', '--phase', 'after', '--id', 'restore-during']' returned non-zero exit status 1.

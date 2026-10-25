@@ -1,0 +1,33 @@
+[
+  {
+    "name": "visual-check",
+    "command": [
+      "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "tools/assets/visual_manifest.py",
+      "--check"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "ui-check",
+    "command": [
+      "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "tools/assets/ui_manifest.py",
+      "--check"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "assets",
+    "command": [
+      "/Users/wangyule/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools/assets",
+      "-v"
+    ],
+    "exit_code": 0
+  }
+]

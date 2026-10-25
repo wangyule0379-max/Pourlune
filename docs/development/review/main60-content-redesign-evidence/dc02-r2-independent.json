@@ -1,0 +1,361 @@
+{
+  "scope_frozen_files": 34,
+  "snapshot_files_unchanged_after_checks": 141,
+  "strategy_nodes": [
+    {
+      "level": 13,
+      "nodes_verified": [
+        {
+          "step": 7,
+          "before": [
+            "BPP",
+            "OPOO",
+            "B",
+            "OGGP",
+            "GG",
+            "BB"
+          ],
+          "after": [
+            "BPPP",
+            "OPOO",
+            "B",
+            "OGG",
+            "GG",
+            "BB"
+          ],
+          "units": 1,
+          "author_causal_claim": "1中BPP仍留1容量，4顶P才能并入；若先把该槽占满就不能照此路线继续，需改走其他合法策略。"
+        },
+        {
+          "step": 10,
+          "before": [
+            "BPPP",
+            "OP",
+            "B",
+            "OOO",
+            "GGGG",
+            "BB"
+          ],
+          "after": [
+            "BPPP",
+            "OP",
+            "",
+            "OOO",
+            "GGGG",
+            "BBB"
+          ],
+          "units": 1,
+          "author_causal_claim": "3中最后B归到6后，P目标3首次成为真实接收空间；第11/12步将借放在1/2中的P收回。"
+        }
+      ],
+      "scope": "exact node states and contiguous phase ranges; causal prose separately read by parent; no human playtest"
+    },
+    {
+      "level": 20,
+      "nodes_verified": [
+        {
+          "step": 7,
+          "before": [
+            "B",
+            "GPPG",
+            "GGPP",
+            "B",
+            "BB",
+            "OOOO"
+          ],
+          "after": [
+            "",
+            "GPPG",
+            "GGPP",
+            "BB",
+            "BB",
+            "OOOO"
+          ],
+          "units": 1,
+          "author_causal_claim": "1的B进入4后腾出目标空间；这时2=GPPG、3=GGPP仍混色，不是末尾整瓶标签互换。"
+        },
+        {
+          "step": 9,
+          "before": [
+            "",
+            "GPPG",
+            "GGPP",
+            "BBBB",
+            "",
+            "OOOO"
+          ],
+          "after": [
+            "",
+            "GPPG",
+            "GG",
+            "BBBB",
+            "PP",
+            "OOOO"
+          ],
+          "units": 2,
+          "author_causal_claim": "5已经从BB清空，3的PP才有位置离开；这直接暴露GG，使第10步2顶G可合并到3并揭露2的PP。"
+        }
+      ],
+      "scope": "exact node states and contiguous phase ranges; causal prose separately read by parent; no human playtest"
+    },
+    {
+      "level": 21,
+      "nodes_verified": [
+        {
+          "step": 6,
+          "before": [
+            "G",
+            "GGOO",
+            "PPBB",
+            "BOBO",
+            "PP",
+            "G"
+          ],
+          "after": [
+            "",
+            "GGOO",
+            "PPBB",
+            "BOBO",
+            "PP",
+            "GG"
+          ],
+          "units": 1,
+          "author_causal_claim": "1真空，而3=PPBB、4=BOBO仍混色；第7/8步能接O的空间来自这次腾空。"
+        },
+        {
+          "step": 10,
+          "before": [
+            "OOO",
+            "GGGG",
+            "PPBB",
+            "BOB",
+            "PP",
+            ""
+          ],
+          "after": [
+            "OOO",
+            "GGGG",
+            "PP",
+            "BOB",
+            "PP",
+            "BB"
+          ],
+          "units": 2,
+          "author_causal_claim": "6从G用途回收后转接B；这发生在3/4仍混色时，并释放P目标3的底层PP。"
+        }
+      ],
+      "scope": "exact node states and contiguous phase ranges; causal prose separately read by parent; no human playtest"
+    },
+    {
+      "level": 40,
+      "nodes_verified": [
+        {
+          "step": 9,
+          "before": [
+            "BPBB",
+            "GGGG",
+            "POOO",
+            "BOPP",
+            "",
+            ""
+          ],
+          "after": [
+            "BP",
+            "GGGG",
+            "POOO",
+            "BOPP",
+            "BB",
+            ""
+          ],
+          "units": 2,
+          "author_causal_claim": "缓冲5清空后接1的BB；这使1露出P，并在第10步接4的PP，容量恰能形成BPPP。"
+        },
+        {
+          "step": 12,
+          "before": [
+            "B",
+            "GGGG",
+            "POOO",
+            "BO",
+            "BB",
+            "PPP"
+          ],
+          "after": [
+            "",
+            "GGGG",
+            "POOO",
+            "BO",
+            "BBB",
+            "PPP"
+          ],
+          "units": 1,
+          "author_causal_claim": "6承担P后，1的B才可归5；1腾空使3/4里的O可顺序回收。此时3=POOO、4=BO仍混色。"
+        }
+      ],
+      "scope": "exact node states and contiguous phase ranges; causal prose separately read by parent; no human playtest"
+    },
+    {
+      "level": 41,
+      "nodes_verified": [
+        {
+          "step": 10,
+          "before": [
+            "PPP",
+            "GGGG",
+            "PBB",
+            "OBB",
+            "OOO",
+            ""
+          ],
+          "after": [
+            "PPP",
+            "GGGG",
+            "P",
+            "OBB",
+            "OOO",
+            "BB"
+          ],
+          "units": 2,
+          "author_causal_claim": "6从G换B时3=PBB、4=OBB仍混合；收走BB才让1的PPP进入3并腾空1。"
+        },
+        {
+          "step": 11,
+          "before": [
+            "PPP",
+            "GGGG",
+            "P",
+            "OBB",
+            "OOO",
+            "BB"
+          ],
+          "after": [
+            "",
+            "GGGG",
+            "PPPP",
+            "OBB",
+            "OOO",
+            "BB"
+          ],
+          "units": 3,
+          "author_causal_claim": "清空1的能力依赖上一动作释放3的容量，随后4中剩余覆盖解除，O才可回1。"
+        }
+      ],
+      "scope": "exact node states and contiguous phase ranges; causal prose separately read by parent; no human playtest"
+    },
+    {
+      "level": 53,
+      "nodes_verified": [
+        {
+          "step": 10,
+          "before": [
+            "PP",
+            "GGGG",
+            "PO",
+            "POOO",
+            "",
+            "BBBB"
+          ],
+          "after": [
+            "PP",
+            "GGGG",
+            "P",
+            "POOO",
+            "O",
+            "BBBB"
+          ],
+          "units": 1,
+          "author_causal_claim": "5先接G后清空，再接3的O；4=POOO仍混色。腾出O使3露P，给第12/13步收P提供接收容量。"
+        }
+      ],
+      "scope": "exact node states and contiguous phase ranges; causal prose separately read by parent; no human playtest"
+    },
+    {
+      "level": 60,
+      "nodes_verified": [
+        {
+          "step": 4,
+          "before": [
+            "GBBB",
+            "GBP",
+            "OPOO",
+            "OPP",
+            "GG",
+            ""
+          ],
+          "after": [
+            "GBBB",
+            "GB",
+            "OPOO",
+            "OPPP",
+            "GG",
+            ""
+          ],
+          "units": 1,
+          "author_causal_claim": "把2的P并到4不是归位，目的是露出2的B，使第6步B并到6，随后1/2底G能合并并回收5。"
+        },
+        {
+          "step": 9,
+          "before": [
+            "",
+            "GGGG",
+            "OPOO",
+            "OPPP",
+            "",
+            "BBBB"
+          ],
+          "after": [
+            "",
+            "GGGG",
+            "OPOO",
+            "O",
+            "PPP",
+            "BBBB"
+          ],
+          "units": 3,
+          "author_causal_claim": "回收5后承接4的PPP；这直接开放4的O顶面。若5仍被G占着，该后续不能按本路线执行。"
+        },
+        {
+          "step": 11,
+          "before": [
+            "",
+            "GGGG",
+            "OP",
+            "OOO",
+            "PPP",
+            "BBBB"
+          ],
+          "after": [
+            "",
+            "GGGG",
+            "O",
+            "OOO",
+            "PPPP",
+            "BBBB"
+          ],
+          "units": 1,
+          "author_causal_claim": "3的OO已移至4后才露P；P进入5凑齐，从而释放3底O；第12步把O并到4腾出P目标3，形成归位链。"
+        }
+      ],
+      "scope": "exact node states and contiguous phase ranges; causal prose separately read by parent; no human playtest"
+    }
+  ],
+  "level28": {
+    "old_positive_claim": "failed; preserved",
+    "independent_conditional_depth": 14,
+    "independent_conditional_visited": 22867,
+    "solution_with_truncation_found": false,
+    "single_deletion_wins": [
+      2
+    ],
+    "negative_branch_length": 15,
+    "without_redundant_step_length": 14,
+    "general_impossibility_claim": false
+  },
+  "regression_mutation": {
+    "red_exit": 1,
+    "red_output": "test_dc02_r01_deleted_capacity_move_changes_later_maximum_units_but_still_wins (test_measure_levels.MeasurementTests.test_dc02_r01_deleted_capacity_move_changes_later_maximum_units_but_still_wins) ... FAIL\n\n======================================================================\nFAIL: test_dc02_r01_deleted_capacity_move_changes_later_maximum_units_but_still_wins (test_measure_levels.MeasurementTests.test_dc02_r01_deleted_capacity_move_changes_later_maximum_units_but_still_wins)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Volumes/data/App Development/Pourlune/build/main60-parent-review-20261023-r2/tools/content/test_measure_levels.py\", line 94, in test_dc02_r01_deleted_capacity_move_changes_later_maximum_units_but_still_wins\n    self.assertEqual([r['removed_1_based_step'] for r in audited], [2])\nAssertionError: Lists differ: [] != [2]\n\nSecond list contains 1 additional elements.\nFirst extra element 0:\n2\n\n- []\n+ [2]\n?  +\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n",
+    "green_exit": 0,
+    "green_output": "test_dc02_r01_deleted_capacity_move_changes_later_maximum_units_but_still_wins (test_measure_levels.MeasurementTests.test_dc02_r01_deleted_capacity_move_changes_later_maximum_units_but_still_wins) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nOK\n"
+  },
+  "physical_or_human_playtest": false
+}

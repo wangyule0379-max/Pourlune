@@ -1,0 +1,32 @@
+[
+  {
+    "probe": "insecure-url",
+    "exit": 1,
+    "error": {
+      "ok": false,
+      "code": "invalid_public_destination_support_url"
+    },
+    "output_created": false,
+    "native_build_or_key_creation": false
+  },
+  {
+    "probe": "partial-signing",
+    "exit": 1,
+    "error": {
+      "ok": false,
+      "code": "android_signing_requires_android_and_complete_explicit_assets"
+    },
+    "output_created": false,
+    "native_build_or_key_creation": false
+  },
+  {
+    "probe": "missing-keystore",
+    "exit": 1,
+    "error": {
+      "ok": false,
+      "code": "android_signing_file_missing_or_unreadable"
+    },
+    "output_created": false,
+    "native_build_or_key_creation": false
+  }
+]

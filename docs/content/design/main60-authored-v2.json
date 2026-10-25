@@ -1,0 +1,5255 @@
+{
+  "scope": "60 authored inputs; automated proof and human experience are separate; no runtime procedural generation",
+  "levels": [
+    {
+      "level": 1,
+      "preserve": true,
+      "strategy_notes": "保留原始盘面与原参考解；教程连续性/原12关身份为固定锚点。"
+    },
+    {
+      "level": 2,
+      "board": [
+        [
+          "G",
+          "O",
+          "O",
+          "O"
+        ],
+        [
+          "O",
+          "G",
+          "G",
+          "G"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        }
+      ],
+      "source_seed": 202610250030,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "步骤1先移走1号的O3，步骤2把2号的G3暂借给1号。步骤3清空2号；该新空位在步骤4接G4，腾出的1号再接O4。不是第1关的换色副本。"
+    },
+    {
+      "level": 3,
+      "board": [
+        [
+          "G",
+          "G",
+          "G",
+          "O"
+        ],
+        [
+          "O",
+          "G",
+          "O",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        }
+      ],
+      "source_seed": 202610250016,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "步骤3将2号G1倒入O目标1号的G3，合法性取决于顶色与余量。随后步骤4清空2号，步骤5/6才把G/O送回各自标签。"
+    },
+    {
+      "level": 4,
+      "board": [
+        [
+          "G",
+          "O",
+          "O",
+          "G"
+        ],
+        [
+          "O",
+          "G",
+          "O",
+          "G"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        }
+      ],
+      "source_seed": 202610250014,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "步骤5用2号接O3揭露1号底部G；步骤6清空1号，步骤7/8依次让两个空位接回O4、G4。8步是完整BFS最短，不靠可删倒回凑节点。拼片仍由既有稳定ID事务决定。"
+    },
+    {
+      "level": 5,
+      "board": [
+        [
+          "O",
+          "O",
+          "G",
+          "G"
+        ],
+        [
+          "O",
+          "P",
+          "P",
+          "P"
+        ],
+        [
+          "G",
+          "G",
+          "O",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        }
+      ],
+      "source_seed": 202610260016,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "步骤1/2把2号的P3与3号的P1收集到4号。步骤3从2号清出O1，使2号能接步骤4的G2；步骤5清出3号O2再完成G/P归位。三色均实际搬运，新增色不靠开局完成目标送过关。"
+    },
+    {
+      "level": 6,
+      "board": [
+        [
+          "G",
+          "O",
+          "O",
+          "P"
+        ],
+        [
+          "G",
+          "G",
+          "O",
+          "O"
+        ],
+        [
+          "G",
+          "P",
+          "P",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 4,
+          "to_index": 0
+        }
+      ],
+      "source_seed": 202610260004,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "4号从步骤1/5暂存P，5号从步骤2/3暂存O。步骤4/6先让G回到2号，再由步骤7清4号、步骤8清5号。两只缓冲各承担不同颜色，不能把标签当接收限制。"
+    },
+    {
+      "level": 7,
+      "board": [
+        [
+          "G",
+          "G",
+          "O",
+          "O"
+        ],
+        [
+          "O",
+          "O",
+          "P",
+          "P"
+        ],
+        [
+          "G",
+          "G",
+          "P",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        }
+      ],
+      "source_seed": 202610260009,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "第4步前选择1→3或3→1都能合并G，但前者清空O目标1号，余下最少3步；反向会清空P目标3号，余下最少4步。比较的是实际新空位用途，不把次优说成死局。"
+    },
+    {
+      "level": 8,
+      "board": [
+        [
+          "G",
+          "P",
+          "P",
+          "P"
+        ],
+        [
+          "P",
+          "O",
+          "O",
+          "O"
+        ],
+        [
+          "O",
+          "G",
+          "G",
+          "G"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        }
+      ],
+      "source_seed": 202610260000,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "步骤3以后，1号是G4、3号是O4，都满且整色但标签错误。步骤4清空2号，再按1→2、3→1、4→3完成固定标签闭环。"
+    },
+    {
+      "level": 9,
+      "board": [
+        [
+          "P",
+          "P",
+          "G",
+          "G"
+        ],
+        [
+          "B",
+          "B",
+          "P",
+          "P"
+        ],
+        [
+          "B",
+          "G",
+          "O",
+          "O"
+        ],
+        [
+          "B",
+          "O",
+          "O",
+          "G"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        },
+        {
+          "from_index": 5,
+          "to_index": 2
+        }
+      ],
+      "source_seed": 202610270033,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "四只目标初始均混色，前两步从1号释放G2/P2到两只缓冲，获得首个空目标。步骤4用它收O；P缓冲待3号清空后再在步骤11归位。"
+    },
+    {
+      "level": 10,
+      "board": [
+        [
+          "O",
+          "O",
+          "P",
+          "P"
+        ],
+        [
+          "B",
+          "G",
+          "G",
+          "O"
+        ],
+        [
+          "P",
+          "B",
+          "B",
+          "P"
+        ],
+        [
+          "G",
+          "B",
+          "G",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        }
+      ],
+      "source_seed": 202610270099,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "5号先收P2/P1，步骤7把P3送回3号而变空。步骤8收G3，揭露2号B；步骤9/10清4号G后，B4与G4才在步骤11/12归位。同一缓冲两种用途有不同依赖，参考无可删单步或局部短替代。"
+    },
+    {
+      "level": 11,
+      "board": [
+        [
+          "O",
+          "O",
+          "B",
+          "P"
+        ],
+        [
+          "P",
+          "P",
+          "O",
+          "B"
+        ],
+        [
+          "B",
+          "G",
+          "P",
+          "O"
+        ],
+        [
+          "B",
+          "G",
+          "G",
+          "G"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        }
+      ],
+      "source_seed": 202610270000,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "参考先移4号G3，暴露B来接2号B；2号O与3号P随后串接。另一开局1→5先暂存P会形成另一条覆盖释放顺序，完整分支保留，不把11步或12步直接称为玩家难度。"
+    },
+    {
+      "level": 12,
+      "preserve": true,
+      "strategy_notes": "保留原始盘面与原参考解；教程连续性/原12关身份为固定锚点。"
+    },
+    {
+      "level": 13,
+      "board": [
+        [
+          "B",
+          "P",
+          "B",
+          "O"
+        ],
+        [
+          "O",
+          "P",
+          "O",
+          "G"
+        ],
+        [
+          "B",
+          "G",
+          "B",
+          "P"
+        ],
+        [
+          "O",
+          "G",
+          "G",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        },
+        {
+          "from_index": 5,
+          "to_index": 3
+        }
+      ],
+      "source": "accepted DC02 representative; board/ref retained",
+      "strategy_notes": "沿用已独立复核的代表关具体因果节点；详strategy-review.md及父DC02审查，最终真人难度尚未通过。"
+    },
+    {
+      "level": 14,
+      "board": [
+        [
+          "O",
+          "G",
+          "O",
+          "B"
+        ],
+        [
+          "B",
+          "P",
+          "P",
+          "G"
+        ],
+        [
+          "B",
+          "G",
+          "G",
+          "P"
+        ],
+        [
+          "O",
+          "O",
+          "B",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 2
+        }
+      ],
+      "source_seed": 202610270155,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "6号先暂存O。步骤6清空4号后，步骤7让4号接1号G2，露出1号O；步骤8清6号回O，步骤9/10改由6号接P3/P1。4号这个中转把O回收和P收集串起来，最后两只缓冲分别归位。"
+    },
+    {
+      "level": 15,
+      "board": [
+        [
+          "G",
+          "B",
+          "P",
+          "B"
+        ],
+        [
+          "O",
+          "P",
+          "B",
+          "G"
+        ],
+        [
+          "P",
+          "O",
+          "P",
+          "B"
+        ],
+        [
+          "G",
+          "G",
+          "O",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        }
+      ],
+      "source_seed": 202610270011,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "开局1→5搬B1，剩余最短13步；先4→5搬O2，剩余最短14步。小块先揭露P，使1/3两瓶的P和B交替释放；大块先行合法但整体多一步，附两条完整分支。"
+    },
+    {
+      "level": 16,
+      "board": [
+        [
+          "O",
+          "O",
+          "P",
+          "O"
+        ],
+        [
+          "B",
+          "B",
+          "B",
+          "G"
+        ],
+        [
+          "G",
+          "B",
+          "G",
+          "P"
+        ],
+        [
+          "P",
+          "P",
+          "G",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 4,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        },
+        {
+          "from_index": 5,
+          "to_index": 2
+        }
+      ],
+      "source_seed": 202610270051,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "步骤1–6借1号收P再回O，腾出5号；步骤7把3号G2交给5号并揭露B，开启第二段。步骤8–14解除B/G/P依赖并回标签。两段通过同一5号容量相接。"
+    },
+    {
+      "level": 17,
+      "board": [
+        [
+          "B",
+          "B",
+          "G",
+          "G"
+        ],
+        [
+          "P",
+          "G",
+          "G",
+          "O"
+        ],
+        [
+          "B",
+          "O",
+          "B",
+          "O"
+        ],
+        [
+          "O",
+          "P",
+          "P",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        },
+        {
+          "from_index": 5,
+          "to_index": 3
+        }
+      ],
+      "source_seed": 202610270024,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "两只缓冲分别收G与B，O直接收进步骤2清出的1号。步骤9/10把P分批送回3号后再收尾，保留四色与回收计划，但减少跨色缓冲换用作为阶段缓和。"
+    },
+    {
+      "level": 18,
+      "board": [
+        [
+          "B",
+          "B",
+          "B",
+          "P"
+        ],
+        [
+          "O",
+          "P",
+          "O",
+          "B"
+        ],
+        [
+          "P",
+          "G",
+          "G",
+          "P"
+        ],
+        [
+          "O",
+          "G",
+          "O",
+          "G"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 5,
+          "to_index": 1
+        }
+      ],
+      "source_seed": 202610270017,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "步骤2把O目标1号暂时装成B4，因此此时不能接O。先处理2/3/4号交错的O/P/G，步骤11清4号后步骤12将B4搬回，步骤13才让O归1号。"
+    },
+    {
+      "level": 19,
+      "board": [
+        [
+          "B",
+          "O",
+          "G",
+          "P"
+        ],
+        [
+          "G",
+          "P",
+          "G",
+          "G"
+        ],
+        [
+          "B",
+          "B",
+          "O",
+          "O"
+        ],
+        [
+          "P",
+          "B",
+          "O",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 5,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        },
+        {
+          "from_index": 5,
+          "to_index": 0
+        }
+      ],
+      "source_seed": 202610270607,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "6号在前半段收G，步骤7回G到2号后变空；步骤8/9借它接两瓶O并露出B。O链的释放依赖G链先回收这只空间，之后B/P才能完成，不是两个互不相关的小盘并置。"
+    },
+    {
+      "level": 20,
+      "board": [
+        [
+          "B",
+          "O",
+          "P",
+          "B"
+        ],
+        [
+          "G",
+          "P",
+          "P",
+          "G"
+        ],
+        [
+          "G",
+          "G",
+          "P",
+          "O"
+        ],
+        [
+          "B",
+          "O",
+          "O",
+          "B"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        },
+        {
+          "from_index": 5,
+          "to_index": 0
+        }
+      ],
+      "source": "accepted DC02 representative; board/ref retained",
+      "strategy_notes": "沿用已独立复核的代表关具体因果节点；详strategy-review.md及父DC02审查，最终真人难度尚未通过。"
+    },
+    {
+      "level": 21,
+      "board": [
+        [
+          "G",
+          "B",
+          "G",
+          "O"
+        ],
+        [
+          "G",
+          "G",
+          "O",
+          "P"
+        ],
+        [
+          "P",
+          "P",
+          "B",
+          "P"
+        ],
+        [
+          "B",
+          "O",
+          "B",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 5,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        },
+        {
+          "from_index": 5,
+          "to_index": 3
+        }
+      ],
+      "source": "accepted DC02 representative; board/ref retained",
+      "strategy_notes": "沿用已独立复核的代表关具体因果节点；详strategy-review.md及父DC02审查，最终真人难度尚未通过。"
+    },
+    {
+      "level": 22,
+      "board": [
+        [
+          "B",
+          "P",
+          "O",
+          "P"
+        ],
+        [
+          "G",
+          "P",
+          "B",
+          "O"
+        ],
+        [
+          "P",
+          "O",
+          "G",
+          "O"
+        ],
+        [
+          "G",
+          "B",
+          "G",
+          "B"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 4,
+          "to_index": 0
+        }
+      ],
+      "source_seed": 202610270007,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "参考步骤3把4号B借入G目标2号，步骤4将3号G借给4号，形成交叉暂存。步骤6–10利用3号逐批收P，释放1/2号；步骤11–14再解G/B交叉，未使用额外瓶。"
+    },
+    {
+      "level": 23,
+      "board": [
+        [
+          "P",
+          "B",
+          "G",
+          "B"
+        ],
+        [
+          "P",
+          "G",
+          "G",
+          "P"
+        ],
+        [
+          "P",
+          "B",
+          "O",
+          "B"
+        ],
+        [
+          "O",
+          "G",
+          "O",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 1
+        }
+      ],
+      "source_seed": 202610270010,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "第8步前，3号的O1盖着B/P。先3→1移O，剩余最短7步；先4→3合并O会把3号顶层扩成O2，剩余最短8步。前者先暴露B去5号，再让P进入其正确目标3号。"
+    },
+    {
+      "level": 24,
+      "board": [
+        [
+          "G",
+          "G",
+          "O",
+          "P"
+        ],
+        [
+          "P",
+          "O",
+          "G",
+          "B"
+        ],
+        [
+          "G",
+          "B",
+          "B",
+          "P"
+        ],
+        [
+          "O",
+          "O",
+          "B",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        },
+        {
+          "from_index": 5,
+          "to_index": 0
+        }
+      ],
+      "source_seed": 202610270022,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "第12步前B可由3→4完成，O也可由6→1完成。两个动作均合法、各自余下3步，但分别先释放3号与6号，后续次序不同；不硬编码唯一颜色顺序。"
+    },
+    {
+      "level": 25,
+      "board": [
+        [
+          "G",
+          "O",
+          "P",
+          "G"
+        ],
+        [
+          "G",
+          "O",
+          "B",
+          "B"
+        ],
+        [
+          "P",
+          "B",
+          "G",
+          "P"
+        ],
+        [
+          "P",
+          "O",
+          "B",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 2
+        }
+      ],
+      "source_seed": 202610270229,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "5号前半段收G、6号收P。步骤8清1号、步骤9回O到1号后暴露2号G；步骤10把5号G回2号，步骤11/12让5号接B，接替B暂存用途。不是按画面左右固定绑定颜色。"
+    },
+    {
+      "level": 26,
+      "board": [
+        [
+          "P",
+          "B",
+          "P",
+          "O"
+        ],
+        [
+          "O",
+          "O",
+          "G",
+          "B"
+        ],
+        [
+          "B",
+          "O",
+          "P",
+          "G"
+        ],
+        [
+          "P",
+          "B",
+          "G",
+          "G"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        }
+      ],
+      "source_seed": 202610270016,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "P分散在1、3、4号三个来源，1号含两个P。步骤6/8先把P从1/3号分批整理，露出B/O；步骤10–13先腾4号再将P送回3号。一次收集全P不等于能直接归位，必须解它下面的B/O。"
+    },
+    {
+      "level": 27,
+      "board": [
+        [
+          "O",
+          "G",
+          "G",
+          "B"
+        ],
+        [
+          "B",
+          "P",
+          "P",
+          "O"
+        ],
+        [
+          "O",
+          "O",
+          "G",
+          "G"
+        ],
+        [
+          "P",
+          "B",
+          "P",
+          "B"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 1
+        }
+      ],
+      "source_seed": 202610270030,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "G/B各用一只缓冲。步骤5先完成O并清3号给P2，随后按B/P交替剥开4号。没有色数回落；相较26/28减少目标反复借用作为有界缓和。"
+    },
+    {
+      "level": 28,
+      "board": [
+        [
+          "B",
+          "B",
+          "G",
+          "P"
+        ],
+        [
+          "O",
+          "P",
+          "O",
+          "O"
+        ],
+        [
+          "G",
+          "P",
+          "O",
+          "B"
+        ],
+        [
+          "B",
+          "G",
+          "G",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        },
+        {
+          "from_index": 5,
+          "to_index": 0
+        }
+      ],
+      "source": "accepted DC02 representative; board/ref retained",
+      "strategy_notes": "14步正常路线保留；旧15步容量分支第2步可删，是无收益截断反例，不能当正向收益。"
+    },
+    {
+      "level": 29,
+      "board": [
+        [
+          "G",
+          "P",
+          "B",
+          "B"
+        ],
+        [
+          "G",
+          "B",
+          "O",
+          "G"
+        ],
+        [
+          "O",
+          "B",
+          "P",
+          "P"
+        ],
+        [
+          "O",
+          "G",
+          "P",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 2
+        }
+      ],
+      "source_seed": 202610270025,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "1号底部G被P/BB覆盖，步骤1/5移开后仍先借它收别处G；O在3号收齐，步骤11先把G回2号，步骤12/13经4号把O回1号，不能把深层目标当开局可直接归位。"
+    },
+    {
+      "level": 30,
+      "board": [
+        [
+          "O",
+          "G",
+          "B",
+          "O"
+        ],
+        [
+          "P",
+          "O",
+          "G",
+          "G"
+        ],
+        [
+          "B",
+          "P",
+          "B",
+          "O"
+        ],
+        [
+          "P",
+          "P",
+          "B",
+          "G"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 4,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 1
+        }
+      ],
+      "source_seed": 202610270284,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "5号步骤1/2/5收O，步骤8送回1号后变空；步骤9收3号B2揭露P。后半段P经过2/4号接力，B再归4号，5号的回收实际开启第二链。"
+    },
+    {
+      "level": 31,
+      "board": [
+        [
+          "B",
+          "G",
+          "O",
+          "O"
+        ],
+        [
+          "P",
+          "G",
+          "O",
+          "G"
+        ],
+        [
+          "P",
+          "B",
+          "B",
+          "G"
+        ],
+        [
+          "P",
+          "B",
+          "O",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 4,
+          "to_index": 0
+        },
+        {
+          "from_index": 5,
+          "to_index": 1
+        }
+      ],
+      "source_seed": 202610270026,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "保留1→5(O2)与2→5(G1)两种非缓冲对调的开局。两条完整解分别先建立O与G收集，后续第3–5步局面不同；等长也如实记录，不要求唯一解。"
+    },
+    {
+      "level": 32,
+      "board": [
+        [
+          "P",
+          "P",
+          "O",
+          "G"
+        ],
+        [
+          "G",
+          "B",
+          "G",
+          "G"
+        ],
+        [
+          "B",
+          "B",
+          "B",
+          "P"
+        ],
+        [
+          "O",
+          "O",
+          "P",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 4,
+          "to_index": 0
+        }
+      ],
+      "source_seed": 202610270201,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "5号先收G，步骤5将2号B1清给3号后步骤6回G腾空5号。步骤7/9改收O，使4号P能借1号再回3号；空间复用和分批收集在同一链内。"
+    },
+    {
+      "level": 33,
+      "board": [
+        [
+          "O",
+          "G",
+          "O",
+          "B"
+        ],
+        [
+          "P",
+          "B",
+          "O",
+          "P"
+        ],
+        [
+          "P",
+          "P",
+          "G",
+          "O"
+        ],
+        [
+          "G",
+          "B",
+          "G",
+          "B"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 0
+        }
+      ],
+      "source_seed": 202610270035,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "步骤8将2号P1送到3号完成P，同时清空的是来源2号。步骤9借空2号接1号G2，暴露1号O；步骤11/13继续收4号G，释放其夹层B给5号。P的完成因此服务G/O/B链，满的3号本身并未变空。"
+    },
+    {
+      "level": 34,
+      "board": [
+        [
+          "O",
+          "P",
+          "O",
+          "B"
+        ],
+        [
+          "P",
+          "B",
+          "O",
+          "P"
+        ],
+        [
+          "G",
+          "P",
+          "G",
+          "G"
+        ],
+        [
+          "G",
+          "B",
+          "B",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 0
+        }
+      ],
+      "source_seed": 202610270032,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "步骤3先把P借入O目标1号，步骤6再把它转回2号，露出底部O；步骤7接4号O。随后G与P在2/3/4号归位，步骤15最后补O，明确记录暂借到正确归位的转换。"
+    },
+    {
+      "level": 35,
+      "board": [
+        [
+          "O",
+          "B",
+          "O",
+          "P"
+        ],
+        [
+          "P",
+          "P",
+          "G",
+          "G"
+        ],
+        [
+          "B",
+          "G",
+          "G",
+          "B"
+        ],
+        [
+          "O",
+          "P",
+          "B",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        },
+        {
+          "from_index": 5,
+          "to_index": 1
+        }
+      ],
+      "source_seed": 202610270361,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "步骤7清空4号，步骤8接1号B3以暴露O；步骤9回收6号的O到1号，步骤10/11改用6号接G并露P/B。两个空间转换彼此衔接，不是只在空缓冲间搬整色。"
+    },
+    {
+      "level": 36,
+      "board": [
+        [
+          "O",
+          "B",
+          "P",
+          "P"
+        ],
+        [
+          "O",
+          "O",
+          "G",
+          "P"
+        ],
+        [
+          "P",
+          "G",
+          "O",
+          "B"
+        ],
+        [
+          "G",
+          "B",
+          "G",
+          "B"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        },
+        {
+          "from_index": 5,
+          "to_index": 3
+        }
+      ],
+      "source_seed": 202610270061,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "步骤7已把O完整归1号，后续不再动它。剩余G/P/B仍需步骤8交换G暂存、步骤9–12从4号交替拆B/G，再把两缓冲回收。不是先送一个现成完成瓶。"
+    },
+    {
+      "level": 37,
+      "board": [
+        [
+          "O",
+          "B",
+          "O",
+          "O"
+        ],
+        [
+          "O",
+          "P",
+          "B",
+          "B"
+        ],
+        [
+          "G",
+          "P",
+          "G",
+          "B"
+        ],
+        [
+          "P",
+          "G",
+          "G",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        }
+      ],
+      "source_seed": 202610270005,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "B缓冲解除1/2/3号覆盖；步骤8回O后清出的2号用来接G，步骤10–12完成P/G交换。四色、借位与空位回收保留，结构比前后组合关更集中。"
+    },
+    {
+      "level": 38,
+      "board": [
+        [
+          "G",
+          "G",
+          "O",
+          "B"
+        ],
+        [
+          "O",
+          "P",
+          "G",
+          "B"
+        ],
+        [
+          "B",
+          "O",
+          "P",
+          "B"
+        ],
+        [
+          "P",
+          "G",
+          "P",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 0
+        }
+      ],
+      "source_seed": 202610270020,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "第8步前3号只有B1，5号B3。先3→5清空P目标3号，后续总共10步；若反向5→3提前把错误P目标装成B4，仍可解但总共11步。真实差异是少了正确P接收位置，非声称所有整色凑满都有害。"
+    },
+    {
+      "level": 39,
+      "board": [
+        [
+          "G",
+          "P",
+          "P",
+          "B"
+        ],
+        [
+          "B",
+          "P",
+          "O",
+          "G"
+        ],
+        [
+          "G",
+          "O",
+          "O",
+          "G"
+        ],
+        [
+          "B",
+          "O",
+          "P",
+          "B"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 2
+        }
+      ],
+      "source_seed": 202610270046,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "第8步前2号空，1号G3、3号O3都可借它。先1→2留出1号给O，余下最短7步；先3→2会把O放错G目标，余下8步。两条路线都逐步记录接收余量与露层，不强求截断。"
+    },
+    {
+      "level": 40,
+      "board": [
+        [
+          "B",
+          "P",
+          "B",
+          "G"
+        ],
+        [
+          "G",
+          "O",
+          "P",
+          "G"
+        ],
+        [
+          "P",
+          "O",
+          "G",
+          "O"
+        ],
+        [
+          "B",
+          "O",
+          "P",
+          "B"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 2
+        }
+      ],
+      "source": "accepted DC02 representative; board/ref retained",
+      "strategy_notes": "沿用已独立复核的代表关具体因果节点；详strategy-review.md及父DC02审查，最终真人难度尚未通过。"
+    },
+    {
+      "level": 41,
+      "board": [
+        [
+          "P",
+          "P",
+          "B",
+          "O"
+        ],
+        [
+          "G",
+          "O",
+          "P",
+          "G"
+        ],
+        [
+          "P",
+          "B",
+          "O",
+          "G"
+        ],
+        [
+          "O",
+          "B",
+          "B",
+          "G"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 5,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 4,
+          "to_index": 0
+        },
+        {
+          "from_index": 5,
+          "to_index": 3
+        }
+      ],
+      "source": "accepted DC02 representative; board/ref retained",
+      "strategy_notes": "沿用已独立复核的代表关具体因果节点；详strategy-review.md及父DC02审查，最终真人难度尚未通过。"
+    },
+    {
+      "level": 42,
+      "board": [
+        [
+          "P",
+          "G",
+          "P",
+          "P"
+        ],
+        [
+          "G",
+          "B",
+          "G",
+          "O"
+        ],
+        [
+          "B",
+          "O",
+          "B",
+          "O"
+        ],
+        [
+          "O",
+          "G",
+          "P",
+          "B"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        },
+        {
+          "from_index": 5,
+          "to_index": 1
+        }
+      ],
+      "source_seed": 202610270002,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "1号P2开局与2号O1开局都可解；两条分支均给出各自回收顺序。参考先清1号，步骤4把它作为O接收位，最后处理3/4号B与P；瓶身份不随显示位置变化。"
+    },
+    {
+      "level": 43,
+      "board": [
+        [
+          "P",
+          "O",
+          "B",
+          "B"
+        ],
+        [
+          "G",
+          "B",
+          "G",
+          "O"
+        ],
+        [
+          "O",
+          "G",
+          "O",
+          "P"
+        ],
+        [
+          "P",
+          "B",
+          "G",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 0
+        }
+      ],
+      "source_seed": 202610270004,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "三段具体检查点：步骤1–3建立B/O暂存；步骤4–9解1/2/3号P/G交叉并清3号；步骤10–16把4号P/G/B逐层导向已准备接收位。第二段释放的3号是第三段P落点。"
+    },
+    {
+      "level": 44,
+      "board": [
+        [
+          "G",
+          "G",
+          "B",
+          "O"
+        ],
+        [
+          "G",
+          "P",
+          "P",
+          "B"
+        ],
+        [
+          "B",
+          "P",
+          "O",
+          "O"
+        ],
+        [
+          "P",
+          "B",
+          "G",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 4,
+          "to_index": 0
+        }
+      ],
+      "source_seed": 202610270215,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "1号O目标步骤2借B，步骤7移B暴露G，步骤8清G后彻底空；步骤9改借P3，露3号B。步骤13再清P，步骤14回O。两次换色前均有真实空瓶节点，未拆过正确完成目标。"
+    },
+    {
+      "level": 45,
+      "board": [
+        [
+          "P",
+          "B",
+          "B",
+          "P"
+        ],
+        [
+          "G",
+          "O",
+          "G",
+          "P"
+        ],
+        [
+          "P",
+          "B",
+          "O",
+          "O"
+        ],
+        [
+          "O",
+          "G",
+          "B",
+          "G"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        },
+        {
+          "from_index": 5,
+          "to_index": 3
+        }
+      ],
+      "source_seed": 202610270055,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "参考先清1号接O，随后2/4号G往返只有为露4号B、2号O的真实用途。两缓冲分别收P/B后归位，保留两种已学关系而不再加跨色缓冲交换。"
+    },
+    {
+      "level": 46,
+      "board": [
+        [
+          "G",
+          "B",
+          "B",
+          "P"
+        ],
+        [
+          "B",
+          "G",
+          "P",
+          "O"
+        ],
+        [
+          "O",
+          "P",
+          "G",
+          "P"
+        ],
+        [
+          "G",
+          "B",
+          "O",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        },
+        {
+          "from_index": 5,
+          "to_index": 3
+        }
+      ],
+      "source_seed": 202610270014,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "参考第2步前，5号已收P、6号是唯一空瓶。1→6收BB与4→6收OO竞争同一接收位置，先做任一项便不能立即把另一颜色也倒进6号。B优先分支先露1号G，第3个分支动作1→3腾空1号，再接2号O；O优先分支先露4号B，接1号BB并露1号G，再把2号O并入6号。两条完整分支均再15步，证明的是空位用途与腾位顺序不同，不是唯一优解；原第7步两个独立聚合不是竞争例证，已撤回。"
+    },
+    {
+      "level": 47,
+      "board": [
+        [
+          "P",
+          "O",
+          "B",
+          "G"
+        ],
+        [
+          "B",
+          "B",
+          "B",
+          "G"
+        ],
+        [
+          "O",
+          "O",
+          "G",
+          "P"
+        ],
+        [
+          "P",
+          "G",
+          "O",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        },
+        {
+          "from_index": 5,
+          "to_index": 0
+        }
+      ],
+      "source_seed": 202610270050,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "步骤2移走2号顶G1，露出B3；步骤3立即让1号B1并入该B3，清出1号O/P覆盖。长块用于接住小块而非故意拆长块，后段清4号才容纳B4。"
+    },
+    {
+      "level": 48,
+      "board": [
+        [
+          "B",
+          "O",
+          "P",
+          "G"
+        ],
+        [
+          "G",
+          "P",
+          "G",
+          "O"
+        ],
+        [
+          "B",
+          "P",
+          "O",
+          "G"
+        ],
+        [
+          "P",
+          "B",
+          "B",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 4,
+          "to_index": 0
+        }
+      ],
+      "source_seed": 202610270367,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "步骤6把O2借到1号，步骤7清2号P后步骤8回G，腾5号；步骤9清1号O3到5号揭露B，步骤11接4号B2后揭P。缓冲换用与目标暂借通过同一O/B/P链连接。"
+    },
+    {
+      "level": 49,
+      "board": [
+        [
+          "G",
+          "O",
+          "B",
+          "P"
+        ],
+        [
+          "B",
+          "G",
+          "P",
+          "O"
+        ],
+        [
+          "O",
+          "P",
+          "G",
+          "O"
+        ],
+        [
+          "B",
+          "G",
+          "B",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        }
+      ],
+      "source_seed": 202610270019,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "2/3号同为O顶但第二层分别P/G，首步都可移O；两条实际分支露出的可并颜色不同，接下来的回收顺序也不同。两条都是17步时如实记录，不把相同顶色误认成完全同一局面。"
+    },
+    {
+      "level": 50,
+      "board": [
+        [
+          "G",
+          "B",
+          "O",
+          "B"
+        ],
+        [
+          "P",
+          "O",
+          "B",
+          "P"
+        ],
+        [
+          "O",
+          "O",
+          "G",
+          "P"
+        ],
+        [
+          "G",
+          "G",
+          "B",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 2
+        }
+      ],
+      "source_seed": 202610270029,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "步骤13把B集中成缓冲5号B4，步骤14先清4号G再步骤15回B。整色暂存在无标签位置仍不算胜利；先前O/G/P的交叉提供最终归位空间。"
+    },
+    {
+      "level": 51,
+      "board": [
+        [
+          "O",
+          "G",
+          "P",
+          "G"
+        ],
+        [
+          "B",
+          "O",
+          "B",
+          "O"
+        ],
+        [
+          "B",
+          "P",
+          "B",
+          "G"
+        ],
+        [
+          "P",
+          "G",
+          "O",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        }
+      ],
+      "source_seed": 202610270037,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "1→5暂存G与2→5暂存O两条非对称解都保留。前者整体16步、后者17步；后者可恢复且合法。默认提示实时求当前局面，不要求复现设计者参考路线。"
+    },
+    {
+      "level": 52,
+      "board": [
+        [
+          "O",
+          "P",
+          "O",
+          "G"
+        ],
+        [
+          "B",
+          "B",
+          "G",
+          "B"
+        ],
+        [
+          "B",
+          "P",
+          "O",
+          "G"
+        ],
+        [
+          "P",
+          "G",
+          "O",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        },
+        {
+          "from_index": 5,
+          "to_index": 2
+        }
+      ],
+      "source_seed": 202610270287,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "步骤7完成O目标1号后不再拆。剩余三色仍混在2/3/4号：步骤8/9先露/接B，步骤10/11转G露P，步骤12–16才能回B/G/P。余题不是已排序三瓶的直接交换。"
+    },
+    {
+      "level": 53,
+      "board": [
+        [
+          "P",
+          "G",
+          "B",
+          "G"
+        ],
+        [
+          "G",
+          "P",
+          "B",
+          "O"
+        ],
+        [
+          "P",
+          "O",
+          "B",
+          "B"
+        ],
+        [
+          "P",
+          "O",
+          "O",
+          "G"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 4,
+          "to_index": 0
+        },
+        {
+          "from_index": 5,
+          "to_index": 3
+        }
+      ],
+      "source": "accepted DC02 representative; board/ref retained",
+      "strategy_notes": "沿用已独立复核的代表关具体因果节点；详strategy-review.md及父DC02审查，最终真人难度尚未通过。"
+    },
+    {
+      "level": 54,
+      "board": [
+        [
+          "P",
+          "B",
+          "O",
+          "P"
+        ],
+        [
+          "P",
+          "B",
+          "G",
+          "O"
+        ],
+        [
+          "P",
+          "O",
+          "G",
+          "G"
+        ],
+        [
+          "G",
+          "B",
+          "O",
+          "B"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        },
+        {
+          "from_index": 5,
+          "to_index": 1
+        }
+      ],
+      "source_seed": 202610270038,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "初始顶层形成具体依赖：1号顶P要去满的P目标3号，3号顶G要去满的G目标2号，2号顶O要去满的O目标1号。先将P收5号、G收6号，步骤3–9交错抽O/B并清1号，再步骤10–13拆2号O/G/B/P。第四色B在1/4号间接力参与破环，不能仅凭静态环图称难度。"
+    },
+    {
+      "level": 55,
+      "board": [
+        [
+          "B",
+          "O",
+          "G",
+          "B"
+        ],
+        [
+          "B",
+          "G",
+          "P",
+          "B"
+        ],
+        [
+          "P",
+          "O",
+          "G",
+          "O"
+        ],
+        [
+          "P",
+          "P",
+          "O",
+          "G"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 1
+        }
+      ],
+      "source_seed": 202610270067,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "第13步前交叉准备已完成，4→1回O与6→2回G都已就绪，任选后仍需3步。旧“两个正确目标提前完成会更差”的预设在本盘不成立，已精确修订契约。前12步仍需清1/2号与P/B/O/G交错，不能跳过这些准备。"
+    },
+    {
+      "level": 56,
+      "board": [
+        [
+          "O",
+          "P",
+          "O",
+          "B"
+        ],
+        [
+          "G",
+          "B",
+          "P",
+          "O"
+        ],
+        [
+          "B",
+          "P",
+          "B",
+          "G"
+        ],
+        [
+          "G",
+          "P",
+          "G",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 5,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 4,
+          "to_index": 3
+        },
+        {
+          "from_index": 5,
+          "to_index": 2
+        }
+      ],
+      "source_seed": 202610270059,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "6号早期暂存O2。步骤10清出2号并把G搬入，步骤11回O到1号后6号变空；步骤12/13让它接P，露出3/4号B/G，才可完成第4片的收尾。"
+    },
+    {
+      "level": 57,
+      "board": [
+        [
+          "B",
+          "O",
+          "O",
+          "O"
+        ],
+        [
+          "B",
+          "P",
+          "B",
+          "P"
+        ],
+        [
+          "G",
+          "P",
+          "G",
+          "B"
+        ],
+        [
+          "G",
+          "O",
+          "G",
+          "P"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 4,
+          "to_index": 0
+        },
+        {
+          "from_index": 5,
+          "to_index": 2
+        }
+      ],
+      "source_seed": 202610270052,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "不同于43的P/G中段：先暂存O3/P并用1号协助合B（步骤1–6）；步骤7–12拆3/4号G/P/O，用早已空的1号接O；最后步骤13–16依次回B/G/O/P。第三段依赖两只来源清空，而非换色复制43。"
+    },
+    {
+      "level": 58,
+      "board": [
+        [
+          "B",
+          "P",
+          "B",
+          "O"
+        ],
+        [
+          "O",
+          "B",
+          "G",
+          "P"
+        ],
+        [
+          "P",
+          "G",
+          "G",
+          "B"
+        ],
+        [
+          "O",
+          "G",
+          "P",
+          "O"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 1
+        },
+        {
+          "from_index": 5,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 3
+        },
+        {
+          "from_index": 4,
+          "to_index": 0
+        }
+      ],
+      "source_seed": 202610270074,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "两种不同来源的开局都给完整解。参考第8步用空6号接P3，不向只剩1格的混色瓶强塞；第9步把B3移进1号露O，随后G/P回收。容量检查点与后续归位顺序都来自实际状态。"
+    },
+    {
+      "level": 59,
+      "board": [
+        [
+          "O",
+          "O",
+          "G",
+          "P"
+        ],
+        [
+          "B",
+          "G",
+          "B",
+          "O"
+        ],
+        [
+          "P",
+          "B",
+          "B",
+          "P"
+        ],
+        [
+          "G",
+          "O",
+          "P",
+          "G"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 0
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 2
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 2,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 3,
+          "to_index": 2
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 3,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        },
+        {
+          "from_index": 5,
+          "to_index": 1
+        }
+      ],
+      "source_seed": 202610270023,
+      "source": "parent curated from bounded search proposals; explicit frozen board and reviewed strategy",
+      "strategy_notes": "1号先收O，2/3号先交换B释放P落点，4号G/P/O分三次导出后才容纳B4。保留两阶段与四色，缩短跨色暂存链，为60整合留节奏空间。"
+    },
+    {
+      "level": 60,
+      "board": [
+        [
+          "G",
+          "B",
+          "B",
+          "G"
+        ],
+        [
+          "G",
+          "B",
+          "P",
+          "G"
+        ],
+        [
+          "O",
+          "P",
+          "O",
+          "O"
+        ],
+        [
+          "O",
+          "P",
+          "P",
+          "B"
+        ],
+        [],
+        []
+      ],
+      "reference_moves": [
+        {
+          "from_index": 0,
+          "to_index": 4
+        },
+        {
+          "from_index": 1,
+          "to_index": 4
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 1,
+          "to_index": 3
+        },
+        {
+          "from_index": 0,
+          "to_index": 5
+        },
+        {
+          "from_index": 1,
+          "to_index": 5
+        },
+        {
+          "from_index": 0,
+          "to_index": 1
+        },
+        {
+          "from_index": 4,
+          "to_index": 1
+        },
+        {
+          "from_index": 3,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 2,
+          "to_index": 4
+        },
+        {
+          "from_index": 2,
+          "to_index": 3
+        },
+        {
+          "from_index": 3,
+          "to_index": 0
+        },
+        {
+          "from_index": 4,
+          "to_index": 2
+        },
+        {
+          "from_index": 5,
+          "to_index": 3
+        }
+      ],
+      "source": "accepted DC02 representative; board/ref retained",
+      "strategy_notes": "沿用已独立复核的代表关具体因果节点；详strategy-review.md及父DC02审查，最终真人难度尚未通过。"
+    }
+  ]
+}

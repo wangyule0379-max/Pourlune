@@ -1,0 +1,94 @@
+{
+  "platform": "iOS Simulator 26.5",
+  "device": "GDF-Remaining-20261020",
+  "udid": "4DF92321-95EC-4C8E-849C-0CF0AA6FE1D2",
+  "bundle_id": "dev.pourlune.pourluneDev",
+  "database_define": "POURLUNE_DATABASE=b01_integration.sqlite",
+  "procedure": [
+    "Install normal flutter build ios --simulator --debug output; this is not the test runner",
+    "Use real Simulator UI: choose main-012, bottle1 to5, bottle3 to1; wait Saved on this device",
+    "xcrun simctl terminate 4DF92321-95EC-4C8E-849C-0CF0AA6FE1D2 dev.pourlune.pourluneDev",
+    "xcrun simctl launch 4DF92321-95EC-4C8E-849C-0CF0AA6FE1D2 dev.pourlune.pourluneDev",
+    "Use real Resume saved sample control and compare UI accessibility and drawing"
+  ],
+  "observed_before": {
+    "instance_id": "dev-1792601340927533-414767142",
+    "puzzle_id": "main-012",
+    "revision": 2,
+    "moves": 2,
+    "board_bottom_to_top": [
+      [
+        "B",
+        "P",
+        "G",
+        "G"
+      ],
+      [
+        "G",
+        "O",
+        "B",
+        "P"
+      ],
+      [
+        "P",
+        "B",
+        "O"
+      ],
+      [
+        "O",
+        "G",
+        "P",
+        "B"
+      ],
+      [
+        "O"
+      ],
+      []
+    ],
+    "save_status": "Saved on this device"
+  },
+  "new_process_pid": 33947,
+  "observed_after": {
+    "instance_id": "dev-1792601340927533-414767142",
+    "puzzle_id": "main-012",
+    "revision": 2,
+    "moves": 2,
+    "board_bottom_to_top": [
+      [
+        "B",
+        "P",
+        "G",
+        "G"
+      ],
+      [
+        "G",
+        "O",
+        "B",
+        "P"
+      ],
+      [
+        "P",
+        "B",
+        "O"
+      ],
+      [
+        "O",
+        "G",
+        "P",
+        "B"
+      ],
+      [
+        "O"
+      ],
+      []
+    ],
+    "save_status": "Saved on this device"
+  },
+  "screenshot": "ios-after-cold-restart.png",
+  "accessibility_evidence": "ios-after-cold-restart.txt",
+  "limitations": "Manual Simulator UI plus simctl process lifecycle; not Android/device-minimum or OS memory-pressure coverage. No reinstall or data clearing between the compared launches. The integration runner teardown is a separate test and not used as cold-start proof.",
+  "before_process_pid": 33861,
+  "before_screenshot": "ios-before-termination.png",
+  "before_accessibility": "ios-before-termination.txt",
+  "automated_evidence_comparison": "Both AX captures contain same instance/revision/moves/Saved; all six bottle descriptions compare equal."
+}
