@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-const colors = {'O', 'G', 'P', 'B'};
+const colors = {'O', 'G', 'P', 'B', 'R'};
 typedef Board = List<List<String>>;
 Board freezeBoard(Iterable<Iterable<String>> board) =>
     List.unmodifiable(board.map((b) => List<String>.unmodifiable(b)));
@@ -206,7 +206,7 @@ class Puzzle {
     ];
     final present = board.expand((b) => b).toSet();
     if (present.length < 2 ||
-        present.length > 4 ||
+        present.length > 5 ||
         board.length != present.length + 2) {
       invalid('Invalid color/bottle count');
     }

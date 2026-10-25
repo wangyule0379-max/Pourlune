@@ -81,8 +81,8 @@ def validate_puzzle(puzzle):
     check_schema(puzzle, 'puzzle.schema.json')
     board, labels = puzzle['initial_bottom_to_top'], puzzle['target_labels']
     totals = Counter(color for bottle in board for color in bottle)
-    if not 2 <= len(totals) <= 4 or set(totals.values()) != {4}:
-        raise ContentError('expected 2..4 colors, exactly 4 units per color')
+    if not 2 <= len(totals) <= 5 or set(totals.values()) != {4}:
+        raise ContentError('expected 2..5 colors, exactly 4 units per color')
     if len(board) != len(totals) + 2 or len(labels) != len(board):
         raise ContentError('bottle and label count must equal color count + 2')
     if Counter(label for label in labels if label is not None) != Counter({c: 1 for c in totals}):
