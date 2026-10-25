@@ -1,3 +1,5 @@
+// Historical v2/v3 acceptance remains pinned to its released definition.
+// Current v4 definitions and hint/upgrade contracts live in main60_v4_test.dart.
 import 'dart:convert';
 import 'dart:io';
 
@@ -6,7 +8,7 @@ import 'package:test/test.dart';
 
 Puzzle current(int level) => Puzzle.parse(
   File(
-    '../../app/assets/puzzles/main/main-${level.toString().padLeft(3, '0')}.json',
+    '../../docs/development/evidence/main60-five-color-difficulty/old-main/main-${level.toString().padLeft(3, '0')}.json',
   ).readAsStringSync(),
 );
 Puzzle previous(int level) => Puzzle.parse(

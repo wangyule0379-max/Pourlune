@@ -55,14 +55,14 @@ void main() {
       expect(puzzle.id, old.id);
       expect(puzzle.contentVersion, old.contentVersion + 1);
       final installed = Puzzle.parse(
-        File('../../app/assets/puzzles/main/$id.json').readAsStringSync(),
+        File('../../docs/development/evidence/main60-five-color-difficulty/old-main/$id.json').readAsStringSync(),
       );
       final finalCandidate = Puzzle.parse(
         File(
           '../../docs/development/evidence/main60-content-redesign/full60/levels/$id.runtime.json',
         ).readAsStringSync(),
       );
-      // Preserve the v2 proof against its frozen definition. Explicit v3
+      // Preserve the v2 proof against its frozen definition. Explicit v3/v4
       // replacements have their own current-content and upgrade checks.
       expect(finalCandidate.initial, puzzle.initial);
       expect(finalCandidate.targets, puzzle.targets);
@@ -131,7 +131,7 @@ void main() {
       final level = row['level'] as int;
       final puzzle = Puzzle.parse(
         File(
-          '../../app/assets/puzzles/main/main-${level.toString().padLeft(3, '0')}.json',
+          '../../docs/development/evidence/main60-five-color-difficulty/old-main/main-${level.toString().padLeft(3, '0')}.json',
         ).readAsStringSync(),
       );
       var state = GameInstance.create(id: 'rescue-$level', puzzle: puzzle);

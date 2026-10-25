@@ -1,34 +1,40 @@
 {
   "schema_version": 1,
   "puzzle_id": "main-031",
-  "content_version": 2,
+  "content_version": 3,
   "mode": "main",
   "content_status": "production_candidate",
   "main_level": 31,
   "capacity": 4,
   "initial_bottom_to_top": [
     [
+      "R",
+      "P",
       "B",
+      "R"
+    ],
+    [
+      "P",
+      "R",
       "G",
-      "O",
+      "G"
+    ],
+    [
+      "R",
+      "B",
+      "P",
       "O"
     ],
     [
-      "P",
+      "O",
+      "B",
+      "O",
+      "G"
+    ],
+    [
+      "O",
+      "B",
       "G",
-      "O",
-      "G"
-    ],
-    [
-      "P",
-      "B",
-      "B",
-      "G"
-    ],
-    [
-      "P",
-      "B",
-      "O",
       "P"
     ],
     [],
@@ -39,71 +45,96 @@
     "G",
     "P",
     "B",
+    "R",
     null,
     null
   ],
   "reference_moves": [
     {
-      "from_index": 0,
-      "to_index": 4
-    },
-    {
-      "from_index": 0,
-      "to_index": 5
-    },
-    {
       "from_index": 1,
       "to_index": 5
     },
     {
-      "from_index": 1,
-      "to_index": 4
+      "from_index": 0,
+      "to_index": 1
     },
     {
-      "from_index": 1,
+      "from_index": 3,
       "to_index": 5
     },
     {
       "from_index": 2,
-      "to_index": 5
-    },
-    {
-      "from_index": 2,
-      "to_index": 0
-    },
-    {
-      "from_index": 1,
-      "to_index": 2
-    },
-    {
-      "from_index": 3,
-      "to_index": 2
-    },
-    {
-      "from_index": 3,
-      "to_index": 4
-    },
-    {
-      "from_index": 3,
-      "to_index": 0
-    },
-    {
-      "from_index": 3,
-      "to_index": 2
-    },
-    {
-      "from_index": 0,
       "to_index": 3
     },
     {
       "from_index": 4,
+      "to_index": 2
+    },
+    {
+      "from_index": 4,
+      "to_index": 5
+    },
+    {
+      "from_index": 0,
+      "to_index": 4
+    },
+    {
+      "from_index": 2,
       "to_index": 0
+    },
+    {
+      "from_index": 2,
+      "to_index": 4
+    },
+    {
+      "from_index": 1,
+      "to_index": 2
+    },
+    {
+      "from_index": 0,
+      "to_index": 1
+    },
+    {
+      "from_index": 2,
+      "to_index": 0
+    },
+    {
+      "from_index": 1,
+      "to_index": 2
     },
     {
       "from_index": 5,
       "to_index": 1
+    },
+    {
+      "from_index": 4,
+      "to_index": 5
+    },
+    {
+      "from_index": 3,
+      "to_index": 4
+    },
+    {
+      "from_index": 3,
+      "to_index": 5
+    },
+    {
+      "from_index": 4,
+      "to_index": 3
+    },
+    {
+      "from_index": 0,
+      "to_index": 4
+    },
+    {
+      "from_index": 3,
+      "to_index": 0
+    },
+    {
+      "from_index": 5,
+      "to_index": 3
     }
   ],
-  "difficulty_intent": "两个好开局：比较可行路线而非找唯一答案。一条先腾目标、一条先合色；均合法，选择更易理解的一条。结构/求解证据见单关卡；人类难度未标定。",
-  "source_reference": "docs/content/design/main60-level-contracts-v2.json"
+  "difficulty_intent": "目标也能腾空：混色未清时主动腾出一只目标瓶供下一颜色借用。两条合法分支及空位复用见v4单关证据；该路线展示技巧，不宣称唯一解或人工难度已通过。",
+  "source_reference": "docs/content/design/main60-five-color-contracts-v4.json"
 }
