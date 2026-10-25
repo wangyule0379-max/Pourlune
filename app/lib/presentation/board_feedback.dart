@@ -77,6 +77,7 @@ class BoardFeedback extends StatelessWidget {
         s.puzzle.referenceMoves[lesson.step].from + 1,
         s.puzzle.referenceMoves[lesson.step].to + 1,
       );
+      title = body;
     } else if (noMoves) {
       title = l.noMoves;
       body = l.noMovesBody;
@@ -105,6 +106,7 @@ class BoardFeedback extends StatelessWidget {
         final badgeActive =
             hintActive || (!teaching && (noMoves || c.rejection != null));
         final titles = [
+          if (teaching) title,
           l.rulesTitle,
           l.matchLabelsTitle,
           l.cantPourHere,
@@ -210,7 +212,7 @@ class BoardFeedback extends StatelessWidget {
               title,
               key: const Key('feedback-title'),
               textAlign: TextAlign.center,
-              style: badgeActive ? badgeTitleStyle : _titleStyle,
+              style: badgeActive || teaching ? badgeTitleStyle : _titleStyle,
             ),
           ),
         );

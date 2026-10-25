@@ -17,6 +17,7 @@ import 'parallel_navigation/navigation_materials.dart';
 import 'parallel_navigation/home_collection_art.dart';
 import 'parallel_navigation/chapter_lock_art.dart';
 import 'reference_extra_art.dart';
+import 'daily_reference.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({
@@ -602,6 +603,7 @@ class DailyPage extends StatefulWidget {
 
 class _DailyPageState extends State<DailyPage> {
   late DateTime month;
+  bool showHistory = false;
   late final Timer dayRefresh;
   @override
   void initState() {
@@ -718,10 +720,12 @@ class _DailyPageState extends State<DailyPage> {
           ),
           const SizedBox(height: 12),
           const NavigationPanel(
-            child: Text(
-              'A fresh puzzle.\nAt your own pace.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
+            child: Center(
+              child: Text(
+                'A fresh puzzle.\nAt your own pace.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -736,6 +740,14 @@ class _DailyPageState extends State<DailyPage> {
                     : l.continuePrevious(active.puzzleDate!),
               ),
             ),
+          if (!largeText && !showHistory) ...[
+            DailyWeekStrip(
+              date: c.today.date,
+              stamps: c.progress.dailyStamps,
+              onDate: _date,
+            ),
+            const SizedBox(height: 14),
+          ],
           FilledButton(
             key: const Key('today'),
             onPressed: c.busy || c.library.daily == null
@@ -751,121 +763,138 @@ class _DailyPageState extends State<DailyPage> {
                   : l.dailyTitle,
             ),
           ),
+          if (!largeText)
+            TextButton(
+              key: const Key('daily-history-toggle'),
+              onPressed: () => setState(() => showHistory = !showHistory),
+              child: Text(showHistory ? 'Hide history' : 'View history'),
+            ),
           const SizedBox(height: 16),
-          NavigationPanel(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      tooltip: l.previousMonth,
-                      onPressed: month.year == 1 && month.month == 1
-                          ? null
-                          : () => setState(
-                              () => month = DateTime.utc(
-                                month.year,
-                                month.month - 1,
+          if (largeText || showHistory)
+            NavigationPanel(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                        tooltip: l.previousMonth,
+                        onPressed: month.year == 1 && month.month == 1
+                            ? null
+                            : () => setState(
+                                () => month = DateTime.utc(
+                                  month.year,
+                                  month.month - 1,
+                                ),
                               ),
+                        icon: const Icon(Icons.chevron_left),
+                      ),
+                      Expanded(
+                        child: Text(
+                          DateFormat.yMMMM('en').format(month),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: l.nextMonth,
+                        onPressed: month.year == 9999 && month.month == 12
+                            ? null
+                            : () => setState(
+                                () => month = DateTime.utc(
+                                  month.year,
+                                  month.month + 1,
+                                ),
+                              ),
+                        icon: const Icon(Icons.chevron_right),
+                      ),
+                    ],
+                  ),
+                  LayoutBuilder(
+                    builder: (context, box) => SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: SizedBox(
+                        width: box.maxWidth < minimumCalendarWidth
+                            ? minimumCalendarWidth
+                            : box.maxWidth,
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                for (final day in l.weekdays.split(','))
+                                  Expanded(
+                                    child: Text(
+                                      day,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                              ],
                             ),
-                      icon: const Icon(Icons.chevron_left),
-                    ),
-                    Expanded(
-                      child: Text(
-                        DateFormat.yMMMM('en').format(month),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
+                            GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: leading + days,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 7,
+                                    mainAxisExtent: dayExtent,
+                                    crossAxisSpacing: 2,
+                                    mainAxisSpacing: 2,
+                                  ),
+                              itemBuilder: (context, index) {
+                                if (index < leading) return const SizedBox();
+                                final day = index - leading + 1,
+                                    date = calendarDate(
+                                      DateTime.utc(
+                                        month.year,
+                                        month.month,
+                                        day,
+                                      ),
+                                    ),
+                                    stamped = c.progress.dailyStamps.contains(
+                                      date,
+                                    );
+                                return Semantics(
+                                  label: l.dateState(
+                                    date,
+                                    stamped ? l.stampOwned : l.noStamp,
+                                  ),
+                                  button: true,
+                                  child: TextButton(
+                                    key: Key('date-$date'),
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.all(2),
+                                      minimumSize: const Size(48, 48),
+                                    ),
+                                    onPressed: c.busy
+                                        ? null
+                                        : () => _date(date),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text('$day'),
+                                        if (stamped)
+                                          const Icon(Icons.check, size: 12),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    IconButton(
-                      tooltip: l.nextMonth,
-                      onPressed: month.year == 9999 && month.month == 12
-                          ? null
-                          : () => setState(
-                              () => month = DateTime.utc(
-                                month.year,
-                                month.month + 1,
-                              ),
-                            ),
-                      icon: const Icon(Icons.chevron_right),
-                    ),
-                  ],
-                ),
-                LayoutBuilder(
-                  builder: (context, box) => SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SizedBox(
-                      width: box.maxWidth < minimumCalendarWidth
-                          ? minimumCalendarWidth
-                          : box.maxWidth,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              for (final day in l.weekdays.split(','))
-                                Expanded(
-                                  child: Text(day, textAlign: TextAlign.center),
-                                ),
-                            ],
-                          ),
-                          GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: leading + days,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 7,
-                                  mainAxisExtent: dayExtent,
-                                  crossAxisSpacing: 2,
-                                  mainAxisSpacing: 2,
-                                ),
-                            itemBuilder: (context, index) {
-                              if (index < leading) return const SizedBox();
-                              final day = index - leading + 1,
-                                  date = calendarDate(
-                                    DateTime.utc(month.year, month.month, day),
-                                  ),
-                                  stamped = c.progress.dailyStamps.contains(
-                                    date,
-                                  );
-                              return Semantics(
-                                label: l.dateState(
-                                  date,
-                                  stamped ? l.stampOwned : l.noStamp,
-                                ),
-                                button: true,
-                                child: TextButton(
-                                  key: Key('date-$date'),
-                                  style: TextButton.styleFrom(
-                                    padding: const EdgeInsets.all(2),
-                                    minimumSize: const Size(48, 48),
-                                  ),
-                                  onPressed: c.busy ? null : () => _date(date),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text('$day'),
-                                      if (stamped)
-                                        const Icon(Icons.check, size: 12),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
           const SizedBox(height: 10),
-          Text(l.historyReadOnly, textAlign: TextAlign.center),
+          if (largeText || showHistory)
+            Text(l.historyReadOnly, textAlign: TextAlign.center),
         ],
       ),
     );

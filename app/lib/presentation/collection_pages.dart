@@ -8,6 +8,7 @@ import 'scene_art.dart';
 import 'motion.dart';
 import 'completion_bottles.dart';
 import 'completion_layout.dart';
+import 'daily_reference.dart';
 import 'completion_compact_layout.dart';
 import 'parallel_collection/collection_visuals.dart';
 import 'parallel_collection/scene_detail.dart';
@@ -574,6 +575,10 @@ class CompletionPage extends StatelessWidget {
         l = AppLocalizations.of(context),
         s = c.current!,
         kind = c.settlementKind;
+    if (kind == SettlementKind.daily &&
+        MediaQuery.textScalerOf(context).scale(16) <= 22) {
+      return DailyReferenceCompletion(controller: c);
+    }
     final finalStory = kind == SettlementKind.finalStory,
         patch = kind == SettlementKind.patch || kind == SettlementKind.chapter;
     final title = finalStory
