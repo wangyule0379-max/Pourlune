@@ -1,6 +1,6 @@
 # 主线60关五色完整候选交付
 
-日期：2026-10-25。状态：完整实现、自动验证与作者原生差额已完成；**父独立验收接受整套阶段Beta候选，进入新包准备；尚无新TestFlight上传**。
+日期：2026-10-25。状态：完整实现、自动验证与作者原生差额已完成；**父独立验收接受整套阶段Beta候选，进入新包准备；新TestFlight14上传、Apple处理和本人组分发均完成**。
 
 本批按完整60关执行。1–20逐关复核并保留原定义／版本／字节；21–60实际改为五色、
 7初始瓶，改题content_version各加1。每日30题与catalog原字节保留。固定目标、容量4、
@@ -76,5 +76,20 @@ F9／Small11b／4188／历史Large／普通与Firebase库和冻结发布包未�
 
 父结论见[独立验收报告](../review/main60-five-color-difficulty.md)：22／33／42／59分别20／22／22／23步，
 不用Hint／加瓶／Undo；四次重玩无拼片／权益重复，正常和小屏未见新阻断问题。
-还需：新精确CI、签名候选独立核包、上传与商店处理。未在实体手机首玩、未新签名／上传／商店处理。TestFlight12／Play13既有包未覆盖。
-本轮父已接受整套阶段Beta候选，现准备0.5.0+14签名新包；包与发布门槛仍须逐项完成。
+当前0.5.0+14候选2源828c9f3633376efa28c2ba56aab7065f8bd35caf，实际签名生成完成。
+相对父受验运行输入仅版本号与五目标结算脚区余量两项；父已实际查看390×844完整图并接受尺寸差额。
+CI40210076970全部成功：工具64／核心45／应用411、format／analyze、Android debug APK及iOS Simulator构建通过。
+候选1因CI发现260高庆祝区瓶宽31.8536低于32守卫而保留停用；候选2修正脚区实际余量，49项相关检查通过，未放宽32守卫。
+作者实际IPA核验505源文件、146资源、60主线、31每日/catalog、签名、原生纯净、配置、无AdID选择及三方dSYM UUID通过。
+只读镜像`build/package-review/0.5.0-14/ios-main60-v4-2`共558文件；IPA SHA256
+`bef59065fd24659ca5a91f622ff89f580b2beb67363b31e50a91f3c29f29a409`。
+机器证据见`evidence/main60-five-color-difficulty/release-14/`。
+
+已建立仅含既有本人测试员的Pourlune Self内部组，手动分发；原两人组成员及其4个旧构建保持。
+父已独立通过原签名候选与实际Organizer上传变体，见[新包独立核验](../review/main60-five-color-build14-independent.md)。
+Xcode已返回0.5.0(14)上传完成，ASC构建addf4e5b-dcfb-4b6b-8d26-d13494ae0340处理完成。
+实际Flutter二进制含boringssl源码路径，已按标准算法／Apple OS以外附带实现填写技术分类；本轮仅本人内部测试，法国分发否，未代签新法律协议或修改Info。
+测试说明已保存并回读；新构建仅关联Pourlune Self内部组1人，组内唯一构建0.5.0(14)显示“正在测试／90天后过期”。
+最终回执`release-14/upload-state.json`、`build-group-readback.txt`、`self-group-tester-readback.txt`、
+`testflight-group-ready.txt`及`testflight14-self-ready.png`分别证明上传、组成员与可测试状态。
+未在实体手机安装／首玩14（成员页面仍显示旧12已安装）；未恢复AdMob或新上传Play。旧构建保留，F9未操作。
