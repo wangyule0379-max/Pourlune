@@ -1,0 +1,182 @@
+- banner:
+  - generic: Analytics
+  - search:
+    - img: search
+    - textbox "搜索":
+      - /placeholder: 可以试搜一下“上个月和去年的用户数比较”
+  - button "切换产品":
+  - button "帮助条目菜单":
+    - img: help
+  - button "打开用户账号切换面板。"
+- navigation "主要页面":
+  - link "首页":
+    - generic: 首页
+  - link "报告":
+    - img: insert_chart_filled
+    - generic: 报告
+  - link "探索":
+    - img: data_exploration
+    - generic: 探索
+  - link "广告":
+    - img: ads_click
+    - generic: 广告
+- navigation "“设置”页面":
+  - link "任务":
+    - img: task_alt
+    - generic: 任务
+  - link "管理":
+    - img: settings_filled
+    - generic: 管理
+- navigation "辅助导航":
+  - navigation "次级页面":
+    - button "创建":
+      - img: add
+      - text: 创建
+      - img: arrow_drop_down
+  - tree:
+    - treeitem "管理" [level=1]:
+      - button "管理":
+        - generic: 管理
+    - treeitem "我的偏好设置" [level=1]:
+      - button "我的偏好设置":
+        - generic: 我的偏好设置
+    - treeitem "账号设置" [expanded] [level=1]:
+      - separator
+      - button "账号设置":
+        - generic: 账号设置
+        - img: keyboard_arrow_up
+    - treeitem "账号" [level=2]:
+      - button "账号":
+        - img: arrow_right
+        - generic: 账号
+    - treeitem "媒体资源设置" [expanded] [level=1]:
+      - separator
+      - button "媒体资源设置":
+        - generic: 媒体资源设置
+        - img: keyboard_arrow_up
+    - treeitem "媒体资源" [level=2]:
+      - button "媒体资源":
+        - img: arrow_right
+        - generic: 媒体资源
+    - treeitem "数据收集和修改" [expanded] [level=2]:
+      - button "数据收集和修改":
+        - img: arrow_drop_down
+        - generic: 数据收集和修改
+    - treeitem "数据流" [level=3]:
+      - button "数据流":
+        - generic: 数据流
+    - treeitem "数据收集" [level=3]:
+      - button "数据收集":
+        - generic: 数据收集
+    - treeitem "数据导入" [level=3]:
+      - button "数据导入":
+        - generic: 数据导入
+    - treeitem "数据保留" [level=3]:
+      - button "数据保留":
+        - generic: 数据保留
+    - treeitem "数据过滤器" [level=3]:
+      - button "数据过滤器":
+        - generic: 数据过滤器
+    - treeitem "数据删除请求" [level=3]:
+      - button "数据删除请求":
+        - generic: 数据删除请求
+    - treeitem "用户意见征求设置" [level=3]:
+      - button "用户意见征求设置":
+        - generic: 用户意见征求设置
+    - treeitem "数据显示" [level=2]:
+      - button "数据显示":
+        - img: arrow_right
+        - generic: 数据显示
+    - treeitem "产品关联" [level=2]:
+      - button "产品关联":
+        - img: arrow_right
+        - generic: 产品关联
+  - separator
+- button "导航切换" [expanded]:
+  - img: keyboard_arrow_left
+- main:
+  - heading "数据收集" [active] [level=1]
+  - button "Google 信号数据收集" [expanded]:
+    - heading "Google 信号数据收集" [level=2]
+  - region "Google 信号数据收集":
+    - img: info
+    - generic: 通知
+    - generic: 完善用户数据洞见。
+    - button "启用 Google 信号":
+      - generic: 打开
+    - paragraph:
+      - text: 对于已启用广告个性化功能并登录了 Google 账号的用户，Google Analytics 可利用其数据强化相关功能，为您提供更深入的用户数据洞见，例如汇总的受众特征和兴趣数据。
+      - link "详细了解如何启用 Google 信号":
+        - /url: https://support.google.com/analytics/answer/9445345?hl=zh_CN&utm_id=ad
+      - text: 。
+    - paragraph:
+      - text: 如果您启用 Google 信号，Google Analytics 会将从您的网站和应用中收集的会话数据，与已登录用户的 Google 账号信息关联起来，前提是用户已同意进行这种关联。启用 Google 信号即表示，您同意以下事项：遵守
+      - link "Google 广告功能政策":
+        - /url: https://support.google.com/analytics/answer/2700409?hl=zh_CN&utm_id=ad
+      - text: （包括有关敏感类别的规定）；为进行此类关联，提供了必要的隐私权披露声明，并已获得最终用户的授权；最终用户可以通过
+      - link "我的活动记录":
+        - /url: https://myactivity.google.com/myactivity
+      - text: 访问和删除此类数据。
+  - button "收集 User-ID 和用户提供的数据" [expanded]:
+    - heading "收集 User-ID 和用户提供的数据" [level=2]
+  - region "收集 User-ID 和用户提供的数据":
+    - generic: 通过 Google Ads 集成提高衡量准确性并实现更多功能。
+    - text: 借助 User-ID 和用户提供的数据，您可以通过第一方数据更全面地了解用户与您网站和应用的互动情况、提高转化衡量的准确性，而且在将 Google Analytics 媒体资源与 Google Ads 账号关联后，还能增强受众群体共享功能。
+    - link "详细了解 User-ID":
+      - /url: https://support.google.com/analytics/answer/9213390?hl=zh_CN&utm_id=ad
+    - text: 。
+    - generic: 收集 User-ID
+    - text: 借助 User-ID 功能，您可以为网站和应用用户提供您自己的标识符，以便将用户在不同会话中的行为与作为其访问媒介的各种设备和平台关联起来。Google Analytics 会将每个不同的 User-ID 解读为一个单独的用户。这样一来，您就可以获得更准确的用户计数，还能更全面地了解用户与您的商家的互动情况。
+    - link "详细了解 User-ID":
+      - /url: https://support.google.com/analytics/answer/9213390?hl=zh_CN&utm_id=ad
+    - text: 。
+    - text: 您有责任确保自己根据
+    - link "《Google Analytics 服务条款》":
+      - /url: https://marketingplatform.google.com/about/analytics/terms/us
+    - text: 来使用 User-ID 功能，包括不将 Google Analytics 个人身份信息作为 User-ID 来发送，并且必须在您的隐私权政策中提供适当的标识符使用声明。 如需了解如何向 Google Analytics 发送 User-ID，请参阅
+    - link "发送 User-ID":
+      - /url: https://developers.google.com/analytics/devguides/collection/ga4/user-id
+    - text: 。
+    - generic: 收集用户提供的数据
+    - generic: Beta 版
+    - img: info
+    - generic: 通知
+    - generic: 首先，请为您的 Google Analytics（分析）媒体资源选择一个行业类别。
+    - button "请选择一项":
+      - generic: 请选择一项
+      - img: arrow_drop_down
+    - button "保存" [disabled]:
+      - generic: 保存
+    - text: 这样一来，您就可以获得更丰富且更详细的受众群体数据，从而提高用户和转化衡量的准确性。如需使用增强版转化衡量和受众群体共享等功能，您必须有关联的广告账号并在 Google Analytics 媒体资源中启用
+    - link "广告个性化":
+      - /url: https://support.google.com/analytics/answer/9626162?hl=zh_CN&utm_id=ad
+    - text: 。通过收集用户提供的数据，您可以采用能保障隐私安全的方式，将经用户同意收集且经过哈希处理的客户数据发送到 Google Analytics，从而对您的现有 Google Analytics 数据形成补充。
+    - link "详细了解“收集用户提供的数据”功能":
+      - /url: https://support.google.com/analytics/answer/14077171?hl=zh_CN&utm_id=ad
+    - text: 。
+    - text: 启用“收集用户提供的数据”功能即表示，您同意遵守
+    - link "“收集用户提供的数据”功能政策":
+      - /url: https://support.google.com/analytics/answer/12150158?hl=zh_CN&utm_id=ad
+    - text: ，还必须提供必要的隐私权披露声明，并且需要就使用此类信息获得最终用户的授权。根据我们的政策，禁止针对敏感类别的客户使用此功能。
+  - button "精细位置和设备数据收集":
+    - heading "精细位置和设备数据收集" [level=2]
+  - switch "精细位置和设备数据收集" [checked]:
+  - button "广告个性化高级开启设置":
+    - heading "广告个性化高级开启设置" [level=2]
+  - button "用户数据收集确认书":
+    - heading "用户数据收集确认书" [level=2]
+- contentinfo:
+  - text: ©2026 Google |
+  - link "Google Analytics 首页":
+    - /url: https://www.google.com/analytics/?hl=zh-CN
+  - text: "|"
+  - link "服务条款":
+    - /url: https://www.google.com/analytics/tos.html?hl=zh-CN
+  - text: "|"
+  - link "隐私权政策":
+    - /url: https://www.google.com/policies/privacy/?hl=zh-CN
+  - text: "|"
+  - button "发送反馈":
+    - img: feedback
+    - generic: 发送反馈
+- button "打开上下文菜单"

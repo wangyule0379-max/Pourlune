@@ -1,0 +1,92 @@
+- progressbar
+- generic: 正在加载 Google Play 管理中心
+- banner:
+  - link "Google Play 管理中心徽标":
+    - /url: /console/u/0/developers/8719288384645399837/home
+    - button "Google Play 管理中心徽标"
+  - button "未读通知 打开通知中心":
+    - img: notifications_unread
+    - generic: 未读通知
+  - button "切换开发者账号":
+    - img: more_vert
+  - button "Google 账号： yule wang (wangyule0379@gmail.com)":
+- navigation:
+  - list:
+    - listitem "首页":
+      - button "首页":
+        - img: home
+    - listitem "管理账号":
+      - button "管理账号":
+        - img: badge
+    - listitem "Pourlune":
+      - button "Pourlune":
+        - img: play_prism
+    - listitem "信息中心":
+      - button "信息中心":
+        - img: dashboard
+    - listitem "统计信息":
+      - button "统计信息":
+        - img: bar_chart
+    - listitem "发布概览":
+      - button "发布概览":
+        - img: overview
+    - listitem "由 Google Play 提供保护":
+      - button "由 Google Play 提供保护":
+        - img: shield
+    - listitem "测试和发布":
+      - button "测试和发布":
+        - img: rocket_launch
+    - listitem "监控和改进":
+      - button "监控和改进":
+        - img: vital_signs
+    - listitem "扩大用户群":
+      - button "扩大用户群":
+        - img: finance_mode
+    - listitem "借助 Play 变现":
+      - button "借助 Play 变现":
+        - img: sell
+- link "返回发布概览":
+  - /url: /console/u/0/developers/8719288384645399837/app/4974934617254026237/publishing
+  - img: keyboard_backspace
+  - generic: 发布概览
+- heading "广告 ID" [level=1]
+- generic: 帮助我们了解您的应用是否使用了广告 ID
+- heading "Android 13 (API 33) 在广告 ID 方面有一些变化" [level=2]
+- paragraph:
+  - text: 如果应用使用广告 ID，并且以 Android 13 或更高版本为目标平台，则必须在其应用清单 (app manifest) 中声明 com.google.android.gms.permission.AD_ID 权限。如果您未添加这项权限，您的广告标识符将会变成一串 0。这样一来，任何尝试获取该标识符的操作都会收到一串 0，而不是标识符。
+  - link "详细了解“广告 ID”, 在新标签页中打开":
+    - /url: https://support.google.com/googleplay/android-developer/answer/6048248?hl=zh-CN
+    - text: 了解详情
+- heading "我们将根据此声明提供保护措施" [level=2]
+- paragraph: 如果您声明自己的应用使用广告 ID，那么当您的应用以 Android 13 为目标平台时，我们将禁止发布在清单文件中未添加 com.google.android.gms.permission.AD_ID 权限的版本。禁止发布这些版本时，我们会提醒您添加该权限。如果您的版本不需要使用广告 ID，您将能够跳过该错误，并进行发布。您也可以更新声明，使系统不再显示因使用广告 ID 导致的发布错误。
+- heading "声明" [level=2]
+- paragraph: 您必须先完成此声明，然后才能使用以 Android 13 为目标平台的制品来发布版本。
+- heading "您的应用是否使用了广告 ID？" [level=2]
+- paragraph: 这包括您的应用导入的所有使用广告 ID 的 SDK
+- radiogroup:
+  - radio "否" [checked]
+  - generic: 否
+  - radio "是"
+  - generic: 是
+- paragraph:
+  - text: 回答此问题时，请务必确认您的应用中是否有任何第三方 SDK 代码使用广告 ID。如果有，您必须声明自己的应用使用广告 ID。某些 SDK（例如 Google 移动广告 SDK [Play Services-ads]）可能已在其库清单中声明了 com.google.android.gms.permission.AD_ID 权限。如果您的应用将这些 SDK 用作依赖项，即使您未在应用的主清单中明确声明 com.google.android.gms.permission.AD_ID 权限，默认情况下，系统仍会将 SDK 的库清单中的这项权限合并到应用的主清单。
+  - link "详细了解如何合并多个清单文件（在新标签页中打开）":
+    - /url: https://developer.android.com/studio/build/manage-manifests#merge-manifests
+    - text: 了解详情
+- button "舍弃" [disabled]:
+  - generic: 舍弃
+- button "保存" [disabled]:
+  - generic: 保存
+- link "产品动态":
+  - /url: https://play.google.com/console/about/whats-new/
+- link "状态信息中心":
+  - /url: https://status.play.google.com/
+- link "帮助":
+  - /url: /console/u/0/developers/8719288384645399837/help-and-support?app=4974934617254026237
+- generic: © 2026 Google
+- link "隐私权":
+  - /url: https://www.google.com/policies/privacy/
+- link "开发者分发协议":
+  - /url: https://play.google.com/about/developer-distribution-agreement.html
+- link "服务条款":
+  - /url: https://play.google.com/about/console/terms-of-service/

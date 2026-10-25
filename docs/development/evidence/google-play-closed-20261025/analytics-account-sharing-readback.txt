@@ -1,0 +1,200 @@
+- banner:
+  - generic: Analytics
+  - search:
+    - img: search
+    - textbox "搜索":
+      - /placeholder: 可以试搜一下“上个月和去年的用户数比较”
+  - button "切换产品":
+  - button "帮助条目菜单":
+    - img: help
+  - button "打开用户账号切换面板。"
+- navigation "主要页面":
+  - link "首页":
+    - generic: 首页
+  - link "报告":
+    - img: insert_chart_filled
+    - generic: 报告
+  - link "探索":
+    - img: data_exploration
+    - generic: 探索
+  - link "广告":
+    - img: ads_click
+    - generic: 广告
+- navigation "“设置”页面":
+  - link "任务":
+    - img: task_alt
+    - generic: 任务
+  - link "管理":
+    - img: settings_filled
+    - generic: 管理
+- navigation "辅助导航":
+  - navigation "次级页面":
+    - button "创建":
+      - img: add
+      - text: 创建
+      - img: arrow_drop_down
+  - tree:
+    - treeitem "管理" [level=1]:
+      - button "管理":
+        - generic: 管理
+    - treeitem "我的偏好设置" [level=1]:
+      - button "我的偏好设置":
+        - generic: 我的偏好设置
+    - treeitem "账号设置" [expanded] [level=1]:
+      - separator
+      - button "账号设置":
+        - generic: 账号设置
+        - img: keyboard_arrow_up
+    - treeitem "账号" [expanded] [level=2]:
+      - button "账号":
+        - img: arrow_drop_down
+        - generic: 账号
+    - treeitem "账号详细信息" [level=3]:
+      - button "账号详细信息":
+        - generic: 账号详细信息
+    - treeitem "账号访问权限管理" [level=3]:
+      - button "账号访问权限管理":
+        - generic: 账号访问权限管理
+    - treeitem "账号更改历史记录" [level=3]:
+      - button "账号更改历史记录":
+        - generic: 账号更改历史记录
+    - treeitem "账号数据 API 配额历史记录" [level=3]:
+      - button "账号数据 API 配额历史记录":
+        - generic: 账号数据 API 配额历史记录
+    - treeitem "回收站" [level=3]:
+      - button "回收站":
+        - generic: 回收站
+    - treeitem "媒体资源设置" [expanded] [level=1]:
+      - separator
+      - button "媒体资源设置":
+        - generic: 媒体资源设置
+        - img: keyboard_arrow_up
+    - treeitem "媒体资源" [level=2]:
+      - button "媒体资源":
+        - img: arrow_right
+        - generic: 媒体资源
+    - treeitem "数据收集和修改" [expanded] [level=2]:
+      - button "数据收集和修改":
+        - img: arrow_drop_down
+        - generic: 数据收集和修改
+    - treeitem "数据流" [level=3]:
+      - button "数据流":
+        - generic: 数据流
+    - treeitem "数据收集" [level=3]:
+      - button "数据收集":
+        - generic: 数据收集
+    - treeitem "数据导入" [level=3]:
+      - button "数据导入":
+        - generic: 数据导入
+    - treeitem "数据保留" [level=3]:
+      - button "数据保留":
+        - generic: 数据保留
+    - treeitem "数据过滤器" [level=3]:
+      - button "数据过滤器":
+        - generic: 数据过滤器
+    - treeitem "数据删除请求" [level=3]:
+      - button "数据删除请求":
+        - generic: 数据删除请求
+    - treeitem "用户意见征求设置" [level=3]:
+      - button "用户意见征求设置":
+        - generic: 用户意见征求设置
+    - treeitem "数据显示" [level=2]:
+      - button "数据显示":
+        - img: arrow_right
+        - generic: 数据显示
+    - treeitem "产品关联" [level=2]:
+      - button "产品关联":
+        - img: arrow_right
+        - generic: 产品关联
+  - separator
+- button "导航切换" [expanded]:
+  - img: keyboard_arrow_left
+- main:
+  - heading "账号详细信息" [active] [level=1]
+  - link "移入回收站":
+    - /url: "#/a407469534p560150083/admin/account/delete"
+    - generic: 移入回收站
+  - heading "基本设置" [level=2]
+  - text: 账号 ID
+  - generic: "407469534"
+  - text: 账号名称
+  - textbox "账号名称": FishPilot
+  - text: 开展业务的国家/地区
+  - button "美国":
+    - generic: 美国
+    - img: arrow_drop_down
+  - heading "数据共享设置 用于详细了解数据共享设置的提示" [level=2]:
+    - text: 数据共享设置
+    - button "用于详细了解数据共享设置的提示":
+      - img: help_outline
+  - paragraph:
+    - text: Google 只会出于
+    - link "维护和保护":
+      - /url: https://support.google.com/analytics/answer/1011397?hl=zh_CN&utm_id=ad
+    - text: Google Analytics 服务的需要处理您的 Google Analytics 数据，
+    - link "《Google 广告数据处理条款》":
+      - /url: https://business.safety.google/adsprocessorterms/
+    - text: 对此有具体说明。通过以下数据共享设置，您可以自行决定您在 Google Analytics 中收集的数据是否也可出于其他目的共享给 Google。
+  - paragraph:
+    - text: 利用数据共享选项，您可以更好地控制 Google Analytics 数据的共享。
+    - link "详细了解账号数据共享设置":
+      - /url: https://support.google.com/analytics/answer/1011397?hl=zh_CN&utm_id=ad
+      - text: 了解详情
+  - checkbox "Google 产品和服务"
+  - generic: Google 产品和服务
+  - emphasis: 与 Google 共享您的 Google Analytics 数据，帮助改善 Google 的产品和服务。启用此设置后，Google 将可以更好地了解用户行为和期望方面的规律，打造让我们各款产品的用户都获益的功能，例如改善 Google Ads 系统工具，方便您更好地制作、管理和分析广告系列。Google 不会将您的数据用于其自身的广告个性化或广告定位。如果您停用此选项，数据仍可传输到已与您的媒体资源关联的其他 Google 产品。若要查看或更改您的设置，请访问每项媒体资源中的“产品关联”部分。
+  - button "无需执行任何操作":
+    - img: warning
+    - generic: 无需执行任何操作
+  - checkbox "为模型贡献数据并分享业务洞见数据" [checked]
+  - generic: 为模型贡献数据并分享业务洞见数据
+  - text: 选择贡献汇总的衡量数据后，您即可启用预测、基于模型估算数据和基准比较等功能，获得更丰富的业务数据洞见。 系统会将您共享的数据（包括作为共享来源的媒体资源的相关信息）进行汇总和去标识化处理，然后才会用来生成业务数据洞见。
+  - button "显示示例"
+  - checkbox "技术支持" [checked]
+  - generic: 技术支持
+  - generic: 允许 Google 技术支持代表在必要时访问您的 Google Analytics 数据和账号，以方便提供服务和找出技术问题的解决办法。
+  - checkbox "针对您的业务的建议" [checked]
+  - generic: 针对您的业务的建议
+  - generic: 向 Google 授予对您 Google Analytics 账号数据的访问权限，包括账号使用情况和配置数据、产品支出以及与您的 Google Analytics 账号关联的用户，让 Google 可以帮助您充分利用各种 Google 产品，并为您提供有关 Google Analytics 和其他 Google 商业产品的数据洞见、优惠、建议和优化提示。
+  - text: 了解 Google Analytics 如何
+  - link "保护您的数据":
+    - /url: https://support.google.com/analytics/answer/6004245?hl=zh_CN&utm_id=ad
+  - text: 。
+  - generic: 数据处理条款
+  - paragraph:
+    - text: 如果您在欧洲经济区的某个成员国/地区、瑞士或英国境内创办了企业，或者您由于其他原因需要遵守《一般数据保护条例》(GDPR) 的某种本地版本，或者您的企业需要遵守《加州消费者隐私法案》(CCPA)，并且您已与 Google 订立直接客户合同或签署《Google Analytics 360 使用条款》以使用 Google Analytics，则您需要接受《Google 广告数据处理条款》。某些使用 Google Analytics 服务的用户可能已经在他们的 Google Analytics（或 GA360）协议中同意遵守《Google 广告数据处理条款》，如果是这种情况，用户接受《Google 广告数据处理条款》不会影响他们已经接受的协议条款。
+    - link "详细了解数据处理条款":
+      - /url: https://support.google.com/analytics/answer/3379636?hl=zh_CN&utm_id=ad
+  - generic: 尚未接受此账号的《数据处理条款》。
+  - checkbox "根据 GDPR 的要求，我接受《数据处理条款》。 详细了解《数据处理条款》"
+  - text: 根据 GDPR 的要求，我接受
+  - link "《数据处理条款》":
+    - /url: https://privacy.google.com/businesses/processorterms/
+  - text: 。
+  - link "详细了解《数据处理条款》":
+    - /url: https://support.google.com/analytics/answer/3379636?hl=zh_CN&utm_id=ad
+  - generic: 点击“管理 DPA 详细信息”即可更新或完善数据处理条款。系统会将您引导至 DPA 管理页面，您可以在此处修改联系人和所属组织的法律实体。
+  - link "管理 DPA 详细信息":
+    - /url: https://marketingplatform.google.com/gdpr/?key=407469534&product=1
+    - text: 管理 DPA 详细信息
+    - img: launch
+  - separator
+  - button "保存":
+    - generic: 保存
+  - button "取消":
+    - generic: 取消
+- contentinfo:
+  - text: ©2026 Google |
+  - link "Google Analytics 首页":
+    - /url: https://www.google.com/analytics/?hl=zh-CN
+  - text: "|"
+  - link "服务条款":
+    - /url: https://www.google.com/analytics/tos.html?hl=zh-CN
+  - text: "|"
+  - link "隐私权政策":
+    - /url: https://www.google.com/policies/privacy/?hl=zh-CN
+  - text: "|"
+  - button "发送反馈":
+    - img: feedback
+    - generic: 发送反馈
+- button "打开上下文菜单"
