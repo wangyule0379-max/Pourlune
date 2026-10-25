@@ -529,6 +529,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get blueSquare => 'Blue square';
 
   @override
+  String get roseStar => 'Rose star';
+
+  @override
   String get suggestedTarget => 'Suggested destination';
 
   @override

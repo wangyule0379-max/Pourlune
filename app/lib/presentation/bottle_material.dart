@@ -24,3 +24,27 @@ const neutralKnitColorFilter = ColorFilter.matrix([
   1,
   0,
 ]);
+
+/// Rose knit sampled from existing material; clear glass is never filtered.
+const roseKnitColorFilter = ColorFilter.matrix([
+  .15,
+  .2933,
+  .0567,
+  0,
+  132,
+  .15,
+  .2933,
+  .0567,
+  0,
+  64,
+  .15,
+  .2933,
+  .0567,
+  0,
+  88,
+  0,
+  0,
+  0,
+  1,
+  0,
+]);

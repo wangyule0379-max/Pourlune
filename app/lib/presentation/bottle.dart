@@ -9,14 +9,31 @@ const liquidColors = {
   'G': Color(0xffb9d89f),
   'P': Color(0xffc6aadb),
   'B': Color(0xffa9d4e6),
+  'R': Color(0xffe8a5b8),
 };
 const colorNames = {
   'O': 'Orange circle',
   'G': 'Green triangle',
   'P': 'Purple diamond',
   'B': 'Blue square',
+  'R': 'Rose star',
 };
-const symbols = {'O': '●', 'G': '▲', 'P': '◆', 'B': '■'};
+const symbols = {'O': '●', 'G': '▲', 'P': '◆', 'B': '■', 'R': '★'};
+
+/// Shared pictogram for liquid layers and the fixed target cushion.
+Path fivePointStar(Offset center, double radius) {
+  final points = [
+    for (var i = 0; i < 10; i++)
+      center +
+          Offset(
+                math.cos(-math.pi / 2 + i * math.pi / 5),
+                math.sin(-math.pi / 2 + i * math.pi / 5),
+              ) *
+              (i.isEven ? radius : radius * .381966),
+  ];
+  return Path()..addPolygon(points, true);
+}
+
 typedef LiquidBand = ({String color, double units});
 
 class BottleButton extends StatelessWidget {
@@ -339,6 +356,8 @@ class BottlePainter extends CustomPainter {
             ..close(),
           p,
         );
+      case 'R':
+        canvas.drawPath(fivePointStar(c, r), p);
       case 'B':
         canvas.drawRect(
           Rect.fromCenter(center: c, width: r * 2, height: r * 2),

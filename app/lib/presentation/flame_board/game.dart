@@ -43,9 +43,9 @@ class FlameBoardGame extends FlameGame {
   (String, int, int)? _ignored;
   SequenceEffect? _pourEffect;
   _ProgressEffect? _selectionEffect, _errorEffect;
-  final _pressEffects = List<_ProgressEffect?>.filled(7, null);
-  final _press = List<double>.filled(7, 0);
-  final _selectionLifts = List<double>.filled(7, 0);
+  final _pressEffects = List<_ProgressEffect?>.filled(8, null);
+  final _press = List<double>.filled(8, 0);
+  final _selectionLifts = List<double>.filled(8, 0);
   int? _selectionTarget;
   double _elapsed = 0, _initialLift = 0, _shake = 0;
   int? _selected, _suggested, _hintSource, _shaking, _addedBottle;

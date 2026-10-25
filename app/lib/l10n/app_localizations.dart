@@ -988,6 +988,12 @@ abstract class AppLocalizations {
   /// **'Blue square'**
   String get blueSquare;
 
+  /// No description provided for @roseStar.
+  ///
+  /// In en, this message translates to:
+  /// **'Rose star'**
+  String get roseStar;
+
   /// No description provided for @suggestedTarget.
   ///
   /// In en, this message translates to:

@@ -49,7 +49,7 @@ class FlameBoard extends StatefulWidget {
 
 class _FlameBoardState extends State<FlameBoard> {
   late FlameBoardGame game;
-  final states = List.generate(7, (_) => WidgetStatesController());
+  final states = List.generate(8, (_) => WidgetStatesController());
   @override
   void initState() {
     super.initState();

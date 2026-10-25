@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../data/player_settings.dart';
-import '../bottle.dart' show LiquidBand, ink, liquidColors;
+import '../bottle.dart' show LiquidBand, ink, liquidColors, fivePointStar;
 import '../bottle_material.dart';
 import 'frame.dart';
 import 'geometry.dart';
@@ -237,6 +237,7 @@ class FlameBoardPainter {
       'G': Rect.fromLTWH(937, 211, 166, 309),
       'P': Rect.fromLTWH(1139, 211, 166, 309),
       'B': Rect.fromLTWH(736, 574, 166, 300),
+      'R': Rect.fromLTWH(736, 211, 166, 309),
     };
     Offset point(double x, double y) =>
         Offset((x - .5) * shape.width, (y - .10) * shape.height);
@@ -280,6 +281,7 @@ class FlameBoardPainter {
       Rect? cuff,
       Path? mask,
       bool neutral = false,
+      bool rose = false,
     }) {
       canvas.save();
       canvas.translate(pose.mouth.dx, pose.mouth.dy);
@@ -303,7 +305,11 @@ class FlameBoardPainter {
         shape.imageRect,
         Paint()
           ..filterQuality = FilterQuality.high
-          ..colorFilter = neutral ? neutralKnitColorFilter : null,
+          ..colorFilter = neutral
+              ? neutralKnitColorFilter
+              : rose
+              ? roseKnitColorFilter
+              : null,
       );
       canvas.restore();
     }
@@ -551,6 +557,7 @@ class FlameBoardPainter {
     layer(
       material,
       neutral: fixedTarget == null,
+      rose: fixedTarget == 'R',
       cuff: Rect.fromLTRB(
         image.left,
         image.top,
@@ -561,7 +568,12 @@ class FlameBoardPainter {
     );
     // Only the U-shaped knitted band: never the source bottle's lower glass
     // or baked liquid. All clear glass comes from the actually empty bottle.
-    layer(material, mask: baseCuff, neutral: fixedTarget == null);
+    layer(
+      material,
+      mask: baseCuff,
+      neutral: fixedTarget == null,
+      rose: fixedTarget == 'R',
+    );
     if (settings.strongContrast) {
       canvas.drawPath(
         path,
@@ -583,6 +595,8 @@ class FlameBoardPainter {
   ) {
     final path = Path();
     switch (color) {
+      case 'R':
+        path.addPath(fivePointStar(p, r), Offset.zero);
       case 'O':
         path.addOval(Rect.fromCircle(center: p, radius: r));
       case 'G':
@@ -605,6 +619,7 @@ class FlameBoardPainter {
       'O': Color(0xff1655c2),
       'G': Color(0xff286b35),
       'P': Color(0xff33388b),
+      'R': Color(0xffa52e54),
       'B': Color(0xff1655c2),
     };
     canvas.drawPath(path, Paint()..color = contrast ? ink : colors[color]!);

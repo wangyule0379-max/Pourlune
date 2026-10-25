@@ -402,12 +402,13 @@ class BoardLayout {
     this.footLabels = true,
     this.bottomCaptionsExternal = false,
   }) {
-    assert(count >= 4 && count <= 7);
+    assert(count >= 4 && count <= 8);
     final rows = switch (count) {
       4 => [2, 2],
       5 => [3, 2],
       6 => [3, 3],
-      _ => [4, 3],
+      7 => [4, 3],
+      _ => [4, 4],
     };
     compactLabels = textScale <= 1.3 && width / rows.first - 12 >= 80;
     // Target cushions sit above a separate number/capacity row.
