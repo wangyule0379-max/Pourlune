@@ -191,7 +191,7 @@ def report(pack,cards,directory):
             totals.append(dict(id=pid,level=card['level'],**comparisons))
     (directory/'strategy-summary.json').write_bytes(encoded(dict(seeds=list(SEEDS),action_budget=120,cycle_definition='third exact board visit',policies=strategy.__doc__,levels=totals,scope='finite strategy simulations; not human difficulty, shortest or no-solution proofs')))
     with (directory/'curve.csv').open('w',newline='') as stream:
-        writer=csv.writer(stream);writer.writerow(['id','old_version','new_version','colors','initial_bottles','stage','title','planning_point','reference_steps','lower_bound','shortest_status','old_greedy_wins_64','new_greedy_wins_64','old_random_wins_64','new_random_wins_64','human_play'])
+        writer=csv.writer(stream,lineterminator="\n");writer.writerow(['id','old_version','new_version','colors','initial_bottles','stage','title','planning_point','reference_steps','lower_bound','shortest_status','old_greedy_wins_64','new_greedy_wins_64','old_random_wins_64','new_random_wins_64','human_play'])
         for c in cards:
             comparison=c['simple_strategy_comparison'];contract=c['contract']
             writer.writerow([c['puzzle_id'],c['old_version'],c['new_version'],contract['colors'],contract['initial_bottles'],contract['stage'],contract['title'],c['planning_point']['explanation'],len(c['reference_replay']['steps']),c['measurement']['group_lower_bound'],c['measurement']['shortest_status'],comparison['old']['greedy']['win'],comparison['new']['greedy']['win'],comparison['old']['random']['win'],comparison['new']['random']['win'],c['human_play_status']])
