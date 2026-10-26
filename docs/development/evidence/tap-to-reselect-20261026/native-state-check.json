@@ -1,0 +1,62 @@
+{
+  "identical_persisted_payload_pairs": [
+    [
+      "initial",
+      "full-reselected"
+    ],
+    [
+      "first-legal",
+      "mismatch-reselected"
+    ],
+    [
+      "second-legal",
+      "cancel-empty"
+    ],
+    [
+      "second-legal",
+      "hint-reselected"
+    ]
+  ],
+  "legal_actions_only": [
+    [
+      1,
+      5
+    ],
+    [
+      5,
+      6
+    ],
+    [
+      2,
+      5
+    ]
+  ],
+  "legal_state_sequence": {
+    "initial": [
+      0,
+      0,
+      0
+    ],
+    "first-legal": [
+      1,
+      1,
+      1
+    ],
+    "second-legal": [
+      2,
+      2,
+      2
+    ],
+    "final": [
+      3,
+      3,
+      3
+    ]
+  },
+  "fields": [
+    "move_count",
+    "board_revision",
+    "undo_history_length"
+  ],
+  "note": "Native payload identity proves no persisted snapshot change; automated FFI fault-counter additionally verifies zero snapshot-save calls for ordinary selections. Hint metrics may legitimately persist cancellation, not board changes."
+}
