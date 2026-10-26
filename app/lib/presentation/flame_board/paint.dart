@@ -79,6 +79,9 @@ class FlameBoardPainter {
       final settle =
           frame.pour?.stage == 'settle' &&
           (active?.from == i || active?.to == i);
+      // The transported bottle is last: water stays visible in the receiver,
+      // while the source glass and front knit lip correctly occlude its root.
+      if (i == active?.from) _paintStream(canvas, frame);
       paintBottle(
         canvas,
         i,
@@ -164,6 +167,10 @@ class FlameBoardPainter {
           ..strokeWidth = 3,
       );
     }
+  }
+
+  void _paintStream(Canvas canvas, BoardVisualFrame frame) {
+    final shape = frame.layout.shape, active = frame.active;
     final flow = frame.pour;
     if (flow != null && flow.inStream > .000001) {
       final receiver = frame.poses[active!.to];

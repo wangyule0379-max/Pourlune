@@ -24,8 +24,8 @@ class BottleShape {
   Rect get visibleRect => imageRect;
   List<Offset> get interior => [
     for (final p in const [
-      Offset(.38, .10),
-      Offset(.62, .10),
+      Offset(.32, .05),
+      Offset(.68, .05),
       Offset(.64, .19),
       Offset(.78, .245),
       Offset(.82, .30),
@@ -110,7 +110,10 @@ class BottleShape {
   double get unitArea => areaBelow(interior, (.29 - .10) * height) / 4;
   List<Offset> worldHull(BottlePose pose) =>
       interior.map(pose.transform).toList();
-  Offset lip(double direction) => Offset(direction * .08 * width, 0);
+  // The 166x309 material's opening ends near (53,16)/(113,16).
+  // Use that same inner lip for the retained volume, pose and flowing water.
+  Offset lip(double direction) =>
+      Offset(direction * .18 * width, -.05 * height);
 }
 
 double polygonArea(List<Offset> polygon) {
