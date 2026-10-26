@@ -21,7 +21,7 @@ void main() {
     )..addFont(rootBundle.load('assets/fonts/nunito/Nunito[wght].ttf'))).load();
   });
   testWidgets(
-    'P05 live six-bottle materials retain actual pour, rejection, Undo and free Pause Restart',
+    'P05 live six-bottle materials retain actual pour, reselection, true rejection, Undo and free Pause Restart',
     (t) async {
       t.view.devicePixelRatio = 1;
       t.view.physicalSize = const Size(375, 667);
@@ -104,7 +104,12 @@ void main() {
         await settleFlameBoard(t, c);
         expect(c.current!.board, before.board);
         expect(c.current!.moveCount, 1);
+        expect(c.selectedSource, invalid.$2);
+        expect(c.rejection, isNull);
+        // Direct pour still reports genuine refusal; ordinary taps reselect.
+        await t.runAsync(() => c.pour(invalid.$1, invalid.$2));
         expect(c.rejection, isNotNull);
+        expect(c.current, same(before));
         await t.runAsync(() => t.tap(find.byKey(const Key('undo'))));
         await t.pumpAndSettle();
         await settleFlameBoard(t, c);

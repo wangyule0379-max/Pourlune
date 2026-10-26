@@ -156,6 +156,12 @@ void main() {
         await t.pumpAndSettle();
         await t.tap(find.byKey(const Key('max-bottle-2')));
         await t.pumpAndSettle();
+        expect(c.selectedSource, 2);
+        expect(c.rejection, isNull);
+        expect(find.text('Full'), findsNothing);
+        // Keep the real rejection/detail layout guard via explicit pour.
+        await t.runAsync(() => c.pour(1, 2));
+        await t.pumpAndSettle();
         expect(find.text('Full'), findsOneWidget);
         expect(c.current!.board, state.board);
         expect(c.current!.moveCount, 12);
@@ -187,8 +193,8 @@ void main() {
             image.dispose();
           });
         }
-        // A real saving transition must not swap back to the broken max layout.
-        await t.tap(find.byKey(const Key('max-bottle-1')));
+        // Cancel the new source, then make the same real saving transition.
+        await t.tap(find.byKey(const Key('max-bottle-2')));
         await t.pumpAndSettle();
         await t.tap(find.byKey(const Key('max-bottle-0')));
         await t.pumpAndSettle();
