@@ -1,0 +1,47 @@
+{
+  "reviewed_at": "2026-10-26T14:44:15.107922+00:00",
+  "reviewer": "parent independent review of actual platform screenshots and readback receipts",
+  "screenshots_actually_viewed": [
+    "upload-complete.png",
+    "self-group-ready.png"
+  ],
+  "checks": {
+    "exact_ci_terminal_receipt": true,
+    "upload_variant_preaccepted": true,
+    "version16": true,
+    "processing_complete": true,
+    "existing_group_testing": true,
+    "platform_identity": true
+  },
+  "passed": true,
+  "evidence_sha256": {
+    "ci-terminal.json": "75f49fcddc66fbfdaf3f925ae3614cec8dd54dc0937dae37fe2cd4ae0cf8c16f",
+    "testflight-ready.json": "a3439a5803d866687491b5990701abbc7cd33efdbb44b0073c3a990c6ccbfd26",
+    "upload-result.json": "fa90ef0a9b579fbb2809f4b20b3eee37faf19b6fc7877c19f2a3eb72cfb326b5",
+    "upload-complete.png": "9717c2175ecea08eb2b6f4e64b8bdabf834b484124f1194285ab4a1901ac0e35",
+    "upload-complete.txt": "841d607c018c8418d2c608bd6a06b9f8d92baf10682c72b20d24b5bd6b798f10",
+    "self-group-ready.png": "6bfd2b2f3bda791679b1833a8ec06731dc7b62f7efdee65cdea054299ddd92bd",
+    "self-group-readback.txt": "f48d30f415b1f923f50be91428a81b8afcb524878ebfa14f4adeeb9395665026",
+    "build-group-readback.txt": "6b77b924630a657662d0d13542a559ecd0ca916a425826fc160644c211068990",
+    "organizer-independent.json": "bae595ba92935f6fb9bf98bc97509605880e8cc620aaf1b6e592b4b6468bf18b"
+  },
+  "ci_method": "Exact head queried live while in progress earlier; final saved terminal receipt read now, no repeated terminal query.",
+  "physical_phone_install_or_audio_audition_verified": false,
+  "ad_mode": "official test ads, not commercial owner units",
+  "archive_text_normalization": {
+    "checked_at": "2026-10-26T14:46:40.089876+00:00",
+    "reason": "Developer stripped trailing whitespace in two UI text receipts to satisfy git diff --check. Parent reread both current texts; same build16 testing status, Self group and two testers. Seven other evidence hashes including both screenshots remain exact. No platform, CI, device or package changes.",
+    "files": [
+      {
+        "path": "self-group-readback.txt",
+        "original_reviewed_sha256": "cfdd672898e98ff1d783382c4c2a69f1ef25b417c55a13e23c5477b6ded5a921",
+        "archived_sha256": "f48d30f415b1f923f50be91428a81b8afcb524878ebfa14f4adeeb9395665026"
+      },
+      {
+        "path": "build-group-readback.txt",
+        "original_reviewed_sha256": "3837f49713db4b048a17e2a837e68faecc2a48e3113cd207df6be11cf5bebf4d",
+        "archived_sha256": "6b77b924630a657662d0d13542a559ecd0ca916a425826fc160644c211068990"
+      }
+    ]
+  }
+}
