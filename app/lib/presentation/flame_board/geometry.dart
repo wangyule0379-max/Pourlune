@@ -234,12 +234,33 @@ class PourGeometry {
     final initialAngle = pourAngle(shape, sourceUnits.toDouble()) * direction;
     final finalAngle =
         pourAngle(shape, (sourceUnits - units).toDouble()) * direction;
-    final gap = bounds == null ? 35.0 : (shape.width * .30).clamp(8.0, 26.0);
+    final rimClearance =
+        -shape.imageRect.top + (shape.width * .14).clamp(8.0, 16.0);
+    double rimDrop(double angle) {
+      final turn = BottlePose(Offset.zero, angle);
+      // The top 17% of the original material contains the knit rim/seam.
+      // Its rotated lower edge, not the stream's lip point, needs clearance
+      // above the receiving rim. The envelope includes the widening neck.
+      final rim = Rect.fromLTRB(
+        -shape.width * .32,
+        -shape.height * .10,
+        shape.width * .32,
+        shape.height * .07,
+      );
+      final bottom = [
+        rim.topLeft,
+        rim.topRight,
+        rim.bottomLeft,
+        rim.bottomRight,
+      ].map((p) => turn.transform(p).dy).reduce(math.max);
+      return bottom - turn.transform(shape.lip(direction)).dy;
+    }
+
     double transportScale(double angle) {
       if (area == null) return 1;
       final turn = BottlePose(Offset.zero, angle);
       final lip = turn.transform(shape.lip(direction));
-      final anchor = targetMouth - Offset(0, gap);
+      final anchor = targetMouth - Offset(0, rimClearance);
       var scale = 1.0;
       for (final corner in [
         shape.visibleRect.topLeft,
@@ -247,7 +268,9 @@ class PourGeometry {
         shape.visibleRect.bottomLeft,
         shape.visibleRect.bottomRight,
       ]) {
-        final delta = turn.transform(corner) - lip;
+        // The rim's extension scales with the transported bottle too, so
+        // clearance and canvas fitting share one linear transform.
+        final delta = turn.transform(corner) - lip - Offset(0, rimDrop(angle));
         if (delta.dx < 0) {
           scale = math.min(scale, (anchor.dx - area.left) / -delta.dx);
         }
@@ -264,14 +287,18 @@ class PourGeometry {
       return scale.clamp(.01, 1);
     }
 
-    Offset aligned(double angle) =>
-        targetMouth +
-        Offset(0, -gap) -
-        BottlePose(
-          Offset.zero,
-          angle,
-          scale: transportScale(angle),
-        ).transform(shape.lip(direction));
+    Offset aligned(double angle) {
+      final scale = transportScale(angle);
+      final gap = area == null ? 35.0 : rimClearance + rimDrop(angle) * scale;
+      return targetMouth -
+          Offset(0, gap) -
+          BottlePose(
+            Offset.zero,
+            angle,
+            scale: scale,
+          ).transform(shape.lip(direction));
+    }
+
     final selected = sourceMouth + Offset(0, -initialLift);
     final approachEnd = aligned(initialAngle * .65);
     var out = 0.0, delivered = 0.0, head = 0.0, tail = 0.0;

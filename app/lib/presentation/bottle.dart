@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 const ink = Color(0xff061b78);
 const cream = Color(0xfffff9e6);
 const liquidColors = {
-  'O': Color(0xffff9f46),
+  'O': Color(0xffff8218),
   'G': Color(0xff8fd342),
   'P': Color(0xffad72e5),
   'B': Color(0xff38b5e8),
