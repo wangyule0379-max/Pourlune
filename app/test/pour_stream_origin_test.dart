@@ -67,7 +67,7 @@ void main() {
       final initial = boardFixture(colors: 5, extra: true);
       final layout = BoardLayout(width: 370, count: 8, maxHeight: 480);
       var totalCovered = 0;
-      for (final route in [(2, 7), (7, 2)]) {
+      for (final route in [(2, 7), (7, 5)]) {
         final from = route.$1, to = route.$2;
         // Mirror the real four-unit core transfer for both directions.
         final move = from == 2
