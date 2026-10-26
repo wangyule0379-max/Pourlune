@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 const ink = Color(0xff061b78);
 const cream = Color(0xfffff9e6);
 const liquidColors = {
-  'O': Color(0xffebc69b),
-  'G': Color(0xffb9d89f),
-  'P': Color(0xffc6aadb),
-  'B': Color(0xffa9d4e6),
-  'R': Color(0xffe8a5b8),
+  'O': Color(0xffff9f46),
+  'G': Color(0xff8fd342),
+  'P': Color(0xffad72e5),
+  'B': Color(0xff38b5e8),
+  'R': Color(0xffe56c9a),
 };
 const colorNames = {
   'O': 'Orange circle',

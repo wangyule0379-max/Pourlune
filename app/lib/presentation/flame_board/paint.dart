@@ -430,12 +430,12 @@ class FlameBoardPainter {
             pose.transform(Offset(shape.width * .32, shape.height * .4)),
             [
               Color.lerp(color, const Color(0xff58616a), .16)!,
-              Color.lerp(color, Colors.white, .22)!,
-              Color.lerp(color, Colors.white, .38)!,
-              Color.lerp(color, Colors.white, .08)!,
+              Color.lerp(color, Colors.white, .12)!,
+              Color.lerp(color, Colors.white, .18)!,
+              Color.lerp(color, Colors.white, .04)!,
               color,
               Color.lerp(color, const Color(0xff58616a), .12)!,
-              Color.lerp(color, Colors.white, .25)!,
+              Color.lerp(color, Colors.white, .18)!,
             ],
             [0, .07, .23, .45, .72, .93, 1],
           ),
@@ -465,8 +465,8 @@ class FlameBoardPainter {
             surface.topCenter,
             surface.bottomCenter,
             [
-              Color.lerp(liquidColors[merged.last.color], Colors.white, .48)!,
-              Color.lerp(liquidColors[merged.last.color], Colors.white, .12)!,
+              Color.lerp(liquidColors[merged.last.color], Colors.white, .32)!,
+              Color.lerp(liquidColors[merged.last.color], Colors.white, .08)!,
             ],
           ),
       );
