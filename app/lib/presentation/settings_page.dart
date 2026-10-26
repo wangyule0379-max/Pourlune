@@ -330,6 +330,9 @@ class _RulesPageState extends State<RulesPage> {
                       demo = result.state;
                       selected = null;
                     });
+                  } else if (state.tutorial?.active != true &&
+                      state.board[index].isNotEmpty) {
+                    setState(() => selected = index);
                   }
                 }
               },

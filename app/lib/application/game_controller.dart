@@ -601,9 +601,20 @@ class GameController extends ChangeNotifier {
     }
     if (selectedSource == null) {
       if (s.board[index].isNotEmpty) {
+        _cancelHint();
         selectedSource = index;
         onFeedback?.call(GameFeedback.select);
       }
+      _notify();
+      return;
+    }
+    final target = s.board[index];
+    if (s.tutorial?.active != true &&
+        target.isNotEmpty &&
+        (target.length == 4 || target.last != s.board[selectedSource!].last)) {
+      _cancelHint();
+      selectedSource = index;
+      onFeedback?.call(GameFeedback.select);
       _notify();
       return;
     }
