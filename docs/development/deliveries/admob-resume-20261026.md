@@ -23,3 +23,7 @@
 app-ads.txt须开发者网站根目录且与公开商店Developer Website关联，现有pourlune-support项目子路径不等于域根。根站仓库查询404，未擅自建立主域站点或覆盖其他产品。应用设置目前显示未公开应用无需verification；待公开条目/账号权限可用后再完成实际归属验证。官方依据：https://support.google.com/admob/answer/9363762 和 https://support.google.com/admob/answer/14538460 。
 
 Android本批仅真实登记/工具配置校验，未声称Android SDK/物理手机通过；重复原生回调、无奖励提前关闭不是本次截图证据（现有受控测试保护仍保留）。F9/D79及其窗口/库未操作。TestFlight15冻结，无新包上传、无广告策略/采集选择/存档结构改变。
+
+## 最终独立结论
+
+父已追加实际查看插屏Test mode与返回22两图、只读核interstitial-sdk.sqlite后接受有限测试接入；边界11及total/consumed11/剩0与活动22一致。与此前激励结果一起通过测试链路独立复核；账号审核、隐私消息、app-ads及商业/Android原生/物理手机范围仍未因此通过。见review/admob-resume-20261026-independent.md。
