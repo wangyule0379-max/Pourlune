@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reproducible Pourlune originals: stdlib oscillators, no samples/network.
+"""Recompute four original effects and verify two selected recordings without replacing them.
 
 Run from any directory with Python 3.11+: audio_generate.py [--check].
 The check recomputes every byte, checks signal bounds and both delivered copies.
@@ -11,7 +11,6 @@ import io
 import json
 import math
 from pathlib import Path
-import random
 import struct
 import wave
 
@@ -53,17 +52,6 @@ def synthesize():
     out = tracks["select"] = blank(0.14)
     tone(out, 0, 0.14, 84, 1, bell=True)
 
-    out = tracks["pour"] = blank(0.84)
-    rng = random.Random(8008)
-    low = 0
-    for i in range(len(out)):
-        t = i / RATE
-        low += 0.075 * (rng.uniform(-1, 1) - low)
-        edge = min(1, t / 0.04, (0.84 - t) / 0.08)
-        out[i] = low * edge * (0.6 + 0.4 * math.sin(TAU * 8 * t) ** 2)
-    for start, note in [(0.06, 64), (0.20, 67), (0.36, 62), (0.53, 69), (0.68, 65)]:
-        tone(out, start, 0.15, note, 0.13, attack=0.015)
-
     out = tracks["error"] = blank(0.28)
     tone(out, 0, 0.15, 64, 0.8)
     tone(out, 0.11, 0.17, 61, 0.8)
@@ -76,16 +64,6 @@ def synthesize():
     for start, note in [(0, 84), (0.12, 91), (0.28, 88), (0.43, 96)]:
         tone(out, start, 1.05 - start, note, 0.55, bell=True)
 
-    out = tracks["background"] = blank(24)
-    # Eight 4/4 bars at 80 BPM: warm sustained triads and sparse bell replies.
-    # All pitches, rhythm and timbre authored here for this project.
-    chords = [(48, 55, 64), (45, 55, 60), (41, 57, 64), (43, 57, 62)] * 2
-    notes = [72, 79, 76, 72, 69, 76, 72, 67, 69, 76, 72, 77, 74, 69, 67, 74]
-    for bar, chord in enumerate(chords):
-        for note in chord:
-            tone(out, bar * 3, 3, note, 0.36, attack=0.4, decay=1.5)
-    for step, note in enumerate(notes):
-        tone(out, step * 1.5 + 0.3, 1.2, note, 0.16, attack=0.018, bell=True)
     return tracks
 
 
@@ -139,16 +117,24 @@ def main():
             else:
                 directory.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(data)
+    selected = json.loads((ROOT / "docs/design/production-candidates/audio-selected-20261026/runtime/manifest.json").read_text())
+    for entry in selected["files"]:
+        source = ROOT / entry["candidate_path"]
+        asset = ASSETS / entry["file"]
+        data = source.read_bytes()
+        assert hashlib.sha256(data).hexdigest() == entry["sha256"]
+        assert asset.read_bytes() == data, f"selected recording drift: {asset}"
+        entries.append(entry)
     manifest = {
         "status": "production_candidate; not independent audio acceptance",
         "authored_on": "2026-10-22",
-        "authoring": "Codex deterministic synthesis for the Pourlune B03 user-authorized task",
+        "authoring": "Four unchanged B03 synthesized effects plus two user-selected licensed recordings",
         "source": "tools/assets/audio_generate.py",
         "source_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-        "third_party_audio_inputs": [],
+        "third_party_audio_inputs": [selected["source_record"]],
         "authorization_record": "AUDIO-AUTHORING.md",
         "measurement": "Decoded integer PCM, full-file unweighted RMS and sample peak; not LUFS, true peak, perceived loudness or device sound pressure.",
-        "loop_note": "Whole-file 24-second loop with zero endpoints and envelope releases. Native-player gapless behavior and audible seam require device validation.",
+        "loop_note": "Full original Dream Culture music loop; natural-pitch water loop gated by visible flow. Native loop and subjective seams require device validation.",
         "files": entries,
     }
     data = (json.dumps(manifest, indent=2, ensure_ascii=False) + "\n").encode()
@@ -157,9 +143,9 @@ def main():
         assert path.read_bytes() == data, "manifest drift"
     else:
         path.write_bytes(data)
-    print(f"{'Verified' if args.check else 'Generated'} {len(entries)} originals; two byte-identical copies; PCM bounds/zero endpoints checked.")
+    print(f"{'Verified' if args.check else 'Generated'} 4 original effects + 2 protected selected recordings; runtime copies verified.")
     for entry in entries:
-        print(f"{entry['file']}: {entry['duration_seconds']:.2f}s, sample peak {entry['sample_peak_dbfs']:.2f} dBFS, unweighted RMS {entry['unweighted_rms_dbfs']:.2f} dBFS")
+        print(f"{entry['file']}: {entry['duration_seconds']:.2f}s")
 
 
 if __name__ == "__main__":

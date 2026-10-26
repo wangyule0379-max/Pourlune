@@ -19,10 +19,12 @@ class LargeTextBoardPage extends StatefulWidget {
     required this.onPause,
     required this.onExtra,
     required this.showSaveFailure,
+    this.onFlowStart,
+    this.onFlowEnd,
   });
   final GameController controller;
   final VoidCallback onPause;
-  final VoidCallback? onExtra;
+  final VoidCallback? onExtra, onFlowStart, onFlowEnd;
   final bool showSaveFailure;
   @override
   State<LargeTextBoardPage> createState() => LargeTextBoardPageState();
@@ -345,6 +347,8 @@ class LargeTextBoardPageState extends State<LargeTextBoardPage> {
             settings: c.settings,
             motion: c.motion,
             onMotionComplete: c.completeMotion,
+            onFlowStart: widget.onFlowStart,
+            onFlowEnd: widget.onFlowEnd,
             rejectedBottle: c.rejectedBottle,
             rejectionRevision: c.rejectionRevision,
             addedBottle: widget.showSaveFailure

@@ -31,6 +31,8 @@ class FlameBoard extends StatefulWidget {
     this.keyPrefix = 'bottle',
     this.motion,
     this.onMotionComplete,
+    this.onFlowStart,
+    this.onFlowEnd,
     this.rejectedBottle,
     this.rejectionRevision = 0,
     this.preview = false,
@@ -38,6 +40,7 @@ class FlameBoard extends StatefulWidget {
   final GameInstance state;
   final int? selected, suggested, hintSource, rejectedBottle, addedBottle;
   final ValueChanged<int>? onTap, onMotionComplete;
+  final VoidCallback? onFlowStart, onFlowEnd;
   final PlayerSettings settings;
   final String keyPrefix;
   final PourMotion? motion;
@@ -62,6 +65,8 @@ class _FlameBoardState extends State<FlameBoard> {
   }
 
   FlameBoardGame _newGame() => FlameBoardGame(
+    onFlowStart: () => widget.onFlowStart?.call(),
+    onFlowEnd: () => widget.onFlowEnd?.call(),
     onMotionComplete: (token) {
       if (mounted) widget.onMotionComplete?.call(token);
     },

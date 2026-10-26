@@ -193,4 +193,25 @@ void main() {
       await audio.dispose();
     },
   );
+  test(
+    'water queued behind decoder cannot begin after its flow ended',
+    () async {
+      final sink = AudioSink()..holdMusic = Completer<void>();
+      final audio = GameAudio(transport: sink);
+      final starting = audio.update(
+        settings: enabled,
+        foreground: true,
+        paused: false,
+      );
+      await Future<void>.delayed(Duration.zero);
+      final water = audio.play(GameSound.pour);
+      final ended = audio.finishEffect();
+      sink.holdMusic!.complete();
+      await Future.wait([starting, water, ended]);
+      expect(sink.events, ['music']);
+      await audio.play(GameSound.select);
+      expect(sink.events.last, 'select');
+      await audio.dispose();
+    },
+  );
 }

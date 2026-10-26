@@ -51,6 +51,7 @@ class GameAudio {
 
   /// Ends a finite visual cue without stopping the background music.
   Future<void> finishEffect() {
+    _soundRevision++; // A decoder delay must not start water after flow ended.
     if (_disposed) return _pending;
     return _enqueue(() async {
       if (!_effectsActive) return;
@@ -134,7 +135,7 @@ class _AssetAudioTransport implements GameAudioTransport {
     final player = _music ??= AudioPlayer();
     await player.setAudioContext(_context(music: true));
     await player.setReleaseMode(ReleaseMode.loop);
-    await player.play(AssetSource('audio/background.wav'), volume: 0.45);
+    await player.play(AssetSource('audio/dream-culture.mp3'), volume: 0.12);
   }
 
   @override
@@ -146,7 +147,9 @@ class _AssetAudioTransport implements GameAudioTransport {
     // A single effects voice intentionally replaces the previous short cue.
     await player.stop();
     await player.setAudioContext(_context(music: false));
-    await player.setReleaseMode(ReleaseMode.stop);
+    await player.setReleaseMode(
+      sound == GameSound.pour ? ReleaseMode.loop : ReleaseMode.stop,
+    );
     await player.play(AssetSource('audio/${sound.name}.wav'), volume: 0.65);
   }
 
