@@ -166,16 +166,23 @@ class FlameBoardPainter {
     }
     final flow = frame.pour;
     if (flow != null && flow.inStream > .000001) {
-      final top = Offset.lerp(
-        flow.streamStart,
-        flow.streamEnd,
-        flow.streamTail,
-      )!;
-      final bottom = Offset.lerp(
-        flow.streamStart,
-        flow.streamEnd,
-        flow.streamHead,
-      )!;
+      final receiver = frame.poses[active!.to];
+      final hull = shape.worldHull(receiver);
+      final filled = frame.bands[active.to].fold(0.0, (n, b) => n + b.units);
+      final surface = Offset(
+        flow.streamEnd.dx,
+        waterline(hull, filled * shape.unitArea),
+      );
+      // One column continues through the neck to the rising liquid surface.
+      // Below the opening it is restricted to the receiver's clear interior.
+      canvas.save();
+      canvas.clipPath(
+        Path()
+          ..addRect(Rect.fromLTRB(0, 0, frame.layout.width, receiver.mouth.dy))
+          ..addPolygon(hull, true),
+      );
+      final top = Offset.lerp(flow.streamStart, surface, flow.streamTail)!;
+      final bottom = Offset.lerp(flow.streamStart, surface, flow.streamHead)!;
       final path = Path()
         ..moveTo(top.dx, top.dy)
         ..quadraticBezierTo(
@@ -187,11 +194,11 @@ class FlameBoardPainter {
       canvas.drawPath(
         path,
         Paint()
-          ..color = liquidColors[active!.before[active.from].last]!
+          ..color = liquidColors[active.before[active.from].last]!
           ..style = PaintingStyle.stroke
           ..strokeCap = StrokeCap.round
           ..strokeWidth =
-              math.max(1.5, shape.width * .018) + active.units * .17,
+              math.max(2.8, shape.width * .035) + active.units * .25,
       );
       canvas.drawPath(
         path,
@@ -212,6 +219,7 @@ class FlameBoardPainter {
           Paint()..color = Colors.white.withValues(alpha: .5),
         );
       }
+      canvas.restore();
     }
   }
 

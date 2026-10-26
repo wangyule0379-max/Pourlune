@@ -183,8 +183,9 @@ class FlameBoardGame extends FlameGame {
             500 + geometry.flowMs,
             geometry.totalMs,
           ];
-    final budget = _reduced ? .12 : m.duration.inMicroseconds / 1000000;
     final total = boundaries.last;
+    // Geometry milliseconds are real presentation time, including the flow.
+    final budget = total / 1000;
     late final SequenceEffect effect;
     effect = SequenceEffect(
       [

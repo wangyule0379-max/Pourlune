@@ -215,7 +215,7 @@ class PourGeometry {
   final int units, sourceUnits;
   final double initialLift;
   final Rect? bounds;
-  double get flowMs => 230 + 70.0 * units;
+  double get flowMs => 460 + 100.0 * units;
   double get totalMs => 200 + 90 + flowMs + 210 + 100;
   PourFrame frame(double elapsedMs) {
     final t = elapsedMs.clamp(0.0, totalMs);
@@ -234,7 +234,7 @@ class PourGeometry {
     final initialAngle = pourAngle(shape, sourceUnits.toDouble()) * direction;
     final finalAngle =
         pourAngle(shape, (sourceUnits - units).toDouble()) * direction;
-    final gap = bounds == null ? 35.0 : math.max(4.0, shape.width * .06);
+    final gap = bounds == null ? 35.0 : (shape.width * .30).clamp(8.0, 26.0);
     double transportScale(double angle) {
       if (area == null) return 1;
       final turn = BottlePose(Offset.zero, angle);
@@ -300,7 +300,7 @@ class PourGeometry {
       stage = 'align';
     } else if (t < 290 + flowMs) {
       final f = t - 290;
-      const lag = 26.0;
+      const lag = 60.0;
       out = units * _ease(f / (flowMs - lag));
       delivered = units * _ease((f - lag) / (flowMs - lag));
       final angle = pourAngle(shape, sourceUnits - out) * direction;
