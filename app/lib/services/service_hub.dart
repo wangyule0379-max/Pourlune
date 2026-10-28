@@ -108,6 +108,7 @@ class ServiceHub extends ChangeNotifier {
   int _consentGeneration = 0;
   String firebaseStatus = 'disabled';
   int _privacyGeneration = 0;
+  int _privacyChoiceGeneration = 0;
   void _notify() {
     if (!_disposed) notifyListeners();
   }
@@ -203,18 +204,25 @@ class ServiceHub extends ChangeNotifier {
   }
 
   Future<void> updatePrivacy(PrivacyChoices value) async {
+    final choiceGeneration = ++_privacyChoiceGeneration;
     if (!value.analytics) continuation.clear();
     choices = value;
     privacySaveFailed = false;
     // In-memory gate closes synchronously; native withdrawal is queued immediately.
     final sync = _syncPrivacy();
     _notify();
+    var saveFailed = false;
     try {
       await store.writeServiceValue('privacy_choices', value.toJson());
     } catch (_) {
-      privacySaveFailed = true;
+      saveFailed = true;
+    }
+    // Only the latest live selection may apply a save acknowledgement.
+    if (choiceGeneration == _privacyChoiceGeneration && !_disposed) {
+      privacySaveFailed = saveFailed;
     }
     await sync;
+    if (choiceGeneration != _privacyChoiceGeneration || _disposed) return;
     if (privacySaveFailed) await _syncPrivacy();
     _notify();
   }
@@ -354,6 +362,7 @@ class ServiceHub extends ChangeNotifier {
     if (_disposed) return;
     _disposed = true;
     _consentGeneration++;
+    _privacyChoiceGeneration++;
     _ticker.cancel();
     ads.removeListener(_notify);
     ads.dispose();
