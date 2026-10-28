@@ -9,3 +9,9 @@ R01接收瓶下沉和R02整体下移/静态缩放均已被用户否决，旧通�
 实际页面Widget像素证明：第4关源瓶在旧画布上方有约9千至1万不透明样本，实际与独立全源参考匹配（0差异），并非只把scale改大又裁掉。关卡文字、返回/暂停及静态瓶/动作矩形不变；源瓶运输.9，第6关下排接收路径1.0。规则提示和部分装饰会被浮动源瓶短暂经过，此为已显式记录的自然前景遮挡，待父实际判断，未擅自隐藏/挪动提示或当成通过。PNG为Widget证据，不是原生验收。
 
 正常main新QA尚待另冻及Computer指定2894实际4/5瓶重点观察；F9、统计/SDK/广告、保存/奖励与发布不改。不得将当前代码/Widget检查称为已修好或已更新TestFlight。
+
+## Frozen QA provenance (pending native review)
+
+Implementation source: `30a42d9b613e71732766910af5266dfbe9bad886`. Normal main simulator debug build succeeded. 361 files frozen read-only at `build/pour-flight-fix-20261028/ios-qa-3/Runner.app`; manifest SHA256 `9f030c29763a0ffa06fe774a76af3793b456b569e35858fe8e504f21742239fa`. Display name `Pourlune Pour QA R3`; same dedicated identity/database; Firebase, GM and ads disabled.
+
+Same-byte installation copy is under `xcode-frozen-launch-3/Products`, with standard directory/executable0755 and data0644 permissions. GUI-only descriptor `PourFlightSourceOnlyQA.xcodeproj`, scheme `PourFlightSourceOnly_NoBuild_20261028`, has zero sources/build phases/dependencies/packages/scripts. Static settings confirm arm64/iphonesimulator and correct Products path. Computer must use existing2894 and Run Without Building only; no device CLI. Parent coordinates native4/5 priority; new evidence belongs to native-r3. No actual installation or acceptance claimed.
