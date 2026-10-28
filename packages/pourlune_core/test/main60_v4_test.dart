@@ -5,10 +5,16 @@ import 'package:pourlune_core/pourlune_core.dart';
 import 'package:test/test.dart';
 
 const evidence = '../../docs/development/evidence/main60-five-color-difficulty';
-Puzzle current(int level) => Puzzle.parse(
-  File(
-    '../../app/assets/puzzles/main/main-${level.toString().padLeft(3, '0')}.json',
-  ).readAsStringSync(),
+// Historical v4 contracts stay attached to their authored definitions. Current
+// packaging and calibration are covered by production_content/main60_v5 tests.
+final _authoredV4 =
+    (jsonDecode(
+          File('../../docs/content/design/main60-five-color-v4.json')
+              .readAsStringSync(),
+        ) as Map<String, dynamic>)['levels']
+        as List;
+Puzzle current(int level) => Puzzle.fromJson(
+  Map<String, dynamic>.from((_authoredV4[level - 1] as Map)['puzzle'] as Map),
 );
 
 void main() {

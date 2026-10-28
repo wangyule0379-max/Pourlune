@@ -9,6 +9,7 @@ from measure_levels import trace_solution
 
 ROOT=Path(__file__).resolve().parents[2]
 EVIDENCE=ROOT/'docs/development/evidence/main60-five-color-difficulty'
+AUTHORED=read_json(ROOT/'docs/content/design/main60-five-color-v4.json')['levels']
 
 class Main60V4Tests(unittest.TestCase):
     def test_entire_pack_and_contracts_not_samples(self):
@@ -58,7 +59,7 @@ class Main60V4Tests(unittest.TestCase):
         from validate import pour, is_won
         from measure_levels import successors
         for n in [20,30,40,50,60]:
-            p=read_json(ROOT/f'app/assets/puzzles/main/main-{n:03}.json')
+            p=AUTHORED[n-1]['puzzle']
             for policy in ['greedy','random']:
                 for seed in SEEDS[:4]:
                     a=strategy(p['initial_bottom_to_top'],p['target_labels'],seed,policy)
@@ -75,7 +76,7 @@ class Main60V4Tests(unittest.TestCase):
         data=read_json(EVIDENCE/'extra-space-comparisons.json')['levels']
         self.assertEqual([r['level'] for r in data],[20,30,40,50,60])
         for row in data:
-            p=read_json(ROOT/f"app/assets/puzzles/main/{row['id']}.json")
+            p=AUTHORED[row['level']-1]['puzzle']
             prefix=trace_solution(p['initial_bottom_to_top'],p['target_labels'],row['prefix'],require_win=False)
             self.assertEqual(prefix['steps'][-1]['after'],row['board'])
             trace_solution(row['board'],p['target_labels'],row['without_extra']['moves'])

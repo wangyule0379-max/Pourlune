@@ -10,6 +10,7 @@ class AudioSink implements GameAudioTransport {
   final events = <String>[];
   Completer<void>? holdMusic;
   bool failMusic = false;
+  bool failEffectsStop = false;
 
   @override
   Future<void> startMusic() async {
@@ -23,7 +24,11 @@ class AudioSink implements GameAudioTransport {
   @override
   Future<void> play(GameSound sound) async => events.add(sound.name);
   @override
-  Future<void> stopEffects() async => events.add('stop effects');
+  Future<void> stopEffects() async {
+    events.add('stop effects');
+    if (failEffectsStop) throw StateError('native stop unavailable');
+  }
+
   @override
   Future<void> dispose() async => events.add('dispose');
 }
@@ -100,6 +105,57 @@ void main() {
     expect(sink.events, ['music', 'pour', 'stop effects']);
     await audio.dispose();
   });
+
+  test(
+    'rapid pause, background, or sound toggle cannot leave water looping',
+    () async {
+      for (final reason in ['pause', 'background', 'sound']) {
+        final sink = AudioSink();
+        final audio = GameAudio(transport: sink);
+        await audio.update(settings: enabled, foreground: true, paused: false);
+        await audio.play(GameSound.pour);
+        final stopping = audio.update(
+          settings: reason == 'sound'
+              ? enabled.withValue('sound', false)
+              : enabled,
+          foreground: reason != 'background',
+          paused: reason == 'pause',
+        );
+        // Lifecycle/settings notifications need not wait for the audio queue.
+        final resuming = audio.update(
+          settings: enabled,
+          foreground: true,
+          paused: false,
+        );
+        await Future.wait([stopping, resuming]);
+        expect(
+          sink.events.where((e) => e == 'stop effects'),
+          hasLength(1),
+          reason: reason,
+        );
+        expect(sink.events.where((e) => e == 'pour'), hasLength(1));
+        await audio.play(GameSound.select);
+        expect(sink.events.last, 'select');
+        await audio.dispose();
+      }
+    },
+  );
+
+  test(
+    'failed flow-end stop remains stoppable at the next lifecycle update',
+    () async {
+      final sink = AudioSink();
+      final audio = GameAudio(transport: sink);
+      await audio.update(settings: enabled, foreground: true, paused: false);
+      await audio.play(GameSound.pour);
+      sink.failEffectsStop = true;
+      await audio.finishEffect();
+      sink.failEffectsStop = false;
+      await audio.update(settings: enabled, foreground: false, paused: false);
+      expect(sink.events.where((e) => e == 'stop effects'), hasLength(2));
+      await audio.dispose();
+    },
+  );
 
   test(
     'queued effects from before pause are never replayed on resume',

@@ -21,6 +21,7 @@ class GameAudio {
   Future<void> _pending = Future<void>.value();
   bool _musicAllowed = false, _soundAllowed = false;
   bool _musicPlaying = false, _effectsActive = false, _disposed = false;
+  bool _effectsStopRequested = false;
   int _soundRevision = 0;
 
   /// Best effort only. Call without awaiting from gameplay/save/navigation.
@@ -34,7 +35,10 @@ class GameAudio {
     final active = foreground && !paused;
     _musicAllowed = active && settings.music;
     final soundAllowed = active && settings.sound;
-    if (_soundAllowed != soundAllowed) _soundRevision++;
+    if (_soundAllowed != soundAllowed) {
+      _soundRevision++;
+      if (!soundAllowed) _effectsStopRequested = true;
+    }
     _soundAllowed = soundAllowed;
     return _enqueue(_sync);
   }
@@ -43,6 +47,7 @@ class GameAudio {
     if (_disposed || !_soundAllowed) return _pending;
     final revision = _soundRevision;
     return _enqueue(() async {
+      if (_effectsStopRequested) await _stopEffects();
       if (_disposed || !_soundAllowed || revision != _soundRevision) return;
       _effectsActive = true;
       await _transport.play(sound);
@@ -53,15 +58,13 @@ class GameAudio {
   Future<void> finishEffect() {
     _soundRevision++; // A decoder delay must not start water after flow ended.
     if (_disposed) return _pending;
-    return _enqueue(() async {
-      if (!_effectsActive) return;
-      _effectsActive = false;
-      await _transport.stopEffects();
-    });
+    _effectsStopRequested = true;
+    return _enqueue(_stopEffects);
   }
 
   Future<void> stop() {
     _musicAllowed = _soundAllowed = false;
+    _effectsStopRequested = true;
     _soundRevision++;
     if (_disposed) return _pending;
     return _enqueue(_sync);
@@ -91,11 +94,22 @@ class GameAudio {
       }
     });
     await _attempt(() async {
-      if ((!_soundAllowed || _disposed) && _effectsActive) {
-        await _transport.stopEffects();
-        _effectsActive = false;
+      // Preserve an interruption even if a resume reached the queue first.
+      // Only music resumes; a previous visual cue must never restart.
+      if (_effectsStopRequested || !_soundAllowed || _disposed) {
+        await _stopEffects();
       }
     });
+  }
+
+  Future<void> _stopEffects() async {
+    if (_effectsActive) {
+      await _transport.stopEffects();
+      _effectsActive = false;
+    }
+    // A failed native stop leaves this request and the active voice intact so
+    // the next lifecycle update can retry without blocking gameplay.
+    _effectsStopRequested = false;
   }
 
   Future<void> _enqueue(Future<void> Function() operation) {
@@ -115,6 +129,7 @@ class GameAudio {
 
 class _AssetAudioTransport implements GameAudioTransport {
   AudioPlayer? _music, _effects;
+  bool _musicReady = false;
 
   AudioContext _context({required bool music}) => AudioContext(
     android: AudioContextAndroid(
@@ -133,13 +148,18 @@ class _AssetAudioTransport implements GameAudioTransport {
   @override
   Future<void> startMusic() async {
     final player = _music ??= AudioPlayer();
+    if (_musicReady) {
+      await player.resume();
+      return;
+    }
     await player.setAudioContext(_context(music: true));
     await player.setReleaseMode(ReleaseMode.loop);
     await player.play(AssetSource('audio/dream-culture.mp3'), volume: 0.12);
+    _musicReady = true;
   }
 
   @override
-  Future<void> stopMusic() async => _music?.stop();
+  Future<void> stopMusic() async => _music?.pause();
 
   @override
   Future<void> play(GameSound sound) async {

@@ -86,3 +86,20 @@ POURLUNE_CONTENT_REPORT=../../docs/development/evidence/B03/content-dart-budgets
 逐关curve及两条合法分支表示具体接收口竞争与可行续路；参考路线的缓冲复用不等于
 证明所有解都必须如此。下界/合法解上界/最短未知分开，算法结果不作为人类难度、视觉
 或发布通过。完整父实际验收仍是后续门槛。
+
+## 当前主线校准 v5（2026-10-28）
+
+运行资产当前使用 `docs/content/design/main60-calibration-v5.json` 的40道明确替换，
+前20、每日30与catalog保持原字节。v4输入作为历史基线保留；**不要对当前包运行v2/v3/v4安装器**。
+固定目标、5色/7瓶/最多8瓶、旧活动实例内嵌定义和奖励ID不变。改变的题目单独递增内容版本。
+
+```sh
+.venv/bin/python tools/content/calibrate_main60_v5.py --check
+.venv/bin/python tools/content/calibrate_main60_v5.py --install
+.venv/bin/python tools/content/difficulty_probe.py --output build/difficulty-comparison.json
+```
+
+检查/安装先核两个目的地全部字节；未知编辑拒绝且不写任何题。策略测量为两个无前瞻、
+避免重复状态的简单策略，独立32种子、100合法动作预算。`no_new_choice`/预算用尽不是
+无解，更不是人类失败。后段降低其通关比例不代表已保证真人难度单调递增。
+历史版本测试固定到对应历史源；当前90题与提示及新旧SQLite实例另测。
