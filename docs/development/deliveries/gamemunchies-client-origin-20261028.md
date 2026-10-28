@@ -30,6 +30,6 @@ iOS实际后台test开局13→14，活跃2/展示1/失败28保持；完成后原
 
 早先手工Python回放仅发过一次，HTTP403，Cloudflare实际安全事件定位为Browser Integrity Check。该失败与一次性ledger保留，不换UA、不改WAF、不重放；它不算去重成功。以上成功来自SDK原生HTTP、持久化与重试。受控断连/丢ACK不等于无线断网、真机、广告展示/奖励或正式生产通过。F9未动。
 
-Android原生SDK公开回执在 ../evidence/gamemunchies-live-integration/api-native-android/。新增自然active与原两条合批，所以不能声称Android收到纯重复0/N；只证明原两条去重。Computer已恢复冻结normal-main APK，安装内base SHA与f284eb192c4095bf7c77942c4c874a884bcbf65e90e94d976f446d8bd99e0d19一致、原正常库保留，未启动/清库。后台Android后验数因页面变化/CDP超时未读到，保持未验证；不能用HTTP ACK替代管理UI计数回读。
+Android原生SDK公开回执在 ../evidence/gamemunchies-live-integration/api-native-android/。新增自然active与原两条合批，所以不能声称Android收到纯重复0/N；只证明原两条去重。Computer已恢复冻结normal-main APK，安装内base SHA与f284eb192c4095bf7c77942c4c874a884bcbf65e90e94d976f446d8bd99e0d19一致、原正常库保留，未启动/清库。后台Android首次后验因页面变化/CDP超时未读到；随后Computer正常只读回读已完成：test活跃1→2、开局1→2、展示0/失败0保持，更新15:14:27，符合只新增一局。截图保留在原始Computer证据目录backend-after.png，不用HTTP ACK代替后台计数。
 
 地址专项已交总控独立判断，不代表整体GM广告控制、隐私披露、CI或新TestFlight完成。现存隐私页误述与真实广告路径仍需修复/验证后再交整体候选。
