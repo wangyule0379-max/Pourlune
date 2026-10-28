@@ -56,3 +56,9 @@ IPA 86,731,598字节，SHA256 a37b9aa46932616744d04a2116a1b9c89acdd84a98a108eecc
 ## 支持站已发布回读
 
 既有pourlune-support仓库提交01764d8eb8de85755f6cbf9214b2f3db9db46af0，Pages run40651368042精确head成功，只同步源ea2bdee的index.html/privacy.html。实际HTTPS help SHA256 ff8c960faeb77ddb6df15f0871d5cc0f119ff971694594c1bf054115ac204c89，privacy SHA256 2fb654594fb1d8dbdb4d91656861ac8dd782857301a1afd9afc56b878296ac55，均匹配该精确源；浏览器读到18条件措辞与16/17/Android13无GM说明。当前本分支privacy仅API链接markup较该发布源后改为纯文字，不将站点回读误称与当前HEAD逐字相同。完整Computer回执见../evidence/gamemunchies-live-integration/support-release/report.md。站点同步不等于18已分发，无SDK归档或商店操作。
+
+## Actions具体授权已落实
+
+本人在总控聊天明确答复“允许，仅供构建并继续发布”。Computer已在既有Pourlune仓库设置GAMEMUNCHIES_DART_SDK_ARCHIVE_V1，页面确认Repository secret added；源受限文件、长度和归档SHA与已核固定源匹配。此后继续最终精确源CI及原组发布，不移除GM或重造无差额签名包。
+
+配置过程有需保留的异常：提交后页面跳转完成前，无障碍快照意外将归档值输出到Use Computer聊天的工具结果。该值是私有SDK归档，并非认证token；已知暴露范围为该聊天工具记录，没有进入公开仓库的证据。开发未读取/复制该输出，也不在本报告、仓库、日志或后续消息复述payload；已告知用户与总控。重编码或替换同源码归档不能撤回既有聊天记录，因此不将无效“轮换”冒称修复；既有获批构建用途继续，后续不得获取该密钥显示值。此前待答状态作为历史记录保留，由本项更新。
