@@ -376,3 +376,26 @@ checks the actual product's GADApplicationIdentifier. Independently inspect the
 new AAB's actual bundletool manifest App ID before store upload, alongside its
 certificate/payload/signature checks; native Gradle checks alone are not store
 acceptance.
+
+
+### Privacy manifest normalization for local iOS archives (2026-10-28)
+
+Apple TN3181 requires omitting `NSPrivacyAccessedAPITypes` when its array is empty.
+The manual signed archive path now sets `POURLUNE_REPAIR_PRIVACY_MANIFESTS=1` for
+`xcodebuild archive`. Runner's final `privacy_manifests.sh` phase removes only
+that empty key in the 14 explicitly reviewed, code-free resource bundles before
+Runner signing. It does not rewrite SDK caches, signed frameworks, nonempty API
+reasons, data-collection declarations or old candidates. Unknown/malformed
+manifests and signed/code-bearing resource bundles fail before any repair.
+Debug and simulator builds skip the phase. Archive and exported IPA are checked
+again with `ios_privacy_manifests.inspect_app`; final verification never repairs
+an already signed package.
+
+Read-only check: `.venv/bin/python tools/validation/ios_privacy_manifests.py --app <Runner.app>`.
+Focused guards: `.venv/bin/python -m unittest discover -s tools/validation -p test_ios_privacy_manifests.py -v`.
+Actual local signed archive/export proof is in
+`docs/development/evidence/prelaunch-closeout-20261028/privacy-package-independent.json`.
+That proof reuses version16 only in a new local directory and must never be uploaded:
+16 is already occupied. Any later store candidate needs its own unused build number,
+final source and distribution settings. This format repair does not answer store
+privacy questionnaires or establish that commercial ads are ready.

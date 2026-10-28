@@ -22,6 +22,7 @@ from android_signing import SigningError, inspect_signer, sign_aab
 from admob_config import AdConfigError, add_arguments as add_ad_arguments, selection as ad_selection
 from build_version import BuildError, read_version
 from ios_release_plugins import verify_no_test_plugin
+from ios_privacy_manifests import inspect_app as inspect_privacy_manifests
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -144,6 +145,8 @@ def main():
                 raise BuildError('ios_ad_app_id_mismatch')
             if profile:
                 verify_no_test_plugin(artifact / 'Runner')
+                privacy = inspect_privacy_manifests(artifact)
+                (output / 'privacy-manifests.json').write_text(json.dumps(privacy, indent=2) + '\n')
             for nested in artifact.rglob('Info.plist'):
                 if nested == artifact / 'Info.plist':
                     continue

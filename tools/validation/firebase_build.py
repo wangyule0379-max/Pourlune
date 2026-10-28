@@ -16,6 +16,7 @@ from public_destinations import DestinationError, add_destination_arguments, val
 from admob_config import AdConfigError, add_arguments as add_ad_arguments, selection as ad_selection
 from build_version import BuildError, display_definitions
 from ios_release_plugins import release_plugins, verify_no_test_plugin
+from ios_privacy_manifests import inspect_app as inspect_privacy_manifests
 
 
 def main():
@@ -176,7 +177,7 @@ def main():
                     ["xcodebuild", "-workspace", "ios/Runner.xcworkspace", "-scheme", "Runner",
                      "-configuration", "Release", "-destination", "generic/platform=iOS",
                      "-disableAutomaticPackageResolution", "-onlyUsePackageVersionsFromResolvedFile",
-                     "-archivePath", str(archive), "archive"],
+                     "-archivePath", str(archive), "POURLUNE_REPAIR_PRIVACY_MANIFESTS=1", "archive"],
                     ["xcodebuild", "-exportArchive", "-archivePath", str(archive),
                      "-exportOptionsPlist", str(export), "-exportPath", str(output / "ipa")],
                 ])
@@ -195,6 +196,8 @@ def main():
                         break
                     if profile and index == 1:
                         verify_no_test_plugin(archive / 'Products/Applications/Runner.app/Runner')
+                        privacy = inspect_privacy_manifests(archive / 'Products/Applications/Runner.app')
+                        (output / 'privacy-manifests.json').write_text(json.dumps(privacy, indent=2) + '\n')
             # Flutter/Xcode can echo their environment on failure. Redact both
             # the client value and its complete encoded Dart definition.
             log = "\n".join(logs)

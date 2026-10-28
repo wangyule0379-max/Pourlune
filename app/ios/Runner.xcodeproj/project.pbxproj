@@ -160,6 +160,7 @@
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				A10F01000000000000000002 /* Development Crashlytics symbols */,
+				A10F01000000000000000003 /* Normalize archive privacy manifests */,
 			);
 			buildRules = (
 			);
@@ -237,6 +238,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		A10F01000000000000000003 /* Normalize archive privacy manifests */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = ("$(SRCROOT)/Flutter/privacy_manifests.sh", "$(SRCROOT)/../../tools/validation/ios_privacy_manifests.py");
+			name = "Normalize archive privacy manifests";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/bin/sh \"$SRCROOT/Flutter/privacy_manifests.sh\"";
+			showEnvVarsInLog = 0;
+		};
 		A10F01000000000000000002 /* Development Crashlytics symbols */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
