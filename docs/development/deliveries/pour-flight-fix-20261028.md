@@ -29,3 +29,14 @@
 正常lib/main.dart，独立身份dev.pourlune.pourFlightValidation、独立库pour_flight_fix_20261028.sqlite；Firebase none、广告disabled、GM disabled，声音/触觉仅QA静音。五份真实定义/核心动作/SQLite准备夹具覆盖4/5主反馈与6/7/8代表，8瓶为明确核心加瓶QA状态，不是广告奖励或自然进度。夹具工具`app/test/support/pour_flight_fixtures.dart`需显式opt-in且拒绝覆盖已存在输出。
 
 实际安装、正常字号同尺寸短视频与关键帧、动作前后SQLite回执仍待Use Computer执行，并由总控实际验收。F9及原应用、库、测试设备状态不得修改。此包不构成真实广告、物理设备或新TestFlight通过；发布由总控验收后安排。
+
+## 已冻结原生QA候选
+
+源5220a23a22ea0d99c2b5ce4a1c1d68cdad9dfb38，正常main的iOS Simulator debug编译成功（qa-build.log）。只读副本build/pour-flight-fix-20261028/ios-qa-1/Runner.app共361文件；完整qa-manifest.json SHA256为0ccda5400edd0de90f5a4fb97a9a6f39a1da0faf36b8b9014e5a188f3d197936，记录身份、实际defines及五份夹具hash。已交由Use Computer验证，当前尚未实际通过。第一次QA编译因临时defines把GM环境写为空串被guard拒绝（qa-first-build-rejected.log）；将仅该忽略配置改为显式disabled后编译通过，未修改guard或生产实现。
+
+
+## 实际验收工具状态（未通过）
+
+Use Computer已独立核验冻结包361/361文件与manifest SHA、无额外文件/GoogleService plist、Info.plist身份/版本/显示名，并通过Xcode设备管理观察2894A85E-04FC-4857-A856-3BEFF2CCB565为iPhone17 Pro / iOS26.5。尚未安装QA包、未写新库、未产生原生录像或动作回执。
+
+当前CUA文档要求“Do not use other technologies besides cua_repl for computer interactions”；因此不使用simctl、终端或另一执行方绕开。单窗口截图/AX/窗口列表未提供mac跨窗口bounds，尚无法可靠定位Finder到Simulator的拖放终点。Simulator菜单已实见Record Screen，Xcode当前无工程target，Run Without Building不可用。总控正在协调合法GUI安装路径；未要求本人操作。此为验收工具阻断，不是原生运行失败，也不能以Widget像素测试代替实际通过。父明确本阶段不再新构建、测试、签名或上传。
