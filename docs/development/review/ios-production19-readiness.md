@@ -49,3 +49,27 @@ Google官方说明publisher first-party ID不用于将本发布者App活动关�
 为既定13+受众，广告初始化前设置PG内容上限，未设置虚假的年龄/儿童标签。12个Flutter定向测试及分析通过；生产构建6项广告守卫、33项Firebase配置、12项beta工具测试通过。
 
 Use Computer已回读ASC草稿0.5.0、免费、13+覆盖、无登录和手动发布；地区未设，联系人因缺电话未保存。隐私站更新提交c3d991f255517476bb92db2aeefe780ab1f97f6f，正式privacy标签尚在填写。
+
+## 最终签名包独立核验
+
+运行源 `eb48e7d151e6cd2aeaccb653b8e960d6c3c4e561`；`ios-production-gm020-1` 的签名 IPA 86,736,330 字节，SHA-256 `b9f0001c38baea35917681add9c88d04d35f6dd75c8aae117976444896afa5ca`。563 源输入与提交/固定私有包一致，563 候选文件实际 hash 一致，ZIP 完整性与解包字节一致。archive/IPA 分别独立 strict 签名、既有分发 profile/com.pourlune.app/0.5.0(19)、get-task-allow=false、90 题与全部资源一致，Runner/App dSYM UUID 匹配；两份 Runner 均无 integration_test 类及通道字节。核验脚本最初未解码字体文件 URL，修正核验路径后全项通过；未修改候选。详 package-independent.json。
+
+实际 AOT 包含现有 production gameId、api.gamemunchies.com 和两个已回读正式广告单元；不包含独立测试 gameId。原生 AppID 为现有 Pourlune 正式登记。Info.plist 的 Analytics 默认与广告存储/用户数据/个性化开关均 false，无 ATT usage description；同哈希来源全广告请求 NPA、PG 内容上限在初始化前生效。并不声称仅靠静态包检查证明商业库存填充或运行时全部 SDK 数据行为。
+
+Use Computer 已获用户直接确认后发布七类 App Privacy 声明，父实际看发布截图。美国、加拿大两地区已保存，父实际看 2 地区回读图；未勾未来地区自动供应，手动发布不变。用户已提供审核电话，由 Computer 填入并保存，重载姓名正确、电话/邮箱非空但工具遮蔽；不把号码写公开文档。审核电话待办关闭。
+
+精确运行源 CI 40718567516 已 `completed/success`，父核对 head 为 eb48e7d151e6cd2aeaccb653b8e960d6c3c4e561；Use Computer 已继续上传，正式审核尚未完成。SDK 实现源 645a7a2 的 CI 40715422974 已成功，不重复检查。
+
+Computer 首次选择 App Store Connect 后 Organizer 自动进入分析上传，随后取消；当时 ASC 上传记录无19，未当成上传成功。CI终态后从同一归档继续，未反复新建候选或要求用户再次授权。
+
+## 上传后的出口声明
+
+Organizer 已报告上传完成，四个厂商预编译 SDK dSYM 警告记录保留，Runner/App dSYM 自身已独立核符。ASC 完成处理后要求补出口声明。实际 GM 固定客户端使用 package:http 默认 IOClient → dart:io HttpClient；实际 Flutter 二进制包含 boringssl、SecureSocket、tls13 标记，标准 TLS 不仅依赖 Apple 系统 URLSession。故按事实选择“在 Apple 操作系统加密之外或同时使用标准算法”，无专有算法；本次仅美国、加拿大，不在法国分发。不选“以上均无”来省略声明，也不为补 Info.plist 键重建19。
+
+依据：[Apple 加密文件要求](https://developer.apple.com/help/app-store-connect/reference/app-information/export-compliance-documentation-for-encryption/)、[Dart HttpClient](https://api.dart.dev/dart-io/HttpClient-class.html)、[Dart TLS 源码](https://github.com/dart-lang/sdk/blob/main/runtime/bin/secure_socket_filter.cc)。后续平台结果按实际回读记载，不把选项判断当正式批准。
+
+## 最终平台回执（2026-10-29 台北00:10）
+
+父实际看过 `ios-production19-self.png`：既有 Self 2人，19正在测试、90天到期；`ios-production19-review-submitted.png`：已提交1个项目；`ios-production19-review-waiting.png`：iOS0.5.0(19)等待审核，提交ID b9c5f905-35d7-4e43-885e-eb15c63a25db。ASC构建ID c39e2e07-bfb8-4170-bbcf-d467e60d8c5f。声明保存后Missing Compliance消失，未触发额外出口文件要求。没有代签账户协议、增加邀请或公开发布。
+
+实际Organizer上传IPA另核 `organizer-independent.json`：101,668,176字节，SHA-256 5732d392d842be0f343423c055d46b275aa7a96372ab4d77ea77922789a38b86。8个变更Mach-O非签名代码全同、Info语义同，strict签名及既有同Team/App分发profile有效；新增4个符号文件，资源不变。上传的运行内容与已验源相符。商店审核尚未批准，商业广告填充和Android原生未验边界不因提交而改写。
