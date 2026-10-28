@@ -197,7 +197,14 @@ class FlameBoardPainter {
       canvas.save();
       canvas.clipPath(
         Path()
-          ..addRect(Rect.fromLTRB(0, 0, frame.layout.width, receiver.mouth.dy))
+          ..addRect(
+            Rect.fromLTRB(
+              frame.sourcePaintBounds.left,
+              frame.sourcePaintBounds.top,
+              frame.sourcePaintBounds.right,
+              receiver.mouth.dy,
+            ),
+          )
           ..addPolygon(hull, true),
       );
       final top = Offset.lerp(flow.streamStart, surface, flow.streamTail)!;

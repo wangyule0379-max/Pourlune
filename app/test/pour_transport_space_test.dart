@@ -37,8 +37,11 @@ Rect artBounds(BoardLayout layout, BottlePose pose) {
   );
 }
 
+Rect screenPaintBounds(BoardLayout layout) =>
+    Rect.fromLTRB(-12, -106, layout.width + 12, layout.height);
+
 void main() {
-  test('real Level4 lower bottle 3 stays full sized when pouring into upper 2', () {
+  test('real Level4 lower bottle 3 never becomes a miniature into upper 2', () {
     var before = mainPuzzle(4);
     // Legal core moves reproduce the player's exact board, without editing it.
     for (final move in [
@@ -61,7 +64,12 @@ void main() {
     ]);
     final move = boardMove(before, 2, 1);
     final layout = BoardLayout(width: 370, count: 4, maxHeight: 580);
-    final geometry = geometryFor(layout, move.motion, initialLift: 8);
+    final geometry = geometryFor(
+      layout,
+      move.motion,
+      initialLift: 8,
+      bounds: screenPaintBounds(layout),
+    );
     var smallest = 1.0;
     for (var ms = 0.0; ms <= geometry.totalMs; ms += 10) {
       final pose = geometry.frame(ms).source;
@@ -73,7 +81,7 @@ void main() {
     }
     expect(
       smallest,
-      greaterThanOrEqualTo(.9),
+      greaterThanOrEqualTo(.9 - 1e-9),
       reason:
           'A pouring bottle must remain recognizably the same bottle, '
           'rather than becoming a miniature to satisfy the canvas bounds.',
@@ -86,7 +94,11 @@ void main() {
       final move = boardMove(mainPuzzle(6), 1, 3);
       expect(move.motion.units, 2);
       final layout = BoardLayout(width: 370, count: 5, maxHeight: 580);
-      final geometry = geometryFor(layout, move.motion);
+      final geometry = geometryFor(
+        layout,
+        move.motion,
+        bounds: screenPaintBounds(layout),
+      );
       final finalFrame = BoardVisualFrame(
         state: move.after,
         layout: layout,
@@ -128,7 +140,7 @@ void main() {
               units: 4,
               sourceUnits: 4,
               initialLift: 8,
-              bounds: layout.flightBounds,
+              bounds: screenPaintBounds(layout),
             );
             for (var ms = 0.0; ms <= geometry.totalMs; ms += 15) {
               final f = geometry.frame(ms),
@@ -138,12 +150,18 @@ void main() {
                 greaterThanOrEqualTo(.9),
                 reason: '$count/${size.$1} $route at $ms becomes a miniature',
               );
-              expect(art.left, greaterThanOrEqualTo(-.01));
+              expect(
+                art.left,
+                greaterThanOrEqualTo(screenPaintBounds(layout).left - .01),
+              );
               expect(
                 art.top,
-                greaterThanOrEqualTo(layout.flightBounds.top - .01),
+                greaterThanOrEqualTo(screenPaintBounds(layout).top - .01),
               );
-              expect(art.right, lessThanOrEqualTo(layout.width + .01));
+              expect(
+                art.right,
+                lessThanOrEqualTo(screenPaintBounds(layout).right + .01),
+              );
               expect(art.bottom, lessThanOrEqualTo(layout.height + .01));
               // The approved short locked animation may pass in front of
               // captions. Resting geometry and readout positions never move.
@@ -196,7 +214,11 @@ void main() {
       }
       final moved = boardMove(before, route.$1, route.$2);
       final layout = BoardLayout(width: 370, count: count, maxHeight: 580);
-      final geometry = geometryFor(layout, moved.motion);
+      final geometry = geometryFor(
+        layout,
+        moved.motion,
+        bounds: screenPaintBounds(layout),
+      );
       for (var ms = 0.0; ms <= geometry.totalMs; ms += 10) {
         final frame = BoardVisualFrame(
           state: moved.after,

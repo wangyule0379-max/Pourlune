@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 'dart:ui' show Offset;
+import 'dart:ui' show Offset, Rect;
 
 import 'package:pourlune_core/pourlune_core.dart';
 
@@ -19,7 +19,8 @@ class BoardVisualFrame {
     bool reduced = false,
     double initialLift = 0,
     List<double> selectionLifts = const [],
-  }) {
+    Rect? sourcePaintBounds,
+  }) : sourcePaintBounds = sourcePaintBounds ?? layout.flightBounds {
     final m = motion != null && matchesMotion(state, motion) ? motion : null;
     active = m;
     final source = m?.from, target = m?.to;
@@ -33,6 +34,7 @@ class BoardVisualFrame {
           layout,
           m,
           initialLift: initialLift,
+          bounds: this.sourcePaintBounds,
         ).frame(elapsedMs);
         out = flowing.out;
         arrived = flowing.delivered;
@@ -86,6 +88,7 @@ class BoardVisualFrame {
   final GameInstance state;
   final BoardLayout layout;
   final double elapsedMs;
+  final Rect sourcePaintBounds;
   late final PourMotion? active;
   late final PourFrame? pour;
   late final Board contents;
@@ -117,13 +120,14 @@ PourGeometry geometryFor(
   BoardLayout layout,
   PourMotion motion, {
   double initialLift = 0,
+  Rect? bounds,
 }) => PourGeometry(
   shape: layout.shape,
   sourceMouth: layout.mouths[motion.from],
   targetMouth: layout.mouths[motion.to],
   units: motion.units,
   sourceUnits: motion.before[motion.from].length,
-  bounds: layout.flightBounds,
+  bounds: bounds ?? layout.flightBounds,
   initialLift: initialLift,
 );
 

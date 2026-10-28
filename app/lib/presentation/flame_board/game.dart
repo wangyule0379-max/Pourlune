@@ -40,6 +40,7 @@ class FlameBoardGame extends FlameGame {
   bool closed = false, _failed = false, _background = false, _reduced = false;
   GameInstance? _state;
   BoardLayout? _layout;
+  Rect? sourcePaintBounds;
   PlayerSettings _settings = const PlayerSettings();
   PourMotion? _motion;
   (String, int, int)? _ignored;
@@ -61,6 +62,7 @@ class FlameBoardGame extends FlameGame {
     reduced: _reduced,
     initialLift: _initialLift,
     selectionLifts: _selectionLifts,
+    sourcePaintBounds: sourcePaintBounds,
   );
   @override
   Color backgroundColor() => Colors.transparent;

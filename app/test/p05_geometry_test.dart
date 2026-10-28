@@ -67,10 +67,7 @@ void main() {
         shape.height,
       );
       expect(shape.height / shape.width, closeTo(309 / 166, .00001));
-      // The new single upper flight area replaces the old no-flight layout.
-      // Keep material clearly larger than a touch target; reject the old
-      // 55px two-lane layout while retaining full labels and 48px hit cells.
-      expect(visible.width, greaterThanOrEqualTo(64));
+      expect(visible.width, greaterThanOrEqualTo(78));
       for (var i = 0; i < 6; i++) {
         final physical = visible.shift(layout.mouths[i]);
         final caption = layout.labelRect(i);

@@ -2,8 +2,6 @@ import 'dart:math' as math;
 import 'dart:ui';
 import 'dart:typed_data';
 
-const _maximumPourAngle = 1.72;
-
 /// Geometry in the sample canvas. Mouth is the transform origin, rather than
 /// a separately guessed point used only by the stream.
 class BottlePose {
@@ -24,36 +22,6 @@ class BottleShape {
   double get height => width * aspectRatio;
   Rect get imageRect => Rect.fromLTWH(-width / 2, -height * .10, width, height);
   Rect get visibleRect => imageRect;
-  Rect get pouringRim =>
-      Rect.fromLTRB(-width * .32, -height * .10, width * .32, height * .07);
-
-  // One upper flight area, measured from the same material/rim envelopes as
-  // the source pose. This is static layout space, never receiver motion.
-  double get pourHeadroom {
-    var extent = 0.0;
-    final rim = pouringRim;
-    for (final r in [
-      rim.topLeft,
-      rim.topRight,
-      rim.bottomLeft,
-      rim.bottomRight,
-    ]) {
-      for (final p in [
-        visibleRect.topLeft,
-        visibleRect.topRight,
-        visibleRect.bottomLeft,
-        visibleRect.bottomRight,
-      ]) {
-        final d = r - p;
-        for (final a in [0.0, _maximumPourAngle, math.atan2(d.dx, d.dy)]) {
-          if (a < 0 || a > _maximumPourAngle) continue;
-          extent = math.max(extent, d.dx * math.sin(a) + d.dy * math.cos(a));
-        }
-      }
-    }
-    return (width * .14).clamp(8.0, 16.0) + extent;
-  }
-
   List<Offset> get interior => [
     for (final p in const [
       Offset(.32, .05),
@@ -190,7 +158,7 @@ double waterline(List<Offset> polygon, double volumeArea) {
 }
 
 double pourAngle(BottleShape shape, double units) {
-  var low = 0.0, high = _maximumPourAngle;
+  var low = 0.0, high = 1.72;
   final volume = units.clamp(.001, 4) * shape.unitArea;
   for (var i = 0; i < 25; i++) {
     final mid = (low + high) / 2;
@@ -266,17 +234,30 @@ class PourGeometry {
         direction = 1;
       }
     }
+    // The moving source can use real screen space above the local board.
+    // A normal 90% transport and the tested rim gap keep the level header
+    // clear; no resting bottle or receiver changes position or dimensions.
+    final upperFlight =
+        area != null && area.top < 0 && targetMouth.dy < shape.width * 1.25;
     final initialAngle = pourAngle(shape, sourceUnits.toDouble()) * direction;
     final finalAngle =
         pourAngle(shape, (sourceUnits - units).toDouble()) * direction;
     final rimClearance =
-        -shape.imageRect.top + (shape.width * .14).clamp(8.0, 16.0);
+        -shape.imageRect.top +
+        (upperFlight
+            ? (shape.width * .09).clamp(9.0, 12.0)
+            : (shape.width * .14).clamp(8.0, 16.0));
     double rimDrop(double angle) {
       final turn = BottlePose(Offset.zero, angle);
       // The top 17% of the original material contains the knit rim/seam.
       // Its rotated lower edge, not the stream's lip point, needs clearance
       // above the receiving rim. The envelope includes the widening neck.
-      final rim = shape.pouringRim;
+      final rim = Rect.fromLTRB(
+        -shape.width * .32,
+        -shape.height * .10,
+        shape.width * .32,
+        shape.height * .07,
+      );
       final bottom = [
         rim.topLeft,
         rim.topRight,
@@ -314,7 +295,7 @@ class PourGeometry {
           scale = math.min(scale, (area.bottom - anchor.dy) / delta.dy);
         }
       }
-      return scale.clamp(.01, 1);
+      return scale.clamp(.01, upperFlight ? .9 : 1);
     }
 
     Offset aligned(double angle) {
@@ -453,12 +434,11 @@ class BoardLayout {
   BoardLayout({
     required this.width,
     required this.count,
-    this.textScale = 1,
+    double textScale = 1,
     double maxHeight = double.infinity,
     this.preview = false,
     this.footLabels = true,
     this.bottomCaptionsExternal = false,
-    int? targetCount,
   }) {
     assert(count >= 4 && count <= 8);
     final rows = switch (count) {
@@ -472,11 +452,7 @@ class BoardLayout {
     // Target cushions sit above a separate number/capacity row.
     final targetLine = math.max(34.0, 12 * textScale + 12);
     labelHeight = footLabels ? targetLine + 3 + 14 * 1.2 * textScale + 1 : 0;
-    _labelWidth = math.max(64.0, 38 * textScale);
-    lowerLabelHeight =
-        footLabels && textScale <= 1 && (targetCount ?? count - 2) <= rows.first
-        ? labelHeight - targetLine
-        : labelHeight;
+    _labelWidth = math.max(52.0, 38 * textScale);
     topRowCount = rows.first;
     const visibleAspect = 309 / 166;
     final columnWidth = math.min(106.0, width / rows.first - 12);
@@ -494,51 +470,20 @@ class BoardLayout {
     // Nine pixels of raised-cap hit coverage need a disjoint gutter too.
     var rowGap = footLabels ? (compactLabels ? 12.0 : 16.0) : 10.0;
     final captionRows = bottomCaptionsExternal ? 1 : 2;
-    final captionHeights = bottomCaptionsExternal
-        ? labelHeight
-        : labelHeight + lowerLabelHeight;
     final fitting = maxHeight.isFinite
         ? (maxHeight -
                   topPadding -
                   rowGap -
-                  captionHeights -
-                  captionRows * captionGap) /
+                  captionRows * (labelHeight + captionGap)) /
               (2 * visibleAspect)
         : preferred;
-    var visibleWidth = math.min(
+    final visibleWidth = math.min(
       preferred,
       // The 48px minimum applies to the touch cell's height, not bottle
       // width. Preserve two rows when large labels consume the small screen.
       math.max(preview ? 20.0 : 48.0 / visibleAspect, fitting),
     );
-    final hasFlightSpace = !preview && footLabels && textScale <= 1.3;
-    if (hasFlightSpace &&
-        maxHeight.isFinite &&
-        2 * visibleWidth * visibleAspect +
-                math.max(topPadding, BottleShape(visibleWidth).pourHeadroom) +
-                rowGap +
-                captionHeights +
-                captionRows * captionGap >
-            maxHeight) {
-      final fixed = rowGap + captionHeights + captionRows * captionGap;
-      var low = math.min(visibleWidth, 48.0 / visibleAspect);
-      var high = visibleWidth;
-      for (var step = 0; step < 22; step++) {
-        final candidate = (low + high) / 2;
-        final bottle = BottleShape(candidate);
-        if (2 * bottle.height +
-                math.max(topPadding, bottle.pourHeadroom) +
-                fixed <=
-            maxHeight) {
-          low = candidate;
-        } else {
-          high = candidate;
-        }
-      }
-      visibleWidth = low;
-    }
     shape = BottleShape(visibleWidth);
-    if (hasFlightSpace) topPadding = math.max(topPadding, shape.pourHeadroom);
     final visible = shape.visibleRect;
     if (maxHeight.isFinite) {
       final spare = math.max(
@@ -547,10 +492,10 @@ class BoardLayout {
             topPadding -
             rowGap -
             2 * visible.height -
-            captionHeights -
-            captionRows * captionGap,
+            captionRows * (captionGap + labelHeight),
       );
-      // Distribute remaining whitespace after the one measured upper lane.
+      // Distribute genuinely spare room above/between/below the two rows.
+      // Bottle proportions and the minimum caption gap remain unchanged.
       topPadding += spare * .24;
       rowGap += spare * .52;
     }
@@ -570,13 +515,13 @@ class BoardLayout {
         ? labelRect(count - 1).bottom
         : cells.last.bottom;
   }
-  final double width, textScale;
+  final double width;
   final int count;
   final bool preview, footLabels, bottomCaptionsExternal;
   late final int topRowCount;
   late final bool compactLabels;
   late final BottleShape shape;
-  late final double height, labelHeight, lowerLabelHeight;
+  late final double height, labelHeight;
   late final double _labelWidth;
   late final List<Offset> mouths;
   late final List<Rect> cells;
@@ -697,14 +642,13 @@ class BoardLayout {
   }
 
   Rect get flightBounds => Rect.fromLTWH(0, 0, width, height);
-
   Rect labelRect(int index) {
     final labelWidth = math.min(cells[index].width, _labelWidth);
     return Rect.fromLTWH(
       cells[index].center.dx - labelWidth / 2,
       cells[index].bottom + 5,
       labelWidth,
-      index < topRowCount ? labelHeight : lowerLabelHeight,
+      labelHeight,
     );
   }
 }
