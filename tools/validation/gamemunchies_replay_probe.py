@@ -17,6 +17,7 @@ import urllib.error
 import urllib.request
 
 ORIGIN = 'https://studio-k7m4.gamemunchies.com'
+API_ORIGIN = 'https://api.gamemunchies.com'
 GAME_ID = '566121d2-a3f5-4950-8bd9-6ff2f673a0ac'
 FIELDS = {'id', 'installationId', 'type', 'environment', 'occurredAt'}
 TYPES = {'active', 'round_start', 'ad_impression', 'ad_load_failed'}
@@ -36,7 +37,8 @@ def printable_id(value):
         re.fullmatch(r'[\x20-\x7e]{1,128}', value))
 
 
-def prepare(snapshot, *, platform, now=None):
+def prepare(snapshot, *, platform, now=None, origin=ORIGIN):
+    require(origin in {ORIGIN, API_ORIGIN}, 'known_client_origin_required')
     require(platform in {'ios', 'android'}, 'test_mobile_platform_required')
     require(isinstance(snapshot, dict), 'sdk_snapshot_required')
     require(snapshot.get('sourceDevice') == DEVICES[platform] and
@@ -51,7 +53,7 @@ def prepare(snapshot, *, platform, now=None):
         scope = json.loads(base64.urlsafe_b64decode(encoded + '=' * (-len(encoded) % 4)))
     except (ValueError, TypeError, UnicodeError):
         raise ValueError('invalid_sdk_scope') from None
-    require(scope == [ORIGIN, GAME_ID, platform, 'test'], 'wrong_test_scope')
+    require(scope == [origin, GAME_ID, platform, 'test'], 'wrong_test_scope')
     state = snapshot.get('state')
     require(isinstance(state, dict) and state.get('schemaVersion') == 1,
             'sdk_state_required')
@@ -83,7 +85,7 @@ def prepare(snapshot, *, platform, now=None):
     # Preserve every field, including the very first SDK timestamp and IDs.
     body = json.dumps({'events': events}, separators=(',', ':'), ensure_ascii=True).encode()
     require(len(body) <= 49152, 'source_batch_too_large')
-    return {'url': f'{ORIGIN}/api/client/games/{GAME_ID}/{platform}/events',
+    return {'url': f'{origin}/api/client/games/{GAME_ID}/{platform}/events',
             'body': body, 'event_count': len(events),
             'type_counts': dict(Counter(e['type'] for e in events))}
 
@@ -98,7 +100,7 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def main():
+def main(*, origin=ORIGIN, private_subdirectory='gamemunchies-integration/runtime-private'):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--snapshot', type=Path, required=True)
     parser.add_argument('--platform', choices=['ios', 'android'], required=True)
@@ -107,14 +109,14 @@ def main():
                         help='Send once after explicit human authorization; otherwise validate only')
     args = parser.parse_args()
     try:
-        private_root = Path(__file__).resolve().parents[2] / 'build/gamemunchies-integration/runtime-private'
+        private_root = Path(__file__).resolve().parents[2] / 'build' / private_subdirectory
         require(args.snapshot.resolve().is_relative_to(private_root.resolve()),
                 'raw_snapshot_must_stay_in_ignored_private_qa_directory')
         require(args.snapshot.stat().st_mode & 0o077 == 0, 'raw_snapshot_requires_mode_0600')
         require(args.snapshot.resolve() != args.receipt.resolve(), 'receipt_cannot_overwrite_snapshot')
         require(args.snapshot.stat().st_size <= 1048576, 'sdk_snapshot_too_large')
         source = args.snapshot.read_bytes()
-        prepared = prepare(json.loads(source), platform=args.platform)
+        prepared = prepare(json.loads(source), platform=args.platform, origin=origin)
         result = {'destination': prepared['url'], 'platform': args.platform,
                   'environment': 'test', 'game_id': GAME_ID,
                   'source_sha256': hashlib.sha256(source).hexdigest(),
