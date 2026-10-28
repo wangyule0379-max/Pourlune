@@ -699,6 +699,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Optional diagnostics are unavailable in this build. Choices are saved locally.';
 
   @override
+  String get crashUnavailableAnalyticsAvailable =>
+      'Crash reporting is currently unavailable. Gameplay analytics follows your saved choice below.';
+
+  @override
+  String get privacyProviderSyncProblem =>
+      'Your choices are saved, but a reporting service could not apply them. Other enabled reporting may continue. Retry to apply your saved choices.';
+
+  @override
   String get adNetwork =>
       'The ad network could not be reached. Free tools still work. Try again when connected.';
 

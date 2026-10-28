@@ -98,6 +98,7 @@ class GameMunchiesReporting {
   }
 
   final GameMunchiesClient Function()? createClient;
+  bool get configured => createClient != null;
   final DateTime Function() now;
   final void Function(String code)? onDiagnostic;
   GameMunchiesClient? _client;

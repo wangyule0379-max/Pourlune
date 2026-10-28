@@ -286,6 +286,8 @@ XCODE_XCCONFIG_FILE=/tmp/pourlune-main60-five-color.xcconfig FIREBASE_ANALYTICS_
 不能用测试重新安装或Widget重建替代进程恢复。不得把新候选称为已在TestFlight12/Play13。
 ## GameMunchies 统计与广告控制（2026-10-28）
 
+隐私页按服务区分可用性：Firebase 不可用但 GameMunchies 已配置时，提示崩溃上报不可用，游戏统计仍遵循已保存的 Analytics 选择。单个提供方同步失败不能声称所有分享被阻断；本地选择保存失败仍阻断新的应用分享。此差额只修正文案，不改变统计、SDK、广告或发奖门控。渲染与同意竞态回归见 `test/privacy_service_availability_test.dart`、`privacy_choice_generation_test.dart`、`gamemunchies_privacy_race_test.dart`。
+
 复用同一 `gamemunchies_client` 0.1.0，固定源92f588200a1d80b1d0023122fcfc3037db87c53c。
 来源及逐文件指纹在 `../tools/validation/gamemunchies-sdk.json`。
 私有SDK不进入Pourlune仓库；用受限归档恢复到ignored `.private-dependencies/gamemunchies_client`，

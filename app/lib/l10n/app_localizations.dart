@@ -1276,6 +1276,18 @@ abstract class AppLocalizations {
   /// **'Optional diagnostics are unavailable in this build. Choices are saved locally.'**
   String get servicesDisabled;
 
+  /// No description provided for @crashUnavailableAnalyticsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Crash reporting is currently unavailable. Gameplay analytics follows your saved choice below.'**
+  String get crashUnavailableAnalyticsAvailable;
+
+  /// No description provided for @privacyProviderSyncProblem.
+  ///
+  /// In en, this message translates to:
+  /// **'Your choices are saved, but a reporting service could not apply them. Other enabled reporting may continue. Retry to apply your saved choices.'**
+  String get privacyProviderSyncProblem;
+
   /// No description provided for @adNetwork.
   ///
   /// In en, this message translates to:

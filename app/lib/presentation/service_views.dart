@@ -296,7 +296,11 @@ Future<void> showPrivacyChoices(BuildContext context, GameController c) async {
                             Text(l.localOnly),
                             const SizedBox(height: 16),
                             if (hub == null || !hub.firebaseReady)
-                              Text(l.servicesDisabled),
+                              Text(
+                                hub?.reporting.configured == true
+                                    ? l.crashUnavailableAnalyticsAvailable
+                                    : l.servicesDisabled,
+                              ),
                             const SizedBox(height: 8),
                             SwitchListTile(
                               key: const Key('analytics-choice'),
@@ -332,7 +336,12 @@ Future<void> showPrivacyChoices(BuildContext context, GameController c) async {
                             if (hub != null &&
                                 (hub.privacySaveFailed ||
                                     hub.privacySyncFailed)) ...[
-                              Text(l.privacySaveProblem),
+                              Text(
+                                hub.reporting.configured &&
+                                        !hub.privacySaveFailed
+                                    ? l.privacyProviderSyncProblem
+                                    : l.privacySaveProblem,
+                              ),
                               OutlinedButton(
                                 onPressed: hub.retryPrivacy,
                                 child: Text(l.retry),
