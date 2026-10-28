@@ -415,7 +415,7 @@ privacy questionnaires or establish that commercial ads are ready.
 
 只恢复到根目录ignored `.private-dependencies/gamemunchies_client`；未知文件、符号链接、目录穿越、
 整包/逐文件漂移或已有安装被修改均拒绝，不覆盖不匹配源。
-CI使用仓库Actions secret `GAMEMUNCHIES_DART_SDK_ARCHIVE_V1`，仅映射到本step的
+CI使用仓库Actions secret `GAMEMUNCHIES_DART_SDK_ARCHIVE_V2`，仅映射到本step的
 `POURLUNE_GM_SDK_ARCHIVE`供脚本解码。没有secret的fork/环境会明确失败，不拿删依赖或替身当干净通过。
 这批归档10233字节、base64值13644字节，低于GitHub的48KB secret限制；只输出公开指纹，不回显payload。
 设置由Use Computer在正常GitHub设置页面按具体授权执行，不新增token或公开仓库。
@@ -427,3 +427,5 @@ CI使用仓库Actions secret `GAMEMUNCHIES_DART_SDK_ARCHIVE_V1`，仅映射到�
 `gamemunchies_config.py`在两端原生构建阶段核实际identity与Dart定义，拒绝未知ID、环境错配和未授权endpoint覆盖。
 候选sources.json同时冻结SDK实际输入hash，candidate.json记录ID/environment/api地址及SDK固定源，
 不能把“编译含SDK”冒称“实际已上报/已可后台控制”。实际结果另见最终交付。
+
+SDK 0.2.0: restore the manifest-matching private Dart archive with `gamemunchies_sdk.py --archive <private-archive>` into the ignored path dependency. If upgrading an existing source directory, first preserve it outside that path; the installer refuses to overwrite mismatching source. The new archive SHA is `70effde1c9150b416b34f4dd4b6d95912ef836b5f429c98ea5a8cbf98fd0c167`. Both one-shot replay CLIs now target only the public API host; old-scope snapshots are rejected, never silently migrated. SDK 0.1.0 to 0.2.0 at the same API/game/platform/environment retains the native SDK state, including installation, queue, config and cooldown.

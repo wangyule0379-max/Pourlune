@@ -34,7 +34,7 @@ class ReplayProbeTest(unittest.TestCase):
             platform='ios', now=self.now, **kwargs)
 
     def snapshot(self, state, game_id='566121d2-a3f5-4950-8bd9-6ff2f673a0ac'):
-        scope = ['https://studio-k7m4.gamemunchies.com', game_id, 'ios', 'test']
+        scope = ['https://api.gamemunchies.com', game_id, 'ios', 'test']
         key = 'gamemunchies.v1.' + base64.urlsafe_b64encode(
             json.dumps(scope, separators=(',', ':')).encode()).decode()
         return {'preferencesKey': key, 'state': state,
@@ -47,7 +47,7 @@ class ReplayProbeTest(unittest.TestCase):
         self.assertEqual(json.loads(prepared['body'])['events'], original['events'])
         self.assertEqual(self.state, original)
         self.assertEqual(prepared['url'],
-                         'https://studio-k7m4.gamemunchies.com/api/client/games/'
+                         'https://api.gamemunchies.com/api/client/games/'
                          '566121d2-a3f5-4950-8bd9-6ff2f673a0ac/ios/events')
 
     def test_production_or_overshared_payload_is_rejected_before_network(self):

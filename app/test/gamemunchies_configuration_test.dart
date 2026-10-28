@@ -133,7 +133,9 @@ void main() {
       expect(reporting.allowsLoad(AdKind.interstitial), false);
       expect(reporting.allowsLoad(AdKind.rewarded), true);
       await reporting.roundStarted('off', DateTime.now());
-      await reporting.loadFailed()();
+      await reporting
+          .loadAttempt(AdKind.rewarded)
+          .emit('ad_load_failed', reason: 'network');
       await client.flush();
       expect(posts, 0);
     } finally {
@@ -168,7 +170,7 @@ void main() {
     );
     await reporting.setEnabled(false);
     expect(reporting.allowsShow(AdKind.interstitial), true);
-    await reporting.impression(AdKind.interstitial)();
+    await reporting.opportunity(AdKind.interstitial).emit('ad_impression');
     expect(reporting.allowsShow(AdKind.interstitial), false);
     expect((await state.read(client.scope))!['events'], isEmpty);
     await reporting.dispose();

@@ -108,7 +108,7 @@ void main() {
     expect(h.received.where((e) => e['type'] == 'round_start').length, 1);
     await r.setEnabled(false);
     await r.roundStarted('withdrawn', h.now);
-    await r.impression(AdKind.rewarded)();
+    await r.opportunity(AdKind.rewarded).emit('ad_impression');
     expect(h.received.where((e) => e['type'] == 'round_start').length, 1);
     await r.dispose();
   });
@@ -139,17 +139,21 @@ void main() {
     final h = ReportingHarness();
     final r = h.reporting();
     await r.setEnabled(true);
-    final displayed = r.impression(AdKind.interstitial);
-    final failed = r.loadFailed();
+    final displayed = r.opportunity(AdKind.interstitial);
+    await h.flush();
+    h.received.clear();
+    final failed = r.loadAttempt(AdKind.rewarded);
+    await h.flush();
+    h.received.clear();
     h.now = h.now.add(const Duration(seconds: 5));
-    await displayed();
-    await failed();
+    await displayed.emit('ad_impression');
+    await failed.emit('ad_load_failed', reason: 'network');
     h.loseAck = true;
     await h.flush();
     final first = h.posts.last;
     h.now = h.now.add(const Duration(seconds: 10));
-    await displayed();
-    await failed();
+    await displayed.emit('ad_impression');
+    await failed.emit('ad_load_failed', reason: 'network');
     await h.flush();
     expect(h.posts.last, first);
     expect(h.received.where((e) => e['type'] == 'ad_impression').length, 1);
@@ -190,8 +194,10 @@ void main() {
       );
       await r.setEnabled(true);
       await r.roundStarted('new-round', DateTime.now());
-      await r.impression(AdKind.rewarded)();
-      await r.loadFailed()();
+      await r.opportunity(AdKind.rewarded).emit('ad_impression');
+      await r
+          .loadAttempt(AdKind.rewarded)
+          .emit('ad_load_failed', reason: 'network');
       await r.dispose();
       expect(codes, contains('initialization_failed'));
     },

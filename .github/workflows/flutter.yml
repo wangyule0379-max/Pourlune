@@ -18,7 +18,7 @@ jobs:
           echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
       - name: Restore pinned private GameMunchies SDK
         env:
-          POURLUNE_GM_SDK_ARCHIVE: ${{ secrets.GAMEMUNCHIES_DART_SDK_ARCHIVE_V1 }}
+          POURLUNE_GM_SDK_ARCHIVE: ${{ secrets.GAMEMUNCHIES_DART_SDK_ARCHIVE_V2 }}
         run: python3 tools/validation/gamemunchies_sdk.py
       - name: Release configuration guards (no credentials)
         run: python3 -m unittest discover -s tools/validation -v
@@ -50,7 +50,7 @@ jobs:
           echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
       - name: Restore pinned private GameMunchies SDK
         env:
-          POURLUNE_GM_SDK_ARCHIVE: ${{ secrets.GAMEMUNCHIES_DART_SDK_ARCHIVE_V1 }}
+          POURLUNE_GM_SDK_ARCHIVE: ${{ secrets.GAMEMUNCHIES_DART_SDK_ARCHIVE_V2 }}
         run: python3 tools/validation/gamemunchies_sdk.py
       - run: flutter pub get --enforce-lockfile && flutter build ios --simulator --debug
         working-directory: app

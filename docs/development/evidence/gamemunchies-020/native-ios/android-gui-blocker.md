@@ -1,0 +1,3 @@
+# Android GUI preparation
+
+The QA APK SHA-256 matched `f120d0c9620953badde41e0262660f94d18565e3f099c11999ba53bba3a0ad2a`. Android Studio's Profile or Debug APK opened it and recognized `dev.pourlune.pourlune_dev`, version 0.5.0 code 19; its device selector displayed Pourlune GM QA 20261028. Run opened configuration but reported `Please select Android SDK`, although installed API 36 was listed globally. The GUI module SDK chooser could not be reliably operated through the available computer control; existing Running Devices detached view has the previously recorded focus/input routing issue. No APK install, device reset, storage clearing, or test event was performed. Android native QA is therefore unverified; do not infer success from the APK inspection.

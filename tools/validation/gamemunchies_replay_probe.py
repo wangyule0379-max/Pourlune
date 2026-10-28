@@ -16,7 +16,7 @@ import sys
 import urllib.error
 import urllib.request
 
-ORIGIN = 'https://studio-k7m4.gamemunchies.com'
+ORIGIN = 'https://api.gamemunchies.com'
 API_ORIGIN = 'https://api.gamemunchies.com'
 GAME_ID = '566121d2-a3f5-4950-8bd9-6ff2f673a0ac'
 FIELDS = {'id', 'installationId', 'type', 'environment', 'occurredAt'}

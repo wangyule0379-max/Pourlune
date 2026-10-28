@@ -1,0 +1,43 @@
+00:00 +0: loading /Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/app/test/gamemunchies_ads_transport_test.dart
+00:00 +0: interstitial: load/show/open/close are not impressions; real impression type counts once
+GM_RULES version=0 source=default enabled=true next_level=true extra_bottle=true interval=180
+00:00 +0 -1: interstitial: load/show/open/close are not impressions; real impression type counts once [E]
+  Expected: ['ad_load_requested', 'ad_loaded', 'ad_opportunity', 'ad_show_attempted']
+    Actual: MappedListIterable<Map<String, dynamic>, dynamic>:[]
+     Which: at location [0] is MappedListIterable<Map<String, dynamic>, dynamic>:[] which shorter than expected
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/gamemunchies_ads_transport_test.dart 89:9      main.<fn>
+  
+00:00 +0 -1: rewarded: load/show/open/close are not impressions; real impression type counts once
+GM_RULES version=0 source=default enabled=true next_level=true extra_bottle=true interval=180
+00:00 +0 -2: rewarded: load/show/open/close are not impressions; real impression type counts once [E]
+  Expected: ['ad_load_requested', 'ad_loaded', 'ad_opportunity', 'ad_show_attempted']
+    Actual: MappedListIterable<Map<String, dynamic>, dynamic>:[]
+     Which: at location [0] is MappedListIterable<Map<String, dynamic>, dynamic>:[] which shorter than expected
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/gamemunchies_ads_transport_test.dart 89:9      main.<fn>
+  
+00:00 +0 -2: real load-failed type reports, show-failed and local unavailable do not
+GM_RULES version=0 source=default enabled=true next_level=true extra_bottle=true interval=180
+POURLUNE_AD_LOAD_FAILED rewarded network 2
+00:00 +0 -3: real load-failed type reports, show-failed and local unavailable do not [E]
+  Expected: ['ad_load_requested', 'ad_load_failed']
+    Actual: MappedListIterable<Map<String, dynamic>, dynamic>:['ad_load_failed']
+     Which: at location [0] is 'ad_load_failed' instead of 'ad_load_requested'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/gamemunchies_ads_transport_test.dart 122:7     main.<fn>
+  
+00:00 +0 -3: offline reporting cannot prevent real reward callback; close alone grants nothing
+GM_RULES version=0 source=default enabled=true next_level=true extra_bottle=true interval=180
+00:00 +1 -3: Some tests failed.
+
+Failing tests:
+  /Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/app/test/gamemunchies_ads_transport_test.dart: interstitial: load/show/open/close are not impressions; real impression type counts once
+  /Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/app/test/gamemunchies_ads_transport_test.dart: real load-failed type reports, show-failed and local unavailable do not
+  /Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/app/test/gamemunchies_ads_transport_test.dart: rewarded: load/show/open/close are not impressions; real impression type counts once

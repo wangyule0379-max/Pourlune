@@ -65,6 +65,24 @@ void main() {
     debugDefaultTargetPlatformOverride = null;
   });
 
+  test('opt-in during loading reports the later callback without inventing an earlier request', () async {
+    await stats.setEnabled(false);
+    final pending = transport.load(AdKind.rewarded);
+    final failure = expectLater(pending, throwsA(isA<AdLoadFailure>()));
+    await Future<void>.delayed(Duration.zero);
+    final id = (calls.single.arguments as Map)['adId'] as int;
+    await h.flush();
+    expect(h.posts, isEmpty);
+    await stats.setEnabled(true);
+    await event(id, 'onAdFailedToLoad', {
+      'loadAdError': LoadAdError(3, 'com.google.android.gms.ads', 'test', null),
+    });
+    await failure;
+    await h.flush();
+    expect(h.received.map((e) => e['type']), ['ad_load_failed']);
+    expect(h.received.single['ad']['reason'], 'no_fill');
+  });
+
   for (final kind in AdKind.values) {
     test(
       '${kind.name}: load/show/open/close are not impressions; real impression type counts once',
@@ -86,13 +104,28 @@ void main() {
         );
         await event(id, 'onAdShowedFullScreenContent');
         await h.flush();
-        expect(h.received, isEmpty);
+        expect(h.received.map((e) => e['type']), [
+          'ad_load_requested',
+          'ad_loaded',
+          'ad_opportunity',
+          'ad_show_attempted',
+        ]);
+        expect(
+          h.received.every(
+            (e) =>
+                e['ad']['provider'] == 'admob' && e['ad']['kind'] == kind.name,
+          ),
+          isTrue,
+        );
         await event(id, 'onAdImpression');
         h.now = h.now.add(const Duration(seconds: 3));
         await event(id, 'onAdImpression');
         await h.flush();
-        expect(h.received.single['type'], 'ad_impression');
-        expect(h.received.single['occurredAt'], '2026-10-28T01:00:00.000Z');
+        final impressions = h.received.where(
+          (e) => e['type'] == 'ad_impression',
+        );
+        expect(impressions.length, 1);
+        expect(impressions.single['occurredAt'], '2026-10-28T01:00:00.000Z');
         await event(id, 'onAdDismissedFullScreenContent');
         expect(rewards, 0);
         await handle.dispose();
@@ -101,7 +134,7 @@ void main() {
   }
 
   test(
-    'real load-failed type reports, show-failed and local unavailable do not',
+    'load failure and show failure have separate stages and reasons',
     () async {
       final pending = transport.load(AdKind.rewarded);
       final failed = expectLater(pending, throwsA(isA<AdLoadFailure>()));
@@ -117,7 +150,15 @@ void main() {
       });
       await failed;
       await h.flush();
-      expect(h.received.single['type'], 'ad_load_failed');
+      expect(h.received.map((e) => e['type']), [
+        'ad_load_requested',
+        'ad_load_failed',
+      ]);
+      expect(h.received.last['ad']['reason'], 'network');
+      expect(
+        h.received.first['ad']['loadAttemptId'],
+        h.received.last['ad']['loadAttemptId'],
+      );
       final another = transport.load(AdKind.interstitial);
       await Future<void>.delayed(Duration.zero);
       final next =
@@ -136,10 +177,12 @@ void main() {
         ),
       );
       await event(next, 'onFailedToShowFullScreenContent', {
-        'adError': AdError(0, 'test', 'test'),
+        'error': AdError(0, 'test', 'test'),
       });
       await h.flush();
-      expect(h.received.length, 1);
+      expect(h.received.where((e) => e['type'] == 'ad_impression'), isEmpty);
+      expect(h.received.last['type'], 'ad_show_failed');
+      expect(h.received.last['ad']['reason'], 'sdk_error');
       await handle.dispose();
     },
   );
@@ -169,7 +212,26 @@ void main() {
       'rewardItem': RewardItem(1, 'extra_bottle'),
     });
     expect(rewarded, 1);
+    await event(id, 'onRewardedAdUserEarnedReward', {
+      'rewardItem': RewardItem(1, 'extra_bottle'),
+    });
     expect(h.received, isEmpty);
+    h.offline = false;
+    h.now = h.now.add(const Duration(seconds: 3));
+    await h.flush();
+    final rewards = h.received.where((e) => e['type'] == 'ad_reward_earned');
+    expect(rewards.length, 1);
+    final impression = h.received.singleWhere(
+      (e) => e['type'] == 'ad_impression',
+    );
+    expect(
+      rewards.single['ad']['opportunityId'],
+      impression['ad']['opportunityId'],
+    );
+    expect(
+      rewards.single['ad']['loadAttemptId'],
+      h.received.first['ad']['loadAttemptId'],
+    );
     await handle.dispose();
   });
 }

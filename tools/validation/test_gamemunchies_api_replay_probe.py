@@ -22,8 +22,8 @@ class APIScopeReplayTest(unittest.TestCase):
         self.assertEqual(snapshot,before)
         self.assertEqual(json.loads(result['body'])['events'],snapshot['state']['events'])
         self.assertEqual(result['url'],probe.ORIGIN+'/api/client/games/'+legacy.GAME_ID+'/ios/events')
-        with self.assertRaises(ValueError):legacy.prepare(snapshot,platform='ios',now=now)
-        with self.assertRaises(ValueError):probe.prepare(self.snapshot(legacy.ORIGIN),platform='ios',now=now)
+        self.assertEqual(legacy.prepare(snapshot,platform='ios',now=now)['url'], result['url'])
+        with self.assertRaises(ValueError):probe.prepare(self.snapshot('https://old-client.invalid'),platform='ios',now=now)
 
     def test_rejects_production_other_device_and_extra_data(self):
         for kind in ['production','other-device','extra-field']:

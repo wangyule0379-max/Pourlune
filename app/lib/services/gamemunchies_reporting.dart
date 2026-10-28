@@ -13,6 +13,7 @@ class GameMunchiesReporting {
     this.createClient,
     DateTime Function()? now,
     this.onDiagnostic,
+    this.appVersion = 'dev',
   }) : now = now ?? DateTime.now;
 
   static const baseUrl = 'https://api.gamemunchies.com';
@@ -45,7 +46,10 @@ class GameMunchiesReporting {
       return GameMunchiesReporting();
     }
     late GameMunchiesReporting owner;
+    const version = String.fromEnvironment('POURLUNE_VERSION_NAME');
+    const build = String.fromEnvironment('POURLUNE_VERSION_CODE');
     owner = GameMunchiesReporting(
+      appVersion: version.isEmpty ? 'dev' : '$version+$build',
       createClient: () => GameMunchiesClient(
         ClientOptions(
           baseUrl: baseUrl,
@@ -100,6 +104,7 @@ class GameMunchiesReporting {
   final GameMunchiesClient Function()? createClient;
   bool get configured => createClient != null;
   final DateTime Function() now;
+  final String appVersion;
   final void Function(String code)? onDiagnostic;
   GameMunchiesClient? _client;
   GameMunchiesLifecycle? _lifecycle;
@@ -195,35 +200,55 @@ class GameMunchiesReporting {
         ),
       );
 
-  /// One callback per actual load attempt/ad object; the first invocation owns
-  /// the ID/time. SDK queue retries reuse those values after process restart.
-  Future<void> Function() _observation(AdKind? kind) {
-    Future<void>? submission;
-    return () => submission ??= () {
-      final at = now().toUtc().toIso8601String();
-      final id =
-          'gm-${DateTime.now().microsecondsSinceEpoch}-'
-          '${Random.secure().nextInt(1 << 32)}';
-      return _submit(
-        (client) => kind == null
-            ? client.track('ad_load_failed', id: id, occurredAt: at)
-            : client.recordAdImpression(
-                kind.name,
-                kind == AdKind.interstitial ? 'next_level' : 'extra_bottle',
-                id: id,
-                occurredAt: at,
-              ),
-        rulesOnly: kind != null,
-      );
-    }();
-  }
+  /// Local identifiers only. No network or preferences work delays the ad path.
+  GameMunchiesAdEvents loadAttempt(AdKind kind) =>
+      GameMunchiesAdEvents._(this, kind, load: true)..emit('ad_load_requested');
 
-  Future<void> Function() impression(AdKind kind) => _observation(kind);
-  Future<void> Function() loadFailed() => _observation(null);
+  GameMunchiesAdEvents opportunity(AdKind kind) =>
+      GameMunchiesAdEvents._(this, kind, load: false)..emit('ad_opportunity');
 
   Future<void> dispose() {
     _disposed = true;
     _allowed = false;
     return _disposing ??= _configuration.then((_) => _closeClient());
   }
+}
+
+/// A single load or display opportunity. Each stage owns its first timestamp and
+/// stable ID; late/duplicate callbacks cannot enqueue another observation.
+class GameMunchiesAdEvents {
+  GameMunchiesAdEvents._(this.owner, AdKind kind, {required bool load})
+    : id = List.generate(
+        16,
+        (_) => Random.secure().nextInt(256),
+      ).map((b) => b.toRadixString(16).padLeft(2, '0')).join(),
+      _context = {
+        'kind': kind.name,
+        'scene': GameMunchiesReporting.scene(kind),
+        'provider': 'admob',
+        'appVersion': owner.appVersion,
+      } {
+    _context[load ? 'loadAttemptId' : 'opportunityId'] = id;
+  }
+
+  final GameMunchiesReporting owner;
+  final String id;
+  final Map<String, dynamic> _context;
+  final _submissions = <String, Future<void>>{};
+
+  void attachLoad(String loadId) => _context['loadAttemptId'] = loadId;
+
+  Future<void> emit(String type, {String? reason}) => _submissions.putIfAbsent(
+    type,
+    () {
+      final at = owner.now().toUtc().toIso8601String();
+      final context = {..._context, 'reason': ?reason};
+      return owner._submit(
+        (client) =>
+            client.trackAdEvent(type, context, id: '$id:$type', occurredAt: at),
+        // A real interstitial impression maintains cooldown even after opt-out.
+        rulesOnly: type == 'ad_impression',
+      );
+    },
+  );
 }

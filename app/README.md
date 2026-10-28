@@ -288,7 +288,7 @@ XCODE_XCCONFIG_FILE=/tmp/pourlune-main60-five-color.xcconfig FIREBASE_ANALYTICS_
 
 隐私页按服务区分可用性：Firebase 不可用但 GameMunchies 已配置时，提示崩溃上报不可用，游戏统计仍遵循已保存的 Analytics 选择。单个提供方同步失败不能声称所有分享被阻断；本地选择保存失败仍阻断新的应用分享。此差额只修正文案，不改变统计、SDK、广告或发奖门控。渲染与同意竞态回归见 `test/privacy_service_availability_test.dart`、`privacy_choice_generation_test.dart`、`gamemunchies_privacy_race_test.dart`。
 
-复用同一 `gamemunchies_client` 0.1.0，固定源92f588200a1d80b1d0023122fcfc3037db87c53c。
+复用同一 `gamemunchies_client` 0.2.0，固定源6dac35372fb07cb0325e198792e4adf09dc75e29。
 来源及逐文件指纹在 `../tools/validation/gamemunchies-sdk.json`。
 私有SDK不进入Pourlune仓库；用受限归档恢复到ignored `.private-dependencies/gamemunchies_client`，
 再运行 `flutter pub get --enforce-lockfile`。方法见 `../tools/validation/README.md`。
@@ -318,3 +318,15 @@ SDK前台每30秒检查一次、配置尝试至少间隔5分钟、请求超时8�
 新实例首次落盘才记round_start；恢复/Restart/前台/加瓶不算新局。
 展示和失败只接真实Google `onAdImpression`/`onAdFailedToLoad`，仍使用官方测试广告，不增加MAX或付费广告。
 最终实际数据/规则版本/分发结果见 `../docs/development/deliveries/gamemunchies-live-integration.md`。
+
+### SDK 0.2.0 ad funnel (2026-10-28)
+
+The fixed private Dart archive is verified by `tools/validation/gamemunchies-sdk.json` (archive SHA-256 and all seven files). Only the SDK version changes in `pubspec.lock`. No private SDK source is committed. CI uses the separately installed `GAMEMUNCHIES_DART_SDK_ARCHIVE_V2`; V1 remains available for earlier commits.
+
+`GameMunchiesAdEvents` retains one random correlation ID and first ID/time per stage. `GoogleAdsTransport` records actual request, load callback, show invocation/failure, impression callback and earned-reward callback through `trackAdEvent`. It never also calls legacy `recordAdImpression`. The coordinator owns show opportunities and blocked decisions; a blocked Extra-bottle dialog entry or ineligible Next action is counted once, not on UI rebuilds. Dismissal/load success/show invocation are never counted as exposure. SQLite remains the only reward authority.
+
+All calls are asynchronous observations. Analytics opt-out stops queueing/sending and clears pending statistics; configuration refresh and actual interstitial cooldown continue. Existing consent defaults and stored choices are unchanged. No AdMob reporting OAuth, simulated revenue, MAX, or new display policy is included.
+
+For this upgrade use existing `app/config/gamemunchies/test.json` (test ID + test environment), official AdMob test mode, and dedicated QA identities. `integration_test/gamemunchies_020_native_app.dart` is a debug-only verification entry: new `gm_020_20261028.sqlite`, real controller/AdMob and SDK, first-process controlled POST disconnect, same-installation restart, one lost real ACK. It explicitly opts in only this new QA database. Normal `lib/main.dart` does not import this harness.
+
+Production switch for a future authorized release: `tools/validation/beta_build.py --gamemunchies-environment production` (or the same option in `firebase_build.py`). This selects existing game ID `8feaf0dc-ec12-4308-ac58-16b2180f2d63`, platform ios/android and production environment; `GameMunchiesReporting.environment()` checks the pair. Keep `baseUrl=https://api.gamemunchies.com`; do not add `/api`. `--ad-mode` remains a separate existing choice. Version dimensions come from build-generated `POURLUNE_VERSION_NAME` and `POURLUNE_VERSION_CODE`. This task builds test only and does not publish a store version.

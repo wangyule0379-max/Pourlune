@@ -183,6 +183,14 @@ Future<void> showExtraBottle(BuildContext context, GameController c) async {
     return;
   }
   final l = AppLocalizations.of(context), hub = c.services;
+  if (!c.canWatchExtraBottle) {
+    hub?.ads.blockedOpportunity(
+      AdKind.rewarded,
+      c.current?.extraBottleGranted == true
+          ? 'entitlement'
+          : hub.ads.blockedReason(AdKind.rewarded) ?? 'unknown',
+    );
+  }
   // The first sheet explains the exchange; only its explicit Watch starts it.
   final watch = await showKnitDialog<bool>(
     context: context,

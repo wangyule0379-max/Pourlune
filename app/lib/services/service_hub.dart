@@ -51,6 +51,7 @@ class ServiceHub extends ChangeNotifier {
       transport:
           transport ?? GoogleAdsTransport(config, reporting: this.reporting),
       configured: config.adsConfigured,
+      reporting: this.reporting,
       rulesAllowLoad: this.reporting.allowsLoad,
       rulesAllowShow: this.reporting.allowsShow,
       preShowTimeout: adPreShowTimeout,

@@ -1028,6 +1028,9 @@ class GameController extends ChangeNotifier {
         // still persists the next snapshot through the normal Retry flow.
       }
     }
+    if (!check) {
+      services?.ads.blockedOpportunity(AdKind.interstitial, 'entitlement');
+    }
     if (!_alive) return;
     if (!_foreground) {
       _afterForeground = advance;

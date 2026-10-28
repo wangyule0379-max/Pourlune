@@ -34,10 +34,12 @@ class QaAckLossClient extends http.BaseClient {
     this.lossMarker, {
     http.Client? inner,
     this.savedOriginals = const [],
+    this.proofDirectory,
   }) : _inner = inner ?? http.Client();
   final File lossMarker;
   final http.Client _inner;
   final List<Map<String, dynamic>> savedOriginals;
+  final Directory? proofDirectory;
   final acknowledgements = <Map<String, int>>[];
   List<Map<String, dynamic>>? _original;
   bool _firstAcceptedAll = false;
@@ -82,15 +84,18 @@ class QaAckLossClient extends http.BaseClient {
         }
         // Save every real ACK before injecting loss or returning it to the SDK.
         // Public counts/booleans only; original fields stay in the private snapshot.
-        await _writeProof(File('${lossMarker.parent.path}/acks.json'), {
-          'acks': acknowledgements,
-          'original_batch_count': _original!.length,
-          'saved_original_count': savedOriginals.length,
-          'first_batch_accepted_all_originals': _firstAcceptedAll,
-          'retry_kept_original_ids_and_first_times':
-              retryPreservedOriginalFields,
-          'originals_deduplicated': originalsDeduplicated,
-        });
+        await _writeProof(
+          File('${(proofDirectory ?? lossMarker.parent).path}/acks.json'),
+          {
+            'acks': acknowledgements,
+            'original_batch_count': _original!.length,
+            'saved_original_count': savedOriginals.length,
+            'first_batch_accepted_all_originals': _firstAcceptedAll,
+            'retry_kept_original_ids_and_first_times':
+                retryPreservedOriginalFields,
+            'originals_deduplicated': originalsDeduplicated,
+          },
+        );
         if (!await lossMarker.exists()) {
           await lossMarker.writeAsString(
             'one controlled lost ACK; never inject twice\n',
