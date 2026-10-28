@@ -438,6 +438,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'The support address has not been configured. No message will be sent.';
 
   @override
+  String feedbackOpenFailed(String email) {
+    return 'Couldn\'t open your email app. You can write to $email.';
+  }
+
+  @override
+  String get supportOpenFailed => 'Couldn\'t open this page. Please try again.';
+
+  @override
   String versionInfo(String version, String build) {
     return 'Pourlune · $version ($build)';
   }

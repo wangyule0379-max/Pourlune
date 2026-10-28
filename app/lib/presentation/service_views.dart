@@ -163,8 +163,18 @@ Future<void> openSupportEntry(
       false;
   if (!context.mounted || ok) return;
   final l = AppLocalizations.of(context);
-  ScaffoldMessenger.of(context)
-      .showSnackBar(SnackBar(content: Text(l.supportUnavailable)));
+  final config = c.services?.config;
+  final uri = feedback
+      ? config?.feedback
+      : privacy
+      ? config?.privacy
+      : config?.support;
+  final message = uri == null
+      ? l.supportUnavailable
+      : feedback
+      ? l.feedbackOpenFailed(uri.path)
+      : l.supportOpenFailed;
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
 }
 
 Future<void> showExtraBottle(BuildContext context, GameController c) async {
