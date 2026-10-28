@@ -2,6 +2,8 @@ import 'dart:math' as math;
 import 'dart:ui';
 import 'dart:typed_data';
 
+const _maximumPourAngle = 1.72;
+
 /// Geometry in the sample canvas. Mouth is the transform origin, rather than
 /// a separately guessed point used only by the stream.
 class BottlePose {
@@ -22,6 +24,36 @@ class BottleShape {
   double get height => width * aspectRatio;
   Rect get imageRect => Rect.fromLTWH(-width / 2, -height * .10, width, height);
   Rect get visibleRect => imageRect;
+  Rect get pouringRim =>
+      Rect.fromLTRB(-width * .32, -height * .10, width * .32, height * .07);
+
+  // One upper flight area, measured from the same material/rim envelopes as
+  // the source pose. This is static layout space, never receiver motion.
+  double get pourHeadroom {
+    var extent = 0.0;
+    final rim = pouringRim;
+    for (final r in [
+      rim.topLeft,
+      rim.topRight,
+      rim.bottomLeft,
+      rim.bottomRight,
+    ]) {
+      for (final p in [
+        visibleRect.topLeft,
+        visibleRect.topRight,
+        visibleRect.bottomLeft,
+        visibleRect.bottomRight,
+      ]) {
+        final d = r - p;
+        for (final a in [0.0, _maximumPourAngle, math.atan2(d.dx, d.dy)]) {
+          if (a < 0 || a > _maximumPourAngle) continue;
+          extent = math.max(extent, d.dx * math.sin(a) + d.dy * math.cos(a));
+        }
+      }
+    }
+    return (width * .14).clamp(8.0, 16.0) + extent;
+  }
+
   List<Offset> get interior => [
     for (final p in const [
       Offset(.32, .05),
@@ -158,7 +190,7 @@ double waterline(List<Offset> polygon, double volumeArea) {
 }
 
 double pourAngle(BottleShape shape, double units) {
-  var low = 0.0, high = 1.72;
+  var low = 0.0, high = _maximumPourAngle;
   final volume = units.clamp(.001, 4) * shape.unitArea;
   for (var i = 0; i < 25; i++) {
     final mid = (low + high) / 2;
@@ -212,21 +244,16 @@ class PourGeometry {
     required this.sourceUnits,
     this.initialLift = 0,
     this.bounds,
-    this.targetDrop = 0,
-    this.targetWasRaised = false,
   });
   final BottleShape shape;
   final Offset sourceMouth, targetMouth;
   final int units, sourceUnits;
   final double initialLift;
-  final double targetDrop;
-  final bool targetWasRaised;
   final Rect? bounds;
   double get flowMs => 460 + 100.0 * units;
   double get totalMs => 200 + 90 + flowMs + 210 + 100;
   PourFrame frame(double elapsedMs) {
     final t = elapsedMs.clamp(0.0, totalMs);
-    final receivingMouth = targetMouth + Offset(0, targetDrop);
     var direction = targetMouth.dx > sourceMouth.dx ? 1.0 : -1.0;
     final area = bounds;
     if (area != null) {
@@ -249,12 +276,7 @@ class PourGeometry {
       // The top 17% of the original material contains the knit rim/seam.
       // Its rotated lower edge, not the stream's lip point, needs clearance
       // above the receiving rim. The envelope includes the widening neck.
-      final rim = Rect.fromLTRB(
-        -shape.width * .32,
-        -shape.height * .10,
-        shape.width * .32,
-        shape.height * .07,
-      );
+      final rim = shape.pouringRim;
       final bottom = [
         rim.topLeft,
         rim.topRight,
@@ -268,7 +290,7 @@ class PourGeometry {
       if (area == null) return 1;
       final turn = BottlePose(Offset.zero, angle);
       final lip = turn.transform(shape.lip(direction));
-      final anchor = receivingMouth - Offset(0, rimClearance);
+      final anchor = targetMouth - Offset(0, rimClearance);
       var scale = 1.0;
       for (final corner in [
         shape.visibleRect.topLeft,
@@ -298,7 +320,7 @@ class PourGeometry {
     Offset aligned(double angle) {
       final scale = transportScale(angle);
       final gap = area == null ? 35.0 : rimClearance + rimDrop(angle) * scale;
-      return receivingMouth -
+      return targetMouth -
           Offset(0, gap) -
           BottlePose(
             Offset.zero,
@@ -393,17 +415,7 @@ class PourGeometry {
         scale: source.scale,
       );
     }
-    // Borrow presentation space only while input is locked. The resting
-    // board and fixed readouts retain their original positions and sizes.
-    final targetProgress = t < 290
-        ? targetWasRaised
-              ? _ease((t - 200) / 90)
-              : _ease(t / 200)
-        : 1 - _ease((t - 290 - flowMs) / 210);
-    final target = BottlePose(
-      targetMouth + Offset(0, targetDrop * targetProgress),
-      0,
-    );
+    final target = BottlePose(targetMouth, 0);
     return PourFrame(
       source: source,
       target: target,
@@ -446,6 +458,7 @@ class BoardLayout {
     this.preview = false,
     this.footLabels = true,
     this.bottomCaptionsExternal = false,
+    int? targetCount,
   }) {
     assert(count >= 4 && count <= 8);
     final rows = switch (count) {
@@ -459,7 +472,11 @@ class BoardLayout {
     // Target cushions sit above a separate number/capacity row.
     final targetLine = math.max(34.0, 12 * textScale + 12);
     labelHeight = footLabels ? targetLine + 3 + 14 * 1.2 * textScale + 1 : 0;
-    _labelWidth = math.max(52.0, 38 * textScale);
+    _labelWidth = math.max(64.0, 38 * textScale);
+    lowerLabelHeight =
+        footLabels && textScale <= 1 && (targetCount ?? count - 2) <= rows.first
+        ? labelHeight - targetLine
+        : labelHeight;
     topRowCount = rows.first;
     const visibleAspect = 309 / 166;
     final columnWidth = math.min(106.0, width / rows.first - 12);
@@ -477,20 +494,51 @@ class BoardLayout {
     // Nine pixels of raised-cap hit coverage need a disjoint gutter too.
     var rowGap = footLabels ? (compactLabels ? 12.0 : 16.0) : 10.0;
     final captionRows = bottomCaptionsExternal ? 1 : 2;
+    final captionHeights = bottomCaptionsExternal
+        ? labelHeight
+        : labelHeight + lowerLabelHeight;
     final fitting = maxHeight.isFinite
         ? (maxHeight -
                   topPadding -
                   rowGap -
-                  captionRows * (labelHeight + captionGap)) /
+                  captionHeights -
+                  captionRows * captionGap) /
               (2 * visibleAspect)
         : preferred;
-    final visibleWidth = math.min(
+    var visibleWidth = math.min(
       preferred,
       // The 48px minimum applies to the touch cell's height, not bottle
       // width. Preserve two rows when large labels consume the small screen.
       math.max(preview ? 20.0 : 48.0 / visibleAspect, fitting),
     );
+    final hasFlightSpace = !preview && footLabels && textScale <= 1.3;
+    if (hasFlightSpace &&
+        maxHeight.isFinite &&
+        2 * visibleWidth * visibleAspect +
+                math.max(topPadding, BottleShape(visibleWidth).pourHeadroom) +
+                rowGap +
+                captionHeights +
+                captionRows * captionGap >
+            maxHeight) {
+      final fixed = rowGap + captionHeights + captionRows * captionGap;
+      var low = math.min(visibleWidth, 48.0 / visibleAspect);
+      var high = visibleWidth;
+      for (var step = 0; step < 22; step++) {
+        final candidate = (low + high) / 2;
+        final bottle = BottleShape(candidate);
+        if (2 * bottle.height +
+                math.max(topPadding, bottle.pourHeadroom) +
+                fixed <=
+            maxHeight) {
+          low = candidate;
+        } else {
+          high = candidate;
+        }
+      }
+      visibleWidth = low;
+    }
     shape = BottleShape(visibleWidth);
+    if (hasFlightSpace) topPadding = math.max(topPadding, shape.pourHeadroom);
     final visible = shape.visibleRect;
     if (maxHeight.isFinite) {
       final spare = math.max(
@@ -499,10 +547,10 @@ class BoardLayout {
             topPadding -
             rowGap -
             2 * visible.height -
-            captionRows * (captionGap + labelHeight),
+            captionHeights -
+            captionRows * captionGap,
       );
-      // Distribute genuinely spare room above/between/below the two rows.
-      // Bottle proportions and the minimum caption gap remain unchanged.
+      // Distribute remaining whitespace after the one measured upper lane.
       topPadding += spare * .24;
       rowGap += spare * .52;
     }
@@ -528,7 +576,7 @@ class BoardLayout {
   late final int topRowCount;
   late final bool compactLabels;
   late final BottleShape shape;
-  late final double height, labelHeight;
+  late final double height, labelHeight, lowerLabelHeight;
   late final double _labelWidth;
   late final List<Offset> mouths;
   late final List<Rect> cells;
@@ -650,26 +698,13 @@ class BoardLayout {
 
   Rect get flightBounds => Rect.fromLTWH(0, 0, width, height);
 
-  double receivingDrop(int index) {
-    if (preview || !footLabels || textScale > 1.3 || index >= topRowCount) {
-      return 0;
-    }
-    // The full rotated material/rim envelope needs 1.23 bottle widths.
-    // Use the caption/gutter space temporarily instead of shrinking the
-    // whole board or pushing a normal-sized bottle through the title.
-    return (shape.width * 1.25 + 2 - cells[index].top).clamp(
-      0.0,
-      math.max(0, height - cells[index].bottom - 2),
-    );
-  }
-
   Rect labelRect(int index) {
     final labelWidth = math.min(cells[index].width, _labelWidth);
     return Rect.fromLTWH(
       cells[index].center.dx - labelWidth / 2,
       cells[index].bottom + 5,
       labelWidth,
-      labelHeight,
+      index < topRowCount ? labelHeight : lowerLabelHeight,
     );
   }
 }

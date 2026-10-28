@@ -129,7 +129,6 @@ void main() {
               sourceUnits: 4,
               initialLift: 8,
               bounds: layout.flightBounds,
-              targetDrop: layout.receivingDrop(route.$2),
             );
             for (var ms = 0.0; ms <= geometry.totalMs; ms += 15) {
               final f = geometry.frame(ms),
@@ -140,7 +139,10 @@ void main() {
                 reason: '$count/${size.$1} $route at $ms becomes a miniature',
               );
               expect(art.left, greaterThanOrEqualTo(-.01));
-              expect(art.top, greaterThanOrEqualTo(-.01));
+              expect(
+                art.top,
+                greaterThanOrEqualTo(layout.flightBounds.top - .01),
+              );
               expect(art.right, lessThanOrEqualTo(layout.width + .01));
               expect(art.bottom, lessThanOrEqualTo(layout.height + .01));
               // The approved short locked animation may pass in front of
@@ -153,51 +155,66 @@ void main() {
     },
   );
 
-  test(
-    'upper receivers make local room without resizing the resting board',
-    () {
-      final before = mainPuzzle(4);
-      // Reproduce the player's one-unit pour into the upper receiver.
-      var state = before;
-      for (final route in [
-        (0, 2),
-        (1, 2),
-        (1, 0),
-        (1, 2),
-        (0, 1),
-        (1, 3),
-        (2, 1),
-        (0, 2),
-      ]) {
-        state = boardMove(state, route.$1, route.$2).after;
-      }
-      final actual = boardMove(state, 2, 1);
-      final layout = BoardLayout(width: 358, count: 4, maxHeight: 470);
-      final g = geometryFor(layout, actual.motion);
-      expect(layout.shape.width, greaterThanOrEqualTo(78));
-      expect(actual.motion.units, 1);
-      for (var ms = 0.0; ms <= g.totalMs; ms += 10) {
-        final frame = BoardVisualFrame(
-          state: actual.after,
-          layout: layout,
-          motion: actual.motion,
-          elapsedMs: ms,
-        );
-        for (final pose in frame.poses) {
-          final art = artBounds(layout, pose);
-          expect(art.top, greaterThanOrEqualTo(-.01));
-          expect(art.bottom, lessThanOrEqualTo(layout.height + .01));
+  test('only the source moves during the whole real 4–8 bottle pour', () {
+    for (final count in [4, 5, 6, 7, 8]) {
+      var before = mainPuzzle(
+        count == 4
+            ? 4
+            : count == 5
+            ? 6
+            : count == 6
+            ? 11
+            : 21,
+      );
+      if (count == 8) before = before.grantExtraBottle();
+      late (int, int) route;
+      if (count == 4) {
+        for (final move in [
+          (0, 2),
+          (1, 2),
+          (1, 0),
+          (1, 2),
+          (0, 1),
+          (1, 3),
+          (2, 1),
+          (0, 2),
+        ]) {
+          before = boardMove(before, move.$1, move.$2).after;
+        }
+        route = (2, 1);
+      } else if (count == 5) {
+        route = (1, 3);
+      } else {
+        final upper = count == 6 ? 3 : 4;
+        for (final move in before.puzzle.referenceMoves) {
+          if (move.from >= upper && move.to < upper) {
+            route = (move.from, move.to);
+            break;
+          }
+          before = boardMove(before, move.from, move.to).after;
         }
       }
-      final end = BoardVisualFrame(
-        state: actual.after,
-        layout: layout,
-        motion: actual.motion,
-        elapsedMs: g.totalMs,
-      );
-      for (var i = 0; i < 4; i++) {
-        expect(end.poses[i].mouth, layout.mouths[i]);
+      final moved = boardMove(before, route.$1, route.$2);
+      final layout = BoardLayout(width: 370, count: count, maxHeight: 580);
+      final geometry = geometryFor(layout, moved.motion);
+      for (var ms = 0.0; ms <= geometry.totalMs; ms += 10) {
+        final frame = BoardVisualFrame(
+          state: moved.after,
+          layout: layout,
+          motion: moved.motion,
+          elapsedMs: ms,
+        );
+        for (var i = 0; i < count; i++) {
+          if (i == route.$1) continue;
+          expect(
+            frame.poses[i].mouth,
+            layout.mouths[i],
+            reason: '$count bottles, stationary $i at $ms ms must not sink',
+          );
+          expect(frame.poses[i].angle, 0);
+          expect(frame.poses[i].scale, 1);
+        }
       }
-    },
-  );
+    }
+  });
 }

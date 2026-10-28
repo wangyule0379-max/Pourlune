@@ -145,6 +145,8 @@ class _FlameBoardState extends State<FlameBoard> {
         textScale: MediaQuery.textScalerOf(context).scale(14) / 14,
         preview: w.preview,
         footLabels: !denseDock,
+        targetCount:
+            w.state.puzzle.targets.lastIndexWhere((t) => t != null) + 1,
       );
       // Reconcile all inputs atomically before building controls. The game
       // defers notifier publication during layout, rather than its state.

@@ -59,9 +59,7 @@ class FlameBoardPainter {
     final shape = frame.layout.shape, active = frame.active;
     for (var i = 0; i < frame.poses.length; i++) {
       if (layer == BoardPaintLayer.moving) break;
-      final mouth = frame.movingIndices.contains(i) && i != active?.from
-          ? frame.poses[i].mouth
-          : frame.layout.mouths[i];
+      final mouth = frame.layout.mouths[i];
       canvas.drawOval(
         Rect.fromCenter(
           center: mouth + Offset(0, shape.height * .90 + 1),
