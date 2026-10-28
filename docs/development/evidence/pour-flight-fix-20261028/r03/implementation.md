@@ -1,4 +1,6 @@
-# R03：恢复build18静态页，仅修源瓶绘制空间（待实际验收）
+# R03：恢复build18静态页，仅修源瓶绘制空间（两条原生路径已独立接受）
+
+最终状态：总控已直接核原布局与QA3来源，并实际查看4/L4 3→2、5/L6 2→4两条正常main路径的16关键帧、核19媒体hash，接受本次最小源瓶修复。接收/其它瓶固定，源瓶完整且水柱接瓶口；规则提示/邻瓶标签的短暂前景遮挡已实际审查并保留，归位恢复。不再为此改变静态布局。权威报告为`docs/development/review/pour-flight-source-only-R03-independent.md/json`，原始录像与324采样帧保留在native-r3、逐项hash索引；16受审帧及联系表入版本管理。R01/R02拒绝保留，以下待验描述是交付时历史状态。没有新TestFlight上传，未扩大为广告/统计/全部路径或物理设备验收。
 
 R01接收瓶下沉和R02整体下移/静态缩放均已被用户否决，旧通过撤回。当前BoardLayout整个类与已发布build18源ea2bdee逐字节相同；标签、BoardPage、BoardFeedback等原文件未改。原52标签宽、统一labelHeight、topPadding24+spare*.24、rowGap+spare*.52、原widthfit已全部恢复，旧78守卫恢复。15份build18历史几何参考回归先红（R02的96.23对106），恢复后全等通过；不是降低布局断言。
 
