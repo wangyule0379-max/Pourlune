@@ -1,0 +1,11 @@
+# iOS Next interstitial — 2026-10-28
+
+On simulator `2894A85E-04FC-4857-A856-3BEFF2CCB565`, the installed normal-main function QA package `dev.pourlune.functionValidation`, source `28a4941bf80f7d5ac4e8f77ffe0dfe6205c3f394`, matched all 363 frozen files. A hash-verified `main021-last` real-puzzle fixture (SHA-256 `202ec8edc7041e34b36fdbbd182cb57a17184c10bcf2d2308d543862493e0e14`) was copied only to its named function QA database after a private backup. It preloaded 20 first clears and qualification total 10; this is prepared progress, not natural play. The GM identity and databases were not modified.
+
+In the function app's actual initial SDK request window, the targeted local rule subscription recorded `googleads.g.doubleclick-cn.net` as `RuleSet(reject) → REJECT`. The previously authorized exact-domain runtime exception was applied with a full rule comparison and 900-second auto-restore guard. No pubads or other domain was added. The normal Extra bottle dialog initially reported unavailable; one Try again loaded the optional ad offer, which was dismissed without showing a rewarded ad. This demonstrated rewarded inventory readiness; it alone did not establish interstitial readiness.
+
+The actual final pour 7→5 completed Level 21. Pressing Next displayed the official **Test mode interstitial**, explicitly labeled “This is an interstitial test ad.” [Native screenshot](ios-next-interstitial.png). Its close button was used and Level 22 opened with zero moves. No ad content was clicked.
+
+After normal termination, the function database passed `integrity_check`. It contained exactly one interstitial fullscreen show linked to one interstitial attempt with `qualifying_boundary=11`; `qualifying_clear_total=11`, `qualifying_consumed_total=11`, and `first_clears_since_interstitial=0`. Level 21 had exactly one first-completion record; the active ordinary slot contained `main-022` with zero moves. IDs are omitted.
+
+The single runtime exception was actively removed after approximately 71 seconds. [Restoration record](cn-next-exception-run.json) reports `restored=true` and `persistent_config_unchanged=true`; no other network or clock change was made. The independent function result database remains preserved. This is simulator test-ad behavior; physical devices, commercial inventory and Android remain unverified.
