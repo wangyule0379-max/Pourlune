@@ -46,6 +46,8 @@ class AdCoordinator extends ChangeNotifier {
     required this.store,
     required this.transport,
     required this.configured,
+    this.rulesAllowLoad,
+    this.rulesAllowShow,
     FullscreenCooldown? clock,
     this.loadTimeout = const Duration(seconds: 30),
     this.preShowTimeout = const Duration(minutes: 2),
@@ -53,6 +55,9 @@ class AdCoordinator extends ChangeNotifier {
   final GameStore store;
   final AdTransport transport;
   final bool configured;
+  final bool Function(AdKind)? rulesAllowLoad, rulesAllowShow;
+  int _revision = 0;
+  int get revision => _revision;
   final FullscreenCooldown clock;
   final Duration loadTimeout, preShowTimeout;
   bool allowed = false,
@@ -79,10 +84,13 @@ class AdCoordinator extends ChangeNotifier {
       _initialized &&
       allowed &&
       policy.adsEnabled &&
+      (rulesAllowLoad?.call(kind) ?? true) &&
       (kind == AdKind.interstitial
           ? policy.interstitialEnabled
           : policy.rewardedEnabled);
   bool ready(AdKind kind) =>
+      _inventoryReady(kind) && (rulesAllowShow?.call(kind) ?? true);
+  bool _inventoryReady(AdKind kind) =>
       !_disposed &&
       _permits(kind) &&
       foreground &&
@@ -119,6 +127,7 @@ class AdCoordinator extends ChangeNotifier {
     if (modal != null) dialogOpen = modal;
     if (remote != null) policy = remote;
     if (invalidate) {
+      _revision++;
       for (final kind in AdKind.values) {
         _generation[kind] = (_generation[kind] ?? 0) + 1;
         final old = _handles.remove(kind);
@@ -149,7 +158,7 @@ class AdCoordinator extends ChangeNotifier {
         showing ||
         timingSaveFailed ||
         state(kind) == AdLoadState.loading ||
-        ready(kind)) {
+        _inventoryReady(kind)) {
       return;
     }
     final old = _handles.remove(kind);
@@ -225,9 +234,12 @@ class AdCoordinator extends ChangeNotifier {
     AdKind kind,
     String request, {
     VoidCallback? onReward,
+    int? expectedRevision,
   }) async {
+    final revision = _revision;
     if (showing ||
         _disposed ||
+        (expectedRevision != null && expectedRevision != revision) ||
         dialogOpen ||
         !foreground ||
         timingSaveFailed ||
@@ -248,7 +260,12 @@ class AdCoordinator extends ChangeNotifier {
       _notify();
       return const AdResult(false, 'save_failed');
     }
-    if (_disposed || !foreground || !_permits(kind) || dialogOpen) {
+    if (_disposed ||
+        !foreground ||
+        !_permits(kind) ||
+        dialogOpen ||
+        revision != _revision ||
+        !(rulesAllowShow?.call(kind) ?? true)) {
       _pendingClear.add(request);
       await retryTiming();
       showing = false;

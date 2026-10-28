@@ -384,6 +384,14 @@ class FirebaseConfigTest(unittest.TestCase):
         for name, content in before.items():
             self.assertEqual(Path(name).read_bytes(), content)
 
+    def test_wrapper_explicit_gamemunchies_production_reaches_flutter(self):
+        result = self.wrapper('prod', gamemunchies_environment='production')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        sent = json.loads((self.root / 'flutter-input.json').read_text())['defines']
+        self.assertEqual(sent['POURLUNE_GAMEMUNCHIES_GAME_ID'],
+                         '8feaf0dc-ec12-4308-ac58-16b2180f2d63')
+        self.assertEqual(sent['POURLUNE_GAMEMUNCHIES_ENVIRONMENT'], 'production')
+
     def test_wrapper_offline_omits_options_and_does_not_require_local_configs(self):
         shutil.rmtree(self.root / "dev")
         self.registry.unlink()

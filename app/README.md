@@ -284,3 +284,35 @@ XCODE_XCCONFIG_FILE=/tmp/pourlune-main60-five-color.xcconfig FIREBASE_ANALYTICS_
 写入`copied`标记（最长55秒）；测试运行器结束可能卸载安装，须先复制截图和一致SQLite备份。
 真实同安装进程恢复另外使用`lib/main.dart`正常构建、同一Runner/kernel与SIGKILL/launch核对，
 不能用测试重新安装或Widget重建替代进程恢复。不得把新候选称为已在TestFlight12/Play13。
+## GameMunchies 统计与广告控制（2026-10-28）
+
+复用同一 `gamemunchies_client` 0.1.0，固定源92f588200a1d80b1d0023122fcfc3037db87c53c。
+来源及逐文件指纹在 `../tools/validation/gamemunchies-sdk.json`。
+私有SDK不进入Pourlune仓库；用受限归档恢复到ignored `.private-dependencies/gamemunchies_client`，
+再运行 `flutter pub get --enforce-lockfile`。方法见 `../tools/validation/README.md`。
+缺少或指纹不符即拒绝构建，不借另一份SDK或悄悄移除接线解围。
+
+客户端只连接 `https://api.gamemunchies.com`（不带 `/api` 后缀），无后台地址或管理员凭据。
+地址切换本身不需要SDK升级；92f5882扩展是独立的统计同意需求。
+SDK按origin/gameId/platform/environment隔离存储：旧域名的QA队列、ID和SDK冷却不迁移，
+原游戏SQLite与全屏180秒保护保持。TestFlight17不含GM，因此该版正式玩家没有旧GM队列可迁移。
+
+缺省构建不启用GM。专用QA显式使用 `config/gamemunchies/test.json` 与已登记的实际QA原生身份；
+正式签名候选须给beta_build.py `--gamemunchies-environment production`，
+绑定已核正式gameId与com.pourlune.app，不能混用test/production。
+统计仍需App设置主动打开 **Share gameplay analytics**；默认关闭，保存失败不启用。
+关统计立即停止新采集/发送并清当前作用域待发队列，尽力取消在途统计请求；已经抵达服务器的记录不能撤回。
+规则GET继续，使用同一个SDK客户端、缓存和刷新限频；不会为规则拉取偷偷发active。
+
+加载前、载入完成及show前检查总开关/类型/场景；配置变更使尚未调用原生show的旧机会失效。
+已开始原生展示的回调保持，合法奖励仍只按原实例SQLite事务去重。
+关闭远程加瓶不会触发本地免费加瓶捷径；本地disabled广告模式原有行为保留。
+远程规则与Firebase安全开关、UMP、前台、首通资格、全屏互斥共同满足后才显示。
+SDK前台每30秒检查一次、配置尝试至少间隔5分钟、请求超时8秒；后台暂停，返回前台到期再尝试。
+离线用已验证缓存或明确默认值，核心玩法不等待网络。
+
+全屏本地安全间隔仍为最近任一全屏shown后的180秒。GM另限制最近一次实际插屏impression到下一次插屏的间隔；
+有效展示需同时满足两个截止时间（远程低于180秒不能缩短本地保护，rewarded不受GM插屏间隔约束）。
+新实例首次落盘才记round_start；恢复/Restart/前台/加瓶不算新局。
+展示和失败只接真实Google `onAdImpression`/`onAdFailedToLoad`，仍使用官方测试广告，不增加MAX或付费广告。
+最终实际数据/规则版本/分发结果见 `../docs/development/deliveries/gamemunchies-live-integration.md`。

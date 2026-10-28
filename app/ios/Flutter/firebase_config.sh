@@ -11,6 +11,8 @@ fi
 "$POURLUNE_PYTHON_BIN" "$POURLUNE_REPO_ROOT/tools/validation/admob_config.py" \
   --platform ios --native-id "$PRODUCT_BUNDLE_IDENTIFIER" \
   --native-app-id "${POURLUNE_ADMOB_APP_ID:-ca-app-pub-3940256099942544~1458002511}" "$@"
+"$POURLUNE_PYTHON_BIN" "$POURLUNE_REPO_ROOT/tools/validation/gamemunchies_config.py" \
+  --platform ios --native-id "$PRODUCT_BUNDLE_IDENTIFIER"
 "$POURLUNE_PYTHON_BIN" "$POURLUNE_REPO_ROOT/tools/validation/firebase_config.py" \
   --environment "${POURLUNE_FIREBASE_ENV:-none}" --platform ios \
   --config-dir "${POURLUNE_FIREBASE_CONFIG_DIR:-$SRCROOT/../config/firebase}" \

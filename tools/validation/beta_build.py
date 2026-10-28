@@ -23,6 +23,8 @@ from admob_config import AdConfigError, add_arguments as add_ad_arguments, selec
 from build_version import BuildError, read_version
 from ios_release_plugins import verify_no_test_plugin
 from ios_privacy_manifests import inspect_app as inspect_privacy_manifests
+from gamemunchies_config import ConfigError as GMConfigError, add_arguments as add_gm_arguments, selection as gm_selection
+from gamemunchies_sdk import inspect_source, DESTINATION as SDK_DESTINATION, SDKSourceError
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -45,8 +47,11 @@ def sources():
         'git', 'ls-files', '-z', '--cached', '--others', '--exclude-standard', '--',
         'app', 'packages', 'tools', '.flutter-version', '.github',
     ], cwd=ROOT).decode().split('\0')
-    return {name: sha(ROOT / name) for name in sorted(set(names))
-            if name and (ROOT / name).is_file()}
+    result = {name: sha(ROOT / name) for name in sorted(set(names))
+              if name and (ROOT / name).is_file()}
+    for name, value in inspect_source()['files'].items():
+        result[(SDK_DESTINATION.relative_to(ROOT) / name).as_posix()] = value
+    return result
 
 
 def main():
@@ -58,6 +63,7 @@ def main():
                         help='Export an IPA using this existing App Store profile')
     add_destination_arguments(parser)
     add_ad_arguments(parser)
+    add_gm_arguments(parser)
     parser.add_argument('--android-keystore', type=Path)
     parser.add_argument('--android-key-alias')
     parser.add_argument('--android-store-password-file', type=Path)
@@ -67,6 +73,8 @@ def main():
     try:
         destinations = validate_destinations(args.support_url, args.privacy_url, args.feedback_email)
         ads = ad_selection(args.ad_mode, args.platform, 'com.pourlune.app', args.admob_registration)
+        gm = gm_selection(args.gamemunchies_environment, args.platform, 'com.pourlune.app')
+        sdk_source = inspect_source()
         version, number = read_version((ROOT / 'app/pubspec.yaml').read_text())
         android_inputs = [args.android_keystore, args.android_key_alias,
                           args.android_store_password_file, args.android_certificate_sha256]
@@ -95,7 +103,8 @@ def main():
         # No silent caller target, SDK config, signing, AdMob or Dart overrides.
         command = [sys.executable, str(ROOT / 'tools/validation/firebase_build.py'),
                    '--environment', 'prod', '--platform', args.platform,
-                   '--flutter', args.flutter, '--ad-mode', args.ad_mode]
+                   '--flutter', args.flutter, '--ad-mode', args.ad_mode,
+                   '--gamemunchies-environment', args.gamemunchies_environment]
         if registration:
             command.extend(['--admob-registration', str(registration)])
         for name, value in destinations.items():
@@ -207,6 +216,7 @@ def main():
                     'version': version, 'build_number': number,
                     'firebase_environment': 'prod', 'ads': args.ad_mode,
                     'ad_configuration': ads,
+                    'gamemunchies': gm, 'gamemunchies_sdk': sdk_source,
                     'collection': ('analytics/crash independent opt-in, defaults off; RC may process installation data'
                                    + ('; test ads/UMP may process IP/device/interaction data'
                                       if args.ad_mode == 'test' else '')),
@@ -221,8 +231,8 @@ def main():
         print(json.dumps({'ok': True, 'candidate': str(output / 'candidate.json'),
                           'status': manifest['status']}))
         return 0
-    except (BuildError, ProfileError, DestinationError, SigningError, AdConfigError, OSError) as error:
-        print(json.dumps({'ok': False, 'code': str(error) if isinstance(error, (BuildError, ProfileError, DestinationError, SigningError, AdConfigError))
+    except (BuildError, ProfileError, DestinationError, SigningError, AdConfigError, GMConfigError, SDKSourceError, OSError) as error:
+        print(json.dumps({'ok': False, 'code': str(error) if isinstance(error, (BuildError, ProfileError, DestinationError, SigningError, AdConfigError, GMConfigError, SDKSourceError))
                           else 'candidate_io_error'}), file=sys.stderr)
         return 1
 

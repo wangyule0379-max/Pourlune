@@ -399,3 +399,31 @@ That proof reuses version16 only in a new local directory and must never be uplo
 16 is already occupied. Any later store candidate needs its own unused build number,
 final source and distribution settings. This format repair does not answer store
 privacy questionnaires or establish that commercial ads are ready.
+
+
+## 固定私有 GameMunchies SDK 与显式发行选择
+
+同一个通用SDK的7个已提交runtime/pubspec/README文件由SDK仓库的
+`sdk/dart/tool/package_private.py`打包；固定commit/整包SHA/逐文件SHA记录在
+`gamemunchies-sdk.json`。SDK没有公开发布许可，本任务仅内部消费，不把源码或归档提交公开仓库。
+本机先运行（ARCHIVE为已有600受限归档）：
+
+```sh
+.venv/bin/python tools/validation/gamemunchies_sdk.py --archive /ABSOLUTE/PRIVATE/sdk.tgz
+.venv/bin/python tools/validation/gamemunchies_sdk.py --check
+```
+
+只恢复到根目录ignored `.private-dependencies/gamemunchies_client`；未知文件、符号链接、目录穿越、
+整包/逐文件漂移或已有安装被修改均拒绝，不覆盖不匹配源。
+CI使用仓库Actions secret `GAMEMUNCHIES_DART_SDK_ARCHIVE_V1`，仅映射到本step的
+`POURLUNE_GM_SDK_ARCHIVE`供脚本解码。没有secret的fork/环境会明确失败，不拿删依赖或替身当干净通过。
+这批归档10233字节、base64值13644字节，低于GitHub的48KB secret限制；只输出公开指纹，不回显payload。
+设置由Use Computer在正常GitHub设置页面按具体授权执行，不新增token或公开仓库。
+依据：[GitHub secrets限制](https://docs.github.com/en/actions/reference/security/secrets)、
+[Dart path依赖](https://dart.dev/tools/pub/dependencies)。
+
+`firebase_build.py`/`beta_build.py`新增 `--gamemunchies-environment disabled|test|production`，默认disabled。
+正式后续候选显式production；正常QA另用test定义和匹配的已登记QA身份。
+`gamemunchies_config.py`在两端原生构建阶段核实际identity与Dart定义，拒绝未知ID、环境错配和未授权endpoint覆盖。
+候选sources.json同时冻结SDK实际输入hash，candidate.json记录ID/environment/api地址及SDK固定源，
+不能把“编译含SDK”冒称“实际已上报/已可后台控制”。实际结果另见最终交付。

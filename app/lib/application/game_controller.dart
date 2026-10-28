@@ -182,6 +182,7 @@ class GameController extends ChangeNotifier {
   String selectedScene = 'color_studio';
   _Navigation? _pendingNav;
   GameInstance? _candidate;
+  DateTime? _candidateStartedAt;
   String? _afterCompletion, _revealPiece;
   Future<void> Function()? _afterWrite;
   _Write _write = _Write.snapshot;
@@ -509,6 +510,7 @@ class GameController extends ChangeNotifier {
     _cancelHint();
     _metric(s);
     _candidate = s;
+    _candidateStartedAt = DateTime.now().toUtc();
     _afterCompletion = afterCompletion;
     _write = _Write.candidate;
     _navigating = true;
@@ -814,6 +816,11 @@ class GameController extends ChangeNotifier {
       if (saved != null &&
           (operation == _Write.candidate || operation == _Write.snapshot)) {
         if (operation == _Write.candidate) {
+          final startedAt = _candidateStartedAt;
+          _candidateStartedAt = null;
+          if (startedAt != null) {
+            unawaited(services?.reporting.roundStarted(saved.id, startedAt));
+          }
           _event(ProductEvent.puzzleStart, saved.id, _eventPuzzle(saved));
         }
         if (saved.completed && completion != null) {
@@ -971,6 +978,7 @@ class GameController extends ChangeNotifier {
     }
     _adFlow = true;
     _notify();
+    final adRevision = services?.ads.revision;
     // A delayed fullscreen write may consume an older boundary after this
     // settlement was rendered. Never qualify a new show using that cached count.
     var check = false;
@@ -1002,7 +1010,11 @@ class GameController extends ChangeNotifier {
     }
 
     if (check && services != null) {
-      final result = await services!.ads.show(AdKind.interstitial, _id());
+      final result = await services!.ads.show(
+        AdKind.interstitial,
+        _id(),
+        expectedRevision: adRevision,
+      );
       _event(ProductEvent.interstitialCheck, source.id, {
         'completion_id': source.id,
         'qualifying': progress.qualifyingClears,
@@ -1033,6 +1045,7 @@ class GameController extends ChangeNotifier {
       return;
     }
     final origin = current!, id = _id();
+    final adRevision = services!.ads.revision;
     _adFlow = true;
     rewardIssue = null;
     _cancelHint();
@@ -1044,6 +1057,7 @@ class GameController extends ChangeNotifier {
       final result = await services!.ads.show(
         AdKind.rewarded,
         id,
+        expectedRevision: adRevision,
         onReward: () {
           if (!_alive) return;
           _event(ProductEvent.rewardConfirmed, id, {

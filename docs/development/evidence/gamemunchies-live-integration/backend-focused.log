@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: registration needs no ad JSON and duplicate multi-platform registration is atomic
+ok 1 - registration needs no ad JSON and duplicate multi-platform registration is atomic
+  ---
+  duration_ms: 890.730958
+  type: 'test'
+  ...
+# Subtest: capabilities register once; CAS publish and restore isolate game and platform
+ok 2 - capabilities register once; CAS publish and restore isolate game and platform
+  ---
+  duration_ms: 248.230291
+  type: 'test'
+  ...
+# Subtest: every overview/game/platform request uses the selected environment
+ok 3 - every overview/game/platform request uses the selected environment
+  ---
+  duration_ms: 1.352625
+  type: 'test'
+  ...
+# Subtest: slow old environment cannot replace the current snapshot
+ok 4 - slow old environment cannot replace the current snapshot
+  ---
+  duration_ms: 0.117834
+  type: 'test'
+  ...
+# Subtest: appId correction preserves game, config, version and actual event history
+ok 5 - appId correction preserves game, config, version and actual event history
+  ---
+  duration_ms: 911.750208
+  type: 'test'
+  ...
+# Subtest: correction retains uniqueness and capability initialization cannot overwrite
+ok 6 - correction retains uniqueness and capability initialization cannot overwrite
+  ---
+  duration_ms: 88.431792
+  type: 'test'
+  ...
+# Subtest: data source rejects old slow responses after identity invalidation and accepts no stale UI data
+ok 7 - data source rejects old slow responses after identity invalidation and accepts no stale UI data
+  ---
+  duration_ms: 17.104459
+  type: 'test'
+  ...
+# Subtest: leaving warns for active drafts, identity-bound expired-session drafts, and unconfirmed logout
+ok 8 - leaving warns for active drafts, identity-bound expired-session drafts, and unconfirmed logout
+  ---
+  duration_ms: 0.20475
+  type: 'test'
+  ...
+# Subtest: UI adapter maps platforms, preserves uninitialized state, and surfaces conflicts
+ok 9 - UI adapter maps platforms, preserves uninitialized state, and surfaces conflicts
+  ---
+  duration_ms: 855.983125
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1237.193625

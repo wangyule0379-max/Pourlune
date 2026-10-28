@@ -1,0 +1,15 @@
+# GameMunchies 客户端地址差额
+
+2026-10-28，作为整体统计/广告控制接入中的独立可审差额；不因换地址单独分发商店包。
+
+正常main的GameMunchiesReporting.baseUrl固定为https://api.gamemunchies.com，不带/api后缀；当前活跃reporting单测使用同一新地址。gameId/platform/environment、事件字段、Google广告单元和回调不因换地址改变。最终构建仍须选择已核test或production登记，不能把换host当成完成统计接线。
+
+既有SDK的ClientOptions本就支持HTTPS baseUrl，本次域名不要求升级或重接SDK。固定源92f5882的变化是另一个已授权需求：统计撤回后同一客户端仍取得广告规则、清除待发统计和阻止新发送；不是新域名的前提。SDK由受限固定归档消费，不公开源码。
+
+SDK本地作用域包含origin。旧studio作用域的专用QA存储保留，队列、匿名安装ID和SDK插屏冷却不复制成新作用域；原游戏SQLite和180秒全屏保护保持。TestFlight17不含GM，没有正式玩家旧GM队列迁移。新scope仅在统计同意后生成新的匿名安装ID，此变化不能被当成同一安装统计连续性已证明。
+
+历史回放probe仍明确绑定其旧origin/旧测试授权与记录，不批量替换历史证据，不用该工具向新host重发旧队列冒称迁移或去重通过。新host的实际正常main双端配置/事件与去重差额，须在本轮新包联调中另记；当前SDK52、应用41与工具检查通过不替代这项运行验证。
+
+服务端域名隔离由独立GM任务完成：2416758及4a27c6d记录新API只允许客户端路径，旧host客户端接口兼容。首次并行部署覆盖已通过冻结合并4a27c6d单一部署解决，当前Worker0c12ffaf保留API隔离与管理UI修复。后台已有test/production筛选与四平台v1配置实际回读，不把旧test历史值当作新客户端结果。
+
+整体验收、后续候选和TestFlight终态见gamemunchies-live-integration.md；本项尚不声称新TestFlight已上传或物理安装已验。
