@@ -16,12 +16,12 @@ jobs:
           git clone --depth 1 --branch 3.47.2 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
           test "$(git -C "$RUNNER_TEMP/flutter" rev-parse HEAD)" = d3b14c876900e553bc736ca19295fc09e3853e8e
           echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
-      - name: Release configuration guards (no credentials)
-        run: python3 -m unittest discover -s tools/validation -v
       - name: Restore pinned private GameMunchies SDK
         env:
           POURLUNE_GM_SDK_ARCHIVE: ${{ secrets.GAMEMUNCHIES_DART_SDK_ARCHIVE_V1 }}
         run: python3 tools/validation/gamemunchies_sdk.py
+      - name: Release configuration guards (no credentials)
+        run: python3 -m unittest discover -s tools/validation -v
       - name: Core
         working-directory: packages/pourlune_core
         run: |
