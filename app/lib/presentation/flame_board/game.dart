@@ -49,7 +49,7 @@ class FlameBoardGame extends FlameGame {
   final _press = List<double>.filled(8, 0);
   final _selectionLifts = List<double>.filled(8, 0);
   int? _selectionTarget;
-  double _elapsed = 0, _initialLift = 0, _shake = 0;
+  double _elapsed = 0, _initialLift = 0, _initialTargetLift = 0, _shake = 0;
   int? _selected, _suggested, _hintSource, _shaking, _addedBottle;
   int _rejectionRevision = 0;
   (String, int, int) _key(PourMotion m) => (m.instanceId, m.revision, m.token);
@@ -60,6 +60,7 @@ class FlameBoardGame extends FlameGame {
     elapsedMs: _elapsed,
     reduced: _reduced,
     initialLift: _initialLift,
+    initialTargetLift: _initialTargetLift,
     selectionLifts: _selectionLifts,
   );
   @override
@@ -142,6 +143,7 @@ class FlameBoardGame extends FlameGame {
         _ignored != _key(m) &&
         (_motion == null || _key(_motion!) != _key(m))) {
       final previousLift = _selectionLifts[m.from];
+      final targetLift = _selectionLifts[m.to];
       final returningLifts = List<double>.of(_selectionLifts);
       _cancel();
       for (var i = 0; i < returningLifts.length; i++) {
@@ -150,6 +152,7 @@ class FlameBoardGame extends FlameGame {
         }
       }
       _initialLift = previousLift;
+      _initialTargetLift = targetLift;
       _motion = m;
       _elapsed = 0;
       _select();
@@ -449,6 +452,14 @@ class FlameBoardGame extends FlameGame {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
+    _paintBoard(canvas, BoardPaintLayer.stationary);
+  }
+
+  // Flutter places this one moving layer above the fixed native readouts.
+  void renderMoving(Canvas canvas) =>
+      _paintBoard(canvas, BoardPaintLayer.moving);
+
+  void _paintBoard(Canvas canvas, BoardPaintLayer layer) {
     if (closed || _state == null || _layout == null) return;
     _painter?.paint(
       canvas,
@@ -462,6 +473,7 @@ class FlameBoardGame extends FlameGame {
       shaking: _errorEffect == null ? null : _shaking,
       shake: _shake,
       reduced: _reduced,
+      layer: layer,
     );
   }
 

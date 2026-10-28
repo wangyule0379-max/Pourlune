@@ -18,6 +18,7 @@ class BoardVisualFrame {
     this.elapsedMs = 0,
     bool reduced = false,
     double initialLift = 0,
+    double initialTargetLift = 0,
     List<double> selectionLifts = const [],
   }) {
     final m = motion != null && matchesMotion(state, motion) ? motion : null;
@@ -33,6 +34,7 @@ class BoardVisualFrame {
           layout,
           m,
           initialLift: initialLift,
+          initialTargetLift: initialTargetLift,
         ).frame(elapsedMs);
         out = flowing.out;
         arrived = flowing.delivered;
@@ -54,6 +56,7 @@ class BoardVisualFrame {
           0,
         ),
     ];
+    movingIndices = {?source};
     if (pour != null) {
       poses[source!] = pour!.source;
       poses[target!] = BottlePose(
@@ -66,6 +69,28 @@ class BoardVisualFrame {
             ),
         pour!.target.angle,
       );
+      if (poses[target].mouth.dy > layout.mouths[target].dy + .001) {
+        movingIndices.add(target);
+        final receiver = layout.shape.visibleRect.shift(poses[target].mouth);
+        // A lowered upper-row receiver can briefly borrow the caption band.
+        // Give overlapping lower-row bottles room too, within this canvas;
+        // their original captions stay put and reappear after the action.
+        for (var i = layout.topRowCount; i < poses.length; i++) {
+          if (i == source) continue;
+          final bottle = layout.shape.visibleRect.shift(poses[i].mouth);
+          if (receiver.left >= bottle.right || receiver.right <= bottle.left) {
+            continue;
+          }
+          final drop = (receiver.bottom + 6 - bottle.top).clamp(
+            0.0,
+            (layout.height - bottle.bottom - 2).clamp(0.0, double.infinity),
+          );
+          if (drop > 0) {
+            poses[i] = BottlePose(poses[i].mouth + Offset(0, drop), 0);
+            movingIndices.add(i);
+          }
+        }
+      }
     }
     bands = [
       for (var i = 0; i < state.board.length; i++)
@@ -90,6 +115,7 @@ class BoardVisualFrame {
   late final Board contents;
   late final List<int> counts, paintOrder;
   late final List<BottlePose> poses;
+  late final Set<int> movingIndices;
   late final List<List<LiquidBand>> bands;
 }
 
@@ -115,6 +141,7 @@ PourGeometry geometryFor(
   BoardLayout layout,
   PourMotion motion, {
   double initialLift = 0,
+  double initialTargetLift = 0,
 }) => PourGeometry(
   shape: layout.shape,
   sourceMouth: layout.mouths[motion.from],
@@ -123,6 +150,8 @@ PourGeometry geometryFor(
   sourceUnits: motion.before[motion.from].length,
   bounds: layout.flightBounds,
   initialLift: initialLift,
+  targetDrop: layout.receivingDrop(motion.to),
+  targetWasRaised: initialTargetLift > .001,
 );
 
 /// Counts change only on a shared integer boundary; source and destination

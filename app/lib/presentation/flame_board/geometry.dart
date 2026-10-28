@@ -212,16 +212,21 @@ class PourGeometry {
     required this.sourceUnits,
     this.initialLift = 0,
     this.bounds,
+    this.targetDrop = 0,
+    this.targetWasRaised = false,
   });
   final BottleShape shape;
   final Offset sourceMouth, targetMouth;
   final int units, sourceUnits;
   final double initialLift;
+  final double targetDrop;
+  final bool targetWasRaised;
   final Rect? bounds;
   double get flowMs => 460 + 100.0 * units;
   double get totalMs => 200 + 90 + flowMs + 210 + 100;
   PourFrame frame(double elapsedMs) {
     final t = elapsedMs.clamp(0.0, totalMs);
+    final receivingMouth = targetMouth + Offset(0, targetDrop);
     var direction = targetMouth.dx > sourceMouth.dx ? 1.0 : -1.0;
     final area = bounds;
     if (area != null) {
@@ -263,7 +268,7 @@ class PourGeometry {
       if (area == null) return 1;
       final turn = BottlePose(Offset.zero, angle);
       final lip = turn.transform(shape.lip(direction));
-      final anchor = targetMouth - Offset(0, rimClearance);
+      final anchor = receivingMouth - Offset(0, rimClearance);
       var scale = 1.0;
       for (final corner in [
         shape.visibleRect.topLeft,
@@ -293,7 +298,7 @@ class PourGeometry {
     Offset aligned(double angle) {
       final scale = transportScale(angle);
       final gap = area == null ? 35.0 : rimClearance + rimDrop(angle) * scale;
-      return targetMouth -
+      return receivingMouth -
           Offset(0, gap) -
           BottlePose(
             Offset.zero,
@@ -388,7 +393,17 @@ class PourGeometry {
         scale: source.scale,
       );
     }
-    final target = BottlePose(targetMouth, 0);
+    // Borrow presentation space only while input is locked. The resting
+    // board and fixed readouts retain their original positions and sizes.
+    final targetProgress = t < 290
+        ? targetWasRaised
+              ? _ease((t - 200) / 90)
+              : _ease(t / 200)
+        : 1 - _ease((t - 290 - flowMs) / 210);
+    final target = BottlePose(
+      targetMouth + Offset(0, targetDrop * targetProgress),
+      0,
+    );
     return PourFrame(
       source: source,
       target: target,
@@ -426,7 +441,7 @@ class BoardLayout {
   BoardLayout({
     required this.width,
     required this.count,
-    double textScale = 1,
+    this.textScale = 1,
     double maxHeight = double.infinity,
     this.preview = false,
     this.footLabels = true,
@@ -507,7 +522,7 @@ class BoardLayout {
         ? labelRect(count - 1).bottom
         : cells.last.bottom;
   }
-  final double width;
+  final double width, textScale;
   final int count;
   final bool preview, footLabels, bottomCaptionsExternal;
   late final int topRowCount;
@@ -634,6 +649,20 @@ class BoardLayout {
   }
 
   Rect get flightBounds => Rect.fromLTWH(0, 0, width, height);
+
+  double receivingDrop(int index) {
+    if (preview || !footLabels || textScale > 1.3 || index >= topRowCount) {
+      return 0;
+    }
+    // The full rotated material/rim envelope needs 1.23 bottle widths.
+    // Use the caption/gutter space temporarily instead of shrinking the
+    // whole board or pushing a normal-sized bottle through the title.
+    return (shape.width * 1.25 + 2 - cells[index].top).clamp(
+      0.0,
+      math.max(0, height - cells[index].bottom - 2),
+    );
+  }
+
   Rect labelRect(int index) {
     final labelWidth = math.min(cells[index].width, _labelWidth);
     return Rect.fromLTWH(

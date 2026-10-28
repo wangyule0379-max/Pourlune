@@ -262,6 +262,13 @@ class _FlameBoardState extends State<FlameBoard> {
                         ),
                       ),
                     ),
+                Positioned.fill(
+                  child: ClipRect(
+                    child: IgnorePointer(
+                      child: CustomPaint(painter: _MovingBottleLayer(game)),
+                    ),
+                  ),
+                ),
                 if (denseDock)
                   if (visual.active case final active?)
                     AnimatedBuilder(
@@ -332,4 +339,13 @@ class _FlameBoardState extends State<FlameBoard> {
       );
     },
   );
+}
+
+class _MovingBottleLayer extends CustomPainter {
+  _MovingBottleLayer(this.game) : super(repaint: game.poseTick);
+  final FlameBoardGame game;
+  @override
+  void paint(Canvas canvas, Size size) => game.renderMoving(canvas);
+  @override
+  bool shouldRepaint(_MovingBottleLayer old) => old.game != game;
 }

@@ -36,6 +36,8 @@ class BottleArt {
   }
 }
 
+enum BoardPaintLayer { all, stationary, moving }
+
 class FlameBoardPainter {
   FlameBoardPainter(this.art);
   final BottleArt art;
@@ -51,11 +53,15 @@ class FlameBoardPainter {
     int? shaking,
     double shake = 0,
     bool reduced = false,
+    BoardPaintLayer layer = BoardPaintLayer.all,
   }) {
     if (art.disposed) return;
     final shape = frame.layout.shape, active = frame.active;
     for (var i = 0; i < frame.poses.length; i++) {
-      final mouth = frame.layout.mouths[i];
+      if (layer == BoardPaintLayer.moving) break;
+      final mouth = frame.movingIndices.contains(i) && i != active?.from
+          ? frame.poses[i].mouth
+          : frame.layout.mouths[i];
       canvas.drawOval(
         Rect.fromCenter(
           center: mouth + Offset(0, shape.height * .90 + 1),
@@ -68,6 +74,11 @@ class FlameBoardPainter {
       );
     }
     for (final i in frame.paintOrder) {
+      if (layer == BoardPaintLayer.moving && !frame.movingIndices.contains(i) ||
+          layer == BoardPaintLayer.stationary &&
+              frame.movingIndices.contains(i)) {
+        continue;
+      }
       var pose = frame.poses[i];
       if (i != active?.from) {
         pose = BottlePose(
@@ -117,7 +128,10 @@ class FlameBoardPainter {
             : 0,
       );
     }
-    if (active == null && hintSource != null && suggested != null) {
+    if (layer != BoardPaintLayer.moving &&
+        active == null &&
+        hintSource != null &&
+        suggested != null) {
       final path = frame.layout.hintPath(hintSource, suggested);
       canvas.drawPath(
         path,
