@@ -17,3 +17,10 @@ The separately recorded owner rewarded/interstitial IDs are console inventory in
 They must not replace test units in QA. Console registration does not prove
 commercial readiness, consent-message publication, app-ads.txt verification,
 Android device behavior, or physical-device acceptance.
+
+2026-10-28: the user explicitly authorized the first release with commercial ads.
+The existing iOS units were read again from the correct console account and are
+now included in `registration.json`. `--ad-mode production` consumes those units
+only with matching registered identity and native/Dart guards. `test` continues
+to use sample units even with the same owned App ID. Account/app serving remains
+limited pending public-store linkage; configuration does not guarantee fill.

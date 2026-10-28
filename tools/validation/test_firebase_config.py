@@ -392,6 +392,20 @@ class FirebaseConfigTest(unittest.TestCase):
                          '8feaf0dc-ec12-4308-ac58-16b2180f2d63')
         self.assertEqual(sent['POURLUNE_GAMEMUNCHIES_ENVIRONMENT'], 'production')
 
+    def test_wrapper_production_ads_forward_only_verified_registered_units(self):
+        registration = self.root / 'admob.json'
+        app = {'native_id': 'com.pourlune.app',
+               'app_id': 'ca-app-pub-1111111111111111~1111111111',
+               'interstitial_id': 'ca-app-pub-1111111111111111/2222222222',
+               'rewarded_id': 'ca-app-pub-1111111111111111/3333333333'}
+        registration.write_text(json.dumps({'schema': 1, 'apps': {'ios': app}}))
+        result = self.wrapper('prod', ad_mode='production', admob_registration=str(registration))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        sent = json.loads((self.root / 'flutter-input.json').read_text())['defines']
+        self.assertEqual(sent['POURLUNE_AD_MODE'], 'production')
+        self.assertEqual(sent['POURLUNE_INTERSTITIAL_ID'], app['interstitial_id'])
+        self.assertEqual(sent['POURLUNE_REWARDED_ID'], app['rewarded_id'])
+
     def test_wrapper_offline_omits_options_and_does_not_require_local_configs(self):
         shutil.rmtree(self.root / "dev")
         self.registry.unlink()

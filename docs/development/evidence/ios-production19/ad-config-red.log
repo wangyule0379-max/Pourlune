@@ -1,0 +1,23 @@
+test_android_packaged_manifest_rejects_unused_ad_id_and_analytics_ad_id_collection (test_admob_config.AdConfigTest) ... ok
+test_ios_native_wrong_app_id_fails_before_replacing_existing_firebase_resource (test_admob_config.AdConfigTest) ... ok
+test_native_build_rejects_platform_identity_appid_duplicates_and_live_unit_injection (test_admob_config.AdConfigTest) ... ok
+test_owned_apps_keep_exact_platform_sample_units_and_require_matching_identity (test_admob_config.AdConfigTest) ... ok
+test_production_uses_only_registered_units_and_rejects_build_injection (test_admob_config.AdConfigTest) ... ERROR
+test_registration_hash_matches_the_same_bytes_that_were_parsed (test_admob_config.AdConfigTest) ... ok
+
+======================================================================
+ERROR: test_production_uses_only_registered_units_and_rejects_build_injection (test_admob_config.AdConfigTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/tools/validation/test_admob_config.py", line 65, in test_production_uses_only_registered_units_and_rejects_build_injection
+    selected = selection('production', 'ios', 'com.pourlune.app', self.registration)
+  File "/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/tools/validation/admob_config.py", line 33, in selection
+    require(mode in {'disabled', 'test'} and platform in SAMPLES, 'invalid_ad_selection')
+  File "/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/tools/validation/admob_config.py", line 29, in require
+    raise AdConfigError(code)
+admob_config.AdConfigError: invalid_ad_selection
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.167s
+
+FAILED (errors=1)

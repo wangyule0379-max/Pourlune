@@ -102,6 +102,9 @@ def main():
                        "POURLUNE_AD_APP_ID": ads['app_id'],
                        "POURLUNE_AD_PLATFORM": args.platform,
                        "POURLUNE_AD_NATIVE_ID": ads['native_id']}
+        if args.ad_mode == 'production':
+            definitions.update({'POURLUNE_INTERSTITIAL_ID': ads['interstitial_id'],
+                                'POURLUNE_REWARDED_ID': ads['rewarded_id']})
         definitions.update({'POURLUNE_GAMEMUNCHIES_GAME_ID': gm['game_id'],
                             'POURLUNE_GAMEMUNCHIES_ENVIRONMENT': gm['environment']})
         definitions.update(display_definitions((ROOT / 'app/pubspec.yaml').read_text(), command))

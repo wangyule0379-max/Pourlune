@@ -429,3 +429,7 @@ CI使用仓库Actions secret `GAMEMUNCHIES_DART_SDK_ARCHIVE_V2`，仅映射到�
 不能把“编译含SDK”冒称“实际已上报/已可后台控制”。实际结果另见最终交付。
 
 SDK 0.2.0: restore the manifest-matching private Dart archive with `gamemunchies_sdk.py --archive <private-archive>` into the ignored path dependency. If upgrading an existing source directory, first preserve it outside that path; the installer refuses to overwrite mismatching source. The new archive SHA is `70effde1c9150b416b34f4dd4b6d95912ef836b5f429c98ea5a8cbf98fd0c167`. Both one-shot replay CLIs now target only the public API host; old-scope snapshots are rejected, never silently migrated. SDK 0.1.0 to 0.2.0 at the same API/game/platform/environment retains the native SDK state, including installation, queue, config and cooldown.
+
+## Explicit iOS commercial AdMob selection (2026-10-28)
+
+The user authorized a first public release with real ads. `--ad-mode production --admob-registration <verified-public-registration>` selects the existing owned App ID and the two distinct owned units in `apps.ios.interstitial_id` / `rewarded_id`. The native guard requires a production identity and exact corresponding Dart definitions; missing, foreign-publisher, duplicate, sample or injected units are rejected. Default remains disabled, test mode always retains official sample units. This does not change NPA, UMP, optional statistics or reward policy. Native sample-ad validation does not establish commercial inventory fill; account/store/privacy readiness is separately recorded.

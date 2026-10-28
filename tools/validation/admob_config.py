@@ -1,4 +1,4 @@
-"""Public AdMob selection for disabled builds or explicit beta test ads only."""
+"""Public AdMob selection; production requires an owned, verified registration."""
 import argparse
 import base64
 import binascii
@@ -30,12 +30,13 @@ def require(condition, code):
 
 
 def selection(mode, platform, native_id, registration=None):
-    require(mode in {'disabled', 'test'} and platform in SAMPLES, 'invalid_ad_selection')
+    require(mode in {'disabled', 'test', 'production'} and platform in SAMPLES, 'invalid_ad_selection')
+    require(mode != 'production' or registration is not None, 'production_requires_registration')
     result = {'mode': mode, 'platform': platform, 'native_id': native_id,
               **SAMPLES[platform], 'app_id_source': 'official_sample',
               'owned_registration_verified': False}
     if registration:
-        require(mode == 'test', 'ad_registration_requires_explicit_test_mode')
+        require(mode in {'test', 'production'}, 'ad_registration_requires_enabled_mode')
         try:
             payload = Path(registration).read_bytes()
             data = json.loads(payload)
@@ -47,6 +48,14 @@ def selection(mode, platform, native_id, registration=None):
                 r'ca-app-pub-[0-9]{16}~[0-9]{10}', app_id))
                 and not app_id.startswith('ca-app-pub-3940256099942544'),
                 'invalid_owned_ad_app_id')
+            if mode == 'production':
+                publisher = app_id.split('~')[0]
+                units = {key: app[key] for key in ('interstitial_id', 'rewarded_id')}
+                require(all(isinstance(value, str) and bool(re.fullmatch(
+                    re.escape(publisher) + r'/[0-9]{10}', value))
+                    for value in units.values()) and len(set(units.values())) == 2,
+                    'invalid_owned_ad_units')
+                result.update(units)
         except (OSError, ValueError, KeyError, TypeError):
             raise AdConfigError('invalid_ad_registration') from None
         result.update(app_id=app_id, app_id_source='registered_pourlune',
@@ -63,25 +72,33 @@ def check_build(platform, native_id, native_app_id, encoded, registration=None):
             if key.startswith(('POURLUNE_AD', 'POURLUNE_INTERSTITIAL', 'POURLUNE_REWARDED')):
                 require(key not in defines, 'duplicate_ad_define')
                 require(key in {'POURLUNE_AD_MODE', 'POURLUNE_AD_APP_ID',
-                                'POURLUNE_AD_PLATFORM', 'POURLUNE_AD_NATIVE_ID'}, 'unsupported_ad_define')
+                                'POURLUNE_AD_PLATFORM', 'POURLUNE_AD_NATIVE_ID',
+                                'POURLUNE_INTERSTITIAL_ID', 'POURLUNE_REWARDED_ID'}, 'unsupported_ad_define')
                 defines[key] = value
     except (ValueError, UnicodeError, binascii.Error):
         raise AdConfigError('invalid_ad_defines') from None
     mode = defines.get('POURLUNE_AD_MODE', 'disabled')
     selected = selection(mode, platform, native_id, registration)
     require(native_app_id == selected['app_id'], 'native_ad_app_id_mismatch')
-    if mode == 'test':
+    if mode in {'test', 'production'}:
         require(defines.get('POURLUNE_AD_APP_ID') == selected['app_id']
                 and defines.get('POURLUNE_AD_PLATFORM') == platform
                 and defines.get('POURLUNE_AD_NATIVE_ID') == native_id,
                 'ad_build_selection_mismatch')
+    if mode == 'production':
+        require(defines.get('POURLUNE_INTERSTITIAL_ID') == selected['interstitial_id']
+                and defines.get('POURLUNE_REWARDED_ID') == selected['rewarded_id'],
+                'ad_unit_selection_mismatch')
+    else:
+        require(not {'POURLUNE_INTERSTITIAL_ID', 'POURLUNE_REWARDED_ID'} & defines.keys(),
+                'ad_units_require_production')
     if 'POURLUNE_AD_MODE' not in defines:
         selected['mode'] = 'dart_default'
     return selected
 
 
 def add_arguments(parser):
-    parser.add_argument('--ad-mode', choices=['disabled', 'test'], default='disabled')
+    parser.add_argument('--ad-mode', choices=['disabled', 'test', 'production'], default='disabled')
     parser.add_argument('--admob-registration', type=Path,
                         help='Public Pourlune platform registration, verified against the console')
 
