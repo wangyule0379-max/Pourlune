@@ -1,70 +1,52 @@
-# GameMunchies 统计、广告控制与下一次内部版本
+# GameMunchies 接入与 TestFlight 0.5.0(18) 最终交付
 
-2026-10-28，当前仍在独立验收/发布准备中；不把已分发的TestFlight17称为包含GameMunchies，也未上传18。用户已授权整体通过后更新原Pourlune Self组，地址专项本身不触发分发。F9未动。
+2026-10-28，Asia/Taipei。**已完成总控实际验收、精确CI、Apple上传与处理，原Pourlune Self组的18显示“正在测试 / 90天后过期”，仍为既有2名测试员，未新邀。** App 6826203407，Apple build 6956eb73-ec07-4ff7-a449-76867836c112。开发及总控均实际查看最终上传成功、原组可测试两图；这不等于物理手机已安装。F9未动。
 
-## 实现与来源
+## 实现与实际验收
 
-正常main源e4d1238d4496f69f6cf26116ee4b43ecfca6ad4d，隐私提示修复a928c13。保留17已验反馈/隐私写入代次、题库、音频、隐私清单、奖励事务和离线玩法。版本准备为0.5.0+18，实际上传前再核Apple占号；不重传17或重邀既有2人。
+正常入口保留17已验反馈/隐私保存代次、21–60题、音频、有效隐私清单、离线核心和奖励事务。没有为接入GM改题库、美术、货币或账号。
 
-- 只用同一gamemunchies_client 0.1.0，固定源92f588200a1d80b1d0023122fcfc3037db87c53c，7文件固定受限归档。归档10233字节、SHA256 3866eb1d0975fcaaad2e4fb3b9fe1d2c4a09b01e3305fb75637bb9df753a5d55；私有源码和payload不进入Git。
-- 正常客户端只连接https://api.gamemunchies.com，无/api后缀。正式候选明确production游戏8feaf0dc-ec12-4308-ac58-16b2180f2d63/com.pourlune.app；QA使用test游戏566121d2-a3f5-4950-8bd9-6ff2f673a0ac及独立身份/库。默认未配置GM仍关闭；不能把disabled候选冒充本次GM版本。
-- Analytics默认off；保存同意后才产生/发送统计。关闭立即门控、清当前scope队列、尽力取消在途，已经收到的记录不能撤回；规则拉取继续，不为规则生成安装ID/active。保存代次和SDK同意代次防旧回执竞态。
-- 新实例成功落盘才round_start，恢复不新开局。展示/加载失败只认真实SDK对应回调；正常main不造事件/奖励。GM实际插屏冷却在统计off时仍保留。
-- 请求前、载入后、show前检查总开关、类型/场景及规则修订；尚未原生show的旧机会不能迟到补弹。已开始展示继续真实回调，原实例合法奖励只入账一次。远程关闭加瓶不变成免费赠送。
-- 保留本地最近全屏shown后180秒安全间隔；远程插屏impression间隔同时满足。前台30秒检查配置，到期尝试至少间隔5分钟/8秒超时；离线用缓存或默认，核心不等网络。
+- 同一gamemunchies_client 0.1.0拥有可选统计及广告规则，固定源92f588200a1d80b1d0023122fcfc3037db87c53c。客户端只连接https://api.gamemunchies.com，无/api后缀或管理员凭据。正式gameId 8feaf0dc-ec12-4308-ac58-16b2180f2d63 / ios / production，真实身份com.pourlune.app；QA使用独立test登记/原生身份/SQLite，不把测试数据搬成生产数据。
+- Analytics默认off，启用只在选择保存成功后；关闭立即阻止新采集/发送、清当前scope待发队列、尽力取消在途请求，已收服务端记录不能撤回。规则拉取继续，不为取规则新建安装ID/active。保存代次与SDK同意代次保护旧回执竞态。
+- 新实例首次成功落盘才round_start，恢复不新开局。展示/加载失败只认真实Google对应回调；上报失败不改变奖励。统计off时实际插屏仍更新SDK冷却。
+- 请求前、载入后、show前核总开关/类型/场景/规则修订；关闭使尚未原生show的机会失效。已展示广告保留真实回调，原实例合法奖励按SQLite事务只入账一次。远程关闭加瓶不变免费赠送。本地最近任一全屏shown后180秒安全间隔与GM插屏间隔同时满足。
+- 前台每30秒检查配置，到期尝试至少间隔5分钟、请求8秒超时；离线用缓存/默认，核心不等网络，不承诺后台设置瞬时生效。
+- 隐私页修复只涉及只读配置getter及两条显示文案：Firebase缺失但GM已配置时分别说明crash不可用/analytics按保存选择；单提供方同步失败不再假称所有分享阻断，本地保存失败仍阻断新应用分享。
 
-## 实际证据与限制
-
-| 范围 | 结果 |
+| 范围 | 实际结果 |
 | --- | --- |
-| 后台 | 冻结合并4a27c6d部署Worker0c12ffaf，保留API域名隔离/认证/D1；实际更正两登记平台身份、初始化能力、test/production筛选，不搬迁历史统计。总控已看图/源。 |
-| 正常main iOS统计 | 同意后真实active1→2/round11→12，恢复保持12；关统计后观察不增。后续真实完成1进入2，round12→13。当前轮真实加载失败26→28；旧impression1不属于本轮。 |
-| 正常main iOS控制 | Analytics off仍收到v2 global off、v3两个scene off，Extra Bottle不请求可用广告/不发瓶；v4 allOn/180正常收到。未实际诱发合格Next插屏，不能仅凭flag算该路径通过。 |
-| 正常main Android | 原AVD收到v1/allOn/180；默认统计off未新增。GUI点击路由不可靠，人工开关/新局/广告未验，不扩设备掩盖限制。 |
-| 原生SDK恢复/去重 | iOS200 accepted3/received3→0/3；Android2/2→1/3（2原+1新增）；原ID/首次时间不变、同安装同实例恢复、不新增局、pending0/冷却保持。两端后台均只增1局。两包恢复normal-main不卸载/清库。不是无线断网/物理手机或广告证据。 |
-| 隐私提示 | a928c13修复Firebase缺失但GM已配置时的“全部不可用”误述，区分单提供方同步失败与本地保存失败；4渲染+原竞态/统计共16及F15反馈4通过，analyze0。正常main修复后iOS实际显示通过；截图已查看。 |
-| 真实测试广告 | 17原Google官方测试激励/插屏及原实例奖励已实际验收可复用运输基线；本轮r2唯一一次官方测试激励实际展示/完成/关闭，原daily五瓶→六瓶，attempt/entitlement/fullscreen各0→1、confirmed done且同实例，恢复后仍六瓶/加瓶已禁；后台test展示1→2、开局14/失败28保持。没有独立原生callback日志，结论来自真实广告UI、SQLite事务回执和后台。 |
+| 后台 | 合并4a27c6d部署Worker0c12ffaf，保留API隔离/认证/D1；实际更正正式/测试两登记平台身份、初始化能力、test/production筛选。保留gameId和历史，不迁移或制造正式统计。 |
+| 正常main iOS统计 | 同意后真实active1→2、round11→12，恢复保持12；关统计观察不增。真实完成1进2后round12→13。SDK真实失败26→28，旧impression1不冒本轮结果。 |
+| 正常main iOS控制 | Analytics off仍收到v2 global off、v3两个scene off，Extra Bottle无可用广告且不发瓶；v4 allOn/180恢复正常收到。未单独诱发合格Next插屏，不能仅凭flag标该实际路径通过；运输基线复用17已验真实插屏。 |
+| 双端原生恢复/去重 | iOS真实200 accepted3/received3→0/3；Android2/2→1/3（2原+1自然新增）；原ID/首次时间保持、同安装同实例恢复不另开局、pending0/冷却保持，两端后台均只增1局。Android不写成纯零接收。旧origin QA状态原样保留，不迁移重播；17无GM玩家状态。 |
+| 正常main iOS隐私/激励 | 修复包实际显示正确隐私文案；唯一一次官方Test mode激励展示、完成、关闭，原daily五瓶→六瓶，attempt/entitlement/fullscreen各0→1、confirmed done且同实例，恢复后仍六瓶/加瓶已禁。后台test展示1→2，开局14/失败28保持。没有独立原生callback日志，依据真实广告UI、SQLite和后台。 |
+| Android正常main | 原AVD收到v1/allOn/180，默认统计off未新增；GUI触控路由不可靠，人工开关/新局/真实广告未验，不扩设备或借iOS结果标通过。 |
 
-原始正常main和配置证据：根工作区docs/development/evidence/prelaunch-closeout-20261028/gm-live-client-ios/report.md；地址专项及本分支公开回执见gamemunchies-client-origin-20261028.md与../evidence/gamemunchies-live-integration/api-native-{ios,android}/。手工Python单次403和一次性ledger保留，Cloudflare实际定位Browser Integrity Check，不改UA/WAF重发。
+证据见../evidence/gamemunchies-live-integration/的api-native-{ios,android}/、privacy-ad-r2/、platform/；独立结论见../review/gamemunchies-normal-privacy-reward-20261028.md与gamemunchies-build18-release-final.md。原事件/首次时间及SQLite私密备份仅在受限ignored目录，不进入Git。受控断连/丢ACK不等于无线断网或物理手机验收。手工Python单次403及一次性ledger保留，Cloudflare定位Browser Integrity Check，不改UA/WAF重放；原生SDK成功与这次失败分别记录。
 
-当前网络基线由独立GM任务在其授权范围加入精确googleads.g.doubleclick-cn.net规则；本轮不恢复旧代理备份覆盖它，不扩大例外/TLS/DNS。无库存或真实网络失败按真实error记录，不延长超时冒成功。
+## 精确来源、CI与签名包
 
-## 构建与发布门槛
+- 实现e4d1238，隐私修复a928c13575a32e9efe30e9f99a57a5909b0c7021，签名候选精确源ea2bdee853559ddaa66e44e35fce7bac34a40d29。
+- 最终CI源a8e6be9323d97855de25bcfbcabc0e88337cf415，[run40653590242](https://github.com/wangyule0379-max/Pourlune/actions/runs/40653590242)两job终态success。工具84/核心47/应用477通过、1个显式opt-in内容夹具跳过；17核心文件及214应用文件格式零差额、分析通过，APK和iOS simulator构建成功；两job真实恢复固定SDK7文件。总控独立API核相同head/终态，见final-ci.json、final-ci-excerpts.log及独立ci-bridge/terminal报告。
+- 首轮0687fce/run40653136080的Ubuntu guard因SDK恢复排在guard之后，21项private_sdk_missing失败；只将恢复移到guard之前，未跳过检查或修改App/SDK/测试期望。最终head对签名候选554输入仅该workflow顺序差额，其余553同hash，实际App/SDK/资源/锁/构建工具均不变。总控接受复用原包，不无差额重造或重跑旧终态。
+- 固定受限归档10233字节，SHA256 3866eb1d0975fcaaad2e4fb3b9fe1d2c4a09b01e3305fb75637bb9df753a5d55；7文件指纹在tools/validation/gamemunchies-sdk.json。干净e4导出无sibling SDK，恢复后enforce-lockfile成功/依赖实际在受限目录/lock不变；该本地证明与后来的真实CI分别保留。SDK本身52测试及分析通过。
+- 候选build/beta-candidates/0.5.0-18/ios-gamemunchies-live-1；只读镜像build/package-review/0.5.0-18/ios-gamemunchies-live-1，567文件一致。总控核554来源、90题、真实AOT的API/正式GMID、官方sample单元、prod Firebase/NoAdID、采集默认off、无ATT、archive及IPA无原生测试插件、deep/strict签名/profile/dSYM通过。复用既有Pourlune-only profile，不新建或重置key。
+- 原IPA：86,731,598字节，SHA256 a37b9aa46932616744d04a2116a1b9c89acdd84a98a108eeccea46a6b7665541。实际成功上传Organizer变体：86,731,625字节，SHA256 6e39f3ad4073d70cb0c3f076e03655125d01a4cfffa378185b2ab456df51c034；总控核269文件无增删、差异仅签名区，签名严格通过。两者来源关联、可写archive284文件同原件由总控独立核，详package/ci-bridge/organizer-retry独立报告。
 
-SDK52测试/分析、应用规则/同意聚焦41通过。最终修复后完整应用477通过、1个显式opt-in内容夹具跳过，214文件format零差额、enforce-lockfile通过，最终工具84通过；日志见final-tools-tests.log。干净导出e4无sibling SDK，从固定归档恢复后enforce-lockfile成功、实际依赖在受限目录、lock不变；见clean-source.json/pub日志。这证明本地干净消费，不能冒充远端CI。
+## Apple终态与上传故障历史
 
-e4正常QA冻结iOS361文件，Android APK f284eb192c4095bf7c77942c4c874a884bcbf65e90e94d976f446d8bd99e0d19。a928c13最小正常iOS隐私修复包位于ignored build/gamemunchies-live-qa/ios-privacy-r2，361文件清单及原参数；相同QA身份/库、test/官方测试广告/Firebase none，不是商店候选。
+Xcode约16:43实际成功；Apple处理完成，6956eb73-ec07-4ff7-a449-76867836c112加入原Self内部组，显示18“正在测试 / 90天后过期”、2人。未新邀、未上传生产测试符号、未公开App Store提交。加密沿用已批准事实：系统外标准加密与Apple系统加密同时使用，本次不在法国公开分发，不谎报无加密。最终两图及指纹/平台事实在platform/release.json。
 
-支持站版本18差额已在本分支两页草稿准备：默认off、API地址、独立规则请求、撤回清队列、已接收记录限制、提供方同步范围和test/production分离。原根工作区他人变更不覆盖；其后已按精确源ea2bdee同步现有公开站，见末项回执；18仍未分发。
+首次官方会话在Apple object-storage出现证书主机错配，随后1,666,016字节asset-description第1段379次checksum重试，已取消而非无限等待。保持同18/已验包，确认可信连接后新官方Organizer会话成功；未改App、网络、DNS或TLS信任。不能由此断定初始网络错配的全部根因，也不把checksum错误说成IPA损坏。详upload-transport-note.md及独立upload-transport报告；原日志含cookie/签名URL，不原文复制入Git/聊天。
 
-剩余集中处理：总控核实际最终回执/源与隐私草稿；原有GitHub Actions私有SDK归档具体授权仍待本人答复，未传该payload或创建新凭据，现有明确问项不重复提。之后固定最终源精准CI、production GM+prod Firebase/NoAdID+官方测试广告签名候选、总控实际核包、按既有授权更新原Self组并回读Apple处理/可测试。没有把本地包或地址专项通过写成已更新TestFlight。物理手机升级/硬件音触觉/人类首玩难度继续保持未验。
+## 支持站与具体授权记录
 
-## 最终可审签名候选（尚未上传）
+两页按父审源ea2bdee发布到既有pourlune-support，提交01764d8eb8de85755f6cbf9214b2f3db9db46af0 / Pages40651368042成功。HTTPS help SHA256 ff8c960faeb77ddb6df15f0871d5cc0f119ff971694594c1bf054115ac204c89，privacy 2fb654594fb1d8dbdb4d91656861ac8dd782857301a1afd9afc56b878296ac55，与该源一致；浏览器实际读到18条件、默认off/独立规则/API/撤回清queue/单提供方失败范围，以及16/17/Android13无GM。当前分支privacy只有后续API链接markup差额，不误称站点与当前文档HEAD逐字相同。
 
-候选build/beta-candidates/0.5.0-18/ios-gamemunchies-live-1，独立只读镜像build/package-review/0.5.0-18/ios-gamemunchies-live-1，567文件逐项hash一致，冻结清单在同父目录ios-gamemunchies-live-1-freeze.json。精确源码ea2bdee853559ddaa66e44e35fce7bac34a40d29（运行差额a928c13）；正常main/prod Firebase/NoAdID、GM production真登记、官方测试广告、采集默认off，复用原Pourlune-only profile/certificate，无自动改签名或符号上传。
+本人明确允许私有SDK归档“仅供构建并继续发布”，既有Repository secret GAMEMUNCHIES_DART_SDK_ARCHIVE_V1已配置并被真实CI消费，不再重复索要此授权。配置时Computer的页面AX工具记录意外回显代码归档值；它不是登录token/密码，开发与总控未读取或复制该输出，目前无公开仓库发布证据。此事件已告知并保留，不声称已删除聊天工具历史，也不以重编码相同源码冒充撤回。归档/私钥/凭据不进入公开源码或本报告。
 
-IPA 86,731,598字节，SHA256 a37b9aa46932616744d04a2116a1b9c89acdd84a98a108eeccea46a6b7665541。archive/export成功，deep/strict签名、最终原生dev插件剔除/恢复与隐私清单检查均通过工具实际核验。作者另核AOT含api域名/正式gameId而无旧studio域名、无ATT字段、所有来源输入一致，见signed-candidate-author.json。镜像仅用于总控独立核验；不把签名就绪冒称精准CI/Apple上传或组内可安装已完成。
+## 使用与实际未验范围
 
-正常main r2最终公开报告、隐私/真实测试广告/恢复六瓶/后台截图及去标识SQLite汇总在../evidence/gamemunchies-live-integration/privacy-ad-r2/。reward-return.png曾误存Home，已在不再次请求广告、不重开局情况下恢复同一daily补拍并实际打开核对；报告明确补拍时间性质。
+更新18后，按已保存的Share gameplay analytics选择正常游玩；默认关闭，不能为让面板有数字擅自打开。后台在Pourlune正式登记选择“正式统计 / iOS”，测试游戏已有计数不代表手机已产生正式数据。广告规则独立于统计选择，须等客户端正常刷新后生效。
 
-## 总控最终本地验收
-
-总控已完成独立核包并接受现有候选：567冻结文件、554精确Git/固定SDK输入、IPA实际内容与90题、正式身份/production登记/API、采集默认off、官方测试广告、archive和IPA原生纯净、deep/strict签名/profile及dSYM一致均通过。见../review/gamemunchies-build18-package-independent.md及同名JSON；正常入口隐私与真实奖励独立结论见../review/gamemunchies-normal-privacy-reward-20261028.md。这些是总控原报告的逐字归档；报告内部原证据相对链接按根工作区解析，本分支实际运行副本在privacy-ad-r2。
-
-本地签名候选已接受，不重造包或重复广告/地址/UI检查。总控技术核对通过的两页隐私/support已由Computer按精确源ea2bdee同步既有站，部署及HTTPS/浏览器回读成功，见下项。剩余仍是此前待答的私有SDK Actions具体授权落实后，最终精确源CI与既有原组发布流程；没有绕过或再次催问。商店构建号占用/上传处理/原Self组可测试仍须真实平台终态，当前尚未上传18。
-
-## 支持站已发布回读
-
-既有pourlune-support仓库提交01764d8eb8de85755f6cbf9214b2f3db9db46af0，Pages run40651368042精确head成功，只同步源ea2bdee的index.html/privacy.html。实际HTTPS help SHA256 ff8c960faeb77ddb6df15f0871d5cc0f119ff971694594c1bf054115ac204c89，privacy SHA256 2fb654594fb1d8dbdb4d91656861ac8dd782857301a1afd9afc56b878296ac55，均匹配该精确源；浏览器读到18条件措辞与16/17/Android13无GM说明。当前本分支privacy仅API链接markup较该发布源后改为纯文字，不将站点回读误称与当前HEAD逐字相同。完整Computer回执见../evidence/gamemunchies-live-integration/support-release/report.md。站点同步不等于18已分发，无SDK归档或商店操作。
-
-## Actions具体授权已落实
-
-本人在总控聊天明确答复“允许，仅供构建并继续发布”。Computer已在既有Pourlune仓库设置GAMEMUNCHIES_DART_SDK_ARCHIVE_V1，页面确认Repository secret added；源受限文件、长度和归档SHA与已核固定源匹配。此后继续最终精确源CI及原组发布，不移除GM或重造无差额签名包。
-
-配置过程有需保留的异常：提交后页面跳转完成前，无障碍快照意外将归档值输出到Use Computer聊天的工具结果。该值是私有SDK归档，并非认证token；已知暴露范围为该聊天工具记录，没有进入公开仓库的证据。开发未读取/复制该输出，也不在本报告、仓库、日志或后续消息复述payload；已告知用户与总控。重编码或替换同源码归档不能撤回既有聊天记录，因此不将无效“轮换”冒称修复；既有获批构建用途继续，后续不得获取该密钥显示值。此前待答状态作为历史记录保留，由本项更新。
-
-## 精确CI首轮与顺序修复
-
-首轮push源0687fceac60b0eb812730195fb26334b2402c5be / run40653136080的Ubuntu job在配置检查阶段失败：84项中21项返回private_sdk_missing。原因是本轮候选/Firebase构建guard会实际核固定SDK，工作流却在恢复SDK之前运行guard。Mac实际恢复步骤已通过，不是归档值或身份问题。已将Ubuntu的既有恢复步骤移到guard之前；没有跳过guard或修改SDK/应用/测试期望。失败终态保留，不将之改称通过。
-
-此差额只涉及.github/workflows/flutter.yml；对候选554输入核对，除这一个CI描述文件外其余553完全相同，所有实际应用/SDK/构建工具输入不变。旧签名包保留不重造，最终总控核此CI顺序差额与精确新head对应关系。新的完整CI终态另记。
+平台可测试已确认；物理手机安装/17→18升级、该手机首笔正式统计、真实音触觉、Android人工广告及真人首次难度仍未验。广告保持官方测试单元，不代表收费投放、商业收益或AdMob账户商业readiness通过。F9及原设备/存档保护保持。禁止重复上传18、重跑已完成CI或重新邀请；只处理真实新反馈。
