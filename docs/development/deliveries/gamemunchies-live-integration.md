@@ -35,7 +35,7 @@ SDK52测试/分析、应用规则/同意聚焦41通过。最终修复后完整�
 
 e4正常QA冻结iOS361文件，Android APK f284eb192c4095bf7c77942c4c874a884bcbf65e90e94d976f446d8bd99e0d19。a928c13最小正常iOS隐私修复包位于ignored build/gamemunchies-live-qa/ios-privacy-r2，361文件清单及原参数；相同QA身份/库、test/官方测试广告/Firebase none，不是商店候选。
 
-支持站版本18差额已在本分支两页草稿准备：默认off、API地址、独立规则请求、撤回清队列、已接收记录限制、提供方同步范围和test/production分离。原根工作区他人变更不覆盖；尚未发布这些18说明，且不声称18已分发。
+支持站版本18差额已在本分支两页草稿准备：默认off、API地址、独立规则请求、撤回清队列、已接收记录限制、提供方同步范围和test/production分离。原根工作区他人变更不覆盖；其后已按精确源ea2bdee同步现有公开站，见末项回执；18仍未分发。
 
 剩余集中处理：总控核实际最终回执/源与隐私草稿；原有GitHub Actions私有SDK归档具体授权仍待本人答复，未传该payload或创建新凭据，现有明确问项不重复提。之后固定最终源精准CI、production GM+prod Firebase/NoAdID+官方测试广告签名候选、总控实际核包、按既有授权更新原Self组并回读Apple处理/可测试。没有把本地包或地址专项通过写成已更新TestFlight。物理手机升级/硬件音触觉/人类首玩难度继续保持未验。
 
@@ -51,4 +51,8 @@ IPA 86,731,598字节，SHA256 a37b9aa46932616744d04a2116a1b9c89acdd84a98a108eecc
 
 总控已完成独立核包并接受现有候选：567冻结文件、554精确Git/固定SDK输入、IPA实际内容与90题、正式身份/production登记/API、采集默认off、官方测试广告、archive和IPA原生纯净、deep/strict签名/profile及dSYM一致均通过。见../review/gamemunchies-build18-package-independent.md及同名JSON；正常入口隐私与真实奖励独立结论见../review/gamemunchies-normal-privacy-reward-20261028.md。这些是总控原报告的逐字归档；报告内部原证据相对链接按根工作区解析，本分支实际运行副本在privacy-ad-r2。
 
-本地签名候选已接受，不重造包或重复广告/地址/UI检查。总控已将技术核对通过的两页隐私/support交Computer同步既有站，真实部署回执待其最终回读。剩余仍是此前待答的私有SDK Actions具体授权落实后，最终精确源CI与既有原组发布流程；没有绕过或再次催问。商店构建号占用/上传处理/原Self组可测试仍须真实平台终态，当前尚未上传18。
+本地签名候选已接受，不重造包或重复广告/地址/UI检查。总控技术核对通过的两页隐私/support已由Computer按精确源ea2bdee同步既有站，部署及HTTPS/浏览器回读成功，见下项。剩余仍是此前待答的私有SDK Actions具体授权落实后，最终精确源CI与既有原组发布流程；没有绕过或再次催问。商店构建号占用/上传处理/原Self组可测试仍须真实平台终态，当前尚未上传18。
+
+## 支持站已发布回读
+
+既有pourlune-support仓库提交01764d8eb8de85755f6cbf9214b2f3db9db46af0，Pages run40651368042精确head成功，只同步源ea2bdee的index.html/privacy.html。实际HTTPS help SHA256 ff8c960faeb77ddb6df15f0871d5cc0f119ff971694594c1bf054115ac204c89，privacy SHA256 2fb654594fb1d8dbdb4d91656861ac8dd782857301a1afd9afc56b878296ac55，均匹配该精确源；浏览器读到18条件措辞与16/17/Android13无GM说明。当前本分支privacy仅API链接markup较该发布源后改为纯文字，不将站点回读误称与当前HEAD逐字相同。完整Computer回执见../evidence/gamemunchies-live-integration/support-release/report.md。站点同步不等于18已分发，无SDK归档或商店操作。
