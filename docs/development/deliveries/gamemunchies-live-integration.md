@@ -46,3 +46,9 @@ e4正常QA冻结iOS361文件，Android APK f284eb192c4095bf7c77942c4c874a884bcbf
 IPA 86,731,598字节，SHA256 a37b9aa46932616744d04a2116a1b9c89acdd84a98a108eeccea46a6b7665541。archive/export成功，deep/strict签名、最终原生dev插件剔除/恢复与隐私清单检查均通过工具实际核验。作者另核AOT含api域名/正式gameId而无旧studio域名、无ATT字段、所有来源输入一致，见signed-candidate-author.json。镜像仅用于总控独立核验；不把签名就绪冒称精准CI/Apple上传或组内可安装已完成。
 
 正常main r2最终公开报告、隐私/真实测试广告/恢复六瓶/后台截图及去标识SQLite汇总在../evidence/gamemunchies-live-integration/privacy-ad-r2/。reward-return.png曾误存Home，已在不再次请求广告、不重开局情况下恢复同一daily补拍并实际打开核对；报告明确补拍时间性质。
+
+## 总控最终本地验收
+
+总控已完成独立核包并接受现有候选：567冻结文件、554精确Git/固定SDK输入、IPA实际内容与90题、正式身份/production登记/API、采集默认off、官方测试广告、archive和IPA原生纯净、deep/strict签名/profile及dSYM一致均通过。见../review/gamemunchies-build18-package-independent.md及同名JSON；正常入口隐私与真实奖励独立结论见../review/gamemunchies-normal-privacy-reward-20261028.md。这些是总控原报告的逐字归档；报告内部原证据相对链接按根工作区解析，本分支实际运行副本在privacy-ad-r2。
+
+本地签名候选已接受，不重造包或重复广告/地址/UI检查。总控已将技术核对通过的两页隐私/support交Computer同步既有站，真实部署回执待其最终回读。剩余仍是此前待答的私有SDK Actions具体授权落实后，最终精确源CI与既有原组发布流程；没有绕过或再次催问。商店构建号占用/上传处理/原Self组可测试仍须真实平台终态，当前尚未上传18。
