@@ -31,3 +31,5 @@
 | 真机、公开发行地区/分级等 | 保留范围 | 复用父现有审查及内部本人组，不扩成公开发行或编造真人/物理设备验收 |
 
 两份prod iOS客户端配置只在ignored600路径，public summary/hash与原输入一致；既有Pourlune专属profile/现有签名identity匹配且有效，不生成/重置私钥。此次仍official sample units、原owned native AppID、正式com.pourlune.app、NoAdID及独立采集默认off。准确源CI、签名包/hash/原组正在测试将记录到最终交付；此文不提前宣称完成。
+
+后续终态已在testflight17-functional-fixes.md收口：精确5fb8b79 CI40631141257成功、总控54项签名包及22项Organizer变体核验通过，0.5.0(17)已在原Self组正在测试。本文保留源准备时点的状态与scanner原始triage；实际SDK清单/平台结果以最终证据为准。

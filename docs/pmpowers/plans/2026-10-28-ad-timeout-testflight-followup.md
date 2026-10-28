@@ -22,19 +22,19 @@
 
 - [x] F15：父28a4941用4个RED/相关共13用例修复配置与external launch失败混报；Computer实际复测及父看图通过。发行checkout精确cherry-pick该提交，复用报告，不重复全页。
 - [x] 运输：Computer在一次真实SDK窗口提取目标host/错误类别数字码，匹配两CN exact当前规则；符合既有授权才临时验证，备份/精确diff/自动与主动恢复并核持久hash。公开仅脱敏事实，不收全量网络日志或Cookie。
-- [x] 实际广告：正常页面显示官方Test mode；记录展示/提前关闭不获奖、完整奖励一次、Undo/Restart/重启保留、合格Next插屏，以及GM仅独立test环境impression差额。遵守原180秒间隔；需要的正式题库前置只在独立function库准备。
+- [x] 实际广告：正常页面显示官方Test mode；完整奖励一次、Undo/Restart/重启保留、正式21合格Next插屏已实际验证。提前关闭不获奖仅有受控自动测试，未冒称真实库存路径通过。GM独立test环境聚合变化不证明单事件归属。遵守原180秒间隔；正式题库前置仅在独立function库准备。
 - [x] 非GM隐私并发差额：在 app/test/privacy_choice_generation_test.dart 复用真实SQLite写入＋受控完成回执，断言“旧失败不覆盖最新成功”“dispose后的旧回续不改状态”；先在基线看RED。app/lib/services/service_hub.dart仅保留选择代次/最新保存失败应用/dispose失效，无GM引用。运行新用例＋b04_services_test及F15测试，analyze；提交精准差额。
 - [x] 发布源复核：总控对照f47610b/53dc/F15及当前完整分支，确认保留音频、21–60题库、隐私清单等已验非GM变化。核pubspec/lock无本地GM路径；仅在真实广告与产品复验达到约定范围后冻结新版本候选，不使用占用的16。
-- [ ] 精确检查：执行匹配该发行源的内容/资源/工具/核心/App检查与新CI；不借旧终态CI。按app-store-compliance复用已完成审计，仅核本次实际依赖/行为/清单和内部测试差额。
-- [ ] 签名核包：在新ignored目录用既有profile/certificate导出，不生成密钥；新源/版本/所有输入hash、production身份、官方sample units、NoAdID/采集默认关闭、无integration_test及有效隐私清单由总控独立核验。
-- [ ] Computer上传并回读：沿用原Pourlune Self组，不新建组/邀请；确认Apple处理完成/原组正在测试。若登录确需本人则集中说明，继续独立可做工作；未就绪不称已更新。
+- [x] 精确检查：发行源5fb8b79对应CI40631141257两job成功，工具68/core47/app446通过（另1跳过）、分析、Android debug及iOS simulator构建成功；本机内容/资源/音频检查通过。scanner原始失败及范围triage保留。
+- [x] 签名核包：新ignored目录用既有profile/certificate导出；父独立核验54项通过，563文件只读镜像、559产物hash及526输入匹配精确源。production身份、官方sample units、NoAdID/采集默认关闭、无integration_test/GM、有效隐私清单均通过。
+- [x] Computer上传并回读：0.5.0(17)已上传并处理完成，原Pourlune Self组正在测试/90天、既有2人；父实际看上传/原组/详情三图与AX接受，build33420d37-55f2-4a7f-bfd3-fc8cb2f6108c。未新组/邀请，未重复上传；最终交付见testflight17-functional-fixes.md。
 
 ## 台账
 
 - 原目录主分支工作区保留；独立checkout为codex/testflight17-fixes，f47610b起点包含53dc优化与本地签名隐私修正。
 - 决定：本次发行排除GM，仅解决本轮产品/广告差额；依据原GM test-only范围及父明确批准，代价是GM测试继续独立，不在本次TestFlight采集。
-- 候选构建/上传尚未开始；ASC已实际回读最高16、17未占用，已选择0.5.0+17。
+- 已签名0.5.0+17，ASC构建前回读17未占用；最终上传变体和平台处理仍须另验，不把本地候选当正在测试。
 
-- 源准备实证：enforce-lockfile通过、服务基线6通过；通用隐私2用例RED后修复，2新＋F15/既有服务UI共15通过，analyze无问题，pubspec/lock未变。首次pubget仅缺新checkout ignored SPM父目录，建立后恢复；日志保留。父已读差额接受，候选仍未构建。
+- 源准备实证：enforce-lockfile通过、服务基线6通过；通用隐私2用例RED后修复，2新＋F15/既有服务UI共15通过，analyze无问题，pubspec/lock未变。首次pubget仅缺新checkout ignored SPM父目录，建立后恢复；日志保留。父已读差额接受。
 
-- 实际结果：激励及正式21→Next插屏均已实际完成并获父看图/回执接受；仅googleads exact当前REJECT对应限域验证，两轮规则完整恢复。ASC已回读17空闲。版本17源准备中，隐私/来源指纹均有限审查接受；最终签名包尚未生成。
+- 实际结果：激励及正式21→Next插屏均已实际完成并获父看图/回执接受；仅googleads exact当前REJECT对应限域验证，两轮规则完整恢复。隐私/来源指纹均有限审查接受。签名IPA SHA256为835150b548a84e352f268d98ba69c0298daac996980562848e606aaa2d646765；最终平台结果另记交付文档。
