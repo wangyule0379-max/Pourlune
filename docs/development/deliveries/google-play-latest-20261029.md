@@ -1,6 +1,10 @@
 # Google Play 最新 Alpha 封测更新（进行中）
 
-2026-10-29，Asia/Taipei。当前最高已上传仍为 Alpha 0.5.0(13)，19在本轮只读控制台回读时可用。新版19已签名并完成作者包核及新精确CI；Android原生缺口、旧13升级和商店声明仍在验证，尚未上传或提交。不得以此文档或旧13终态声称新版已分发。iOS19既有Self测试与正式等待审核状态不改。
+2026-10-29，Asia/Taipei。当前最高已上传仍为 Alpha 0.5.0(13)，19在本轮只读控制台回读时可用。Android实际测试广告、同实例奖励持久化、统计撤回/冷却重启及正常main已完成验证，但原已发行13现场冷启动在Flutter之前崩溃；离线追踪确认签名候选19-2同样缺失反射构造器，现明确阻断上传。最小R8修复的本地压缩包检查已转绿，新的签名生产包、实际release启动及总控整体验收待完成，尚未上传或提交。iOS19既有Self测试与正式等待审核状态不改，不重复上传。
+
+实际13在专用QA中首次安装，启动报`InitializationProvider`无法创建`WorkDatabase`，没有生成非空玩法存档。两版DEX都保留`WorkDatabase_Impl`和两个`InputMerger`类，却缺少反射所需public无参构造器；debug包有这些构造器。应用本地keep规则仅补这三个反射入口，Flutter3.47.2原生插件会自动读取该规则，不改SDK/锁/R8模式。CI新增真实minified release AAB及DEX构造器门槛。旧13/19-2红、debug对照绿、本地新release三项绿均留在`release-startup/`，包检查仍不等于实际运行通过。
+
+总控同意保留原13不修补、不将重制13冒充原发行升级。替代兼容验证明确使用原13精确源236cea04的原GameStore/core生成纯合成非空SQLite：已过1–3、main004两步/原定义v2/已领直接加瓶/音乐和统计Off。446项旧源码与原冻结清单匹配，生成器1项、当前真实SQLite的撤销/重开/动作/再打开1项通过；该夹具不含设备或SDK数据、不列为生产asset，后续独立命名QA入口仅在库不存在时种入再调用正常main。它属于存档契约兼容验证，原13非空现场升级仍未完成，不合并两者状态。
 
 ## 新包与来源
 
@@ -53,5 +57,13 @@ Computer导出r2数据时远端Mac锁屏，正常自动解锁失败。已有本�
 立即只停止QA App PID5188后，新副本实际SQLite已核：integrity=ok，同原实例、extra=true、五瓶/revision1；旧中断attempt为closed/confirmed0，新attempt为done/confirmed1，唯一entitlement匹配原实例与该新attempt，pending0，rewarded展示2。SDK偏好确实已变更、同安装标识/config1、队列0，rewarded后的sdkCooldownSaved=false本身不是插屏持久化故障。详`native-r2/reward-committed.json`。目录缓存仍只带出旧2个process文件夹，已要求单独刷新当前证据子目录，不把该49文件副本称为最新进程诊断完整通过。原Reward granted和五瓶截图保留在Computer工具记录，无法文件化的历史图没有重造。跨App重开、真实插屏/撤回冷却、正常main及真实13升级仍继续。
 
 单独Sync该证据子目录后已导出12文件，取到PID5188的当前status/http/ACK：same instance、extra=true/pending0/queue0，最后可见冷却8秒；16条新事件真实ACK16/16，含本次一次曝光、一次earned回调，没有新round start。旧2事件早已收件，当前进程的“首批含原事件/原事件重试”布尔值false不当作去重失败。之后正常桌面重开实际仍Level4/五瓶/Bottle added，没有中断提示；只停止PID6633后同步导出57文件/857591B，作者核原实例及完整活动payload、所有attempt/entitlement记录均与获奖后相同，confirmed/done1、权益1、pending0，SDK同安装/config1/queue0。该进程仅新增active1并ACK1/1，没有重复开局；其它5个已有命名SQLite文件原字节未改。真实激励原实例落盘及正常App重开持久化通过，详`reward-current-process.json`和`reward-restart.json`；不以此代替尚未完成的真实插屏/撤回冷却、正常main、升级与商店门槛。
+
+真实官方测试插屏随后展示、关闭，Flush真实队列后撤回统计并重开。首轮快照63文件/859938B核得插屏1、激励2、唯一奖励仍1；隐私analytics/crash均false，SDK lastShownAt保留，重开PID7885只有配置GET、没有POST。但两进程启动相隔313秒，重开时cooldown0、adConsent=false/库存idle，未见新广告不能归因于冷却；这一不足明记于`interstitial-withdrawal-first.json`。
+
+仅补一组有新目标的统计关闭广告/快速重启观察，没有调时钟：statsfalse仍真实展示另一条官方测试插屏。关闭后只停止App、图标重开，观察冷却123秒；Prepare后许可true/库存ready/冷却103，按一次Show未出现新广告、冷却93且库存仍ready。最终PID9089诊断保存冷却73、sdkCooldownSaved=true。完整66文件/860683B独立核验：两次off进程均无SDK POST、也无任何发送前批文件；SDK lastShownAt相对首轮确实为该off展示更新且跨重开保留，同安装/config1/queue0。SQLite插屏2/激励2、原奖励与原实例完整payload不变、旧5命名库原字节保留。该次排除了未许可、库存未就绪和已过期的混淆，真实统计关闭广告可用及冷却跨重开/拒绝通过；详`off-ad-cooldown-restart.json`。仍只完成专用Android原生广告/SDK部分，正常main、真实13升级、声明/上传和总控整体验收继续，尚未上传Alpha。
+
+正常`lib/main.dart`另用同dev身份的NoAdID测试APK及新`gm_020_normal_20261028.sqlite`运行，Firebase none/GM test。IDE误报SDK36缺失来自生成项目残留SETUP_ISSUES；只去掉该旧缓存并保留原SDK及符号警告，实际android36平台已存在，随后无Build任务安装成功，没有下载/改SDK。初始系统Home后Studio再Run仅作为同APK重新部署保留存档记录；之后专门以系统Home→既有图标验证真正前后台恢复，没有将重新部署冒充恢复。
+
+正常UI两项采集初始Off；Main1完成引导、真实动作、Undo/Hint、Home/Continue，开启统计后首个10/29 Daily执行1→5。测试Android今日开局从1增2，Daily Resume及真正前后台后仍2，最后正常隐私UI回到两项Off并停App。独立核12文件/157997B，其中新库147456B、schema5/integrity=ok：Main1两步/revision4，Hint1/Undo1、引导completed，棋盘等于原定义前两条有效参考动作；Daily002一步/revision1/单条undo，逐格等于初盘的合法1→5动作。最终privacy两false、SDK同安装/config1/queue0、没有奖励attempt或权益。详`normal-main-runtime.json`。单文件SaveAs曾把完整目标路径编码为normal分析项目中的冒号文件名；作者按确切测试文件名找到原件，收紧0600、保留原件并同字节复制至目标私密目录，没有重新操作设备或重造数据。此后继续真实13→19升级及商店门槛，尚未上传。
 
 后台同日test/android/版本19漏斗浏览器实际回读为机会2、加载6/成功6/失败0、尝试展示2/曝光2/奖励1、乱序0；generatedAt为10/29 12:42:26台北，最后上报仍11:19:06。这一范围包含同日既有轮次，不能仅凭奖励总数1声称r2到账；继续要求当前实例的真实回调、SQLite去重权益及重启持久回执。today totals的1活跃/1开局/2展示/0失败不受版本筛选，不能替代该漏斗过滤或归因。原始浏览器回执归档尚待，先按观察范围记于`native-r2/backend-before-r2-completion.json`。

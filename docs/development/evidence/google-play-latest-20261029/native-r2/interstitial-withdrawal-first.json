@@ -1,0 +1,126 @@
+{
+  "at_utc": "2026-10-29T05:28:02.797586+00:00",
+  "files": 63,
+  "bytes": 859938,
+  "actual_interstitial_shown_and_closed": true,
+  "native_fullscreen_counts": {
+    "interstitial": 1,
+    "rewarded": 2
+  },
+  "privacy_choices_persisted": {
+    "analytics": false,
+    "crash": false
+  },
+  "sdk_queue": 0,
+  "sdk_lastShownAt_saved_across_withdrawal_and_restart": true,
+  "config_version": 1,
+  "process_statuses": {
+    "7429": {
+      "sdk": "0.2.0",
+      "platform": "android",
+      "environment": "test",
+      "phase": "online_recovery",
+      "new_process": true,
+      "same_game_instance": true,
+      "restored_original_events": false,
+      "queued": 0,
+      "statistics": false,
+      "configVersion": 1,
+      "interstitial": "ready",
+      "rewarded": "ready",
+      "adConsent": true,
+      "cooldownSeconds": 0,
+      "sdkCooldownSaved": true,
+      "extraBottle": true,
+      "pendingRewards": 0
+    },
+    "7885": {
+      "sdk": "0.2.0",
+      "platform": "android",
+      "environment": "test",
+      "phase": "online_recovery",
+      "new_process": true,
+      "same_game_instance": true,
+      "restored_original_events": false,
+      "queued": 0,
+      "statistics": false,
+      "configVersion": 1,
+      "interstitial": "idle",
+      "rewarded": "idle",
+      "adConsent": false,
+      "cooldownSeconds": 0,
+      "sdkCooldownSaved": true,
+      "extraBottle": true,
+      "pendingRewards": 0
+    }
+  },
+  "before_withdrawal_http": [
+    {
+      "method": "GET",
+      "status": 200,
+      "types": []
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "types": [
+        "active"
+      ]
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "types": [
+        "ad_load_requested",
+        "ad_load_requested",
+        "ad_loaded",
+        "ad_loaded"
+      ]
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "types": [
+        "ad_opportunity",
+        "ad_show_attempted"
+      ]
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "types": [
+        "ad_impression"
+      ]
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "types": [
+        "ad_load_requested",
+        "ad_load_requested",
+        "active"
+      ]
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "types": [
+        "ad_loaded",
+        "ad_loaded"
+      ]
+    }
+  ],
+  "before_withdrawal_received": 13,
+  "before_withdrawal_accepted": 13,
+  "after_restart_http": [
+    {
+      "method": "GET",
+      "status": 200,
+      "types": []
+    }
+  ],
+  "restart_interval_seconds": 313.512647,
+  "cooldown_block_causality": "NOT_PROVEN: restart snapshot has cooldown0, adConsentfalse and inventoryidle, and no ad on click; cannot call it cooldown suppression. One additional stats-off real-ad plus faster restart observation scheduled, bounded to one ad.",
+  "gate": "PASS_REAL_INTERSTITIAL_AND_STATISTICS_WITHDRAWAL_PERSISTENCE; POSITIVE_RESTART_COOLDOWN_PENDING",
+  "release_upload_approved": false
+}

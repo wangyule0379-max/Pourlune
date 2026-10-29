@@ -37,6 +37,9 @@ jobs:
           flutter analyze
           flutter test --concurrency=2
           flutter build apk --debug
+          flutter build appbundle --release
+      - name: Minified Android startup reflection guards
+        run: python3 tools/validation/android_release_startup.py app/build/app/outputs/bundle/release/app-release.aab
   ios-build:
     runs-on: macos-latest
     env:

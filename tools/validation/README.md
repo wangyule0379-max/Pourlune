@@ -440,3 +440,30 @@ SDK 0.2.0: restore the manifest-matching private Dart archive with `gamemunchies
 ## Explicit iOS commercial AdMob selection (2026-10-28)
 
 The user authorized a first public release with real ads. `--ad-mode production --admob-registration <verified-public-registration>` selects the existing owned App ID and the two distinct owned units in `apps.ios.interstitial_id` / `rewarded_id`. The native guard requires a production identity and exact corresponding Dart definitions; missing, foreign-publisher, duplicate, sample or injected units are rejected. Default remains disabled, test mode always retains official sample units. This does not change NPA, UMP, optional statistics or reward policy. Native sample-ad validation does not establish commercial inventory fill; account/store/privacy readiness is separately recorded.
+
+## Android release startup reflection (2026-10-29)
+
+Debug success cannot establish minified startup. The real release13 APK and
+release19 AAB retained WorkManager's Room/InputMerger class names but removed
+their public no-argument constructors; AndroidX Startup then crashed before
+Flutter. Their pinned WorkManager2.7.0/Room2.2.5 consumer rules keep classes only.
+The existing Flutter3.47.2 Gradle plugin automatically includes the new app-local
+`app/android/app/proguard-rules.pro`; it keeps these reflection entry points,
+without changing SDK versions, disabling R8 or changing the game's SQLite data.
+See the [official R8 full-mode FAQ](https://r8.googlesource.com/r8/+/refs/heads/main/compatibility-faq.md#r8-full-mode).
+
+Run against the actual final APK or AAB with the existing Android SDK tool:
+
+```sh
+.venv/bin/python tools/validation/android_release_startup.py /ABSOLUTE/candidate.aab --apkanalyzer /ABSOLUTE/Android/sdk/cmdline-tools/latest/bin/apkanalyzer
+```
+
+The guard reads packaged DEX and verifies public no-argument constructors for
+`WorkDatabase_Impl`, `OverwritingInputMerger` and `ArrayCreatingInputMerger`.
+Its temporary DEX-only view of an AAB is for inspection, never installation.
+It neither edits nor installs the input. CI now builds a real minified release
+AAB with no Firebase configuration, credentials or signing and runs this check.
+Constructor presence is necessary; the final signed release derivative still
+needs actual cold-start/gameplay verification on the dedicated QA device.
+Old signed candidates and the broken original13 remain unchanged; a migration
+fixture is not evidence that the original released13 ran successfully.

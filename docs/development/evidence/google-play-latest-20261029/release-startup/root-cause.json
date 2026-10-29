@@ -1,0 +1,30 @@
+{
+  "actual_gui_device": "Pourlune GM QA 20261028 / emulator-5554",
+  "original13_installed": true,
+  "original13_nonempty_game_data_generated": false,
+  "actual_failure": {
+    "time_local": "2026-10-29 14:48:45 Asia/Taipei",
+    "pid": 12253,
+    "exception": "Unable to get provider androidx.startup.InitializationProvider: Failed to create an instance of androidx.work.impl.WorkDatabase",
+    "before_flutter": true
+  },
+  "packaged_dependencies": {
+    "WorkManager": "2.7.0",
+    "Room": "2.2.5"
+  },
+  "old13_and_candidate19_2": {
+    "classes_present": true,
+    "public_noarg_constructors_present": false,
+    "impacted": [
+      "WorkDatabase_Impl",
+      "OverwritingInputMerger",
+      "ArrayCreatingInputMerger"
+    ]
+  },
+  "minimal_fix": "App-local ProGuard keep for reflection constructors; no SDK/dependency/R8-mode change",
+  "local_minified_release_guard": "passed, all3 public noarg constructors now present",
+  "signed_prod_runtime": "pending",
+  "candidate19_2_upload": "blocked",
+  "iOS19": "already distributed; unchanged",
+  "official_reference": "https://r8.googlesource.com/r8/+/refs/heads/main/compatibility-faq.md#r8-full-mode"
+}
