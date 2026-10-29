@@ -12,7 +12,11 @@
 
 AAB1保留为未上传候选。最终manifest审计发现它只去掉GMS广告ID权限，却仍有平台`ACCESS_ADSERVICES_AD_ID`能力。Android官方文档确认这是另一条广告ID访问通路；没有据此声称本轮实际读取或发送过该ID。最小修复同时移除两条权限，最终manifest guard覆盖两者；NPA、PG上限、其它权限、游戏ID和同意默认不变。新生产权限反例先红后绿，7项聚焦检查通过。
 
-新签名候选：`build/beta-candidates/0.5.0-19/android-alpha-gm020-2/Pourlune-0.5.0-19-upload-signed.aab`，136231956字节，SHA256 `fbe5f16b7bf7a3d5432e2b58a22143d38cac393da6a64a742b71fa8d3518167f`。只读同字节9文件镜像为`build/package-review/0.5.0-19/android-alpha-gm020-2`。复用原BR05上传key及公开pin，不创建/重置key，秘密不进入仓库或日志。
+历史候选2（已阻断，不得上传）：`build/beta-candidates/0.5.0-19/android-alpha-gm020-2/Pourlune-0.5.0-19-upload-signed.aab`，136231956字节，SHA256 `fbe5f16b7bf7a3d5432e2b58a22143d38cac393da6a64a742b71fa8d3518167f`。只读同字节9文件镜像为`build/package-review/0.5.0-19/android-alpha-gm020-2`。复用原BR05上传key及公开pin，不创建/重置key，秘密不进入仓库或日志。
+
+修复候选3源`de5a5950b6e86c50c24e681add0b43e079bc4145`：`build/beta-candidates/0.5.0-19/android-alpha-gm020-3/Pourlune-0.5.0-19-upload-signed.aab`，136310168字节，SHA256 `bcfa0483c086c71161653829067d12e42ee30f275dcc4699bd7c2ca0ee19c06d`，9文件冻结镜像`build/package-review/0.5.0-19/android-alpha-gm020-3`。570输入对精确提交与固定SDK指纹吻合，147资源/90题、12ELF的16KB段、正式身份/默认Off/双广告ID权限排除/无integration_test原生入口及签名均已作者包核。实际三ABI Dart AOT与候选2逐字节相同，非签名载荷仅classes.dex、映射、R8元数据及两项baseline profile改变；夹具和QA入口不在生产AOT。三个反射构造器在最终签名AAB中全存在，不能据此提前写实际启动通过。新精确CI40837181164两job终态成功：工具87/核心47/应用492通过、1已有opt-in夹具跳过，格式/analyze、Android debug APK、新增minified release AAB及3构造器门槛、iOS simulator编译通过；固定SDK V2恢复7文件。旧CI不重跑，真实release设备门槛仍等解锁。
+
+候选3派生同上传key universal APK137457919字节，SHA256 `3859b4f2e27786e380bcd0acf4033c4c4267b01da31006085a3e6f0f98bdf12a`；168项DEX/native/assets与冻结AAB逐字节相同，APK签名pin及16KB zipalign通过。仅用于专用QA更新原空状态13、观察真实minified正式启动/正常动作/仅App重启；它不等于Google Play Signing证书或物理手机升级证明。独立合成旧库debug QA和此正式release验证队列已准备并交Computer，Mac再次锁屏且正常自动解锁失败；Computer已一次请求本人解锁，总控与开发不重复问，不绕过锁屏、不改安全设置，未Run这两条新入口。
 
 作者离线核563源输入、147包内资源及90题、三ABI生产AOT的正式API/GMID/Android单元、12个ELF的16KB载入对齐、bundletool校验与16KB打包配置、无原生integration_test类/通道、strict签名和pin。包为com.pourlune.app/0.5.0(19)，min24/target36，debuggable=false；实际无GMS或平台Advertising-ID权限，Analytics广告ID采集及原生采集默认false。AAB1到AAB2的非签名ZIP载荷仅`base/manifest/AndroidManifest.xml`变化，其余Dart AOT、dex、原生库、资源均逐字节相同。静态16KB检查不是16KB物理设备运行证明。
 
@@ -67,3 +71,7 @@ Computer导出r2数据时远端Mac锁屏，正常自动解锁失败。已有本�
 正常UI两项采集初始Off；Main1完成引导、真实动作、Undo/Hint、Home/Continue，开启统计后首个10/29 Daily执行1→5。测试Android今日开局从1增2，Daily Resume及真正前后台后仍2，最后正常隐私UI回到两项Off并停App。独立核12文件/157997B，其中新库147456B、schema5/integrity=ok：Main1两步/revision4，Hint1/Undo1、引导completed，棋盘等于原定义前两条有效参考动作；Daily002一步/revision1/单条undo，逐格等于初盘的合法1→5动作。最终privacy两false、SDK同安装/config1/queue0、没有奖励attempt或权益。详`normal-main-runtime.json`。单文件SaveAs曾把完整目标路径编码为normal分析项目中的冒号文件名；作者按确切测试文件名找到原件，收紧0600、保留原件并同字节复制至目标私密目录，没有重新操作设备或重造数据。此后继续真实13→19升级及商店门槛，尚未上传。
 
 后台同日test/android/版本19漏斗浏览器实际回读为机会2、加载6/成功6/失败0、尝试展示2/曝光2/奖励1、乱序0；generatedAt为10/29 12:42:26台北，最后上报仍11:19:06。这一范围包含同日既有轮次，不能仅凭奖励总数1声称r2到账；继续要求当前实例的真实回调、SQLite去重权益及重启持久回执。today totals的1活跃/1开局/2展示/0失败不受版本筛选，不能替代该漏斗过滤或归因。原始浏览器回执归档尚待，先按观察范围记于`native-r2/backend-before-r2-completion.json`。
+
+后续15:27台北的浏览器完整响应已由Computer原文转交并归档`backend-test-20261029.json`：test/Android/版本19今日总览1活跃、2开局、4曝光、0加载失败，版本漏斗机会5、privacy阻断1、加载16/成功16/失败0、展示尝试4/曝光4/奖励2、乱序0。包含早先同日QA，不能全部归因于本轮R2，也不把总览当成受版本过滤。`backend-production-20261029.json`同过滤范围hasData=false/updatedAt=null、总览null/漏斗0；仅说明这次正式Android过滤无数据，收入unsupported_filter不是收入0。没有向正式游戏伪造测试统计。
+
+Play只读原声明10/25为无广告/无广告ID；五类数据均收集不分享，互动/崩溃/诊断可选、位置/ID必需，用途没有广告。逐字段差额在`play-current-declarations-readonly.json`及`data-safety-plan.json`：新包需含广告true；AAID依最终双权限缺失保持false，其它标识仍披露；Google广告位置/互动/诊断/ID共享及广告/安全用途不能被统计Off掩盖，Remote Config位置的应用功能用途保留。没有保存或提交声明，最终须按实际标签逐项回读；持有人法律承诺和未知账号事实不猜。
