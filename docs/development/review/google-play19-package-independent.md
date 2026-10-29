@@ -75,3 +75,11 @@ Computer 已实际完成专用5554上的 minified R3安装/首次启动、Main1�
 ## Play 收集与分享用途拆分复核
 
 实际表单将两种用途分开，开发据此把 data-safety-plan 更新为 collection_purposes 与 sharing_purposes。父再次直接读取 [Google Mobile Ads 25.5.0 官方披露](https://developers.google.com/admob/android/privacy/play-data-disclosure)（页面更新2026-10-28）及新JSON，确认四类广告数据分享对应广告、分析、防欺诈安全合规；不把既有 Remote Config/Firebase 的 App functionality 收集用途平移到广告分享用途。位置/设备ID收集保留该功能用途，Crash仍仅可选收集分析、不分享。此次是已核定事实在实际表单中的准确拆分，不改包、SDK、用户选择或Alpha放行；Computer已获完整逐项答案，继续保存并回读实际平台结果。
+
+## Alpha19 正式送审回执
+
+Computer在确认Network已能记录普通页面请求后，仅作一次有记录的正常界面提交，观察 publishing:sendChangesToRe… XHR HTTP200。平台随后明确显示“正在审核中的更改”“您的更改目前正在接受审核”，包含封闭式测试Alpha0.5.0(19)和应用内容。提交活动新增ID3，2026-10-29 17:32台北，状态审核中；版本、广告声明、数据安全三项均在审核。父据这些明确回读确认本次正式送审完成；此前三次无回执原因仍未知，不猜测权限/会话故障。未读取认证头、未导HAR、未脚本代发。当前只是审核中，不是已批准或已可安装；既有iOS19不变。机器记录parent-formal-submission-acceptance.json。
+
+## 实际测试范围与本人确认
+
+最终只读回读为美国及巴基斯坦，勾选Pourlune Beta（1人）与“10月29test”（51人），不是旧记录的仅美国/本人。Computer未在本轮改名单或国家，不能推定设置来源；名单人数不是已加入/已安装人数。因范围当时未经核，先可逆开启自管发布保护，ID3和旧13不变。本人随后对上述精确范围直接回复“是，19版按当前国家和名单开放”。现范围已确认，已指示Computer仅对本次Alpha19/广告/数据安全三项恢复此前自动发布，解除临时保护，不增删名单、国家或邀请；审核/可安装仍按真实平台状态分别回读。
