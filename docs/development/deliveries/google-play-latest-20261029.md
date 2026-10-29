@@ -1,6 +1,6 @@
 # Google Play 最新 Alpha 封测更新（进行中）
 
-2026-10-29，Asia/Taipei。当前最高已上传仍为 Alpha 0.5.0(13)，19在本轮只读控制台回读时可用。Android实际测试广告、同实例奖励持久化、统计撤回/冷却重启及正常main已完成验证，但原已发行13现场冷启动在Flutter之前崩溃；离线追踪确认签名候选19-2同样缺失反射构造器，现明确阻断上传。最小R8修复的本地压缩包检查已转绿，新的签名生产包、实际release启动及总控整体验收待完成，尚未上传或提交。iOS19既有Self测试与正式等待审核状态不改，不重复上传。
+2026-10-29，Asia/Taipei。原Alpha本轮前最高13；19已上传被Play识别并占用，送审请求正在快速检查，尚无实际提交/发布回执。Android实际测试广告、同实例奖励持久化、统计撤回/冷却重启及正常main已通过总控独立证据验收。原13/候选19-2的R8启动构造器缺失已在新19-3修复：新签名生产包及精确CI通过，且专用设备实际minified首次启动、普通操作及仅App重启恢复已成功，当前会话无原Fatal。总控已最终接受并放行原Alpha19更新，广告及数据安全声明已保存；当前有上传/识别回执，尚未取得实际送审或19可安装回执。iOS19既有Self测试与正式等待审核状态不改，不重复上传。
 
 实际13在专用QA中首次安装，启动报`InitializationProvider`无法创建`WorkDatabase`，没有生成非空玩法存档。两版DEX都保留`WorkDatabase_Impl`和两个`InputMerger`类，却缺少反射所需public无参构造器；debug包有这些构造器。应用本地keep规则仅补这三个反射入口，Flutter3.47.2原生插件会自动读取该规则，不改SDK/锁/R8模式。CI新增真实minified release AAB及DEX构造器门槛。旧13/19-2红、debug对照绿、本地新release三项绿均留在`release-startup/`，包检查仍不等于实际运行通过。
 
@@ -75,3 +75,27 @@ Computer导出r2数据时远端Mac锁屏，正常自动解锁失败。已有本�
 后续15:27台北的浏览器完整响应已由Computer原文转交并归档`backend-test-20261029.json`：test/Android/版本19今日总览1活跃、2开局、4曝光、0加载失败，版本漏斗机会5、privacy阻断1、加载16/成功16/失败0、展示尝试4/曝光4/奖励2、乱序0。包含早先同日QA，不能全部归因于本轮R2，也不把总览当成受版本过滤。`backend-production-20261029.json`同过滤范围hasData=false/updatedAt=null、总览null/漏斗0；仅说明这次正式Android过滤无数据，收入unsupported_filter不是收入0。没有向正式游戏伪造测试统计。
 
 Play只读原声明10/25为无广告/无广告ID；五类数据均收集不分享，互动/崩溃/诊断可选、位置/ID必需，用途没有广告。逐字段差额在`play-current-declarations-readonly.json`及`data-safety-plan.json`：新包需含广告true；AAID依最终双权限缺失保持false，其它标识仍披露；Google广告位置/互动/诊断/ID共享及广告/安全用途不能被统计Off掩盖，Remote Config位置的应用功能用途保留。没有保存或提交声明，最终须按实际标签逐项回读；持有人法律承诺和未知账号事实不猜。
+
+## R3 真实 minified 运行结果
+
+本人解锁后，Computer在原专用QA/emulator-5554安装现成R3正式APK，首次正常渲染Main1，引导、Undo、Hint、有效动作和Home/Continue均可操作。仅Android应用信息中对Pourlune执行Force stop，再从原图标重开成功；Continue恢复此前四瓶容量2/4、4/4、2/4、0/4，之后真实2→1变为4/4、2/4、2/4、0/4。没有重装来冒充重启，没有AVD重启或清库，没有手点正式广告。隐私页Analytics/Crash仍Off。
+
+当前Logcat `package:com.pourlune.app`、重开PID13997可见FirebaseInitProvider初始化成功、cold app start和analytics collection disabled；本次可见过滤会话没有FATAL EXCEPTION，不扩大为全历史无错误。实际正式minified启动和操作已越过旧13/R2在Flutter前的WorkDatabase崩溃，不以构造器静态检查替代这个结果。来源是Computer实际GUI观察及直接交接，开发没有绕过GUI操作设备，也未读取不可调试正式包的私有库；详`release-startup/actual-r3-runtime.json`。
+
+新会话同时出现UMP publisher misconfiguration（该AppID没有配置表单）及两次Ad failed to load:3，设备标记为test。按[Google Android AdRequest官方定义](https://developers.google.com/admob/android/reference/com/google/android/gms/ads/AdRequest#ERROR_CODE_NO_FILL)，3为no fill，不能写成网络超时或真实广告展示成功。后台UMP表单与商业填充仍有明确未完成/异常边界，继续保留；没有通过绕过同意、换单元、反复重请求或伪造数据掩盖。该运行证明核心流程不被这些警告阻塞，商业readiness仍未通过。
+
+合成旧库debug APK已安装，首页Continue Level4可见；其后游戏UI/仅App重启及库导出因CUA窗口映射未完成。总控明确收敛门槛：原13精确源生成与当前真实SQLite动作/undo/restart/save/reopen验证已通过，额外替代夹具GUI如因工具失败，明确未验即可，不再单独阻断本次更新。仍不称原发行13非空现场升级。没有为此新建包、设备或重复旧SDK测试/终态CI；F9未动。
+
+总控已依据独立签名包、此前原生/正常main证据及本次Computer实际R3结果放行原Alpha19，机器终态为`release-startup/r3-runtime-acceptance.json`；没有扩大为公开production、iOS19变更、邀请或默认隐私改变。
+
+UMP新警告的代码门控已只读复核：`UmpConsentGateway`在成功/失败回调都读取真实SDK `canRequestAds()`，读取失败则false；ServiceHub更新前先关闭广告资格，SDK结果不允许时返回并维持false，只有SDK明确允许才初始化/预加载，失败标记仍保留。没有将后台无表单或统计Off解释为擅自许可，也没有因为警告强制true。[Google Flutter UMP指南](https://developers.google.com/admob/flutter/privacy)明确允许在更新失败后咨询SDK已有同意状态。两个采集默认false保持；本轮没有新增运行采样去推断PID13997的具体资格布尔值，没有重跑已验测试。
+
+Computer另只读看到Android AppID与实际包/日志一致，商店关联为“—/添加”，隐私总览的欧洲/美国州级项均为“创建”、无管理消息入口；欧洲消息页仍加载，故不能扩大断言所有表单为空。具体Android消息/商店关联与商业填充作为待办留真，不为它重复造包或改iOS。详`release-startup/ump-current-gate-review.json`。
+
+既有ASC隐私只读页显示11小时前由持有人发布，七类为其他诊断/广告/设备ID/产品互动/崩溃/大致位置/性能，均显示身份关联；当前无待发布按钮，本轮没有修改或重复发布。本人“同意并发布”仅对应此前隐私准确性承诺，不推断另一份草稿或新iOS提交授权；见`asc-privacy-existing-readback.json`。
+
+## Play 上传与送审请求（等待平台实际回执）
+
+Computer在上传前回读版本/bundle目录只有13、12，19未占用、原Alpha没有重复草稿。已保存Contains ads=是与Data safety，并在预览逐项核准：位置/互动/诊断/设备或其它ID的分享用途均为分析、广告营销、防欺诈安全合规；位置/ID的收集另外含应用功能，互动/诊断收集为三项，Crash收集仅分析、可选且不分享；传输加密。原来单一用途草案已按实际两页拆成collection_purposes/sharing_purposes，不把RemoteConfig的应用功能直接扩到广告第三方分享。
+
+唯一候选3审核副本已上传，Play识别19(0.5.0)、min24/target36，ReTrace与原生符号附带。原Alpha100%预览已保存，发布概览恰为Alpha19、广告、数据安全三项。Computer已点击并确认送审，此后页面仍显示“尚未提交送审的更改”及最长14分钟快速检查，提交活动没有新条目；因此本轮此刻只能记录请求已发/检查中，尚无实际送审、审核通过或19可安装回执。保留当前页面等待，不重复上传已占用的19或反复点提交，不改公开production、测试员或iOS。机器记录为`play-upload-and-review-request.json`，后续实际回执另补。

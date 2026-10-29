@@ -1,5 +1,7 @@
 # Android 0.5.0(19) 签名包独立审查
 
+最新结论（2026-10-29 16:15 台北）：**R3 静态签名包及已完成 Android QA/后台证据独立复核通过；仍未批准上传。** 只剩当前已排队的修复后真实 release 启动、合成旧库实际操作，以及 Play 声明/提交回读。远端 Mac 再次锁屏，Computer 已一次请求解锁，其他聊天不重复询问。下文 AAB1/R2 为历史结论，不能上传旧包。
+
 2026-10-29。结论：**来源、负载和签名检查通过；NoAdID 权限补漏须重建，当前包不批准上传。** Android 实际运行及 Play 声明交付仍待完成。
 
 审查对象为 `build/package-review/0.5.0-19/android-alpha-gm020-1/Pourlune-0.5.0-19-upload-signed.aab`，来源 `04f175503681e4452231731ea353a33b13f711f8`。包大小 136231971 字节，SHA-256 `16fc6e61270dcb6ba9cc449bad1b32d520c5cdfd76bbd01400c3b3edefa5175b`。
@@ -35,3 +37,41 @@ Data safety 拟定文件已对照 [Google Mobile Ads 25.5.0 官方披露](https:
 R2 原生公开摘要已读：第一次恢复 3/3 被服务接收，包含原离线 2 条及新活跃 1 条；重试混合批 7 条仅新增接受 4 条，摘要记录原事件 ID 和首次时间保留。这支持该批原事件去重，不能写成纯 0/7，后台记录仍待独立回读。中断的真实激励广告只有 impression/shown，SQLite 无确认奖励和 entitlement；没有把进入外部 Play 页面或关闭当作获奖。旧宿主恢复后的 extra 状态差异未归因、未覆盖，R2 独立命名库与旧证据分开。成功奖励、撤回、持久冷却、正常 main 和真实旧存档升级仍需交付。
 
 远端 Mac 锁屏已提出本人解锁请求；两聊天不得再重复提问。总控本轮只做离线包和文档复核，没有操作桌面或设备。
+
+## R3 与 Android 最终证据差额复核（2026-10-29 16:15 台北）
+
+修复源 `de5a5950b6e86c50c24e681add0b43e079bc4145`，候选 `android-alpha-gm020-3`，签名 AAB 136310168 字节，SHA-256 `bcfa0483c086c71161653829067d12e42ee30f275dcc4699bd7c2ca0ee19c06d`。总控独立读取实际包与镜像，9 文件及 570 输入均吻合。严格公开证书签名验证、既有 BR05 pin 和 bundletool validate 通过，没有读取私钥或运行新的构建。
+
+实际原13在创建 `InitializationProvider`/`WorkDatabase` 时崩溃，尚未生成非空玩法存档。R2 包也受同一 R8 反射入口缺失影响，因此先前静态通过不再作为可上传结论。最小 keep 规则只保留 WorkDatabase_Impl 和 InputMerger 的 public 无参构造器。总控另写原始 DEX 结构解析，独立于开发的 apkanalyzer 门槛确认：旧 R2 三个类都存在但缺对应构造器，R3 三个类都有 public 无参且具实际代码的构造器。不升级依赖、不关闭 R8、不用宽泛 keep 回避原因。
+
+R2→R3 非签名载荷仅 DEX、映射、R8 元数据及两项 baseline profile 变化；manifest、三 ABI Dart AOT、全部 native 库和资源逐字节相同，复用已接受的双广告 ID 权限排除、身份、同意默认、SDK、90 题与16KB静态检查。生产 AOT 没有夹具或 QA 入口变化。由同一 AAB 派生的真实 release APK SHA-256 `3859b4f2e27786e380bcd0acf4033c4c4267b01da31006085a3e6f0f98bdf12a`，其168项 DEX/native/assets 与 AAB 相同；它使用上传证书，不能冒称 Play App Signing 交付或物理手机升级。
+
+已保存的新精确 CI `40837181164` 终态回执对应同一源，两 job success（工具87、核心47、应用492及原有1项 opt-in 跳过，含新增 minified AAB/构造器检查）。父未重查远端终态或重跑该套检查。完整机器核包记录为 `evidence/google-play-latest-20261029/release-startup/candidate3-package-independent.json`。
+
+总控另对已导出的真实专用 Android 数据做只读独立检查，记录在 `native-final-independent.py/json`，没有重做设备操作：
+
+- 获奖后、正常 App 重启、统计撤回后的完整 active payload、两次奖励 attempt 和唯一 entitlement 逐行一致。只有真实确认的新 attempt 为 done/confirmed1，旧中断请求没有补奖；同实例五瓶、待处理0。其他五个已有 SQLite 原字节保留。
+- 独立解析 Android DataStore preferences protobuf，确认同一安装标识、空队列及持久 lastShownAt；正常 main 后仍保留该冷却记录。两个统计 Off 进程的实际诊断显示广告许可 true、插屏 ready、冷却142/73秒、已持久保存；均无 SDK POST 或发送批文件。实际展示与点击阻止过程来自 Computer 的观察，父通过导出记录核对，未声称自己操作设备或看过每张新图。
+- 获奖进程真实 ACK 合计16/16；重启进程新增仅 active 一条，没有新 round_start。早期离线恢复 ACK 为3/3，包含重传的下一批为4/7；保存的运行断言确认稳定 ID/首次时间及旧事件去重。现存 last-batch 文件不能独立重建每一条更早的发送载荷，保留这一证据边界，不写成0/7或全量逐条重新核验。
+- 正常 main 独立库 integrity/schema5 通过。父按原题的合法倒水规则独立重放 Main1 前两步和 Daily002 的1→5，逐格对应最终棋盘；分别2步/rev4和1步/rev1。最终两项隐私 false、无奖励 attempt/权益，库 SHA 与交付一致。初始选择、Hint/Undo、真正前后台及开局数不增加由 Computer 的正常 UI 观察和导出共同支持，不拿早先 IDE 重新部署当成真正前后台。
+- 后台归档为 Computer 在既有登录浏览器读取的真实 JSON：test/android 当日总览1活跃、2开局、4曝光；版本19漏斗机会5、privacy阻断1、加载16/成功16、展示尝试4/曝光4、奖励2、乱序0。包含同日其他 QA，且总览不受版本筛选，不能全部归因本次单一流程。production 同日 Android/version19 过滤 hasData=false，没有据此宣称全局正式统计或收入为0。
+
+上述 Android 真实测试广告、奖励幂等、统计/配置解耦、冷却重启及正常入口证据可复用，不再重复已完成流程。它们使用官方测试广告的 debug QA，仍不能代替 R3 的真实 minified 启动，也不能证明商业填充。
+
+原13不修补、不重制为假原版。采用原13精确源码生成的合成非空存档可验证旧契约兼容；生成器与真实 SQLite 测试已通过，待已排队的隔离 QA 正常入口操作/仅 App 重启。该结果必须标为合成旧库兼容，不称“原发行13非空现场升级”。另一条已排队的正式 R3 APK 路径直接更新当前空状态13并验收启动/普通动作/仅 App 重启及当前 PID Logcat。两者均等已请求的 Mac 解锁，无需再建候选或扩大验证矩阵。
+
+这两个有明确目的的设备结果完成后再按既有授权更新 Play 声明并上传当前 R3 到原 Alpha，分别核上传处理、送审/轨道状态和加入安装入口；本轮不触碰 iOS19、F9、保护存档或新增测试员。
+
+## 用户催促后的收尾范围收敛
+
+新一轮 Computer 已实际重新进入 Android Studio 和兼容窗口，旧锁屏状态解除。合成原13夹具已有来源核验及当前真实 SQLite 撤销/重开/动作/保存再打开检查；其额外 GUI 若仍被工具窗口映射阻断，仅记实际 UI 未验，不再作为单独发布门槛，也绝不改称原发行13非空现场升级。优先完成最终R3真实 minified 启动、仅 App 重启和当前进程日志，以直接验证本轮实际启动崩溃修复；通过后继续原 Alpha 声明与上传，不再重复已验 SDK 和数据流程。
+
+## R3 实际运行结果接受与 Alpha 放行
+
+Computer 已实际完成专用5554上的 minified R3安装/首次启动、Main1基本操作、仅App停止重开及Continue原局面恢复；下一步2→1结果正确。当前重启PID13997可见日志没有FATAL，Firebase初始化成功、采集关闭。总控结合已独立核定的同字节AAB/APK及该明确运行回执，接受本轮R8修复，放行现有Alpha封测更新，不再因报告排版重复设备测试。GUI由Computer执行，父没有冒称亲自点击或看过所有新图。详release-startup/r3-runtime-acceptance.json。
+
+保留具体限制：合成旧库UI未完成，不称原发行13非空现场升级；UMP该Android AppID未配置表单、测试标记设备广告load3，不称商业填充通过。由Computer核后台当前消息关联并交开发判断，不通过客户端绕过隐私门控。该远程配置/填充状态不阻止本轮受限Alpha提交，不扩成公开发行或iOS19重新提交。商店声明按已经独立读审的data-safety-plan逐项更新并实际回读。
+
+## Play 收集与分享用途拆分复核
+
+实际表单将两种用途分开，开发据此把 data-safety-plan 更新为 collection_purposes 与 sharing_purposes。父再次直接读取 [Google Mobile Ads 25.5.0 官方披露](https://developers.google.com/admob/android/privacy/play-data-disclosure)（页面更新2026-10-28）及新JSON，确认四类广告数据分享对应广告、分析、防欺诈安全合规；不把既有 Remote Config/Firebase 的 App functionality 收集用途平移到广告分享用途。位置/设备ID收集保留该功能用途，Crash仍仅可选收集分析、不分享。此次是已核定事实在实际表单中的准确拆分，不改包、SDK、用户选择或Alpha放行；Computer已获完整逐项答案，继续保存并回读实际平台结果。
