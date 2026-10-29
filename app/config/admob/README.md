@@ -24,3 +24,8 @@ now included in `registration.json`. `--ad-mode production` consumes those units
 only with matching registered identity and native/Dart guards. `test` continues
 to use sample units even with the same owned App ID. Account/app serving remains
 limited pending public-store linkage; configuration does not guarantee fill.
+
+2026-10-29: Android's existing interstitial and rewarded units were read back
+from the same Pourlune Android registration for the authorized Alpha update.
+They are now included for explicit `--ad-mode production`; QA continues to use
+official sample units and the existing test game. No iOS configuration changed.
