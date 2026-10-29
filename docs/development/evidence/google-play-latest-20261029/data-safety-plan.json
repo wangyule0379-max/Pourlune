@@ -1,0 +1,85 @@
+{
+  "status": "proposed truthful declaration for final Android19; must match final AAB2 and be applied/read back by Computer before submitting Alpha",
+  "native_aaid_use": false,
+  "condition": "both GMS AD_ID and platform ACCESS_ADSERVICES_AD_ID absent in packaged final artifact; Firebase Analytics adid collection false",
+  "contains_ads": true,
+  "encryption_in_transit": true,
+  "accounts": "no in-app accounts or account creation",
+  "collection_choice_note": "Optional app statistics/crashes do not disable independent consent/ads/configuration processing. Do not mark all data optional merely because Analytics is off.",
+  "data_types": [
+    {
+      "type": "Approximate location",
+      "collected": true,
+      "shared": true,
+      "optional": false,
+      "purposes": [
+        "App functionality",
+        "Advertising or marketing",
+        "Analytics",
+        "Fraud prevention, security and compliance"
+      ],
+      "basis": "Google Mobile Ads25.5 IP-based approximate location; no precise/GPS permission; configured Firebase Remote Config country selection also supports app functionality"
+    },
+    {
+      "type": "App interactions",
+      "collected": true,
+      "shared": true,
+      "optional": false,
+      "purposes": [
+        "Advertising or marketing",
+        "Analytics",
+        "Fraud prevention, security and compliance"
+      ],
+      "basis": "Google ads interactions; optional Firebase/GM gameplay and ad-funnel events also use this category"
+    },
+    {
+      "type": "Crash logs",
+      "collected": true,
+      "shared": false,
+      "optional": true,
+      "purposes": [
+        "Analytics"
+      ],
+      "basis": "User opt-in Crashlytics upload; service-provider processing, not advertising-sharing assumption"
+    },
+    {
+      "type": "Diagnostics",
+      "collected": true,
+      "shared": true,
+      "optional": false,
+      "purposes": [
+        "Advertising or marketing",
+        "Analytics",
+        "Fraud prevention, security and compliance"
+      ],
+      "basis": "Google ads SDK performance diagnostics independent of app Crash sharing choice"
+    },
+    {
+      "type": "Device or other IDs",
+      "collected": true,
+      "shared": true,
+      "optional": false,
+      "purposes": [
+        "App functionality",
+        "Advertising or marketing",
+        "Analytics",
+        "Fraud prevention, security and compliance"
+      ],
+      "basis": "App-set/Firebase installation/optional GM random installation identifiers; absence of AAID does not mean no IDs"
+    }
+  ],
+  "not_declared": [
+    "Precise location",
+    "Name/email read or sent by app",
+    "Contacts/photos/microphone",
+    "Purchase/payment data",
+    "Full board contents"
+  ],
+  "external_feedback": "Mailto opens an external mail handler; app does not read mailbox/account or post feedback contents to its own telemetry",
+  "references": [
+    "https://developers.google.com/admob/android/privacy/play-data-disclosure",
+    "https://firebase.google.com/docs/android/play-data-disclosure",
+    "https://developer.android.com/reference/android/adservices/adid/AdIdManager"
+  ],
+  "pending_console_details": "Computer must map to exact current form labels and preserve already-valid fields. Any real holder certification or unknown account fact goes to parent once; no invented legal/deletion claims."
+}
