@@ -1,0 +1,58 @@
+{
+  "at_utc": "2026-10-29T05:08:20.159252+00:00",
+  "actual_process": 5188,
+  "current_process_directory_explicitly_refreshed_and_exported": true,
+  "source_export_files": 12,
+  "status": {
+    "sdk": "0.2.0",
+    "platform": "android",
+    "environment": "test",
+    "phase": "online_recovery",
+    "new_process": true,
+    "same_game_instance": true,
+    "restored_original_events": false,
+    "queued": 0,
+    "statistics": true,
+    "configVersion": 1,
+    "interstitial": "ready",
+    "rewarded": "ready",
+    "adConsent": true,
+    "cooldownSeconds": 8,
+    "sdkCooldownSaved": false,
+    "extraBottle": true,
+    "pendingRewards": 0
+  },
+  "http_statuses": [
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200
+  ],
+  "accepted": 16,
+  "received": 16,
+  "post_batches": 7,
+  "reported_event_types": {
+    "active": 2,
+    "ad_opportunity": 2,
+    "ad_blocked": 1,
+    "ad_load_requested": 4,
+    "ad_loaded": 4,
+    "ad_show_attempted": 1,
+    "ad_impression": 1,
+    "ad_reward_earned": 1
+  },
+  "interpretation": [
+    "This is a new post-drain process. The old2 offline originals were already acknowledged; QA first-original/retry booleans false here are not a new deduplication failure. Prior second-process3/3 then4/7 mixed retry evidence remains authoritative for the original recovery.",
+    "These16 new events all acknowledged; no new round start in this process, one real rewarded impression and earned callback.",
+    "Cooldown8 seconds is actual last persisted diagnostic observation before stop, not a promise that cooldown remains positive through later export/restart.",
+    "Watch-to-visible approximately20seconds cannot be split between GUI refresh latency and SDK display latency from these per-process receipts."
+  ],
+  "reward_sql_reference": "reward-committed.json",
+  "restart_verification_pending": true,
+  "upload_approved": false
+}

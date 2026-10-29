@@ -34,6 +34,24 @@ Play Policy Insights完成7目标/2批critic静态审计；报告仅2项建议�
 
 后续须完成真实Android门槛、总控独立核新包、声明和站点一致，再由Use Computer复核19占用并上传/提交现有Alpha封测，回读处理/审核/安装入口。不另开internal或公开production，不新增测试员或重复邀请。物理手机升级、硬件音触觉、真人首玩和正式广告填充保持未验；AdMob应用待审/投放受限不冒称商业readiness通过。
 
-## 当前唯一持有人阻断
+## 锁屏中断及恢复记录
 
 Computer导出r2数据时远端Mac锁屏，正常自动解锁失败。已有本人解锁请求，不再重复问，不绕过登录。锁屏前已留42项r2私密原件：真实首批3/3，加入4条新加载记录后的重传4/7，原3不重复、原ID/首次时间检查true、最终队列0；不能写成纯0/7。实际无ID测试广告完成加载与曝光，但误入外部Play登录后未收到奖励确认；SQLite只有open/confirmed0尝试、1次rewarded shown、无entitlement/extra。证据是中断状态，不冒称完成奖励或跨重启持久通过。已准备只启动已有QA的NoDeploy配置、正常main及真实13/最终19同上传证书APK标准GUI项目，均未借锁屏进行设备操作。解锁后继续剩余实际门槛，再提交Alpha。
+
+本人随后在总控确认已解锁。Computer回读专用AVD身份后仅停止QA App的PID6350，并选NoDeploy启动；控制台只显示Launching，未观察到启动完成，进程列表曾为空，画面仍停在旧Play页。首轮新的Sync/导出未成功，0项不能当作新的停机快照。AX树与实际窗口位置不符、点击报windowNotFoundAtPosition，先核宿主窗口映射，不据此认定游戏或guest冻结。
+
+总控已确认在既有授权内的恢复路径：确认QA App停止，完整导出其databases（含存在的wal/shm）、files和shared_prefs并核同实例/integrity后，Computer可GUI普通停止精确该AVD、单次Cold Boot；不Wipe、不删除或加载快照、不恢复库、不再次Host Quit qemu。启动后先重新导出核原持久状态再NoDeploy。无需再次要求本人操作模拟器。官方单次Cold Boot操作见[Android Emulator snapshots](https://developer.android.com/studio/run/emulator-snapshots#cold-boot-once)。
+
+随后普通键盘Find Action可用，经键盘定位与实际路径匹配行恢复导出。Computer给出三次成功回执：数据库38文件/844134B、files4文件/1096B、shared_prefs7文件/9417B，合计49文件/854647B，存于新的受限`private-r2-app-stopped/`；最后Processes刷新为空且其后未再Run，Sync没有单独完成回执，不虚构该回执。作者核新r2库integrity=ok/schema5，同原实例、完整活动payload和奖励聚合与中断副本一致；已存SDK偏好原字节相同，test/android配置v1、同安装标识、队列0。保全门槛通过后才通知Computer执行上述GUI普通Stop/单次Cold Boot，尚不视作恢复或奖励验收通过。公开核对见`native-r2/stopped-export-database.json`、`stopped-export-preservation.json`，不公开原始标识或数据文件。
+
+旧窗口的Device Manager红色普通Stop不在AX中、坐标仍失败。总控确认只试一次独立新主窗口；新ignored APK分析项目仅引用原冻结APK/现有SDK，不提供Run配置或构建脚本，不关旧窗/AVD。Computer在新窗口safe mode恢复正常点击，随后对精确QA普通Stop、单次Cold Boot成功到Android主屏，仍5554；没有安装/Run、Wipe、旧快照加载或其它设备操作。冷启动后的同库和SDK偏好回读仍待完成，不把主屏出现直接视为存档或完整流程通过。
+
+冷启动后、启动App前另导出同包49文件/854647B。作者逐文件比较全部49项原字节一致，r2库integrity=ok/schema5、原实例payload、完整SDK偏好/安装标识/configv1/queue0保留，奖励确认与权益仍0；详`native-r2/coldboot-preservation.json`。这一保全门槛通过后，才为当前新窗口项目加入明确的`Pourlune_R2_LaunchOnly_NoDeploy`配置（不部署/清库，零BeforeRun任务）继续既有App启动，不再回到坏窗口。此前原队列已完成ACK，后续进程的`restored_original_events=false`本身不能解释成丢队列；原第二进程离线恢复/重传去重证据继续保留。完整激励完成和跨App重开仍待实际回执。
+
+该新项目的模块下拉为空，NoDeploy被IDE以Module not specified拦住，没有实际启动。Computer改为直接使用专用QA的既有Android桌面图标启动，该无效配置随后删除；没有重装/部署或清库。实际Level4显示中断提示，End interrupted request后旧请求关闭且没有补奖。通过实际游戏Extra bottle/Try again/Watch路径，官方Test Ad约20秒后可见，出现Reward granted、真实关闭后Bottle added及五瓶。曾先观察到旧No ad available画面，随后广告出现，不能把前一幅画面直接判成加载或展示失败；界面刷新和SDK展示延迟尚不能精确区分，也未猜测修改App。
+
+立即只停止QA App PID5188后，新副本实际SQLite已核：integrity=ok，同原实例、extra=true、五瓶/revision1；旧中断attempt为closed/confirmed0，新attempt为done/confirmed1，唯一entitlement匹配原实例与该新attempt，pending0，rewarded展示2。SDK偏好确实已变更、同安装标识/config1、队列0，rewarded后的sdkCooldownSaved=false本身不是插屏持久化故障。详`native-r2/reward-committed.json`。目录缓存仍只带出旧2个process文件夹，已要求单独刷新当前证据子目录，不把该49文件副本称为最新进程诊断完整通过。原Reward granted和五瓶截图保留在Computer工具记录，无法文件化的历史图没有重造。跨App重开、真实插屏/撤回冷却、正常main及真实13升级仍继续。
+
+单独Sync该证据子目录后已导出12文件，取到PID5188的当前status/http/ACK：same instance、extra=true/pending0/queue0，最后可见冷却8秒；16条新事件真实ACK16/16，含本次一次曝光、一次earned回调，没有新round start。旧2事件早已收件，当前进程的“首批含原事件/原事件重试”布尔值false不当作去重失败。之后正常桌面重开实际仍Level4/五瓶/Bottle added，没有中断提示；只停止PID6633后同步导出57文件/857591B，作者核原实例及完整活动payload、所有attempt/entitlement记录均与获奖后相同，confirmed/done1、权益1、pending0，SDK同安装/config1/queue0。该进程仅新增active1并ACK1/1，没有重复开局；其它5个已有命名SQLite文件原字节未改。真实激励原实例落盘及正常App重开持久化通过，详`reward-current-process.json`和`reward-restart.json`；不以此代替尚未完成的真实插屏/撤回冷却、正常main、升级与商店门槛。
+
+后台同日test/android/版本19漏斗浏览器实际回读为机会2、加载6/成功6/失败0、尝试展示2/曝光2/奖励1、乱序0；generatedAt为10/29 12:42:26台北，最后上报仍11:19:06。这一范围包含同日既有轮次，不能仅凭奖励总数1声称r2到账；继续要求当前实例的真实回调、SQLite去重权益及重启持久回执。today totals的1活跃/1开局/2展示/0失败不受版本筛选，不能替代该漏斗过滤或归因。原始浏览器回执归档尚待，先按观察范围记于`native-r2/backend-before-r2-completion.json`。
