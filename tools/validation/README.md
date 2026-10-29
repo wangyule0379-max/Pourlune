@@ -334,6 +334,13 @@ requires explicit Analytics ad-ID collection off. For a test-mode artifact,
 provide the same validated `DART_DEFINES`/public registration as its build;
 passing this guard does not prove actual ad load/show/reward behavior.
 
+The same opt-out also removes `android.permission.ACCESS_ADSERVICES_AD_ID`:
+the platform AdIdManager can expose an advertising ID independently of the
+Google Play services `com.google.android.gms.permission.AD_ID` permission.
+The packaged-manifest guard checks both paths in disabled/production builds.
+This does not remove Firebase installation IDs, app-set IDs or other SDK data,
+which still need accurate Data safety disclosure.
+
 Use `--ad-mode test` only for the authorized ad-testing candidate. Both platforms
 use Google's exact official interstitial/rewarded test units, even on phones that
 have not been registered as test devices; no live-unit flag is provided.

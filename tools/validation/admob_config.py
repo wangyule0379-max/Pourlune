@@ -123,7 +123,9 @@ def main():
                 raise AdConfigError('invalid_android_manifest') from None
             android = '{http://schemas.android.com/apk/res/android}'
             has_ad_id = any(node.tag.startswith('uses-permission') and
-                            node.get(android + 'name') == 'com.google.android.gms.permission.AD_ID'
+                            node.get(android + 'name') in {
+                                'com.google.android.gms.permission.AD_ID',
+                                'android.permission.ACCESS_ADSERVICES_AD_ID'}
                             for node in manifest)
             require(result['mode'] == 'test' or not has_ad_id,
                     'disabled_android_ad_id_permission')

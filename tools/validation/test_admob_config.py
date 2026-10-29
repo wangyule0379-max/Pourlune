@@ -146,5 +146,35 @@ class AdConfigTest(unittest.TestCase):
                 else:
                     self.assertEqual(result.returncode, 0, result.stderr)
 
+    def test_production_manifest_rejects_platform_advertising_id_without_gms_permission(self):
+        app = self.data['apps']['android']
+        app.update(interstitial_id='ca-app-pub-1111111111111111/3333333333',
+                   rewarded_id='ca-app-pub-1111111111111111/4444444444')
+        self.registration.write_text(json.dumps(self.data))
+        manifest = self.root / 'AndroidManifest.xml'
+        env = {**os.environ, 'DART_DEFINES': encoded([
+            ('POURLUNE_AD_MODE', 'production'), ('POURLUNE_AD_PLATFORM', 'android'),
+            ('POURLUNE_AD_NATIVE_ID', 'com.pourlune.app'),
+            ('POURLUNE_AD_APP_ID', app['app_id']),
+            ('POURLUNE_INTERSTITIAL_ID', app['interstitial_id']),
+            ('POURLUNE_REWARDED_ID', app['rewarded_id'])])}
+        for permission in ['', '<uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID" />']:
+            with self.subTest(platform_ad_id=bool(permission)):
+                manifest.write_text(
+                    '<manifest xmlns:android="http://schemas.android.com/apk/res/android">'
+                    + permission + '<application><meta-data '
+                    'android:name="google_analytics_adid_collection_enabled" '
+                    'android:value="false" /></application></manifest>')
+                result = subprocess.run([
+                    sys.executable, str(ROOT / 'tools/validation/admob_config.py'),
+                    '--platform', 'android', '--native-id', 'com.pourlune.app',
+                    '--native-app-id', app['app_id'], '--registration', str(self.registration),
+                    '--android-manifest', str(manifest)], env=env, capture_output=True, text=True)
+                if permission:
+                    self.assertNotEqual(result.returncode, 0, result.stdout)
+                    self.assertIn('disabled_android_ad_id_permission', result.stderr)
+                else:
+                    self.assertEqual(result.returncode, 0, result.stderr)
+
 
 if __name__=='__main__':unittest.main()
