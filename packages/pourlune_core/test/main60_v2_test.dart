@@ -1,3 +1,5 @@
+// Historical v2/v3 acceptance remains pinned to its released definition.
+// Current v4 definitions and hint/upgrade contracts live in main60_v4_test.dart.
 import 'dart:convert';
 import 'dart:io';
 
@@ -6,7 +8,7 @@ import 'package:test/test.dart';
 
 Puzzle current(int level) => Puzzle.parse(
   File(
-    '../../app/assets/puzzles/main/main-${level.toString().padLeft(3, '0')}.json',
+    '../../docs/development/evidence/main60-five-color-difficulty/old-main/main-${level.toString().padLeft(3, '0')}.json',
   ).readAsStringSync(),
 );
 Puzzle previous(int level) => Puzzle.parse(
@@ -14,6 +16,17 @@ Puzzle previous(int level) => Puzzle.parse(
     '../../docs/development/evidence/main60-content-redesign/old-main/main-${level.toString().padLeft(3, '0')}.json',
   ).readAsStringSync(),
 );
+
+final revisedLevels =
+    (jsonDecode(
+              File('../../docs/content/design/main60-rebalance-v3.json')
+                  .readAsStringSync(),
+            )['levels']
+            as List)
+        .map((e) => e['level'] as int)
+        .toSet();
+
+int revisionsSinceV1(int level) => revisedLevels.contains(level) ? 2 : 1;
 
 void main() {
   test(
@@ -55,7 +68,7 @@ void main() {
       final p = current(level);
       final card = jsonDecode(
         File(
-          '../../docs/development/evidence/main60-content-redesign/levels/${p.id}.json',
+          '../../docs/development/evidence/${revisedLevels.contains(level) ? 'difficulty-direct-bottle' : 'main60-content-redesign'}/levels/${p.id}.json',
         ).readAsStringSync(),
       ) as Map<String, dynamic>;
       var reference = GameInstance.create(id: 'reference', puzzle: p);
@@ -114,22 +127,23 @@ void main() {
     }
   });
 
-  test(
-    'DC03 all60 have the new colour progression and actual old version +1',
-    () {
-      for (var level = 1; level <= 60; level++) {
-        final p = current(level), old = previous(level);
-        expect(p.id, old.id);
-        expect(p.mainLevel, level);
-        if ([1, 12].contains(level)) {
-          expect(p.toJson(), old.toJson());
-        } else {
-          expect(p.contentVersion, old.contentVersion + 1, reason: p.id);
-          expect(p.initial.length, level <= 4 ? 4 : (level <= 8 ? 5 : 6));
-        }
+  test('DC03 all60 retain colour progression and explicit per-definition version increments', () {
+    for (var level = 1; level <= 60; level++) {
+      final p = current(level), old = previous(level);
+      expect(p.id, old.id);
+      expect(p.mainLevel, level);
+      if ([1, 12].contains(level)) {
+        expect(p.toJson(), old.toJson());
+      } else {
+        expect(
+          p.contentVersion,
+          old.contentVersion + revisionsSinceV1(level),
+          reason: p.id,
+        );
+        expect(p.initial.length, level <= 4 ? 4 : (level <= 8 ? 5 : 6));
       }
-    },
-  );
+    }
+  });
 
   test('DC04 old13 and old21 snapshots retain board, undo, extra, restart and hints', () {
     for (final level in [13, 21]) {
@@ -138,7 +152,10 @@ void main() {
       final first = old.referenceMoves.first;
       state = state.pour(first.from, first.to).state.grantExtraBottle();
       final saved = jsonEncode(state.toJson());
-      expect(replacement.contentVersion, old.contentVersion + 1);
+      expect(
+        replacement.contentVersion,
+        old.contentVersion + revisionsSinceV1(level),
+      );
       expect(replacement.initial, isNot(old.initial));
       final restored = GameInstance.parse(saved);
       expect(restored.puzzle.toJson(), old.toJson());

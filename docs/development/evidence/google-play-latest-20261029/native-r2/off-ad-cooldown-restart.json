@@ -1,0 +1,73 @@
+{
+  "at_utc": "2026-10-29T05:33:29.165195+00:00",
+  "files": 66,
+  "bytes": 860683,
+  "sqlite_integrity": "ok",
+  "same_rewarded_instance_full_payload_and_attempts_entitlement": true,
+  "rewarded_shows": 2,
+  "interstitial_shows": 2,
+  "unique_reward_entitlement": 1,
+  "privacy_choices": {
+    "analytics": false,
+    "crash": false
+  },
+  "off_process_statuses": {
+    "8738": {
+      "sdk": "0.2.0",
+      "platform": "android",
+      "environment": "test",
+      "phase": "online_recovery",
+      "new_process": true,
+      "same_game_instance": true,
+      "restored_original_events": false,
+      "queued": 0,
+      "statistics": false,
+      "configVersion": 1,
+      "interstitial": "ready",
+      "rewarded": "ready",
+      "adConsent": true,
+      "cooldownSeconds": 142,
+      "sdkCooldownSaved": true,
+      "extraBottle": true,
+      "pendingRewards": 0
+    },
+    "9089": {
+      "sdk": "0.2.0",
+      "platform": "android",
+      "environment": "test",
+      "phase": "online_recovery",
+      "new_process": true,
+      "same_game_instance": true,
+      "restored_original_events": false,
+      "queued": 0,
+      "statistics": false,
+      "configVersion": 1,
+      "interstitial": "ready",
+      "rewarded": "ready",
+      "adConsent": true,
+      "cooldownSeconds": 73,
+      "sdkCooldownSaved": true,
+      "extraBottle": true,
+      "pendingRewards": 0
+    }
+  },
+  "off_process_http": {
+    "8738": [
+      {
+        "method": "GET",
+        "status": 200,
+        "types": []
+      }
+    ],
+    "9089": []
+  },
+  "no_sdk_POST_or_private_post_batch_file_in_either_off_process": true,
+  "sdk_lastShownAt_changed_for_real_stats_off_interstitial_and_persisted": true,
+  "sdk_same_installation_config1_queue0": true,
+  "other_existing_sqlite_bytes_preserved": 5,
+  "observed_sequence": "statsOff still showed official test interstitial; only App stopped/reopened; immediate cooldown123, afterPrepare consentTrue/ready cooldown103, Show requested once no new ad and countdown93 with ready unchanged. Final status independent check below.",
+  "causal_check": "privacy allowed, real stock ready, config1; positive persisted cooldown and no added fullscreen record after blocked request. Unlike prior delayed check, privacy/not-ready/expired are excluded.",
+  "gate": "PASS_REAL_STATS_OFF_AD_PLUS_COOLDOWN_PERSISTENCE_AND_REFUSAL_AFTER_RESTART",
+  "scope_limits": "Official test ads on dedicated emulator; no commercial fill, physical phone or Play App Signing delivery claim. Normal main and real13 upgrade/Play gates remain pending.",
+  "upload_approved": false
+}

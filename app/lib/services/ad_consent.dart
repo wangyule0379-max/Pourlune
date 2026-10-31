@@ -86,6 +86,9 @@ class UmpConsentGateway implements ConsentGateway {
 
   @override
   Future<void> initializeAds() async {
+    await MobileAds.instance.updateRequestConfiguration(
+      RequestConfiguration(maxAdContentRating: MaxAdContentRating.pg),
+    );
     await MobileAds.instance.initialize();
   }
 }

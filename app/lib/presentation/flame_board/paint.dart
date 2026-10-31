@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../data/player_settings.dart';
-import '../bottle.dart' show LiquidBand, ink, liquidColors;
+import '../bottle.dart' show LiquidBand, ink, liquidColors, fivePointStar;
 import '../bottle_material.dart';
 import 'frame.dart';
 import 'geometry.dart';
@@ -36,6 +36,8 @@ class BottleArt {
   }
 }
 
+enum BoardPaintLayer { all, stationary, moving }
+
 class FlameBoardPainter {
   FlameBoardPainter(this.art);
   final BottleArt art;
@@ -51,10 +53,12 @@ class FlameBoardPainter {
     int? shaking,
     double shake = 0,
     bool reduced = false,
+    BoardPaintLayer layer = BoardPaintLayer.all,
   }) {
     if (art.disposed) return;
     final shape = frame.layout.shape, active = frame.active;
     for (var i = 0; i < frame.poses.length; i++) {
+      if (layer == BoardPaintLayer.moving) break;
       final mouth = frame.layout.mouths[i];
       canvas.drawOval(
         Rect.fromCenter(
@@ -68,6 +72,11 @@ class FlameBoardPainter {
       );
     }
     for (final i in frame.paintOrder) {
+      if (layer == BoardPaintLayer.moving && !frame.movingIndices.contains(i) ||
+          layer == BoardPaintLayer.stationary &&
+              frame.movingIndices.contains(i)) {
+        continue;
+      }
       var pose = frame.poses[i];
       if (i != active?.from) {
         pose = BottlePose(
@@ -79,6 +88,9 @@ class FlameBoardPainter {
       final settle =
           frame.pour?.stage == 'settle' &&
           (active?.from == i || active?.to == i);
+      // The transported bottle is last: water stays visible in the receiver,
+      // while the source glass and front knit lip correctly occlude its root.
+      if (i == active?.from) _paintStream(canvas, frame);
       paintBottle(
         canvas,
         i,
@@ -114,7 +126,10 @@ class FlameBoardPainter {
             : 0,
       );
     }
-    if (active == null && hintSource != null && suggested != null) {
+    if (layer != BoardPaintLayer.moving &&
+        active == null &&
+        hintSource != null &&
+        suggested != null) {
       final path = frame.layout.hintPath(hintSource, suggested);
       canvas.drawPath(
         path,
@@ -164,18 +179,36 @@ class FlameBoardPainter {
           ..strokeWidth = 3,
       );
     }
+  }
+
+  void _paintStream(Canvas canvas, BoardVisualFrame frame) {
+    final shape = frame.layout.shape, active = frame.active;
     final flow = frame.pour;
     if (flow != null && flow.inStream > .000001) {
-      final top = Offset.lerp(
-        flow.streamStart,
-        flow.streamEnd,
-        flow.streamTail,
-      )!;
-      final bottom = Offset.lerp(
-        flow.streamStart,
-        flow.streamEnd,
-        flow.streamHead,
-      )!;
+      final receiver = frame.poses[active!.to];
+      final hull = shape.worldHull(receiver);
+      final filled = frame.bands[active.to].fold(0.0, (n, b) => n + b.units);
+      final surface = Offset(
+        flow.streamEnd.dx,
+        waterline(hull, filled * shape.unitArea),
+      );
+      // One column continues through the neck to the rising liquid surface.
+      // Below the opening it is restricted to the receiver's clear interior.
+      canvas.save();
+      canvas.clipPath(
+        Path()
+          ..addRect(
+            Rect.fromLTRB(
+              frame.sourcePaintBounds.left,
+              frame.sourcePaintBounds.top,
+              frame.sourcePaintBounds.right,
+              receiver.mouth.dy,
+            ),
+          )
+          ..addPolygon(hull, true),
+      );
+      final top = Offset.lerp(flow.streamStart, surface, flow.streamTail)!;
+      final bottom = Offset.lerp(flow.streamStart, surface, flow.streamHead)!;
       final path = Path()
         ..moveTo(top.dx, top.dy)
         ..quadraticBezierTo(
@@ -187,11 +220,11 @@ class FlameBoardPainter {
       canvas.drawPath(
         path,
         Paint()
-          ..color = liquidColors[active!.before[active.from].last]!
+          ..color = liquidColors[active.before[active.from].last]!
           ..style = PaintingStyle.stroke
           ..strokeCap = StrokeCap.round
           ..strokeWidth =
-              math.max(1.5, shape.width * .018) + active.units * .17,
+              math.max(2.8, shape.width * .035) + active.units * .25,
       );
       canvas.drawPath(
         path,
@@ -212,6 +245,7 @@ class FlameBoardPainter {
           Paint()..color = Colors.white.withValues(alpha: .5),
         );
       }
+      canvas.restore();
     }
   }
 
@@ -237,6 +271,7 @@ class FlameBoardPainter {
       'G': Rect.fromLTWH(937, 211, 166, 309),
       'P': Rect.fromLTWH(1139, 211, 166, 309),
       'B': Rect.fromLTWH(736, 574, 166, 300),
+      'R': Rect.fromLTWH(736, 211, 166, 309),
     };
     Offset point(double x, double y) =>
         Offset((x - .5) * shape.width, (y - .10) * shape.height);
@@ -280,6 +315,7 @@ class FlameBoardPainter {
       Rect? cuff,
       Path? mask,
       bool neutral = false,
+      bool rose = false,
     }) {
       canvas.save();
       canvas.translate(pose.mouth.dx, pose.mouth.dy);
@@ -303,7 +339,11 @@ class FlameBoardPainter {
         shape.imageRect,
         Paint()
           ..filterQuality = FilterQuality.high
-          ..colorFilter = neutral ? neutralKnitColorFilter : null,
+          ..colorFilter = neutral
+              ? neutralKnitColorFilter
+              : rose
+              ? roseKnitColorFilter
+              : null,
       );
       canvas.restore();
     }
@@ -424,12 +464,12 @@ class FlameBoardPainter {
             pose.transform(Offset(shape.width * .32, shape.height * .4)),
             [
               Color.lerp(color, const Color(0xff58616a), .16)!,
-              Color.lerp(color, Colors.white, .22)!,
-              Color.lerp(color, Colors.white, .38)!,
-              Color.lerp(color, Colors.white, .08)!,
+              Color.lerp(color, Colors.white, .12)!,
+              Color.lerp(color, Colors.white, .18)!,
+              Color.lerp(color, Colors.white, .04)!,
               color,
               Color.lerp(color, const Color(0xff58616a), .12)!,
-              Color.lerp(color, Colors.white, .25)!,
+              Color.lerp(color, Colors.white, .18)!,
             ],
             [0, .07, .23, .45, .72, .93, 1],
           ),
@@ -459,8 +499,8 @@ class FlameBoardPainter {
             surface.topCenter,
             surface.bottomCenter,
             [
-              Color.lerp(liquidColors[merged.last.color], Colors.white, .48)!,
-              Color.lerp(liquidColors[merged.last.color], Colors.white, .12)!,
+              Color.lerp(liquidColors[merged.last.color], Colors.white, .32)!,
+              Color.lerp(liquidColors[merged.last.color], Colors.white, .08)!,
             ],
           ),
       );
@@ -551,6 +591,7 @@ class FlameBoardPainter {
     layer(
       material,
       neutral: fixedTarget == null,
+      rose: fixedTarget == 'R',
       cuff: Rect.fromLTRB(
         image.left,
         image.top,
@@ -561,7 +602,12 @@ class FlameBoardPainter {
     );
     // Only the U-shaped knitted band: never the source bottle's lower glass
     // or baked liquid. All clear glass comes from the actually empty bottle.
-    layer(material, mask: baseCuff, neutral: fixedTarget == null);
+    layer(
+      material,
+      mask: baseCuff,
+      neutral: fixedTarget == null,
+      rose: fixedTarget == 'R',
+    );
     if (settings.strongContrast) {
       canvas.drawPath(
         path,
@@ -583,6 +629,8 @@ class FlameBoardPainter {
   ) {
     final path = Path();
     switch (color) {
+      case 'R':
+        path.addPath(fivePointStar(p, r), Offset.zero);
       case 'O':
         path.addOval(Rect.fromCircle(center: p, radius: r));
       case 'G':
@@ -605,6 +653,7 @@ class FlameBoardPainter {
       'O': Color(0xff1655c2),
       'G': Color(0xff286b35),
       'P': Color(0xff33388b),
+      'R': Color(0xffa52e54),
       'B': Color(0xff1655c2),
     };
     canvas.drawPath(path, Paint()..color = contrast ? ink : colors[color]!);

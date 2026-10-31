@@ -838,6 +838,18 @@ abstract class AppLocalizations {
   /// **'The support address has not been configured. No message will be sent.'**
   String get supportUnavailable;
 
+  /// No description provided for @feedbackOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open your email app. You can write to {email}.'**
+  String feedbackOpenFailed(String email);
+
+  /// No description provided for @supportOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open this page. Please try again.'**
+  String get supportOpenFailed;
+
   /// No description provided for @versionInfo.
   ///
   /// In en, this message translates to:
@@ -987,6 +999,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Blue square'**
   String get blueSquare;
+
+  /// No description provided for @roseStar.
+  ///
+  /// In en, this message translates to:
+  /// **'Rose star'**
+  String get roseStar;
 
   /// No description provided for @suggestedTarget.
   ///
@@ -1257,6 +1275,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Optional diagnostics are unavailable in this build. Choices are saved locally.'**
   String get servicesDisabled;
+
+  /// No description provided for @crashUnavailableAnalyticsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Crash reporting is currently unavailable. Gameplay analytics follows your saved choice below.'**
+  String get crashUnavailableAnalyticsAvailable;
+
+  /// No description provided for @privacyProviderSyncProblem.
+  ///
+  /// In en, this message translates to:
+  /// **'Your choices are saved, but a reporting service could not apply them. Other enabled reporting may continue. Retry to apply your saved choices.'**
+  String get privacyProviderSyncProblem;
 
   /// No description provided for @adNetwork.
   ///

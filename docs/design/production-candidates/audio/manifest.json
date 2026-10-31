@@ -1,13 +1,15 @@
 {
   "status": "production_candidate; not independent audio acceptance",
   "authored_on": "2026-10-22",
-  "authoring": "Codex deterministic synthesis for the Pourlune B03 user-authorized task",
+  "authoring": "Four unchanged B03 synthesized effects plus two user-selected licensed recordings",
   "source": "tools/assets/audio_generate.py",
-  "source_sha256": "eae88a47715bbe0d465658471a608cb5fa6e60fd1eb60ae6fd9f5a455dee81c3",
-  "third_party_audio_inputs": [],
+  "source_sha256": "d250abacb7737c828c555e294012d2c8e30a56c63b1ffb07027ba586faaad983",
+  "third_party_audio_inputs": [
+    "docs/design/production-candidates/audio-selected-20261026/source.json"
+  ],
   "authorization_record": "AUDIO-AUTHORING.md",
   "measurement": "Decoded integer PCM, full-file unweighted RMS and sample peak; not LUFS, true peak, perceived loudness or device sound pressure.",
-  "loop_note": "Whole-file 24-second loop with zero endpoints and envelope releases. Native-player gapless behavior and audible seam require device validation.",
+  "loop_note": "Full original Dream Culture music loop; natural-pitch water loop gated by visible flow. Native loop and subjective seams require device validation.",
   "files": [
     {
       "file": "select.wav",
@@ -19,22 +21,6 @@
       "duration_seconds": 0.14,
       "sample_peak_dbfs": -12.3961,
       "unweighted_rms_dbfs": -23.338,
-      "first_sample": 0,
-      "last_sample": 0,
-      "loop_start_frame": null,
-      "loop_end_frame_exclusive": null,
-      "runtime_linear_gain": 0.65
-    },
-    {
-      "file": "pour.wav",
-      "sha256": "b9f32806c6f7f0c142c296d799b0c9439c50c6ed30b67424a89eb5d6d26b5695",
-      "bytes": 74132,
-      "format": "RIFF/WAVE PCM signed 16-bit little-endian mono",
-      "sample_rate_hz": 44100,
-      "sample_frames": 37044,
-      "duration_seconds": 0.84,
-      "sample_peak_dbfs": -12.3961,
-      "unweighted_rms_dbfs": -25.3463,
       "first_sample": 0,
       "last_sample": 0,
       "loop_start_frame": null,
@@ -90,20 +76,35 @@
       "runtime_linear_gain": 0.65
     },
     {
-      "file": "background.wav",
-      "sha256": "28f1d054e8b6f56fbc1c214f4061dce3f5fe752e110b6647b1f44dad663d8264",
-      "bytes": 2116844,
+      "file": "pour.wav",
+      "sha256": "da8b211c56be759e86649ed9e0eda44aab0177b8ee811900b8b318c37958cd5c",
+      "bytes": 176444,
       "format": "RIFF/WAVE PCM signed 16-bit little-endian mono",
       "sample_rate_hz": 44100,
-      "sample_frames": 1058400,
-      "duration_seconds": 24.0,
-      "sample_peak_dbfs": -18.4167,
-      "unweighted_rms_dbfs": -31.5305,
+      "sample_frames": 88200,
+      "duration_seconds": 2.0,
+      "sample_peak_dbfs": -12.3961,
+      "unweighted_rms_dbfs": -31.8234,
       "first_sample": 0,
       "last_sample": 0,
       "loop_start_frame": 0,
-      "loop_end_frame_exclusive": 1058400,
-      "runtime_linear_gain": 0.45
+      "loop_end_frame_exclusive": 88200,
+      "runtime_linear_gain": 0.65,
+      "candidate_path": "docs/design/production-candidates/audio-selected-20261026/runtime/pour.wav",
+      "origin": "Pouring Water — edschaefer, CC0 1.0",
+      "processing": "System CoreAudio HQ MP3 decode to 44100Hz mono PCM; trim 1.2–3.2s, 16ms cosine edge fades, normalize sample peak 0.24; natural speed/pitch. Runtime loops only during visible flow."
+    },
+    {
+      "file": "dream-culture.mp3",
+      "candidate_path": "docs/design/production-candidates/audio-selected-20261026/dream-culture-original.mp3",
+      "sha256": "f12cbb52bd4b92bd6cf8a343645567c119627e9cbf98108a3eb6ac2cc275ee46",
+      "bytes": 8576659,
+      "format": "MPEG Layer 3 stereo, original complete file",
+      "sample_rate_hz": 44100,
+      "duration_seconds": 214.28571428571428,
+      "origin": "Dream Culture — Kevin MacLeod, CC BY 4.0",
+      "processing": "Complete original MP3, no trimming or time/pitch edits; runtime volume 0.12 and whole-track loop.",
+      "runtime_linear_gain": 0.12
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "puzzle_id": "main-054",
-  "content_version": 2,
+  "content_version": 4,
   "mode": "main",
   "content_status": "production_candidate",
   "main_level": 54,
@@ -10,26 +10,32 @@
     [
       "P",
       "B",
-      "O",
+      "R",
       "P"
     ],
     [
-      "P",
-      "B",
+      "O",
       "G",
+      "R",
       "O"
     ],
     [
-      "P",
-      "O",
+      "R",
       "G",
+      "B",
       "G"
     ],
     [
-      "G",
+      "P",
       "B",
-      "O",
+      "P",
       "B"
+    ],
+    [
+      "R",
+      "G",
+      "O",
+      "O"
     ],
     [],
     []
@@ -39,29 +45,18 @@
     "G",
     "P",
     "B",
+    "R",
     null,
     null
   ],
   "reference_moves": [
     {
       "from_index": 0,
-      "to_index": 4
-    },
-    {
-      "from_index": 2,
       "to_index": 5
     },
     {
       "from_index": 0,
-      "to_index": 2
-    },
-    {
-      "from_index": 3,
-      "to_index": 0
-    },
-    {
-      "from_index": 3,
-      "to_index": 2
+      "to_index": 6
     },
     {
       "from_index": 3,
@@ -77,37 +72,69 @@
     },
     {
       "from_index": 0,
-      "to_index": 4
-    },
-    {
-      "from_index": 1,
-      "to_index": 0
-    },
-    {
-      "from_index": 1,
       "to_index": 5
     },
     {
       "from_index": 1,
-      "to_index": 3
+      "to_index": 0
     },
     {
       "from_index": 1,
-      "to_index": 4
+      "to_index": 6
     },
     {
       "from_index": 2,
-      "to_index": 0
+      "to_index": 1
     },
     {
       "from_index": 4,
-      "to_index": 2
+      "to_index": 0
+    },
+    {
+      "from_index": 1,
+      "to_index": 4
+    },
+    {
+      "from_index": 1,
+      "to_index": 0
+    },
+    {
+      "from_index": 2,
+      "to_index": 1
+    },
+    {
+      "from_index": 3,
+      "to_index": 1
+    },
+    {
+      "from_index": 3,
+      "to_index": 5
+    },
+    {
+      "from_index": 1,
+      "to_index": 3
+    },
+    {
+      "from_index": 2,
+      "to_index": 1
+    },
+    {
+      "from_index": 4,
+      "to_index": 1
+    },
+    {
+      "from_index": 2,
+      "to_index": 4
+    },
+    {
+      "from_index": 6,
+      "to_index": 4
     },
     {
       "from_index": 5,
-      "to_index": 1
+      "to_index": 2
     }
   ],
-  "difficulty_intent": "三色依赖环：借第四色提供的位置打破循环。先从环外释放接收位→切开环→逐个归位。结构/求解证据见单关卡；人类难度未标定。",
-  "source_reference": "docs/content/design/main60-level-contracts-v2.json"
+  "difficulty_intent": "五色第4阶段：先辨认被压住的同色组，再安排两个缓冲；顺手归目标可能提前占满可用空间。加瓶提供额外周转位，但不用加瓶也有完整合法解。离线策略对照见v5；尚非真人难度评分。",
+  "source_reference": "docs/content/design/main60-calibration-v5.json"
 }

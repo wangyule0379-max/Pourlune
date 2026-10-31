@@ -33,6 +33,15 @@ val admobCheck = providers.exec {
 check(admobCheck.result.get().exitValue == 0) {
     "Pourlune AdMob selection rejected; inspect explicit platform/App ID/test configuration."
 }
+val gamemunchiesCheck = providers.exec {
+    commandLine(pourlunePython, pourluneRepo.resolve("tools/validation/gamemunchies_config.py").path,
+        "--platform", "android", "--native-id", pourluneApplicationId)
+    environment("DART_DEFINES", providers.gradleProperty("dart-defines").getOrElse(""))
+    isIgnoreExitValue = true
+}
+check(gamemunchiesCheck.result.get().exitValue == 0) {
+    "Pourlune GameMunchies registration/environment selection rejected."
+}
 val firebaseCheck = providers.exec {
     commandLine(pourlunePython, pourluneRepo.resolve("tools/validation/firebase_config.py").path,
         "--environment", firebaseEnvironment, "--platform", "android",

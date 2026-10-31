@@ -16,6 +16,9 @@ from public_destinations import DestinationError, add_destination_arguments, val
 from admob_config import AdConfigError, add_arguments as add_ad_arguments, selection as ad_selection
 from build_version import BuildError, display_definitions
 from ios_release_plugins import release_plugins, verify_no_test_plugin
+from ios_privacy_manifests import inspect_app as inspect_privacy_manifests
+from gamemunchies_config import ConfigError as GMConfigError, add_arguments as add_gm_arguments, selection as gm_selection
+from gamemunchies_sdk import inspect_source, SDKSourceError
 
 
 def main():
@@ -31,6 +34,7 @@ def main():
     parser.add_argument("--ios-output", type=Path)
     add_destination_arguments(parser)
     add_ad_arguments(parser)
+    add_gm_arguments(parser)
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
     try:
@@ -38,7 +42,7 @@ def main():
         command = args.command[1:] if args.command[:1] == ["--"] else args.command
         require(bool(command) and command[0] in {"build", "run", "test"}, "invalid_flutter_command")
         require(not any(any(name in a for name in (
-                        "POURLUNE_FIREBASE_", "POURLUNE_SUPPORT_URL", "POURLUNE_PRIVACY_URL",
+                        "POURLUNE_FIREBASE_", "POURLUNE_GAMEMUNCHIES_", "POURLUNE_SUPPORT_URL", "POURLUNE_PRIVACY_URL",
                         "POURLUNE_FEEDBACK_EMAIL", "POURLUNE_AD", "POURLUNE_INTERSTITIAL",
                         "POURLUNE_REWARDED", "POURLUNE_VERSION_NAME", "POURLUNE_VERSION_CODE"))
                         or a.startswith("--dart-define-from-file")
@@ -90,12 +94,19 @@ def main():
         ads = ad_selection(args.ad_mode, args.platform,
                            NATIVE_IDS['prod' if args.environment == 'prod' else 'dev'][args.platform],
                            args.admob_registration)
+        gm = gm_selection(args.gamemunchies_environment, args.platform, ads['native_id'])
+        inspect_source()
         definitions = {"POURLUNE_FIREBASE_ENV": args.environment,
                        "POURLUNE_FIREBASE_NATIVE_READY": "false" if config is None else "true",
                        "POURLUNE_AD_MODE": args.ad_mode,
                        "POURLUNE_AD_APP_ID": ads['app_id'],
                        "POURLUNE_AD_PLATFORM": args.platform,
                        "POURLUNE_AD_NATIVE_ID": ads['native_id']}
+        if args.ad_mode == 'production':
+            definitions.update({'POURLUNE_INTERSTITIAL_ID': ads['interstitial_id'],
+                                'POURLUNE_REWARDED_ID': ads['rewarded_id']})
+        definitions.update({'POURLUNE_GAMEMUNCHIES_GAME_ID': gm['game_id'],
+                            'POURLUNE_GAMEMUNCHIES_ENVIRONMENT': gm['environment']})
         definitions.update(display_definitions((ROOT / 'app/pubspec.yaml').read_text(), command))
         definitions.update({'POURLUNE_' + name.upper(): value
                             for name, value in destinations.items() if name != 'ready'})
@@ -176,7 +187,7 @@ def main():
                     ["xcodebuild", "-workspace", "ios/Runner.xcworkspace", "-scheme", "Runner",
                      "-configuration", "Release", "-destination", "generic/platform=iOS",
                      "-disableAutomaticPackageResolution", "-onlyUsePackageVersionsFromResolvedFile",
-                     "-archivePath", str(archive), "archive"],
+                     "-archivePath", str(archive), "POURLUNE_REPAIR_PRIVACY_MANIFESTS=1", "archive"],
                     ["xcodebuild", "-exportArchive", "-archivePath", str(archive),
                      "-exportOptionsPlist", str(export), "-exportPath", str(output / "ipa")],
                 ])
@@ -195,6 +206,8 @@ def main():
                         break
                     if profile and index == 1:
                         verify_no_test_plugin(archive / 'Products/Applications/Runner.app/Runner')
+                        privacy = inspect_privacy_manifests(archive / 'Products/Applications/Runner.app')
+                        (output / 'privacy-manifests.json').write_text(json.dumps(privacy, indent=2) + '\n')
             # Flutter/Xcode can echo their environment on failure. Redact both
             # the client value and its complete encoded Dart definition.
             log = "\n".join(logs)
@@ -205,7 +218,7 @@ def main():
                     log = log.replace(value, "[CLIENT_CONFIG_REDACTED]")
             print(log, end="")
             return result.returncode
-    except (ConfigError, ProfileError, DestinationError, AdConfigError, BuildError) as error:
+    except (ConfigError, ProfileError, DestinationError, AdConfigError, BuildError, GMConfigError, SDKSourceError) as error:
         print(json.dumps({"ok": False, "code": str(error)}), file=sys.stderr)
         return 1
     except OSError:

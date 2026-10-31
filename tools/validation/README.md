@@ -317,6 +317,30 @@ unknown certificate installation is needed for that route.
 ## ADM01 explicit beta test ads
 
 Default `firebase_build.py` and `beta_build.py` remain `--ad-mode disabled`.
+Android now removes the SDK-merged `AD_ID` permission and explicitly disables
+Analytics advertising-ID collection, including sample-ad QA. This does not
+enable advertising or change the existing explicit test-mode gates. For each
+candidate, decode its **actual AAB** manifest with bundletool, then run:
+
+```sh
+.venv/bin/python tools/validation/admob_config.py --platform android \
+  --native-id com.pourlune.app \
+  --native-app-id ca-app-pub-3940256099942544~3347511713 \
+  --android-manifest build/<candidate>/bundle-manifest.xml
+```
+
+This guard rejects advertising-ID permission in disabled/default builds and
+requires explicit Analytics ad-ID collection off. For a test-mode artifact,
+provide the same validated `DART_DEFINES`/public registration as its build;
+passing this guard does not prove actual ad load/show/reward behavior.
+
+The same opt-out also removes `android.permission.ACCESS_ADSERVICES_AD_ID`:
+the platform AdIdManager can expose an advertising ID independently of the
+Google Play services `com.google.android.gms.permission.AD_ID` permission.
+The packaged-manifest guard checks both paths in disabled/production builds.
+This does not remove Firebase installation IDs, app-set IDs or other SDK data,
+which still need accurate Data safety disclosure.
+
 Use `--ad-mode test` only for the authorized ad-testing candidate. Both platforms
 use Google's exact official interstitial/rewarded test units, even on phones that
 have not been registered as test devices; no live-unit flag is provided.
@@ -359,3 +383,87 @@ checks the actual product's GADApplicationIdentifier. Independently inspect the
 new AAB's actual bundletool manifest App ID before store upload, alongside its
 certificate/payload/signature checks; native Gradle checks alone are not store
 acceptance.
+
+
+### Privacy manifest normalization for local iOS archives (2026-10-28)
+
+Apple TN3181 requires omitting `NSPrivacyAccessedAPITypes` when its array is empty.
+The manual signed archive path now sets `POURLUNE_REPAIR_PRIVACY_MANIFESTS=1` for
+`xcodebuild archive`. Runner's final `privacy_manifests.sh` phase removes only
+that empty key in the 14 explicitly reviewed, code-free resource bundles before
+Runner signing. It does not rewrite SDK caches, signed frameworks, nonempty API
+reasons, data-collection declarations or old candidates. Unknown/malformed
+manifests and signed/code-bearing resource bundles fail before any repair.
+Debug and simulator builds skip the phase. Archive and exported IPA are checked
+again with `ios_privacy_manifests.inspect_app`; final verification never repairs
+an already signed package.
+
+Read-only check: `.venv/bin/python tools/validation/ios_privacy_manifests.py --app <Runner.app>`.
+Focused guards: `.venv/bin/python -m unittest discover -s tools/validation -p test_ios_privacy_manifests.py -v`.
+Actual local signed archive/export proof is in
+`docs/development/evidence/prelaunch-closeout-20261028/privacy-package-independent.json`.
+That proof reuses version16 only in a new local directory and must never be uploaded:
+16 is already occupied. Any later store candidate needs its own unused build number,
+final source and distribution settings. This format repair does not answer store
+privacy questionnaires or establish that commercial ads are ready.
+
+
+## 固定私有 GameMunchies SDK 与显式发行选择
+
+同一个通用SDK的7个已提交runtime/pubspec/README文件由SDK仓库的
+`sdk/dart/tool/package_private.py`打包；固定commit/整包SHA/逐文件SHA记录在
+`gamemunchies-sdk.json`。SDK没有公开发布许可，本任务仅内部消费，不把源码或归档提交公开仓库。
+本机先运行（ARCHIVE为已有600受限归档）：
+
+```sh
+.venv/bin/python tools/validation/gamemunchies_sdk.py --archive /ABSOLUTE/PRIVATE/sdk.tgz
+.venv/bin/python tools/validation/gamemunchies_sdk.py --check
+```
+
+只恢复到根目录ignored `.private-dependencies/gamemunchies_client`；未知文件、符号链接、目录穿越、
+整包/逐文件漂移或已有安装被修改均拒绝，不覆盖不匹配源。
+CI使用仓库Actions secret `GAMEMUNCHIES_DART_SDK_ARCHIVE_V2`，仅映射到本step的
+`POURLUNE_GM_SDK_ARCHIVE`供脚本解码。没有secret的fork/环境会明确失败，不拿删依赖或替身当干净通过。
+这批归档10233字节、base64值13644字节，低于GitHub的48KB secret限制；只输出公开指纹，不回显payload。
+设置由Use Computer在正常GitHub设置页面按具体授权执行，不新增token或公开仓库。
+依据：[GitHub secrets限制](https://docs.github.com/en/actions/reference/security/secrets)、
+[Dart path依赖](https://dart.dev/tools/pub/dependencies)。
+
+`firebase_build.py`/`beta_build.py`新增 `--gamemunchies-environment disabled|test|production`，默认disabled。
+正式后续候选显式production；正常QA另用test定义和匹配的已登记QA身份。
+`gamemunchies_config.py`在两端原生构建阶段核实际identity与Dart定义，拒绝未知ID、环境错配和未授权endpoint覆盖。
+候选sources.json同时冻结SDK实际输入hash，candidate.json记录ID/environment/api地址及SDK固定源，
+不能把“编译含SDK”冒称“实际已上报/已可后台控制”。实际结果另见最终交付。
+
+SDK 0.2.0: restore the manifest-matching private Dart archive with `gamemunchies_sdk.py --archive <private-archive>` into the ignored path dependency. If upgrading an existing source directory, first preserve it outside that path; the installer refuses to overwrite mismatching source. The new archive SHA is `70effde1c9150b416b34f4dd4b6d95912ef836b5f429c98ea5a8cbf98fd0c167`. Both one-shot replay CLIs now target only the public API host; old-scope snapshots are rejected, never silently migrated. SDK 0.1.0 to 0.2.0 at the same API/game/platform/environment retains the native SDK state, including installation, queue, config and cooldown.
+
+## Explicit iOS commercial AdMob selection (2026-10-28)
+
+The user authorized a first public release with real ads. `--ad-mode production --admob-registration <verified-public-registration>` selects the existing owned App ID and the two distinct owned units in `apps.ios.interstitial_id` / `rewarded_id`. The native guard requires a production identity and exact corresponding Dart definitions; missing, foreign-publisher, duplicate, sample or injected units are rejected. Default remains disabled, test mode always retains official sample units. This does not change NPA, UMP, optional statistics or reward policy. Native sample-ad validation does not establish commercial inventory fill; account/store/privacy readiness is separately recorded.
+
+## Android release startup reflection (2026-10-29)
+
+Debug success cannot establish minified startup. The real release13 APK and
+release19 AAB retained WorkManager's Room/InputMerger class names but removed
+their public no-argument constructors; AndroidX Startup then crashed before
+Flutter. Their pinned WorkManager2.7.0/Room2.2.5 consumer rules keep classes only.
+The existing Flutter3.47.2 Gradle plugin automatically includes the new app-local
+`app/android/app/proguard-rules.pro`; it keeps these reflection entry points,
+without changing SDK versions, disabling R8 or changing the game's SQLite data.
+See the [official R8 full-mode FAQ](https://r8.googlesource.com/r8/+/refs/heads/main/compatibility-faq.md#r8-full-mode).
+
+Run against the actual final APK or AAB with the existing Android SDK tool:
+
+```sh
+.venv/bin/python tools/validation/android_release_startup.py /ABSOLUTE/candidate.aab --apkanalyzer /ABSOLUTE/Android/sdk/cmdline-tools/latest/bin/apkanalyzer
+```
+
+The guard reads packaged DEX and verifies public no-argument constructors for
+`WorkDatabase_Impl`, `OverwritingInputMerger` and `ArrayCreatingInputMerger`.
+Its temporary DEX-only view of an AAB is for inspection, never installation.
+It neither edits nor installs the input. CI now builds a real minified release
+AAB with no Firebase configuration, credentials or signing and runs this check.
+Constructor presence is necessary; the final signed release derivative still
+needs actual cold-start/gameplay verification on the dedicated QA device.
+Old signed candidates and the broken original13 remain unchanged; a migration
+fixture is not evidence that the original released13 ran successfully.

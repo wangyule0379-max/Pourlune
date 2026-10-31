@@ -65,3 +65,41 @@ POURLUNE_CONTENT_REPORT=../../docs/development/evidence/B03/content-dart-budgets
 日期映射：按本地公历日期算 `d = date - epoch_date` 的整数日差，索引 `((d % n) + n) % n`，从 0 起算。Python 的正除数取模已经非负；Dart 实现保持同样结果。epoch 前日期循环到末尾；不要用 Unix 秒数除以 86400 代替日期差。正式 epoch 和顺序仍由正式目录交付，测试日期不代表产品发布日期。
 
 即使发布模式退出 0，也只证明格式与参考解条件；难度、不同题目的实际差异与编排质量、教学试玩、Dart 一致性及 AC-35 的客户端回放仍需独立验收。这里只维护一个参考验证器，不作为正式客户端运行依赖。
+
+## 五色完整60关 v4（2026-10-25）
+
+当前主线来源为 `docs/content/design/main60-five-color-v4.json` 与逐关
+`main60-five-color-contracts-v4.json`。1–20经复核保留原字节；21–60实际
+五色、7初始瓶。完整参考解均不加瓶。每日30题/catalog以本轮baseline逐字节保护。
+旧v2/v3工具和证据保留历史用途，不使用其安装命令覆盖当前v4。
+
+```sh
+.venv/bin/python tools/content/author_main60_v4.py --check
+.venv/bin/python tools/content/author_main60_v4.py --install
+.venv/bin/python tools/content/author_main60_v4.py --measure --report docs/development/evidence/main60-five-color-difficulty
+.venv/bin/python -m unittest discover -s tools/content -p 'test_main60_v4.py' -v
+```
+
+`--check`严格只读。`--install`先核全部120个目标文件，只接受冻结旧字节或准确新字节，
+再写改题；不读写玩家数据库。`--measure`重放两种有限策略，各64个固定种子、120次合法
+动作上限。JSONL保留实际动作、终态与win/cycle/no_legal_move/action_budget的区别。
+逐关curve及两条合法分支表示具体接收口竞争与可行续路；参考路线的缓冲复用不等于
+证明所有解都必须如此。下界/合法解上界/最短未知分开，算法结果不作为人类难度、视觉
+或发布通过。完整父实际验收仍是后续门槛。
+
+## 当前主线校准 v5（2026-10-28）
+
+运行资产当前使用 `docs/content/design/main60-calibration-v5.json` 的40道明确替换，
+前20、每日30与catalog保持原字节。v4输入作为历史基线保留；**不要对当前包运行v2/v3/v4安装器**。
+固定目标、5色/7瓶/最多8瓶、旧活动实例内嵌定义和奖励ID不变。改变的题目单独递增内容版本。
+
+```sh
+.venv/bin/python tools/content/calibrate_main60_v5.py --check
+.venv/bin/python tools/content/calibrate_main60_v5.py --install
+.venv/bin/python tools/content/difficulty_probe.py --output build/difficulty-comparison.json
+```
+
+检查/安装先核两个目的地全部字节；未知编辑拒绝且不写任何题。策略测量为两个无前瞻、
+避免重复状态的简单策略，独立32种子、100合法动作预算。`no_new_choice`/预算用尽不是
+无解，更不是人类失败。后段降低其通关比例不代表已保证真人难度单调递增。
+历史版本测试固定到对应历史源；当前90题与提示及新旧SQLite实例另测。

@@ -65,7 +65,7 @@ enum FlowNotice {
   settingsUnreadable,
 }
 
-enum _Write { snapshot, candidate, settings, reveal, reset }
+enum _Write { snapshot, candidate, settings, reveal, reset, directBottle }
 
 typedef _Navigation = ({GamePage page, String? slot, String? scene});
 
@@ -182,6 +182,7 @@ class GameController extends ChangeNotifier {
   String selectedScene = 'color_studio';
   _Navigation? _pendingNav;
   GameInstance? _candidate;
+  DateTime? _candidateStartedAt;
   String? _afterCompletion, _revealPiece;
   Future<void> Function()? _afterWrite;
   _Write _write = _Write.snapshot;
@@ -258,6 +259,8 @@ class GameController extends ChangeNotifier {
       current != null &&
       !current!.completed &&
       (current!.slot == 'daily' || current!.puzzle.mainLevel! >= 4);
+  bool get directExtraBottleEnabled =>
+      services == null || services!.config.adMode == 'disabled';
   bool get canWatchExtraBottle =>
       offersExtraBottle &&
       !busy &&
@@ -266,10 +269,10 @@ class GameController extends ChangeNotifier {
       !current!.extraBottleGranted &&
       !rewardSaveFailed &&
       !pendingRewards.any((r) => r.origin.slot == current!.slot) &&
-      services != null &&
-      services!.ads.ready(AdKind.rewarded) &&
-      services!.ads.cooldown == Duration.zero &&
-      !services!.ads.timingSaveFailed;
+      (directExtraBottleEnabled ||
+          (services!.ads.ready(AdKind.rewarded) &&
+              services!.ads.cooldown == Duration.zero &&
+              !services!.ads.timingSaveFailed));
 
   bool get continueLabelIsReplay =>
       ordinary != null && !ordinary!.completed && ordinary!.isReplay;
@@ -507,6 +510,7 @@ class GameController extends ChangeNotifier {
     _cancelHint();
     _metric(s);
     _candidate = s;
+    _candidateStartedAt = DateTime.now().toUtc();
     _afterCompletion = afterCompletion;
     _write = _Write.candidate;
     _navigating = true;
@@ -599,9 +603,20 @@ class GameController extends ChangeNotifier {
     }
     if (selectedSource == null) {
       if (s.board[index].isNotEmpty) {
+        _cancelHint();
         selectedSource = index;
         onFeedback?.call(GameFeedback.select);
       }
+      _notify();
+      return;
+    }
+    final target = s.board[index];
+    if (s.tutorial?.active != true &&
+        target.isNotEmpty &&
+        (target.length == 4 || target.last != s.board[selectedSource!].last)) {
+      _cancelHint();
+      selectedSource = index;
+      onFeedback?.call(GameFeedback.select);
       _notify();
       return;
     }
@@ -709,7 +724,10 @@ class GameController extends ChangeNotifier {
     final operation = _write;
     try {
       CompletionReceipt? completion;
+      GameInstance? directGrant;
       switch (operation) {
+        case _Write.directBottle:
+          directGrant = await store.grantDirectExtraBottle(current!);
         case _Write.snapshot:
           final s = current;
           if (s == null) throw StateError('No pending snapshot');
@@ -737,6 +755,18 @@ class GameController extends ChangeNotifier {
           await store.resetProgress();
       }
       await _refresh();
+      if (directGrant != null) {
+        final before = current!;
+        current = directGrant;
+        _slots[directGrant.slot] = directGrant;
+        if (!before.extraBottleGranted && page == GamePage.board) {
+          _extraBottlePresentation = (
+            token: ++_extraBottlePresentationToken,
+            instanceId: directGrant.id,
+            bottleIndex: directGrant.board.length - 1,
+          );
+        }
+      }
       if (operation == _Write.candidate) {
         current = _candidate;
         _slots[current!.slot] = current;
@@ -786,6 +816,11 @@ class GameController extends ChangeNotifier {
       if (saved != null &&
           (operation == _Write.candidate || operation == _Write.snapshot)) {
         if (operation == _Write.candidate) {
+          final startedAt = _candidateStartedAt;
+          _candidateStartedAt = null;
+          if (startedAt != null) {
+            unawaited(services?.reporting.roundStarted(saved.id, startedAt));
+          }
           _event(ProductEvent.puzzleStart, saved.id, _eventPuzzle(saved));
         }
         if (saved.completed && completion != null) {
@@ -943,6 +978,7 @@ class GameController extends ChangeNotifier {
     }
     _adFlow = true;
     _notify();
+    final adRevision = services?.ads.revision;
     // A delayed fullscreen write may consume an older boundary after this
     // settlement was rendered. Never qualify a new show using that cached count.
     var check = false;
@@ -974,7 +1010,11 @@ class GameController extends ChangeNotifier {
     }
 
     if (check && services != null) {
-      final result = await services!.ads.show(AdKind.interstitial, _id());
+      final result = await services!.ads.show(
+        AdKind.interstitial,
+        _id(),
+        expectedRevision: adRevision,
+      );
       _event(ProductEvent.interstitialCheck, source.id, {
         'completion_id': source.id,
         'qualifying': progress.qualifyingClears,
@@ -988,6 +1028,9 @@ class GameController extends ChangeNotifier {
         // still persists the next snapshot through the normal Retry flow.
       }
     }
+    if (!check) {
+      services?.ads.blockedOpportunity(AdKind.interstitial, 'entitlement');
+    }
     if (!_alive) return;
     if (!_foreground) {
       _afterForeground = advance;
@@ -998,7 +1041,14 @@ class GameController extends ChangeNotifier {
 
   Future<void> watchExtraBottle() async {
     if (!canWatchExtraBottle) return;
+    if (directExtraBottleEnabled) {
+      _cancelHint();
+      _write = _Write.directBottle;
+      await _persist();
+      return;
+    }
     final origin = current!, id = _id();
+    final adRevision = services!.ads.revision;
     _adFlow = true;
     rewardIssue = null;
     _cancelHint();
@@ -1010,6 +1060,7 @@ class GameController extends ChangeNotifier {
       final result = await services!.ads.show(
         AdKind.rewarded,
         id,
+        expectedRevision: adRevision,
         onReward: () {
           if (!_alive) return;
           _event(ProductEvent.rewardConfirmed, id, {

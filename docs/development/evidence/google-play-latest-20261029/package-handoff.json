@@ -1,0 +1,23 @@
+{
+  "status": "signed artifact ready for independent review; Android runtime/upgrade and Play declaration gates pending; not permission to upload yet",
+  "source_head": "04f175503681e4452231731ea353a33b13f711f8",
+  "accepted_runtime_base": "eb48e7d151e6cd2aeaccb653b8e960d6c3c4e561",
+  "existing_ci_reference": "40718567516 completed/success; no requery/rerun",
+  "runtime_native_core_tools_unchanged": true,
+  "source_changes_from_ci": [
+    "app/config/admob/registration.json: add exactly two console-verified Android production units",
+    "app/config/admob/README.md: describe Android explicit selection"
+  ],
+  "author_checks": "563 source inputs exact; signed/unsigned payload unchanged; 147 bundled asset entries match current sources;90 puzzles; production AOT IDs/API; all native ELF PT_LOAD>=16KB; bundletool validate/config/manifest; no native integration-test classes/channel; existing upload certificate pin/strict signing verified by existing tool",
+  "privacy": "No AD_ID in actual AAB; Analytics adid collection=false; ads included and other SDK IDs/disclosures still required",
+  "limitations": [
+    "APK/device SDK configuration under Computer coordination",
+    "normal main, test/android backend funnel, true reward/cooldown/withdrawal checks pending",
+    "13-to19 installed save upgrade not yet observed",
+    "static16KB is not physical16KB runtime",
+    "commercial fill not proven; application needs AdMob review"
+  ],
+  "review_mirror": "/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/build/package-review/0.5.0-19/android-alpha-gm020-1",
+  "artifact_sha256": "16fc6e61270dcb6ba9cc449bad1b32d520c5cdfd76bbd01400c3b3edefa5175b",
+  "artifact_bytes": 136231971
+}

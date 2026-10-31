@@ -1,0 +1,55 @@
+{
+  "read_only": true,
+  "last_modified_console": "2026-10-25",
+  "contains_ads": false,
+  "advertising_id": false,
+  "collection": true,
+  "sharing": false,
+  "encryption_in_transit": true,
+  "account_creation": false,
+  "types": {
+    "Approximate location": {
+      "optional": false,
+      "purposes": [
+        "App functionality",
+        "Analytics"
+      ]
+    },
+    "Device or other IDs": {
+      "optional": false,
+      "purposes": [
+        "App functionality",
+        "Analytics"
+      ]
+    },
+    "App interactions": {
+      "optional": true,
+      "purposes": [
+        "Analytics"
+      ]
+    },
+    "Crash logs": {
+      "optional": true,
+      "purposes": [
+        "Analytics"
+      ]
+    },
+    "Diagnostics": {
+      "optional": true,
+      "purposes": [
+        "Analytics"
+      ]
+    }
+  },
+  "every_type_collected": true,
+  "every_type_shared": false,
+  "every_type_ephemeral": false,
+  "changes_saved": false,
+  "comparison_to_final_plan": {
+    "contains_ads": "must become true",
+    "advertising_id": "keep false only if final package satisfies both permission guards",
+    "sharing": "approximate location/interactions/diagnostics/other IDs true per Ads SDK disclosure",
+    "optional": "interactions and diagnostics no longer globally optional; optional Crashlytics remains optional",
+    "purposes": "follow data-safety-plan including advertising/fraud and Remote Config app functionality"
+  }
+}

@@ -11,7 +11,6 @@ import 'package:pourlune_dev/application/game_controller.dart';
 import 'package:pourlune_dev/data/content_library.dart';
 import 'package:pourlune_dev/data/game_store.dart';
 import 'package:pourlune_dev/presentation/pourlune_app.dart';
-import 'package:pourlune_dev/presentation/reference_extra_art.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'support/flame_board_ready.dart';
@@ -219,54 +218,16 @@ void main() {
             await t.tap(find.byKey(Key('bottle-$colors')));
             await t.pumpAndSettle();
             await settleFlameBoard(t, c);
-            expect(c.rejection, 'Empty or matching top color only');
+            expect(c.rejection, isNull);
+            expect(c.selectedSource, colors);
             expect(c.current!.moveCount, saved.moveCount);
             expect(c.current!.board, saved.board);
             stationary();
-            await expectFeedback("Can't pour here", 'Mismatch');
-            shortRefusalStaysOneLine();
-            final rejectionBadge = find.byKey(const Key('feedback-badge'));
-            if (!maximum) {
-              expect(rejectionBadge, findsOneWidget);
-              expect(
-                find.descendant(
-                  of: rejectionBadge,
-                  matching: find.byWidgetPredicate(
-                    (w) =>
-                        w is ReferenceExtraSurface &&
-                        w.kind == ExtraSurfaceKind.settings,
-                  ),
-                ),
-                findsOneWidget,
-              );
-            }
-            if (spec.scale == 1.0) {
-              expect(
-                t.getSize(rejectionBadge).width,
-                lessThan(
-                  t.getSize(find.byKey(const Key('board-feedback'))).width,
-                ),
-              );
-            }
-            expect(
-              find.byKey(const Key('cancel-hint')),
-              findsNothing,
-              reason: 'ordinary rejection does not acquire Hint actions',
-            );
-            expect(
-              t
-                  .renderObject<RenderParagraph>(
-                    find.text(maximum ? 'Mismatch' : "Can't pour here"),
-                  )
-                  .textAlign,
-              TextAlign.center,
-            );
-            expect(
-              find.text(
-                'Match every color to its target. Leave all buffers empty.',
-              ),
-              findsNothing,
-            );
+            expect(find.text("Can't pour here"), findsNothing);
+            expect(find.text('Bottle full'), findsNothing);
+            expect(find.byKey(const Key('feedback-badge')), findsNothing);
+            expect(find.byKey(const Key('cancel-hint')), findsNothing);
+            // Explicit controller.pour remains a real rejection path below.
             for (final reason in [
               (0, 1, 'That bottle is full', 'Bottle full'),
               (colors + 1, 0, 'Choose a bottle with liquid', 'Empty'),

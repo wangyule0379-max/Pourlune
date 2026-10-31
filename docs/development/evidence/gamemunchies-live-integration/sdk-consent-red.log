@@ -1,0 +1,61 @@
+Resolving dependencies...
+Downloading packages...
+  crypto 3.0.7 (3.0.8 available)
+  jni 1.1.0 (1.1.1 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  shared_preferences_android 2.5.3 (2.5.4 available)
+  shared_preferences_foundation 2.6.0 (2.6.1 available)
+  test_api 0.7.12 (0.7.15 available)
+Got dependencies!
+6 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies in `./example`...
+Downloading packages...
+Got dependencies in `./example`.
+00:00 +0: loading /Volumes/data/App Development/gamemunchies/sdk/dart/test/statistics_consent_test.dart
+00:00 +0: statistics off still refreshes rules in foreground without collecting active or other events
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following NoSuchMethodError was thrown running a test:
+Class 'GameMunchiesClient' has no instance method 'setStatisticsEnabled'.
+Receiver: Instance of 'GameMunchiesClient'
+Tried calling: setStatisticsEnabled(false)
+
+When the exception was thrown, this was the stack:
+#0      Object.noSuchMethod (dart:core-patch/object_patch.dart:38:5)
+#1      main.<anonymous closure> (file:///Volumes/data/App%20Development/gamemunchies/sdk/dart/test/statistics_consent_test.dart:33:31)
+#2      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#3      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  statistics off still refreshes rules in foreground without collecting active or other events
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:00 +0 -1: statistics off still refreshes rules in foreground without collecting active or other events [E]
+  Test failed. See exception logs above.
+  The test description was: statistics off still refreshes rules in foreground without collecting active or other events
+
+00:00 +0 -1: withdrawal clears pending data and a late old ACK cannot send or delete new consent events
+00:00 +0 -2: withdrawal clears pending data and a late old ACK cannot send or delete new consent events [E]
+  NoSuchMethodError: Class 'GameMunchiesClient' has no instance method 'setStatisticsEnabled'.
+  Receiver: Instance of 'GameMunchiesClient'
+  Tried calling: setStatisticsEnabled(false)
+  dart:core                                Object.noSuchMethod
+  test/statistics_consent_test.dart 53:31  main.<fn>
+
+00:00 +0 -2: real interstitial impression retains cooldown while telemetry is off
+00:00 +0 -3: real interstitial impression retains cooldown while telemetry is off [E]
+  NoSuchMethodError: Class 'GameMunchiesClient' has no instance method 'setStatisticsEnabled'.
+  Receiver: Instance of 'GameMunchiesClient'
+  Tried calling: setStatisticsEnabled(false)
+  dart:core                                Object.noSuchMethod
+  test/statistics_consent_test.dart 66:31  main.<fn>
+
+00:00 +0 -3: Some tests failed.
+
+Failing tests:
+  /Volumes/data/App Development/gamemunchies/sdk/dart/test/statistics_consent_test.dart: real interstitial impression retains cooldown while telemetry is off
+  /Volumes/data/App Development/gamemunchies/sdk/dart/test/statistics_consent_test.dart: statistics off still refreshes rules in foreground without collecting active or other events
+  /Volumes/data/App Development/gamemunchies/sdk/dart/test/statistics_consent_test.dart: withdrawal clears pending data and a late old ACK cannot send or delete new consent events

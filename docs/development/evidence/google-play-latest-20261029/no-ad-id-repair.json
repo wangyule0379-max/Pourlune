@@ -1,0 +1,15 @@
+{
+  "superseded_candidate": "android-alpha-gm020-1",
+  "sha256": "16fc6e61270dcb6ba9cc449bad1b32d520c5cdfd76bbd01400c3b3edefa5175b",
+  "status": "retained, not for upload",
+  "finding": "GMS AD_ID absent but platform ACCESS_ADSERVICES_AD_ID retained; old single-permission check did not establish full Advertising-ID opt-out",
+  "scope": "capability gap only; no actual Advertising-ID read/transmission observed",
+  "minimal_correction": "remove platform Advertising-ID permission alongside existing GMS removal, check both at packaged-manifest boundary; retain other permissions/ads choices/defaults/IDs",
+  "red_green": "new production platform-only permission regression failed as expected, then7 AdMob configuration tests passed",
+  "new_candidate": "pending fresh directory and real APK check after source fix",
+  "references": [
+    "https://developer.android.com/reference/android/adservices/adid/AdIdManager",
+    "https://developer.android.com/reference/android/adservices/common/AdServicesPermissions",
+    "https://developers.google.com/admob/android/privacy/play-data-disclosure"
+  ]
+}

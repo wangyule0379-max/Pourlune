@@ -14,12 +14,16 @@ manifest = json.loads((candidate / "manifest.json").read_text())
 generator = ROOT / manifest["source"]
 assert hashlib.sha256(generator.read_bytes()).hexdigest() == manifest["source_sha256"]
 for entry in manifest["files"]:
-    source = candidate / entry["file"]
+    source = ROOT / entry["candidate_path"] if "candidate_path" in entry else candidate / entry["file"]
     asset = ROOT / "app/assets/audio" / entry["file"]
     data = source.read_bytes()
     assert data == asset.read_bytes(), f"packaging drift: {asset}"
     assert len(data) == entry["bytes"]
     assert hashlib.sha256(data).hexdigest() == entry["sha256"]
+    if asset.suffix == ".mp3":
+        assert data[:3] == b"ID3" and entry["duration_seconds"] > 210
+        print(f"Verified complete original MP3 hash/copy {asset.relative_to(ROOT)}; native decode checked separately")
+        continue
     with wave.open(str(asset)) as wav:
         assert (wav.getnchannels(), wav.getsampwidth(), wav.getframerate()) == (1, 2, 44100)
         assert wav.getcomptype() == "NONE"
@@ -32,9 +36,9 @@ for entry in manifest["files"]:
     assert pcm[0] == pcm[-1] == 0
     assert abs(20 * math.log10(peak) - entry["sample_peak_dbfs"]) < 0.0001
     assert abs(20 * math.log10(rms) - entry["unweighted_rms_dbfs"]) < 0.0001
-    if entry["file"] == "background.wav":
+    if entry["file"] == "pour.wav":
         assert entry["loop_start_frame"] == 0
-        assert entry["loop_end_frame_exclusive"] == len(pcm) == 1058400
+        assert entry["loop_end_frame_exclusive"] == len(pcm) == 88200
     print(f"Decoded + verified {asset.relative_to(ROOT)}")
 
 font = ROOT / "docs/design/production-candidates/fonts/nunito"
@@ -47,4 +51,4 @@ for entry in font_source["files"]:
     assert (ROOT / "app/assets/fonts/nunito" / entry["file"]).read_bytes() == data
     print(f"Verified original SHA256 + Git blob + unchanged font copy: {entry['file']}")
 assert (ROOT / "app/assets/fonts/nunito/source.json").read_bytes() == (font / "source.json").read_bytes()
-print("PASS: 6 PCM assets, 3 original font package files, unchanged source record.")
+print("PASS: 5 PCM assets + complete source MP3, 3 original font package files; native MP3 decode separate.")

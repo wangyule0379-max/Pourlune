@@ -94,20 +94,35 @@ class _CompletionBottlesState extends State<CompletionBottles> {
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, box) {
       final indices = widget.targetIndices;
-      final rows = widget.singleRow || indices.length <= 2 ? 1 : 2;
-      final perRow = widget.singleRow ? indices.length : 2;
+      final fiveTargets = indices.length == 5;
       final maxHeight = box.hasBoundedHeight ? box.maxHeight : 370.0;
+      // Normal small screens keep3+2. Exceptionally short celebration space
+      // uses one bounded row rather than shrinking five targets to points.
+      final compactFive = fiveTargets && widget.singleRow;
+      final singleRow = widget.singleRow && (!fiveTargets || maxHeight < 153);
+      final rows = singleRow || indices.length <= 2 ? 1 : 2;
+      final perRow = singleRow
+          ? indices.length
+          : fiveTargets
+          ? 3
+          : 2;
       const ratio =
           190 / 134; // Measured P10 completed bottle, separate from PLAY.
       double badgeWidth(double width) => (width * 1.12).clamp(68.0, 160.0);
       double topFor(double width) => widget.badge == null
           ? 4.0
-          : math.max(4.0, badgeWidth(width) * 147 / 157 - 24);
+          : math.max(
+              4.0,
+              badgeWidth(width) * 147 / 157 + (fiveTargets ? 8 : -24),
+            );
       // Reserve the complete cushion and a clear gap before the card, rather
       // than counting only the bottle body as available celebration height.
-      const rowGap = 8.0;
-      double footFor(double width) =>
-          widget.singleRow ? (width * .34).clamp(24.0, 34.0) + 7 : 45.0;
+      final rowGap = compactFive && !singleRow ? 4.0 : 8.0;
+      double footFor(double width) => compactFive && !singleRow
+          ? (width * .34).clamp(24.0, 34.0) + 3
+          : singleRow || fiveTargets
+          ? (width * .34).clamp(24.0, 34.0) + 7
+          : 45.0;
       double needed(double width) =>
           topFor(width) +
           rows * (width * ratio + footFor(width)) +
@@ -115,9 +130,9 @@ class _CompletionBottlesState extends State<CompletionBottles> {
       var low = 0.0;
       var high = math.min(
         rows == 1 ? 150.0 : 120.0,
-        widget.singleRow
+        singleRow
             ? box.maxWidth / (indices.length + .5)
-            : box.maxWidth * .36,
+            : box.maxWidth * (fiveTargets ? .28 : .36),
       );
       for (var i = 0; i < 24; i++) {
         final middle = (low + high) / 2;
@@ -142,7 +157,11 @@ class _CompletionBottlesState extends State<CompletionBottles> {
               box.maxWidth / 2 +
               (col - (n - 1) / 2) *
                   box.maxWidth *
-                  (widget.singleRow ? 1 / indices.length : .46);
+                  (singleRow
+                      ? 1 / indices.length
+                      : fiveTargets
+                      ? .30
+                      : .46);
           poses.add(
             BottlePose(
               Offset(x, inset + top + row * stride - shape.visibleRect.top),

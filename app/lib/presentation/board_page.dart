@@ -36,6 +36,8 @@ class BoardView extends StatefulWidget {
     this.keyPrefix = 'bottle',
     this.motion,
     this.onMotionComplete,
+    this.onFlowStart,
+    this.onFlowEnd,
     this.rejectedBottle,
     this.rejectionRevision = 0,
     this.preview = false,
@@ -43,6 +45,7 @@ class BoardView extends StatefulWidget {
   final GameInstance state;
   final int? selected, suggested, hintSource, rejectedBottle, addedBottle;
   final void Function(int)? onTap;
+  final VoidCallback? onFlowStart, onFlowEnd;
   final PlayerSettings settings;
   final String keyPrefix;
   final PourMotion? motion;
@@ -77,6 +80,8 @@ class _BoardViewState extends State<BoardView> {
           keyPrefix: widget.keyPrefix,
           motion: widget.motion,
           onMotionComplete: widget.onMotionComplete,
+          onFlowStart: widget.onFlowStart,
+          onFlowEnd: widget.onFlowEnd,
           rejectedBottle: widget.rejectedBottle,
           rejectionRevision: widget.rejectionRevision,
           preview: widget.preview,
@@ -98,11 +103,13 @@ class BoardPage extends StatefulWidget {
     required this.onRestart,
     required this.onPause,
     this.onExtra,
+    this.onFlowStart,
+    this.onFlowEnd,
     this.debugBoardPresentation,
   });
   final GameController controller;
   final VoidCallback onRestart, onPause;
-  final VoidCallback? onExtra;
+  final VoidCallback? onExtra, onFlowStart, onFlowEnd;
 
   /// Isolated presentation review only; normal and release entries ignore it.
   final Widget Function(BoardView)? debugBoardPresentation;
@@ -164,6 +171,8 @@ class _BoardPageState extends State<BoardPage> {
               widget.onPause();
             },
             onExtra: widget.onExtra,
+            onFlowStart: widget.onFlowStart,
+            onFlowEnd: widget.onFlowEnd,
             showSaveFailure: showSaveFailure,
           );
         }
@@ -235,6 +244,8 @@ class _BoardPageState extends State<BoardPage> {
           settings: c.settings,
           motion: c.motion,
           onMotionComplete: c.completeMotion,
+          onFlowStart: widget.onFlowStart,
+          onFlowEnd: widget.onFlowEnd,
           rejectedBottle: c.rejectedBottle,
           rejectionRevision: c.rejectionRevision,
           onTap: c.busy ? null : c.tapBottle,

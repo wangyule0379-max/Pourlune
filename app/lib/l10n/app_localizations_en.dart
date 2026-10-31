@@ -438,6 +438,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'The support address has not been configured. No message will be sent.';
 
   @override
+  String feedbackOpenFailed(String email) {
+    return 'Couldn\'t open your email app. You can write to $email.';
+  }
+
+  @override
+  String get supportOpenFailed => 'Couldn\'t open this page. Please try again.';
+
+  @override
   String versionInfo(String version, String build) {
     return 'Pourlune · $version ($build)';
   }
@@ -527,6 +535,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get blueSquare => 'Blue square';
+
+  @override
+  String get roseStar => 'Rose star';
 
   @override
   String get suggestedTarget => 'Suggested destination';
@@ -686,6 +697,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get servicesDisabled =>
       'Optional diagnostics are unavailable in this build. Choices are saved locally.';
+
+  @override
+  String get crashUnavailableAnalyticsAvailable =>
+      'Crash reporting is currently unavailable. Gameplay analytics follows your saved choice below.';
+
+  @override
+  String get privacyProviderSyncProblem =>
+      'Your choices are saved, but a reporting service could not apply them. Other enabled reporting may continue. Retry to apply your saved choices.';
 
   @override
   String get adNetwork =>

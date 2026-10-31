@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import 'bottle.dart' show ink;
+import 'bottle.dart' show ink, fivePointStar;
 
 class BottleFootLabel extends StatelessWidget {
   const BottleFootLabel({
@@ -131,6 +131,7 @@ class TargetCushion extends StatelessWidget {
       'G': Color(0xff328521),
       'P': Color(0xff862bb5),
       'B': Color(0xff086cbf),
+      'R': Color(0xffbf496a),
     };
     return Container(
       width: size,
@@ -187,6 +188,11 @@ class _TargetGlyph extends CustomPainter {
     final rect = Offset.zero & size;
     final path = Path();
     switch (target) {
+      case 'R':
+        path.addPath(
+          fivePointStar(rect.center, size.shortestSide / 2),
+          Offset.zero,
+        );
       case 'O':
         path.addOval(rect);
       case 'B':

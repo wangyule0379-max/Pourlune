@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import '../data/game_store.dart';
 import 'service_policy.dart';
+import 'gamemunchies_reporting.dart';
 
 enum AdKind { interstitial, rewarded }
 
@@ -21,8 +22,10 @@ class AdCallbacks {
     required this.reward,
     required this.closed,
     required this.failed,
+    this.observation,
   });
   final VoidCallback shown, impression, reward, closed, failed;
+  final GameMunchiesAdEvents? observation;
 }
 
 abstract interface class AdHandle {
@@ -46,13 +49,20 @@ class AdCoordinator extends ChangeNotifier {
     required this.store,
     required this.transport,
     required this.configured,
+    this.rulesAllowLoad,
+    this.reporting,
+    this.rulesAllowShow,
     FullscreenCooldown? clock,
     this.loadTimeout = const Duration(seconds: 30),
     this.preShowTimeout = const Duration(minutes: 2),
   }) : clock = clock ?? FullscreenCooldown();
   final GameStore store;
+  final GameMunchiesReporting? reporting;
   final AdTransport transport;
   final bool configured;
+  final bool Function(AdKind)? rulesAllowLoad, rulesAllowShow;
+  int _revision = 0;
+  int get revision => _revision;
   final FullscreenCooldown clock;
   final Duration loadTimeout, preShowTimeout;
   bool allowed = false,
@@ -79,10 +89,13 @@ class AdCoordinator extends ChangeNotifier {
       _initialized &&
       allowed &&
       policy.adsEnabled &&
+      (rulesAllowLoad?.call(kind) ?? true) &&
       (kind == AdKind.interstitial
           ? policy.interstitialEnabled
           : policy.rewardedEnabled);
   bool ready(AdKind kind) =>
+      _inventoryReady(kind) && (rulesAllowShow?.call(kind) ?? true);
+  bool _inventoryReady(AdKind kind) =>
       !_disposed &&
       _permits(kind) &&
       foreground &&
@@ -119,6 +132,7 @@ class AdCoordinator extends ChangeNotifier {
     if (modal != null) dialogOpen = modal;
     if (remote != null) policy = remote;
     if (invalidate) {
+      _revision++;
       for (final kind in AdKind.values) {
         _generation[kind] = (_generation[kind] ?? 0) + 1;
         final old = _handles.remove(kind);
@@ -149,7 +163,7 @@ class AdCoordinator extends ChangeNotifier {
         showing ||
         timingSaveFailed ||
         state(kind) == AdLoadState.loading ||
-        ready(kind)) {
+        _inventoryReady(kind)) {
       return;
     }
     final old = _handles.remove(kind);
@@ -221,19 +235,49 @@ class AdCoordinator extends ChangeNotifier {
     }
   }
 
+  /// Queried only at an actual user opportunity, never during widget rebuilds.
+  String? blockedReason(AdKind kind) {
+    if (!configured ||
+        !policy.adsEnabled ||
+        !(rulesAllowLoad?.call(kind) ?? true) ||
+        !(kind == AdKind.interstitial
+            ? policy.interstitialEnabled
+            : policy.rewardedEnabled)) {
+      return 'config_disabled';
+    }
+    if (!allowed) return 'privacy';
+    if (!foreground) return 'in_background';
+    if (_disposed || showing || dialogOpen || _writingTiming) return 'busy';
+    if (cooldown > Duration.zero || !(rulesAllowShow?.call(kind) ?? true)) {
+      return 'cooldown';
+    }
+    if (timingSaveFailed) return 'unknown';
+    if (!_inventoryReady(kind)) return 'not_ready';
+    return null;
+  }
+
+  void blockedOpportunity(AdKind kind, String reason) {
+    reporting?.opportunity(kind).emit('ad_blocked', reason: reason);
+  }
+
   Future<AdResult> show(
     AdKind kind,
     String request, {
     VoidCallback? onReward,
+    int? expectedRevision,
   }) async {
+    final revision = _revision;
+    final observation = reporting?.opportunity(kind);
     if (showing ||
         _disposed ||
+        (expectedRevision != null && expectedRevision != revision) ||
         dialogOpen ||
         !foreground ||
         timingSaveFailed ||
         _writingTiming ||
         cooldown > Duration.zero ||
         !ready(kind)) {
+      observation?.emit('ad_blocked', reason: blockedReason(kind) ?? 'busy');
       return const AdResult(false, 'unavailable');
     }
     showing = true;
@@ -246,14 +290,21 @@ class AdCoordinator extends ChangeNotifier {
       showing = false;
       await _dispose(handle);
       _notify();
+      observation?.emit('ad_blocked', reason: 'unknown');
       return const AdResult(false, 'save_failed');
     }
-    if (_disposed || !foreground || !_permits(kind) || dialogOpen) {
+    if (_disposed ||
+        !foreground ||
+        !_permits(kind) ||
+        dialogOpen ||
+        revision != _revision ||
+        !(rulesAllowShow?.call(kind) ?? true)) {
       _pendingClear.add(request);
       await retryTiming();
       showing = false;
       await _dispose(handle);
       _notify();
+      observation?.emit('ad_blocked', reason: blockedReason(kind) ?? 'busy');
       return const AdResult(false, 'stale');
     }
     final result = Completer<AdResult>();
@@ -289,9 +340,13 @@ class AdCoordinator extends ChangeNotifier {
       }
     }
 
-    watchdog = Timer(preShowTimeout, () => finish('timeout'));
+    watchdog = Timer(preShowTimeout, () {
+      observation?.emit('ad_show_failed', reason: 'timeout');
+      finish('timeout');
+    });
     _endActive = () => finish('disposed');
     final callbacks = AdCallbacks(
+      observation: observation,
       shown: () {
         if (finished || shown || _disposed) return;
         shown = true;

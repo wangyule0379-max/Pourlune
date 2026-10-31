@@ -63,7 +63,7 @@ class ReadoutDock extends StatelessWidget {
 
   static double denseWidth(BuildContext context, double targetSize) {
     var numberWidth = 0.0;
-    for (var number = 1; number <= 7; number++) {
+    for (var number = 1; number <= 8; number++) {
       final painter = TextPainter(
         text: TextSpan(
           text: '$number',

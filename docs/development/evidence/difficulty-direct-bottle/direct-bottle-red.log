@@ -1,0 +1,99 @@
+Resolving dependencies...
+Downloading packages...
+  _flutterfire_internals 1.3.78 (1.3.79 available)
+  code_assets 1.2.1 (2.1.0 available)
+  firebase_analytics 13.0.0 (13.0.1 available)
+  firebase_analytics_platform_interface 6.0.8 (6.0.9 available)
+  firebase_analytics_web 0.6.2+14 (0.6.3+15 available)
+  firebase_core 5.0.0 (5.1.0 available)
+  firebase_core_web 4.0.0 (4.1.0 available)
+  firebase_crashlytics 6.0.0 (6.0.1 available)
+  firebase_crashlytics_platform_interface 3.9.1 (3.9.2 available)
+  firebase_remote_config 7.0.0 (7.0.1 available)
+  firebase_remote_config_platform_interface 3.0.8 (3.0.9 available)
+  firebase_remote_config_web 1.10.15 (1.10.16 available)
+  hooks 2.0.2 (2.2.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  objective_c 9.5.0 (9.6.2 available)
+  record_use 0.6.0 (1.1.1 available)
+  sqflite_common_ffi 2.4.4 (2.4.5 available)
+  sqlite3 3.5.2 (3.8.0 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+  web 1.1.1 (1.1.2 available)
+Got dependencies!
+23 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Volumes/data/App Development/Pourlune/app/test/direct_extra_bottle_test.dart
+00:00 +0: disabled ads grant one saved bottle without advertising records
+00:00 +0 -1: disabled ads grant one saved bottle without advertising records [E]
+  Expected: true
+    Actual: <false>
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/direct_extra_bottle_test.dart 38:5             main.<fn>
+
+00:00 +0 -1: direct entitlement survives undo restart and real database reopen
+00:00 +0 -2: direct entitlement survives undo restart and real database reopen [E]
+  Expected: [['G', 'G', 'O', 'O'], ['O', 'O', 'G', 'G'], [], [], []]
+    Actual: [['G', 'G', 'O', 'O'], ['O', 'O', 'G', 'G'], [], []]
+     Which: at location [4] is [['G', 'G', 'O', 'O'], ['O', 'O', 'G', 'G'], [], []] which shorter than expected
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/direct_extra_bottle_test.dart 57:5             main.<fn>
+
+00:00 +0 -2: failed direct grant rolls back entitlement and board; retry grants once
+00:00 +0 -3: failed direct grant rolls back entitlement and board; retry grants once [E]
+  Expected: SavePhase:<SavePhase.failed>
+    Actual: SavePhase:<SavePhase.clean>
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/direct_extra_bottle_test.dart 79:5             main.<fn>
+
+00:00 +0 -3: tutorial levels stay ineligible and daily receives its own bottle
+00:00 +0 -4: tutorial levels stay ineligible and daily receives its own bottle [E]
+  Expected: true
+    Actual: <false>
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/direct_extra_bottle_test.dart 107:5            main.<fn>
+
+00:00 +0 -4: Extra bottle tap immediately adds a bottle without an ad dialog
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: true
+  Actual: <false>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Volumes/data/App%20Development/Pourlune/app/test/direct_extra_bottle_test.dart:123:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Volumes/data/App%20Development/Pourlune/app/test/direct_extra_bottle_test.dart line 123
+The test description was:
+  Extra bottle tap immediately adds a bottle without an ad dialog
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -5: Extra bottle tap immediately adds a bottle without an ad dialog [E]
+  Test failed. See exception logs above.
+  The test description was: Extra bottle tap immediately adds a bottle without an ad dialog
+
+00:02 +0 -5: Some tests failed.
+
+Failing tests:
+  /Volumes/data/App Development/Pourlune/app/test/direct_extra_bottle_test.dart: Extra bottle tap immediately adds a bottle without an ad dialog
+  /Volumes/data/App Development/Pourlune/app/test/direct_extra_bottle_test.dart: direct entitlement survives undo restart and real database reopen
+  /Volumes/data/App Development/Pourlune/app/test/direct_extra_bottle_test.dart: disabled ads grant one saved bottle without advertising records
+  /Volumes/data/App Development/Pourlune/app/test/direct_extra_bottle_test.dart: failed direct grant rolls back entitlement and board; retry grants once
+  /Volumes/data/App Development/Pourlune/app/test/direct_extra_bottle_test.dart: tutorial levels stay ineligible and daily receives its own bottle

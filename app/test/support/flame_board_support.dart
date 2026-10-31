@@ -8,7 +8,7 @@ GameInstance boardFixture({
   bool extra = false,
   String id = 'full-board',
 }) {
-  const palette = ['O', 'G', 'P', 'B'];
+  const palette = ['O', 'G', 'P', 'B', 'R'];
   final state = GameInstance.create(
     id: id,
     isReplay: true,

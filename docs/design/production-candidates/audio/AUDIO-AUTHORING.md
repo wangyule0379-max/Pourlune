@@ -1,3 +1,5 @@
+> Current runtime update (2026-10-26): only select/error/win/reveal retain this original synthesis. Background and pour are replaced by the user-selected licensed recordings documented in `../audio-selected-20261026/`; the six-original record below is historical, not an authorship claim over those recordings.
+
 # B03 audio authoring and authorization record
 
 Date: 2026-10-22. Scope: B03-06 / ART-08.

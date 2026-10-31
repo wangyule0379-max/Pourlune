@@ -26,7 +26,9 @@ enum BoardArtStatus { loading, ready, failed }
 /// Presentation owner only: immutable snapshots in, one guarded token release
 /// out. It cannot submit moves, write SQLite, or grant a reward.
 class FlameBoardGame extends FlameGame {
-  FlameBoardGame({this.onMotionComplete});
+  FlameBoardGame({this.onMotionComplete, this.onFlowStart, this.onFlowEnd});
+  final VoidCallback? onFlowStart, onFlowEnd;
+  bool _flowing = false;
   final ValueChanged<int>? onMotionComplete;
   final visual = ValueNotifier<BoardVisualFrame?>(null);
   final poseTick = ValueNotifier(0);
@@ -38,14 +40,15 @@ class FlameBoardGame extends FlameGame {
   bool closed = false, _failed = false, _background = false, _reduced = false;
   GameInstance? _state;
   BoardLayout? _layout;
+  Rect? sourcePaintBounds;
   PlayerSettings _settings = const PlayerSettings();
   PourMotion? _motion;
   (String, int, int)? _ignored;
   SequenceEffect? _pourEffect;
   _ProgressEffect? _selectionEffect, _errorEffect;
-  final _pressEffects = List<_ProgressEffect?>.filled(7, null);
-  final _press = List<double>.filled(7, 0);
-  final _selectionLifts = List<double>.filled(7, 0);
+  final _pressEffects = List<_ProgressEffect?>.filled(8, null);
+  final _press = List<double>.filled(8, 0);
+  final _selectionLifts = List<double>.filled(8, 0);
   int? _selectionTarget;
   double _elapsed = 0, _initialLift = 0, _shake = 0;
   int? _selected, _suggested, _hintSource, _shaking, _addedBottle;
@@ -59,6 +62,7 @@ class FlameBoardGame extends FlameGame {
     reduced: _reduced,
     initialLift: _initialLift,
     selectionLifts: _selectionLifts,
+    sourcePaintBounds: sourcePaintBounds,
   );
   @override
   Color backgroundColor() => Colors.transparent;
@@ -170,6 +174,16 @@ class FlameBoardGame extends FlameGame {
     _wake();
   }
 
+  void _flow(bool value) {
+    if (_flowing == value) return;
+    _flowing = value;
+    if (value) {
+      onFlowStart?.call();
+    } else {
+      onFlowEnd?.call();
+    }
+  }
+
   void _animate(PourMotion m) {
     if (closed || art == null || _pourEffect != null) return;
     final geometry = geometryFor(_layout!, m, initialLift: _initialLift);
@@ -183,17 +197,21 @@ class FlameBoardGame extends FlameGame {
             500 + geometry.flowMs,
             geometry.totalMs,
           ];
-    final budget = _reduced ? .12 : m.duration.inMicroseconds / 1000000;
     final total = boundaries.last;
+    // Geometry milliseconds are real presentation time, including the flow.
+    final budget = total / 1000;
     late final SequenceEffect effect;
     effect = SequenceEffect(
       [
         for (var i = 0; i < boundaries.length - 1; i++)
-          _ProgressEffect(
-            (p) => _elapsed =
-                boundaries[i] + (boundaries[i + 1] - boundaries[i]) * p,
-            (boundaries[i + 1] - boundaries[i]) / total * budget,
-          ),
+          _ProgressEffect((p) {
+            _elapsed = boundaries[i] + (boundaries[i + 1] - boundaries[i]) * p;
+            _flow(
+              _reduced
+                  ? _elapsed > 0 && _elapsed < 120
+                  : _elapsed >= 290 && _elapsed < 290 + geometry.flowMs,
+            );
+          }, (boundaries[i + 1] - boundaries[i]) / total * budget),
       ],
       onComplete: () {
         if (closed ||
@@ -202,6 +220,7 @@ class FlameBoardGame extends FlameGame {
             _key(_motion!) != _key(m)) {
           return;
         }
+        _flow(false);
         _ignored = _key(m);
         _motion = null;
         _pourEffect = null;
@@ -227,6 +246,7 @@ class FlameBoardGame extends FlameGame {
   }
 
   void _cancel({bool release = false}) {
+    _flow(false);
     final m = _motion;
     _pourEffect?.onComplete = null;
     _pourEffect?.removeFromParent();
@@ -431,6 +451,14 @@ class FlameBoardGame extends FlameGame {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
+    _paintBoard(canvas, BoardPaintLayer.stationary);
+  }
+
+  // Flutter places this one moving layer above the fixed native readouts.
+  void renderMoving(Canvas canvas) =>
+      _paintBoard(canvas, BoardPaintLayer.moving);
+
+  void _paintBoard(Canvas canvas, BoardPaintLayer layer) {
     if (closed || _state == null || _layout == null) return;
     _painter?.paint(
       canvas,
@@ -444,6 +472,7 @@ class FlameBoardGame extends FlameGame {
       shaking: _errorEffect == null ? null : _shaking,
       shake: _shake,
       reduced: _reduced,
+      layer: layer,
     );
   }
 

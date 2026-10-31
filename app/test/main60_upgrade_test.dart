@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -5,11 +6,34 @@ import 'package:pourlune_core/pourlune_core.dart';
 import 'package:pourlune_dev/data/game_store.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-Puzzle definition(int n, {bool old = false}) => Puzzle.parse(
-  File(
-    '${old ? '../docs/development/evidence/main60-content-redesign/old-main' : 'assets/puzzles/main'}/main-${n.toString().padLeft(3, '0')}.json',
-  ).readAsStringSync(),
-);
+Puzzle definition(
+  int n, {
+  bool old = false,
+  bool v2 = false,
+  bool v3 = false,
+  bool v4 = false,
+}) => v4
+    ? Puzzle.fromJson(
+        Map<String, dynamic>.from(
+          (jsonDecode(
+                    File('../docs/content/design/main60-five-color-v4.json')
+                        .readAsStringSync(),
+                  )['levels']
+                  as List)[n - 1]['puzzle']
+              as Map,
+        ),
+      )
+    : Puzzle.parse(
+        File(
+          '${v3
+              ? '../docs/development/evidence/main60-five-color-difficulty/old-main'
+              : v2
+              ? '../docs/development/evidence/difficulty-direct-bottle/v2-baseline'
+              : old
+              ? '../docs/development/evidence/main60-content-redesign/old-main'
+              : 'assets/puzzles/main'}/main-${n.toString().padLeft(3, '0')}.json',
+        ).readAsStringSync(),
+      );
 
 GameInstance finished(GameInstance value) {
   for (final m in value.puzzle.referenceMoves) {
@@ -42,11 +66,30 @@ void main() {
     );
   }
 
-  for (final level in [13, 21]) {
+  for (final (level, v2, v3, v4) in [
+    (13, false, false, false),
+    (21, false, false, false),
+    (13, true, false, false),
+    (20, true, false, false),
+    (60, true, false, false),
+    (21, false, true, false),
+    (30, false, true, false),
+    (60, false, true, false),
+    (21, false, false, true),
+    (40, false, false, true),
+    (60, false, false, true),
+  ]) {
     test(
-      'DC04 real SQLite old$level nonempty snapshot survives new content and reopen',
+      'DC04 real SQLite old$level (v2=$v2 v3=$v3 v4=$v4) nonempty snapshot survives new content and reopen',
       () async {
-        final old = definition(level, old: true), latest = definition(level);
+        final old = definition(
+              level,
+              old: !v2 && !v3 && !v4,
+              v2: v2,
+              v3: v3,
+              v4: v4,
+            ),
+            latest = definition(level);
         var active = GameInstance.create(id: 'old-$level', puzzle: old);
         for (final m in old.referenceMoves.take(2)) {
           active = active.pour(m.from, m.to).state;
@@ -65,7 +108,11 @@ void main() {
           catalogVersion: 1,
         );
         await store.save(daily);
-        expect(latest.contentVersion, old.contentVersion + 1);
+        expect(
+          latest.contentVersion,
+          old.contentVersion +
+              (v4 ? 1 : (v3 ? 2 : (v2 ? 1 : 2) + (level >= 21 ? 2 : 0))),
+        );
         expect(latest.initial, isNot(old.initial));
         await reopen();
         final restored = (await store.load('ordinary')).instance!;

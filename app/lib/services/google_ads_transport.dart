@@ -6,10 +6,12 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'ad_coordinator.dart';
 import 'service_config.dart';
+import 'gamemunchies_reporting.dart';
 
 class GoogleAdsTransport implements AdTransport {
-  GoogleAdsTransport(this.config);
+  GoogleAdsTransport(this.config, {this.reporting});
   final ServiceConfig config;
+  final GameMunchiesReporting? reporting;
   @override
   Future<AdHandle> load(AdKind kind) {
     final done = Completer<AdHandle>();
@@ -19,29 +21,61 @@ class GoogleAdsTransport implements AdTransport {
     }
     // No IDFA/tracking opt-in is inferred from ad request eligibility.
     const request = AdRequest(nonPersonalizedAds: true);
+    final load = reporting?.loadAttempt(kind);
+    void loadFailed(LoadAdError error) {
+      final reason = adLoadReason(
+        defaultTargetPlatform,
+        error.domain,
+        error.code,
+      );
+      if (kDebugMode) {
+        // Fixed category and numeric code only; never the SDK's free message.
+        debugPrint(
+          'POURLUNE_AD_LOAD_FAILED ${kind.name} $reason ${error.code}',
+        );
+      }
+      load?.emit('ad_load_failed', reason: monetizationFailureReason(reason));
+      if (!done.isCompleted) {
+        done.completeError(AdLoadFailure(reason));
+      }
+    }
+
+    void loaded(AdWithoutView ad) {
+      load?.emit('ad_loaded');
+      if (done.isCompleted) return;
+      done.complete(_GoogleHandle(ad, kind, reporting, load?.id));
+    }
+
+    void dispatch(Future<void> request) {
+      unawaited(
+        request.catchError((Object _) {
+          load?.emit('ad_load_failed', reason: 'sdk_error');
+          if (!done.isCompleted) {
+            done.completeError(const AdLoadFailure('load_failed'));
+          }
+        }),
+      );
+    }
+
     if (kind == AdKind.interstitial) {
-      InterstitialAd.load(
-        adUnitId: config.interstitialId,
-        request: request,
-        adLoadCallback: InterstitialAdLoadCallback(
-          onAdLoaded: (ad) => done.complete(_GoogleHandle(ad)),
-          onAdFailedToLoad: (e) => done.completeError(
-            AdLoadFailure(
-              adLoadReason(defaultTargetPlatform, e.domain, e.code),
-            ),
+      dispatch(
+        InterstitialAd.load(
+          adUnitId: config.interstitialId,
+          request: request,
+          adLoadCallback: InterstitialAdLoadCallback(
+            onAdLoaded: loaded,
+            onAdFailedToLoad: loadFailed,
           ),
         ),
       );
     } else {
-      RewardedAd.load(
-        adUnitId: config.rewardedId,
-        request: request,
-        rewardedAdLoadCallback: RewardedAdLoadCallback(
-          onAdLoaded: (ad) => done.complete(_GoogleHandle(ad)),
-          onAdFailedToLoad: (e) => done.completeError(
-            AdLoadFailure(
-              adLoadReason(defaultTargetPlatform, e.domain, e.code),
-            ),
+      dispatch(
+        RewardedAd.load(
+          adUnitId: config.rewardedId,
+          request: request,
+          rewardedAdLoadCallback: RewardedAdLoadCallback(
+            onAdLoaded: loaded,
+            onAdFailedToLoad: loadFailed,
           ),
         ),
       );
@@ -51,25 +85,51 @@ class GoogleAdsTransport implements AdTransport {
 }
 
 class _GoogleHandle implements AdHandle {
-  _GoogleHandle(this.ad);
+  _GoogleHandle(this.ad, this.kind, this.reporting, this.loadId);
   final AdWithoutView ad;
+  final AdKind kind;
+  final GameMunchiesReporting? reporting;
+  final String? loadId;
+  bool _showCalled = false;
+
   @override
   Future<void> show(AdCallbacks callbacks) async {
+    if (_showCalled) return;
+    _showCalled = true;
+    final observation = callbacks.observation ?? reporting?.opportunity(kind);
+    if (loadId != null) observation?.attachLoad(loadId!);
+    observation?.emit('ad_show_attempted');
     FullScreenContentCallback<T> full<T extends AdWithoutView>() =>
         FullScreenContentCallback<T>(
           onAdShowedFullScreenContent: (_) => callbacks.shown(),
-          onAdImpression: (_) => callbacks.impression(),
+          onAdImpression: (_) {
+            observation?.emit('ad_impression');
+            callbacks.impression();
+          },
           onAdDismissedFullScreenContent: (_) => callbacks.closed(),
-          onAdFailedToShowFullScreenContent: (_, e) => callbacks.failed(),
+          onAdFailedToShowFullScreenContent: (_, e) {
+            observation?.emit('ad_show_failed', reason: 'sdk_error');
+            callbacks.failed();
+          },
         );
-    if (ad is InterstitialAd) {
-      final value = ad as InterstitialAd;
-      value.fullScreenContentCallback = full<InterstitialAd>();
-      await value.show();
-    } else {
-      final value = ad as RewardedAd;
-      value.fullScreenContentCallback = full<RewardedAd>();
-      await value.show(onUserEarnedReward: (_, reward) => callbacks.reward());
+    try {
+      if (ad is InterstitialAd) {
+        final value = ad as InterstitialAd;
+        value.fullScreenContentCallback = full<InterstitialAd>();
+        await value.show();
+      } else {
+        final value = ad as RewardedAd;
+        value.fullScreenContentCallback = full<RewardedAd>();
+        await value.show(
+          onUserEarnedReward: (_, reward) {
+            observation?.emit('ad_reward_earned');
+            callbacks.reward();
+          },
+        );
+      }
+    } catch (_) {
+      observation?.emit('ad_show_failed', reason: 'sdk_error');
+      rethrow;
     }
   }
 
@@ -99,3 +159,10 @@ String adLoadReason(TargetPlatform platform, String domain, int code) {
   }
   return 'load_failed';
 }
+
+/// Keep the existing player-facing categories; map only the telemetry protocol.
+String monetizationFailureReason(String reason) => switch (reason) {
+  'network' || 'no_fill' || 'timeout' => reason,
+  'invalid_request' => 'invalid_config',
+  _ => 'sdk_error',
+};

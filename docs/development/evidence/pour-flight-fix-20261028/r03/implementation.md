@@ -1,0 +1,19 @@
+# R03：恢复build18静态页，仅修源瓶绘制空间（两条原生路径已独立接受）
+
+最终状态：总控已直接核原布局与QA3来源，并实际查看4/L4 3→2、5/L6 2→4两条正常main路径的16关键帧、核19媒体hash，接受本次最小源瓶修复。接收/其它瓶固定，源瓶完整且水柱接瓶口；规则提示/邻瓶标签的短暂前景遮挡已实际审查并保留，归位恢复。不再为此改变静态布局。权威报告为`docs/development/review/pour-flight-source-only-R03-independent.md/json`，原始录像与324采样帧保留在native-r3、逐项hash索引；16受审帧及联系表入版本管理。R01/R02拒绝保留，以下待验描述是交付时历史状态。没有新TestFlight上传，未扩大为广告/统计/全部路径或物理设备验收。
+
+R01接收瓶下沉和R02整体下移/静态缩放均已被用户否决，旧通过撤回。当前BoardLayout整个类与已发布build18源ea2bdee逐字节相同；标签、BoardPage、BoardFeedback等原文件未改。原52标签宽、统一labelHeight、topPadding24+spare*.24、rowGap+spare*.52、原widthfit已全部恢复，旧78守卫恢复。15份build18历史几何参考回归先红（R02的96.23对106），恢复后全等通过；不是降低布局断言。
+
+根因：transportScale将局部Board画布top0误当整屏上界，同时运动层ClipRect和外层scroll裁切，故第4关源瓶被缩至约14%。当前只测量本App真实View与画布的坐标关系，为源瓶/水柱单独提供屏幕内的绘制矩形；运动层向该区域绘制，布局尺寸/滚动内容范围不扩大，静止瓶和交互控件不动。预览/大字滚动沿用裁切。原倾角/动作时间/水量和竖直水柱不改，没有新路径框架。
+
+上排源瓶使用正常90%运输比例并保留实测针织口>=8像素空气；修正只在源瓶运动几何中，接收瓶/其它瓶全程固定。单纯100%抬出画布会遮关卡标题（full-page-first.log），过紧间距候选的真实口部仅2px（focused-first.log），均未采用。最终21项针对性检查通过；最终3项页面/静态复查通过；正常字号4个现有首屏矩阵通过；分析无问题。未重跑全应用/core/工具/旧CI。
+
+实际页面Widget像素证明：第4关源瓶在旧画布上方有约9千至1万不透明样本，实际与独立全源参考匹配（0差异），并非只把scale改大又裁掉。关卡文字、返回/暂停及静态瓶/动作矩形不变；源瓶运输.9，第6关下排接收路径1.0。规则提示和部分装饰会被浮动源瓶短暂经过，此为已显式记录的自然前景遮挡，待父实际判断，未擅自隐藏/挪动提示或当成通过。PNG为Widget证据，不是原生验收。
+
+正常main新QA尚待另冻及Computer指定2894实际4/5瓶重点观察；F9、统计/SDK/广告、保存/奖励与发布不改。不得将当前代码/Widget检查称为已修好或已更新TestFlight。
+
+## Frozen QA provenance (pending native review)
+
+Implementation source: `30a42d9b613e71732766910af5266dfbe9bad886`. Normal main simulator debug build succeeded. 361 files frozen read-only at `build/pour-flight-fix-20261028/ios-qa-3/Runner.app`; manifest SHA256 `9f030c29763a0ffa06fe774a76af3793b456b569e35858fe8e504f21742239fa`. Display name `Pourlune Pour QA R3`; same dedicated identity/database; Firebase, GM and ads disabled.
+
+Same-byte installation copy is under `xcode-frozen-launch-3/Products`, with standard directory/executable0755 and data0644 permissions. GUI-only descriptor `PourFlightSourceOnlyQA.xcodeproj`, scheme `PourFlightSourceOnly_NoBuild_20261028`, has zero sources/build phases/dependencies/packages/scripts. Static settings confirm arm64/iphonesimulator and correct Products path. Computer must use existing2894 and Run Without Building only; no device CLI. Parent coordinates native4/5 priority; new evidence belongs to native-r3. No actual installation or acceptance claimed.

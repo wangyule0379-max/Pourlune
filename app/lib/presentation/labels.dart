@@ -10,6 +10,7 @@ String colorLabel(AppLocalizations l, String color) => switch (color) {
   'G' => l.greenTriangle,
   'P' => l.purpleDiamond,
   'B' => l.blueSquare,
+  'R' => l.roseStar,
   _ => color,
 };
 Set<int> ownedRegions(List<String> pieces, String scene) => pieces

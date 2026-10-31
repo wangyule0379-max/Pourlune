@@ -57,6 +57,34 @@ class AdConfigTest(unittest.TestCase):
             self.registration.write_text(json.dumps({**self.data,**changed}))
             with self.assertRaises(AdConfigError):selection('test','ios','com.pourlune.app',self.registration)
 
+    def test_production_uses_only_registered_units_and_rejects_build_injection(self):
+        app = self.data['apps']['ios']
+        app.update(interstitial_id='ca-app-pub-1111111111111111/2222222222',
+                   rewarded_id='ca-app-pub-1111111111111111/3333333333')
+        self.registration.write_text(json.dumps(self.data))
+        selected = selection('production', 'ios', 'com.pourlune.app', self.registration)
+        self.assertEqual(selected['interstitial_id'], app['interstitial_id'])
+        self.assertEqual(selected['rewarded_id'], app['rewarded_id'])
+        defs = [('POURLUNE_AD_MODE', 'production'), ('POURLUNE_AD_PLATFORM', 'ios'),
+                ('POURLUNE_AD_NATIVE_ID', 'com.pourlune.app'),
+                ('POURLUNE_AD_APP_ID', app['app_id']),
+                ('POURLUNE_INTERSTITIAL_ID', app['interstitial_id']),
+                ('POURLUNE_REWARDED_ID', app['rewarded_id'])]
+        self.assertEqual(check_build('ios', 'com.pourlune.app', app['app_id'],
+                                     encoded(defs), self.registration)['mode'], 'production')
+        for broken in [defs[:-1], defs[:-1] + [('POURLUNE_REWARDED_ID',
+                        'ca-app-pub-3940256099942544/1712485313')]]:
+            with self.assertRaises(AdConfigError):
+                check_build('ios', 'com.pourlune.app', app['app_id'], encoded(broken), self.registration)
+        with self.assertRaises(AdConfigError):
+            selection('production', 'ios', 'com.pourlune.app')
+        for invalid in ['ca-app-pub-3940256099942544/1712485313',
+                        'ca-app-pub-2222222222222222/3333333333', app['interstitial_id']]:
+            app['rewarded_id'] = invalid
+            self.registration.write_text(json.dumps(self.data))
+            with self.assertRaises(AdConfigError):
+                selection('production', 'ios', 'com.pourlune.app', self.registration)
+
     def test_native_build_rejects_platform_identity_appid_duplicates_and_live_unit_injection(self):
         defs=[('POURLUNE_AD_MODE','test'),('POURLUNE_AD_PLATFORM','ios'),
               ('POURLUNE_AD_NATIVE_ID','dev.pourlune.admobValidation'),
@@ -83,6 +111,70 @@ class AdConfigTest(unittest.TestCase):
         result=subprocess.run(['sh',str(ROOT/'app/ios/Flutter/firebase_config.sh')],env=env,capture_output=True,text=True)
         self.assertNotEqual(result.returncode,0,result.stdout)
         self.assertEqual(marker.read_text(),'previous-owned-marker')
+
+    def test_android_packaged_manifest_rejects_unused_ad_id_and_analytics_ad_id_collection(self):
+        # A dependency can reintroduce AD_ID during merging. Check the packaged
+        # manifest, not a string in the source manifest or the selected ad mode.
+        manifest = self.root / 'AndroidManifest.xml'
+        for mode, permission, metadata, expected in [
+            ('disabled', True, 'false', 'disabled_android_ad_id_permission'),
+            ('disabled', False, 'false', None),
+            ('test', True, 'false', None),
+            ('disabled', False, 'true', 'android_analytics_ad_id_collection'),
+        ]:
+            with self.subTest(mode=mode, permission=permission, metadata=metadata):
+                permission_xml = ('<uses-permission android:name="com.google.android.gms.permission.AD_ID" />'
+                                  if permission else '')
+                manifest.write_text(
+                    '<manifest xmlns:android="http://schemas.android.com/apk/res/android">'
+                    + permission_xml + '<application><meta-data '
+                    'android:name="google_analytics_adid_collection_enabled" '
+                    f'android:value="{metadata}" /></application></manifest>')
+                env = {**os.environ, 'DART_DEFINES': encoded([
+                    ('POURLUNE_AD_MODE', mode), ('POURLUNE_AD_PLATFORM', 'android'),
+                    ('POURLUNE_AD_NATIVE_ID', 'com.pourlune.app'),
+                    ('POURLUNE_AD_APP_ID', 'ca-app-pub-3940256099942544~3347511713')])}
+                result = subprocess.run([
+                    sys.executable, str(ROOT / 'tools/validation/admob_config.py'),
+                    '--platform', 'android', '--native-id', 'com.pourlune.app',
+                    '--native-app-id', 'ca-app-pub-3940256099942544~3347511713',
+                    '--android-manifest', str(manifest),
+                ], env=env, capture_output=True, text=True)
+                if expected:
+                    self.assertEqual(result.returncode, 1, result.stderr)
+                    self.assertEqual(json.loads(result.stderr)['code'], expected)
+                else:
+                    self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_production_manifest_rejects_platform_advertising_id_without_gms_permission(self):
+        app = self.data['apps']['android']
+        app.update(interstitial_id='ca-app-pub-1111111111111111/3333333333',
+                   rewarded_id='ca-app-pub-1111111111111111/4444444444')
+        self.registration.write_text(json.dumps(self.data))
+        manifest = self.root / 'AndroidManifest.xml'
+        env = {**os.environ, 'DART_DEFINES': encoded([
+            ('POURLUNE_AD_MODE', 'production'), ('POURLUNE_AD_PLATFORM', 'android'),
+            ('POURLUNE_AD_NATIVE_ID', 'com.pourlune.app'),
+            ('POURLUNE_AD_APP_ID', app['app_id']),
+            ('POURLUNE_INTERSTITIAL_ID', app['interstitial_id']),
+            ('POURLUNE_REWARDED_ID', app['rewarded_id'])])}
+        for permission in ['', '<uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID" />']:
+            with self.subTest(platform_ad_id=bool(permission)):
+                manifest.write_text(
+                    '<manifest xmlns:android="http://schemas.android.com/apk/res/android">'
+                    + permission + '<application><meta-data '
+                    'android:name="google_analytics_adid_collection_enabled" '
+                    'android:value="false" /></application></manifest>')
+                result = subprocess.run([
+                    sys.executable, str(ROOT / 'tools/validation/admob_config.py'),
+                    '--platform', 'android', '--native-id', 'com.pourlune.app',
+                    '--native-app-id', app['app_id'], '--registration', str(self.registration),
+                    '--android-manifest', str(manifest)], env=env, capture_output=True, text=True)
+                if permission:
+                    self.assertNotEqual(result.returncode, 0, result.stdout)
+                    self.assertIn('disabled_android_ad_id_permission', result.stderr)
+                else:
+                    self.assertEqual(result.returncode, 0, result.stderr)
 
 
 if __name__=='__main__':unittest.main()

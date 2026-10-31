@@ -10,6 +10,7 @@ import 'package:pourlune_dev/application/game_controller.dart';
 import 'package:pourlune_dev/data/game_store.dart';
 import 'package:pourlune_dev/data/content_library.dart';
 import 'package:pourlune_dev/main.dart';
+import 'package:pourlune_dev/presentation/board_page.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'store_test.dart' show sample, finish;
@@ -107,6 +108,16 @@ void main() {
         await tap('demo-bottle-${move.$2}');
       }
       expect(find.byKey(const Key('demo-skip')), findsNothing);
+      await tap('demo-bottle-0');
+      await tap('demo-bottle-2');
+      BoardView practice() => t.widget<BoardView>(
+        find.byWidgetPredicate(
+          (w) => w is BoardView && w.keyPrefix == 'demo-bottle',
+        ),
+      );
+      expect(practice().selected, 2);
+      await tap('demo-bottle-2');
+      expect(practice().selected, isNull);
       expect(c.ordinary!.toJson(), active);
       await tap('rules-back');
       await tap('home');

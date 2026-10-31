@@ -31,6 +31,8 @@ class FlameBoard extends StatefulWidget {
     this.keyPrefix = 'bottle',
     this.motion,
     this.onMotionComplete,
+    this.onFlowStart,
+    this.onFlowEnd,
     this.rejectedBottle,
     this.rejectionRevision = 0,
     this.preview = false,
@@ -38,6 +40,7 @@ class FlameBoard extends StatefulWidget {
   final GameInstance state;
   final int? selected, suggested, hintSource, rejectedBottle, addedBottle;
   final ValueChanged<int>? onTap, onMotionComplete;
+  final VoidCallback? onFlowStart, onFlowEnd;
   final PlayerSettings settings;
   final String keyPrefix;
   final PourMotion? motion;
@@ -49,7 +52,9 @@ class FlameBoard extends StatefulWidget {
 
 class _FlameBoardState extends State<FlameBoard> {
   late FlameBoardGame game;
-  final states = List.generate(7, (_) => WidgetStatesController());
+  final _canvasKey = GlobalKey();
+  bool _boundsScheduled = false;
+  final states = List.generate(8, (_) => WidgetStatesController());
   @override
   void initState() {
     super.initState();
@@ -62,10 +67,36 @@ class _FlameBoardState extends State<FlameBoard> {
   }
 
   FlameBoardGame _newGame() => FlameBoardGame(
+    onFlowStart: () => widget.onFlowStart?.call(),
+    onFlowEnd: () => widget.onFlowEnd?.call(),
     onMotionComplete: (token) {
       if (mounted) widget.onMotionComplete?.call(token);
     },
   );
+
+  void _measureSourceBounds(BoardLayout layout, bool overflow) {
+    if (_boundsScheduled) return;
+    _boundsScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _boundsScheduled = false;
+      if (!mounted) return;
+      final box = _canvasKey.currentContext?.findRenderObject() as RenderBox?;
+      if (box == null || !box.hasSize) return;
+      final origin = box.localToGlobal(Offset.zero);
+      final view = MediaQueryData.fromView(View.of(context));
+      final bounds = overflow
+          ? Rect.fromLTRB(
+              -origin.dx,
+              view.viewPadding.top - origin.dy,
+              view.size.width - origin.dx,
+              layout.height,
+            )
+          : layout.flightBounds;
+      if (game.sourcePaintBounds != bounds) {
+        setState(() => game.sourcePaintBounds = bounds);
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -141,6 +172,10 @@ class _FlameBoardState extends State<FlameBoard> {
         preview: w.preview,
         footLabels: !denseDock,
       );
+      final sourceOverflow =
+          !w.preview && !denseDock && scaler.scale(14) <= 18.2;
+      _measureSourceBounds(layout, sourceOverflow);
+      final sourceBounds = game.sourcePaintBounds ?? layout.flightBounds;
       // Reconcile all inputs atomically before building controls. The game
       // defers notifier publication during layout, rather than its state.
       game.show(
@@ -181,6 +216,7 @@ class _FlameBoardState extends State<FlameBoard> {
                 game.artStatus.value == BoardArtStatus.ready &&
                 game.frame.active == null;
             return Stack(
+              key: _canvasKey,
               clipBehavior: Clip.none,
               children: [
                 Positioned.fill(child: canvas!),
@@ -257,6 +293,16 @@ class _FlameBoardState extends State<FlameBoard> {
                         ),
                       ),
                     ),
+                Positioned.fromRect(
+                  rect: sourceBounds,
+                  child: ClipRect(
+                    child: IgnorePointer(
+                      child: CustomPaint(
+                        painter: _MovingBottleLayer(game, sourceBounds),
+                      ),
+                    ),
+                  ),
+                ),
                 if (denseDock)
                   if (visual.active case final active?)
                     AnimatedBuilder(
@@ -299,6 +345,7 @@ class _FlameBoardState extends State<FlameBoard> {
         key: const Key('board-accessibility-viewport'),
         child: SingleChildScrollView(
           key: PageStorageKey('board-viewport-${w.state.id}'),
+          clipBehavior: sourceOverflow ? Clip.none : Clip.hardEdge,
           child: Column(
             children: [
               board,
@@ -327,4 +374,19 @@ class _FlameBoardState extends State<FlameBoard> {
       );
     },
   );
+}
+
+class _MovingBottleLayer extends CustomPainter {
+  _MovingBottleLayer(this.game, this.bounds) : super(repaint: game.poseTick);
+  final Rect bounds;
+  final FlameBoardGame game;
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.translate(-bounds.left, -bounds.top);
+    game.renderMoving(canvas);
+  }
+
+  @override
+  bool shouldRepaint(_MovingBottleLayer old) =>
+      old.game != game || old.bounds != bounds;
 }

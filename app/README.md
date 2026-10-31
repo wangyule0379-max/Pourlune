@@ -173,7 +173,7 @@ Native iOS LaunchScreen/Main, Android legacy and API31+ light/night launch theme
 
 ## Full-board Flame presentation
 
-The normal `BoardView` uses `presentation/flame_board/` for the existing 4/5/6/7-bottle layouts. Flutter retains native text, button targets, focus and semantics. The renderer owns only two decoded bottle layers and finite effects; immutable `GameInstance`/`PourMotion` snapshots remain inputs, and its sole completion callback releases the existing presentation token. Top-row captions sit above the flight area and lower-row captions below it; raw moving art and the stream remain within the caption-free bounds throughout every direction. The instance key preserves the renderer when tutorial/assistance text changes. Readonly settlement previews do not attach a controller presenter. Board actions stay disabled until both art layers are ready. A failed load exposes native error semantics and Retry, which replaces only the failed game and preserves the instance/store.
+The normal `BoardView` uses `presentation/flame_board/` for the existing 4/5/6/7-bottle layouts. Flutter retains native text, button targets, focus and semantics. The renderer owns only two decoded bottle layers and finite effects; immutable `GameInstance`/`PourMotion` snapshots remain inputs, and its sole completion callback releases the existing presentation token. The static layout remains equal to published build18. Only the source bottle moves during a pour; receivers, other bottles and readouts keep their original coordinates and dimensions. In normal text mode the source foreground uses the measured screen painting region above the local board, without expanding the board layout. Upper-row transport remains a recognizable 90% of resting size and the actual knit-rim clearance remains tested. The source may briefly occlude the rule prompt or foot readouts; the level header and navigation/actions stay in place. Large-text scrolling and previews retain their existing clipping. The instance key preserves the renderer when tutorial/assistance text changes. Readonly settlement previews do not attach a controller presenter. Board actions stay disabled until both art layers are ready. A failed load exposes native error semantics and Retry, which replaces only the failed game and preserves the instance/store.
 
 Visible capacity and semantic contents follow the same visual progress as the liquid. A single rounded midpoint of outgoing/arrived units is subtracted and added at both ends; integer counts conserve units while the continuous bands also account for liquid in transit. Approach retains the before-counts, and interruption aligns every readout with the complete authoritative state. SQLite commits are never delayed or split for an animation. The debug sample uses this same capacity policy; original frozen sample artifacts are preserved.
 
@@ -241,3 +241,92 @@ layout acceptance and its exact implementation CI.
 ADM01 SDK-only native probe: `integration_test/admob_beta_native_test.dart` requires iOS identity `dev.pourlune.admobValidation`, Firebase none, official sample native App ID, explicit test selection and `adm01_native.sqlite`. It records actual UMP eligibility/inventory plus a real local move save; no screenshots, consent/reward substitutes or production configuration. A successful probe exit is not proof of actual ad display/closure/reward. See `docs/development/evidence/admob-beta-integration/` from repository root for the actual outcome.
 
 Normal-size daily closeout (2026-10-25): Daily uses a current-week stamp strip; View history reveals the existing full read-only calendar. Daily settlement has a date/stamp-specific layout with Back to daily, Home and replay. Real dates, midnight refresh, replay receipts and save guards are unchanged. Tutorial steps are visible text. Special-font layouts retain their existing usable branches. Focused guards: `flutter test test/daily_normal_closeout_test.dart test/offline_ui_test.dart test/p10_responsive_completion_test.dart`. Explicit `tool/parent_normal_snapshot.dart` prepares only absent `build/` QA databases, never an installed user's database or production app entrypoint.
+
+### 2026-10-25 difficulty corrections and direct extra bottle
+
+`POURLUNE_AD_MODE=disabled` (including the current release default) now grants the
+eligible Extra bottle immediately through a local, atomic entitlement. Main1–3
+remain tutorial-only; main4+ and daily allow one extra per instance. The same
+bottle survives Undo, Restart and relaunch. No SDK view, reward attempt or
+interstitial timing is fabricated. Configured test/prod advertising retains its
+existing real callback requirement. Saving failure keeps the old board and offers
+Retry; a successful grant alone starts the added-bottle presentation.
+
+The 22 explicit campaign corrections are reproducible with
+`.venv/bin/python tools/content/rebalance_main60_v3.py --check` from the root.
+`--install` accepts only the frozen v2 baseline or the exact generated v3 output,
+and advances only replaced definitions. Do not run the historical v2 installer
+against this pack. First12, daily30 and the daily catalog are unchanged. Old
+instances embed their original puzzle and are never silently replaced.
+
+The isolated `tool/difficulty_bottle_snapshot.dart` prepares a fresh host SQLite
+QA file only when `POURLUNE_DIFFICULTY_QA_OUTPUT` points to a new project build
+path. It seeds19 settlements and new main020 for normal `lib/main.dart` capture;
+this is QA preparation, not evidence of19 manually played levels.
+
+### 主线五色v4专项（2026-10-25）
+
+正常入口与存档schema不变。初始最多7瓶、一次本地加瓶后8瓶；R为浅玫瑰红液体／星形，
+5目标正常结算3+2。极短异常字号庆祝区保留有界单排，避免目标缩成点。
+全60题来源与只读复现见`../tools/content/README.md`，难度和真实画面仍需独立验收。
+
+本批原生专项使用正常`main/Bootstrap`、正式资源与真实sqflite；只清
+`main60_five_color.sqlite`。先前1–59通关是明确QA准备，测试按参考解和Hint操作，非盲玩。
+不启用Firebase或广告。仅在inventory已确认无竞争的专用设备运行，保护F9、Small11b/4188和旧库。
+外部xcconfig设置`POURLUNE_BUNDLE_IDENTIFIER = dev.pourlune.parentNormalValidation`，
+不全局覆盖SDK资源bundle身份。示例（app/）：
+
+```sh
+XCODE_XCCONFIG_FILE=/tmp/pourlune-main60-five-color.xcconfig FIREBASE_ANALYTICS_WITHOUT_ADID=1 flutter test integration_test/main60_five_color_test.dart -d <exclusive-qa-id> --dart-define=POURLUNE_DATABASE=main60_five_color.sqlite --dart-define=POURLUNE_AD_MODE=disabled --dart-define=POURLUNE_MAIN60_RUN=<unique-run>
+```
+
+测试在`Documents/main60-five-color-native/runtime.json`发出`evidence_ready`后等待host复制和
+写入`copied`标记（最长55秒）；测试运行器结束可能卸载安装，须先复制截图和一致SQLite备份。
+真实同安装进程恢复另外使用`lib/main.dart`正常构建、同一Runner/kernel与SIGKILL/launch核对，
+不能用测试重新安装或Widget重建替代进程恢复。不得把新候选称为已在TestFlight12/Play13。
+## GameMunchies 统计与广告控制（2026-10-28）
+
+隐私页按服务区分可用性：Firebase 不可用但 GameMunchies 已配置时，提示崩溃上报不可用，游戏统计仍遵循已保存的 Analytics 选择。单个提供方同步失败不能声称所有分享被阻断；本地选择保存失败仍阻断新的应用分享。此差额只修正文案，不改变统计、SDK、广告或发奖门控。渲染与同意竞态回归见 `test/privacy_service_availability_test.dart`、`privacy_choice_generation_test.dart`、`gamemunchies_privacy_race_test.dart`。
+
+复用同一 `gamemunchies_client` 0.2.0，固定源6dac35372fb07cb0325e198792e4adf09dc75e29。
+来源及逐文件指纹在 `../tools/validation/gamemunchies-sdk.json`。
+私有SDK不进入Pourlune仓库；用受限归档恢复到ignored `.private-dependencies/gamemunchies_client`，
+再运行 `flutter pub get --enforce-lockfile`。方法见 `../tools/validation/README.md`。
+缺少或指纹不符即拒绝构建，不借另一份SDK或悄悄移除接线解围。
+
+客户端只连接 `https://api.gamemunchies.com`（不带 `/api` 后缀），无后台地址或管理员凭据。
+地址切换本身不需要SDK升级；92f5882扩展是独立的统计同意需求。
+SDK按origin/gameId/platform/environment隔离存储：旧域名的QA队列、ID和SDK冷却不迁移，
+原游戏SQLite与全屏180秒保护保持。TestFlight17不含GM，因此该版正式玩家没有旧GM队列可迁移。
+
+缺省构建不启用GM。专用QA显式使用 `config/gamemunchies/test.json` 与已登记的实际QA原生身份；
+正式签名候选须给beta_build.py `--gamemunchies-environment production`，
+绑定已核正式gameId与com.pourlune.app，不能混用test/production。
+统计仍需App设置主动打开 **Share gameplay analytics**；默认关闭，保存失败不启用。
+关统计立即停止新采集/发送并清当前作用域待发队列，尽力取消在途统计请求；已经抵达服务器的记录不能撤回。
+规则GET继续，使用同一个SDK客户端、缓存和刷新限频；不会为规则拉取偷偷发active。
+
+加载前、载入完成及show前检查总开关/类型/场景；配置变更使尚未调用原生show的旧机会失效。
+已开始原生展示的回调保持，合法奖励仍只按原实例SQLite事务去重。
+关闭远程加瓶不会触发本地免费加瓶捷径；本地disabled广告模式原有行为保留。
+远程规则与Firebase安全开关、UMP、前台、首通资格、全屏互斥共同满足后才显示。
+SDK前台每30秒检查一次、配置尝试至少间隔5分钟、请求超时8秒；后台暂停，返回前台到期再尝试。
+离线用已验证缓存或明确默认值，核心玩法不等待网络。
+
+全屏本地安全间隔仍为最近任一全屏shown后的180秒。GM另限制最近一次实际插屏impression到下一次插屏的间隔；
+有效展示需同时满足两个截止时间（远程低于180秒不能缩短本地保护，rewarded不受GM插屏间隔约束）。
+新实例首次落盘才记round_start；恢复/Restart/前台/加瓶不算新局。
+展示和失败只接真实Google `onAdImpression`/`onAdFailedToLoad`，仍使用官方测试广告，不增加MAX或付费广告。
+最终实际数据/规则版本/分发结果见 `../docs/development/deliveries/gamemunchies-live-integration.md`。
+
+### SDK 0.2.0 ad funnel (2026-10-28)
+
+The fixed private Dart archive is verified by `tools/validation/gamemunchies-sdk.json` (archive SHA-256 and all seven files). Only the SDK version changes in `pubspec.lock`. No private SDK source is committed. CI uses the separately installed `GAMEMUNCHIES_DART_SDK_ARCHIVE_V2`; V1 remains available for earlier commits.
+
+`GameMunchiesAdEvents` retains one random correlation ID and first ID/time per stage. `GoogleAdsTransport` records actual request, load callback, show invocation/failure, impression callback and earned-reward callback through `trackAdEvent`. It never also calls legacy `recordAdImpression`. The coordinator owns show opportunities and blocked decisions; a blocked Extra-bottle dialog entry or ineligible Next action is counted once, not on UI rebuilds. Dismissal/load success/show invocation are never counted as exposure. SQLite remains the only reward authority.
+
+All calls are asynchronous observations. Analytics opt-out stops queueing/sending and clears pending statistics; configuration refresh and actual interstitial cooldown continue. Existing consent defaults and stored choices are unchanged. No AdMob reporting OAuth, simulated revenue, MAX, or new display policy is included.
+
+For this upgrade use existing `app/config/gamemunchies/test.json` (test ID + test environment), official AdMob test mode, and dedicated QA identities. `integration_test/gamemunchies_020_native_app.dart` is a debug-only verification entry: new `gm_020_20261028.sqlite`, real controller/AdMob and SDK, first-process controlled POST disconnect, same-installation restart, one lost real ACK. It explicitly opts in only this new QA database. Normal `lib/main.dart` does not import this harness.
+
+Production switch for a future authorized release: `tools/validation/beta_build.py --gamemunchies-environment production` (or the same option in `firebase_build.py`). This selects existing game ID `8feaf0dc-ec12-4308-ac58-16b2180f2d63`, platform ios/android and production environment; `GameMunchiesReporting.environment()` checks the pair. Keep `baseUrl=https://api.gamemunchies.com`; do not add `/api`. `--ad-mode` remains a separate existing choice. Version dimensions come from build-generated `POURLUNE_VERSION_NAME` and `POURLUNE_VERSION_CODE`. This task builds test only and does not publish a store version.

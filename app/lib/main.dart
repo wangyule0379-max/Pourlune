@@ -34,6 +34,12 @@ void main() {
         'Nunito',
       ], await rootBundle.loadString('assets/fonts/nunito/OFL.txt'));
     });
+    LicenseRegistry.addLicense(() async* {
+      yield LicenseEntryWithLineBreaks([
+        'Dream Culture',
+        'Pouring Water',
+      ], await rootBundle.loadString('assets/audio/ATTRIBUTION.txt'));
+    });
   }
   final previousFlutter = FlutterError.onError;
   FlutterError.onError = (details) {
@@ -156,14 +162,15 @@ class _BootstrapState extends State<Bootstrap> {
         library: library,
         services: hub,
         clock: development?.now,
-        onFeedback: (feedback) => unawaited(
-          sounds.play(switch (feedback) {
+        onFeedback: (feedback) {
+          final sound = switch (feedback) {
             GameFeedback.select => GameSound.select,
-            GameFeedback.pour => GameSound.pour,
+            GameFeedback.pour => null, // Renderer starts water at visible flow.
             GameFeedback.error => GameSound.error,
             GameFeedback.complete => GameSound.win,
-          }),
-        ),
+          };
+          if (sound != null) unawaited(sounds.play(sound));
+        },
       );
       await c.initialize();
       await hub.initializeLocal().catchError((_) {});

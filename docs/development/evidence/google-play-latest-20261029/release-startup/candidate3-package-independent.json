@@ -1,0 +1,83 @@
+{
+  "at": "2026-10-29T08:03:52.297784+00:00",
+  "status": "PASS_R3_STATIC_PACKAGE_FIX_ACTUAL_RELEASE_RUNTIME_PENDING",
+  "source": "de5a5950b6e86c50c24e681add0b43e079bc4145",
+  "artifact_sha256": "bcfa0483c086c71161653829067d12e42ee30f275dcc4699bd7c2ca0ee19c06d",
+  "artifact_bytes": 136310168,
+  "frozen_files_exact": 9,
+  "sources_exact": 570,
+  "source_delta": [
+    ".github/workflows/flutter.yml",
+    "app/android/app/proguard-rules.pro",
+    "app/integration_test/fixtures/legacy13_fixture.dart",
+    "app/integration_test/legacy13_migration_app.dart",
+    "app/test/legacy13_upgrade_test.dart",
+    "tools/validation/README.md",
+    "tools/validation/android_release_startup.py",
+    "tools/validation/fixtures/README.md",
+    "tools/validation/fixtures/generate_legacy13_fixture_test.dart"
+  ],
+  "non_signature_payload_delta": [
+    "BUNDLE-METADATA/com.android.tools.build.obfuscation/proguard.map",
+    "BUNDLE-METADATA/com.android.tools.build.profiles/baseline.prof",
+    "BUNDLE-METADATA/com.android.tools.build.profiles/baseline.profm",
+    "BUNDLE-METADATA/com.android.tools/r8.json",
+    "base/dex/classes.dex"
+  ],
+  "signed_payload_unchanged": true,
+  "manifest_and_all_Dart_AOT_native_assets_identical_to_accepted_R2": true,
+  "public_noarg_independent_raw_Dex_parse": {
+    "before": {
+      "androidx.work.impl.WorkDatabase_Impl": {
+        "class_present": true,
+        "class_public": true,
+        "public_noarg_constructor": false
+      },
+      "androidx.work.OverwritingInputMerger": {
+        "class_present": true,
+        "class_public": true,
+        "public_noarg_constructor": false
+      },
+      "androidx.work.ArrayCreatingInputMerger": {
+        "class_present": true,
+        "class_public": true,
+        "public_noarg_constructor": false
+      }
+    },
+    "after": {
+      "androidx.work.impl.WorkDatabase_Impl": {
+        "class_present": true,
+        "class_public": true,
+        "public_noarg_constructor": true,
+        "constructor_access": 65537,
+        "constructor_code_offset": 2270752
+      },
+      "androidx.work.OverwritingInputMerger": {
+        "class_present": true,
+        "class_public": true,
+        "public_noarg_constructor": true,
+        "constructor_access": 65537,
+        "constructor_code_offset": 2270196
+      },
+      "androidx.work.ArrayCreatingInputMerger": {
+        "class_present": true,
+        "class_public": true,
+        "public_noarg_constructor": true,
+        "constructor_access": 65537,
+        "constructor_code_offset": 2269264
+      }
+    }
+  },
+  "public_signer_pin": "E098618C2D82DDE870552B7ECD7659E6EB428EE32EE53B7455393D754B3685E2",
+  "strict_jarsigner": true,
+  "bundletool_validate": true,
+  "universal_apk_sha256": "3859b4f2e27786e380bcd0acf4033c4c4267b01da31006085a3e6f0f98bdf12a",
+  "universal_payload_matching_entries": 168,
+  "ci_saved_terminal": "40837181164 same de5a595: two jobs success; no live requery",
+  "ci_is_not_runtime": true,
+  "actual_release_startup_pending": true,
+  "synthetic_legacy_compat_UI_pending": true,
+  "upload_approved": false,
+  "private_signing_material_read": false,
+  "device_operations": false
+}

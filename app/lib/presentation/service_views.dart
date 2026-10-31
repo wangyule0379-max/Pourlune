@@ -163,12 +163,34 @@ Future<void> openSupportEntry(
       false;
   if (!context.mounted || ok) return;
   final l = AppLocalizations.of(context);
-  ScaffoldMessenger.of(context)
-      .showSnackBar(SnackBar(content: Text(l.supportUnavailable)));
+  final config = c.services?.config;
+  final uri = feedback
+      ? config?.feedback
+      : privacy
+      ? config?.privacy
+      : config?.support;
+  final message = uri == null
+      ? l.supportUnavailable
+      : feedback
+      ? l.feedbackOpenFailed(uri.path)
+      : l.supportOpenFailed;
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
 }
 
 Future<void> showExtraBottle(BuildContext context, GameController c) async {
+  if (c.directExtraBottleEnabled) {
+    await c.watchExtraBottle();
+    return;
+  }
   final l = AppLocalizations.of(context), hub = c.services;
+  if (!c.canWatchExtraBottle) {
+    hub?.ads.blockedOpportunity(
+      AdKind.rewarded,
+      c.current?.extraBottleGranted == true
+          ? 'entitlement'
+          : hub.ads.blockedReason(AdKind.rewarded) ?? 'unknown',
+    );
+  }
   // The first sheet explains the exchange; only its explicit Watch starts it.
   final watch = await showKnitDialog<bool>(
     context: context,
@@ -282,7 +304,11 @@ Future<void> showPrivacyChoices(BuildContext context, GameController c) async {
                             Text(l.localOnly),
                             const SizedBox(height: 16),
                             if (hub == null || !hub.firebaseReady)
-                              Text(l.servicesDisabled),
+                              Text(
+                                hub?.reporting.configured == true
+                                    ? l.crashUnavailableAnalyticsAvailable
+                                    : l.servicesDisabled,
+                              ),
                             const SizedBox(height: 8),
                             SwitchListTile(
                               key: const Key('analytics-choice'),
@@ -318,7 +344,12 @@ Future<void> showPrivacyChoices(BuildContext context, GameController c) async {
                             if (hub != null &&
                                 (hub.privacySaveFailed ||
                                     hub.privacySyncFailed)) ...[
-                              Text(l.privacySaveProblem),
+                              Text(
+                                hub.reporting.configured &&
+                                        !hub.privacySaveFailed
+                                    ? l.privacyProviderSyncProblem
+                                    : l.privacySaveProblem,
+                              ),
                               OutlinedButton(
                                 onPressed: hub.retryPrivacy,
                                 child: Text(l.retry),

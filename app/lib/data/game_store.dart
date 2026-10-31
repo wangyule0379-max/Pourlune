@@ -548,6 +548,48 @@ class GameStore {
     await tx.insert('unlocks', {'level': 1});
     fault?.call('reset');
   });
+
+  /// Local entitlement for builds with ads disabled; never records an ad view.
+  /// Keep the entitlement and board atomic, including retries after a commit.
+  Future<GameInstance> grantDirectExtraBottle(GameInstance origin) =>
+      db.transaction((tx) async {
+        if (origin.completed ||
+            (origin.slot != 'daily' && origin.puzzle.mainLevel! < 4)) {
+          throw StateError('Extra bottle unavailable');
+        }
+        final rows = await tx.query(
+          'active_slots',
+          where: 'slot = ?',
+          whereArgs: [origin.slot],
+        );
+        final saved = rows.isEmpty
+            ? null
+            : _decode(rows.single['payload'], origin.slot);
+        if (saved == null || saved.id != origin.id || saved.completed) {
+          throw StateError('Original instance is no longer active');
+        }
+        if (saved.extraBottleGranted) return saved;
+        if (jsonEncode(saved.toJson()) != jsonEncode(origin.toJson())) {
+          throw StateError('Origin must be saved');
+        }
+        if ((await tx.query(
+          'reward_attempts',
+          where:
+              "slot = ? AND status IN ('open','unconfirmed','pending_restore')",
+          whereArgs: [origin.slot],
+        )).isNotEmpty) {
+          throw StateError('Resolve the original ad request first');
+        }
+        await tx.insert('reward_entitlements', {
+          'instance_id': origin.id,
+          'attempt_id': 'direct:${origin.id}',
+        }, conflictAlgorithm: ConflictAlgorithm.ignore);
+        final granted = saved.grantExtraBottle();
+        await _write(tx, granted, false);
+        fault?.call('reward_grant');
+        return granted;
+      });
+
   Future<RewardAttempt> beginReward(String attemptId, GameInstance origin) =>
       db.transaction((tx) async {
         if (attemptId.isEmpty ||

@@ -857,6 +857,8 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
               onRestart: _restart,
               onPause: _pause,
               onExtra: () => showExtraBottle(context, c),
+              onFlowStart: () => unawaited(widget.audio?.play(GameSound.pour)),
+              onFlowEnd: () => unawaited(widget.audio?.finishEffect()),
               debugBoardPresentation: widget.debugBoardPresentation,
             );
             return kDebugMode && widget.debugBoardPagePresentation != null

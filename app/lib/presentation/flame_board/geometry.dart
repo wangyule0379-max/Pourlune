@@ -24,8 +24,8 @@ class BottleShape {
   Rect get visibleRect => imageRect;
   List<Offset> get interior => [
     for (final p in const [
-      Offset(.38, .10),
-      Offset(.62, .10),
+      Offset(.32, .05),
+      Offset(.68, .05),
       Offset(.64, .19),
       Offset(.78, .245),
       Offset(.82, .30),
@@ -110,7 +110,10 @@ class BottleShape {
   double get unitArea => areaBelow(interior, (.29 - .10) * height) / 4;
   List<Offset> worldHull(BottlePose pose) =>
       interior.map(pose.transform).toList();
-  Offset lip(double direction) => Offset(direction * .08 * width, 0);
+  // The 166x309 material's opening ends near (53,16)/(113,16).
+  // Use that same inner lip for the retained volume, pose and flowing water.
+  Offset lip(double direction) =>
+      Offset(direction * .18 * width, -.05 * height);
 }
 
 double polygonArea(List<Offset> polygon) {
@@ -215,7 +218,7 @@ class PourGeometry {
   final int units, sourceUnits;
   final double initialLift;
   final Rect? bounds;
-  double get flowMs => 230 + 70.0 * units;
+  double get flowMs => 460 + 100.0 * units;
   double get totalMs => 200 + 90 + flowMs + 210 + 100;
   PourFrame frame(double elapsedMs) {
     final t = elapsedMs.clamp(0.0, totalMs);
@@ -231,15 +234,44 @@ class PourGeometry {
         direction = 1;
       }
     }
+    // The moving source can use real screen space above the local board.
+    // A normal 90% transport and the tested rim gap keep the level header
+    // clear; no resting bottle or receiver changes position or dimensions.
+    final upperFlight =
+        area != null && area.top < 0 && targetMouth.dy < shape.width * 1.25;
     final initialAngle = pourAngle(shape, sourceUnits.toDouble()) * direction;
     final finalAngle =
         pourAngle(shape, (sourceUnits - units).toDouble()) * direction;
-    final gap = bounds == null ? 35.0 : math.max(4.0, shape.width * .06);
+    final rimClearance =
+        -shape.imageRect.top +
+        (upperFlight
+            ? (shape.width * .09).clamp(9.0, 12.0)
+            : (shape.width * .14).clamp(8.0, 16.0));
+    double rimDrop(double angle) {
+      final turn = BottlePose(Offset.zero, angle);
+      // The top 17% of the original material contains the knit rim/seam.
+      // Its rotated lower edge, not the stream's lip point, needs clearance
+      // above the receiving rim. The envelope includes the widening neck.
+      final rim = Rect.fromLTRB(
+        -shape.width * .32,
+        -shape.height * .10,
+        shape.width * .32,
+        shape.height * .07,
+      );
+      final bottom = [
+        rim.topLeft,
+        rim.topRight,
+        rim.bottomLeft,
+        rim.bottomRight,
+      ].map((p) => turn.transform(p).dy).reduce(math.max);
+      return bottom - turn.transform(shape.lip(direction)).dy;
+    }
+
     double transportScale(double angle) {
       if (area == null) return 1;
       final turn = BottlePose(Offset.zero, angle);
       final lip = turn.transform(shape.lip(direction));
-      final anchor = targetMouth - Offset(0, gap);
+      final anchor = targetMouth - Offset(0, rimClearance);
       var scale = 1.0;
       for (final corner in [
         shape.visibleRect.topLeft,
@@ -247,7 +279,9 @@ class PourGeometry {
         shape.visibleRect.bottomLeft,
         shape.visibleRect.bottomRight,
       ]) {
-        final delta = turn.transform(corner) - lip;
+        // The rim's extension scales with the transported bottle too, so
+        // clearance and canvas fitting share one linear transform.
+        final delta = turn.transform(corner) - lip - Offset(0, rimDrop(angle));
         if (delta.dx < 0) {
           scale = math.min(scale, (anchor.dx - area.left) / -delta.dx);
         }
@@ -261,17 +295,21 @@ class PourGeometry {
           scale = math.min(scale, (area.bottom - anchor.dy) / delta.dy);
         }
       }
-      return scale.clamp(.01, 1);
+      return scale.clamp(.01, upperFlight ? .9 : 1);
     }
 
-    Offset aligned(double angle) =>
-        targetMouth +
-        Offset(0, -gap) -
-        BottlePose(
-          Offset.zero,
-          angle,
-          scale: transportScale(angle),
-        ).transform(shape.lip(direction));
+    Offset aligned(double angle) {
+      final scale = transportScale(angle);
+      final gap = area == null ? 35.0 : rimClearance + rimDrop(angle) * scale;
+      return targetMouth -
+          Offset(0, gap) -
+          BottlePose(
+            Offset.zero,
+            angle,
+            scale: scale,
+          ).transform(shape.lip(direction));
+    }
+
     final selected = sourceMouth + Offset(0, -initialLift);
     final approachEnd = aligned(initialAngle * .65);
     var out = 0.0, delivered = 0.0, head = 0.0, tail = 0.0;
@@ -300,7 +338,7 @@ class PourGeometry {
       stage = 'align';
     } else if (t < 290 + flowMs) {
       final f = t - 290;
-      const lag = 26.0;
+      const lag = 60.0;
       out = units * _ease(f / (flowMs - lag));
       delivered = units * _ease((f - lag) / (flowMs - lag));
       final angle = pourAngle(shape, sourceUnits - out) * direction;
@@ -402,12 +440,13 @@ class BoardLayout {
     this.footLabels = true,
     this.bottomCaptionsExternal = false,
   }) {
-    assert(count >= 4 && count <= 7);
+    assert(count >= 4 && count <= 8);
     final rows = switch (count) {
       4 => [2, 2],
       5 => [3, 2],
       6 => [3, 3],
-      _ => [4, 3],
+      7 => [4, 3],
+      _ => [4, 4],
     };
     compactLabels = textScale <= 1.3 && width / rows.first - 12 >= 80;
     // Target cushions sit above a separate number/capacity row.

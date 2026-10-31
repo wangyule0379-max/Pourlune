@@ -1,0 +1,49 @@
+{
+  "scope": "Real iOS Simulator audioplayers Darwin decode and transport, dedicated 256788BA, isolated dev.pourlune.admobResumeValidation, Firebase none/ads disabled; not subjective acoustic acceptance",
+  "results": [
+    {
+      "asset": "audio/select.wav",
+      "duration_ms": 140,
+      "native_decode": true,
+      "loop_wrap_position_ms": null,
+      "playing_paused_stopped": true
+    },
+    {
+      "asset": "audio/pour.wav",
+      "duration_ms": 2000,
+      "native_decode": true,
+      "loop_wrap_position_ms": 265,
+      "playing_paused_stopped": true
+    },
+    {
+      "asset": "audio/error.wav",
+      "duration_ms": 280,
+      "native_decode": true,
+      "loop_wrap_position_ms": null,
+      "playing_paused_stopped": true
+    },
+    {
+      "asset": "audio/win.wav",
+      "duration_ms": 1200,
+      "native_decode": true,
+      "loop_wrap_position_ms": null,
+      "playing_paused_stopped": true
+    },
+    {
+      "asset": "audio/reveal.wav",
+      "duration_ms": 1050,
+      "native_decode": true,
+      "loop_wrap_position_ms": null,
+      "playing_paused_stopped": true
+    },
+    {
+      "asset": "audio/dream-culture.mp3",
+      "duration_ms": 214360,
+      "native_decode": true,
+      "loop_wrap_position_ms": 336,
+      "playing_paused_stopped": true
+    }
+  ],
+  "loop_verification": "Native seek to 250ms before end, wait700ms, position wrapped to <1500ms; after200ms position advanced >50ms. Dart completed state at loop endpoint is expected upstream behavior, not native stop. Pause/stop operations checked separately.",
+  "initial_test_correction": "First run asserted Dart PlayerState.playing after loop and failed; pinned audioplayers6.8.1/Darwin6.5.0 source showed onComplete also emitted on loops. No SDK edit/upgrade."
+}

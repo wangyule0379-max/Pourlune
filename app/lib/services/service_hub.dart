@@ -9,6 +9,7 @@ import 'ad_continuation.dart';
 import 'ad_coordinator.dart';
 import 'firebase_gateway.dart';
 import 'google_ads_transport.dart';
+import 'gamemunchies_reporting.dart';
 import 'service_config.dart';
 import 'service_policy.dart';
 import 'telemetry.dart';
@@ -37,19 +38,26 @@ class ServiceHub extends ChangeNotifier {
     AdTransport? transport,
     ConsentGateway? consent,
     FirebaseGateway? firebase,
+    GameMunchiesReporting? reporting,
     this.timeout = const Duration(seconds: 5),
     this.consentTimeout = const Duration(minutes: 2),
     Duration adPreShowTimeout = const Duration(minutes: 2),
     FullscreenCooldown? adClock,
   }) : consent = consent ?? UmpConsentGateway(config),
-       firebase = firebase ?? FlutterFireGateway() {
+       firebase = firebase ?? FlutterFireGateway(),
+       reporting = reporting ?? GameMunchiesReporting.environment() {
     ads = AdCoordinator(
       store: store,
-      transport: transport ?? GoogleAdsTransport(config),
+      transport:
+          transport ?? GoogleAdsTransport(config, reporting: this.reporting),
       configured: config.adsConfigured,
+      reporting: this.reporting,
+      rulesAllowLoad: this.reporting.allowsLoad,
+      rulesAllowShow: this.reporting.allowsShow,
       preShowTimeout: adPreShowTimeout,
       clock: adClock,
     );
+    this.reporting.onRulesChanged = () => ads.update(remote: policy);
     ads.addListener(_notify);
     telemetry = ProductTelemetry(
       store,
@@ -89,6 +97,7 @@ class ServiceHub extends ChangeNotifier {
   final Set<String> knownPuzzleIds;
   final ConsentGateway consent;
   final FirebaseGateway firebase;
+  final GameMunchiesReporting reporting;
   final Duration timeout, consentTimeout;
   late final AdCoordinator ads;
   late final ProductTelemetry telemetry;
@@ -108,6 +117,7 @@ class ServiceHub extends ChangeNotifier {
   int _consentGeneration = 0;
   String firebaseStatus = 'disabled';
   int _privacyGeneration = 0;
+  int _privacyChoiceGeneration = 0;
   void _notify() {
     if (!_disposed) notifyListeners();
   }
@@ -116,6 +126,7 @@ class ServiceHub extends ChangeNotifier {
     choices = PrivacyChoices.parse(
       await store.readServiceValue('privacy_choices'),
     );
+    unawaited(reporting.setEnabled(choices.analytics));
     try {
       final raw = await store.readServiceValue('remote_policy');
       if (raw is Map) {
@@ -203,18 +214,29 @@ class ServiceHub extends ChangeNotifier {
   }
 
   Future<void> updatePrivacy(PrivacyChoices value) async {
+    final choiceGeneration = ++_privacyChoiceGeneration;
     if (!value.analytics) continuation.clear();
     choices = value;
     privacySaveFailed = false;
+    // Withdraw immediately; enable only once the user's choice is saved.
+    if (!value.analytics) unawaited(reporting.setEnabled(false));
     // In-memory gate closes synchronously; native withdrawal is queued immediately.
     final sync = _syncPrivacy();
     _notify();
+    var saveFailed = false;
     try {
       await store.writeServiceValue('privacy_choices', value.toJson());
     } catch (_) {
-      privacySaveFailed = true;
+      saveFailed = true;
+    }
+    // An older save acknowledgement cannot restore a withdrawn choice, close
+    // a newer allowed client, or overwrite the latest save-failure state.
+    if (choiceGeneration == _privacyChoiceGeneration && !_disposed) {
+      privacySaveFailed = saveFailed;
+      unawaited(reporting.setEnabled(choices.analytics && !saveFailed));
     }
     await sync;
+    if (choiceGeneration != _privacyChoiceGeneration || _disposed) return;
     if (privacySaveFailed) await _syncPrivacy();
     _notify();
   }
@@ -354,9 +376,12 @@ class ServiceHub extends ChangeNotifier {
     if (_disposed) return;
     _disposed = true;
     _consentGeneration++;
+    _privacyChoiceGeneration++;
     _ticker.cancel();
     ads.removeListener(_notify);
     ads.dispose();
+    reporting.onRulesChanged = null;
+    unawaited(reporting.dispose());
     super.dispose();
   }
 }

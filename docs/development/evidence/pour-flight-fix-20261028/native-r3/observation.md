@@ -1,0 +1,8 @@
+# R03 native delta observations
+
+Normal main, QA bundle dev.pourlune.pourFlightValidation on existing 2894 iPhone 17 Pro / iOS 26.5; source 30a42d9b613e71732766910af5266dfbe9bad886. Finder backup of the prior isolated QA database is in ignored build/pour-flight-fix-20261028/native-r3-backup. Xcode NoBuild project and named QA SQLite fixtures only. Both Simulator recordings are 1206×2622, device mask off; samples every 0.1 seconds.
+
+- Four bottles, Level 4, 3→2: 8→9 moves, green target full and source empty; action returns to board, not victory because orange buffer remains. The source keeps its apparent size, target and non-source bottles stay in position in inspected samples, stream joins bottle mouths; source is not clipped by screen. During the pour the source temporarily obscures much of the instruction “Check the color tags”: see `frames-4/05.50.jpg`. Level number, back and pause remain visible; instruction becomes fully visible after return.
+- Five bottles, Level 6, 2→4: 0→1 moves, two orange units move to buffer. Source keeps apparent size, target and other bottles stay in place in inspected samples, stream joins bottle mouths; header remains visible. Moving source temporarily covers part of a neighboring label in `frames-5/03.20.jpg`, and labels restore afterwards.
+
+Original unmasked recordings `4-bottles.mov`, `5-bottles.mov` and sampled frames retained for independent review. This is observation, not approval of the instruction overlap or a claim about every unsampled frame, device class, physical devices, or audio/haptics. No prior candidate, F9, other app or other device was touched.

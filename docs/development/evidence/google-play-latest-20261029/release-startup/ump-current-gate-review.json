@@ -1,0 +1,27 @@
+{
+  "at_utc": "2026-10-29T08:53:28.120112+00:00",
+  "source": "Read-only current app code; existing exact CI tests reused, no changes/new run",
+  "sdk_gate": {
+    "ad_coordinator_initial_allowed": false,
+    "before_ump_update": "ServiceHub sets consent false; calls real requestConsentInfoUpdate",
+    "on_ump_error": "UmpConsentGateway completes _read(failed:true); allowed is awaited SDK canRequestAds, not synthesized true",
+    "on_sdk_read_error": "allowed:false, failed:true",
+    "apply": "If result.allowed is false, keep ads consent false and return before SDK initialization/preload; if SDK itself reports allowed, initialize once and preload; failed flag remains visible as adPrivacyFailed",
+    "analytics_crash_defaults": "PrivacyChoices defaults false/false; UMP eligibility never enables Analytics/Crash",
+    "consent_reset_or_debug_geography_in_prod": "No reset or forced geography added; testing-only config remains testing-only"
+  },
+  "official_basis": "https://developers.google.com/admob/flutter/privacy",
+  "official_basis_summary": "Official guide permits consulting SDK canRequestAds after a consent update error using existing SDK consent status; do not bypass SDK result. Message is associated with configured AdMob AppID.",
+  "not_measured": "No additional sampling of SDK canRequestAds boolean in PID13997; do not infer its exact value solely from a warning",
+  "admob_readonly_observations": {
+    "android_app_id": "ca-app-pub-3090980891246277~3705372838",
+    "matches_packaged_and_log_id": true,
+    "store_link": "Console shows dash/Add; no store association visible",
+    "privacy_overview": "Europe regulations and US state regulations both show Create, no Manage message entry visible",
+    "europe_message_page": "Continues loading; all-message emptiness not independently established",
+    "changes_saved": false
+  },
+  "remaining": "Check/associate Android-specific privacy messages and store listing in account when available; no invented publisher terms/consent, no iOS modification, no commercial-fill claim; does not replace SDK gate",
+  "parent_alpha_release_approval": "release-startup/r3-runtime-acceptance.json",
+  "new_build_required": false
+}
