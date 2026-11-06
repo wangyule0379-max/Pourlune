@@ -28,6 +28,8 @@ import java.util.Collections;
 import org.json.JSONObject;
 
 public final class MainActivity extends Activity {
+ private String serviceMode(){if(BuildConfig.ENABLE_PRODUCTION_SERVICES&&BuildConfig.APPLICATION_ID.equals("com.pourlune.app"))return "production";if(BuildConfig.ENABLE_QA_SERVICES&&BuildConfig.APPLICATION_ID.equals("dev.pourlune.glassgarden.localqa"))return "test";return "disabled";}
+
  private static final String HOST="appassets.androidplatform.net", ENTRY="https://"+HOST+"/assets/web/index.html";
  private FrameLayout root;
  private WebView web;
@@ -42,7 +44,7 @@ public final class MainActivity extends Activity {
   if(Build.VERSION.SDK_INT>=30){getWindow().setDecorFitsSystemWindows(false);root.setOnApplyWindowInsetsListener((view,insets)->{android.graphics.Insets bars=insets.getInsets(WindowInsets.Type.systemBars()|WindowInsets.Type.displayCutout());view.setPadding(bars.left,bars.top,bars.right,bars.bottom);return insets;});}
   if(Build.VERSION.SDK_INT>=33)getOnBackInvokedDispatcher().registerOnBackInvokedCallback(android.window.OnBackInvokedDispatcher.PRIORITY_DEFAULT,this::back);
   WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
-  if(BuildConfig.ENABLE_QA_SERVICES)ads=new GardenAds(this,event->{if(web!=null)web.evaluateJavascript("window.GardenAdEvents && window.GardenAdEvents.receive("+event.toString()+")",null);});
+  if(!serviceMode().equals("disabled"))ads=new GardenAds(this,event->{if(web!=null)web.evaluateJavascript("window.GardenAdEvents && window.GardenAdEvents.receive("+event.toString()+")",null);});
   effects=new NativeEffects(this,()->{if(web!=null)web.evaluateJavascript("window.GardenLifecycle && window.GardenLifecycle.stopAudio()",null);});
   openGame();
  }
@@ -57,11 +59,11 @@ public final class MainActivity extends Activity {
   web.setBackgroundColor(Color.rgb(255,248,239));web.getSettings().setJavaScriptEnabled(true);web.getSettings().setDomStorageEnabled(true);web.getSettings().setAllowFileAccess(false);web.getSettings().setAllowContentAccess(false);web.getSettings().setMediaPlaybackRequiresUserGesture(true);web.getSettings().setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_NEVER_ALLOW);
   if(WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)&&WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)){
    WebViewCompat.addWebMessageListener(web,"GardenAdsBridge",Collections.singleton("https://"+HOST),(view,message,origin,mainFrame,reply)->{if(mainFrame&&ENTRY.equals(view.getUrl()))try{nativeCommand(new JSONObject(message.getData()));}catch(Exception error){Log.w("GardenAds","Invalid bridge command");}});
-   WebViewCompat.addDocumentStartJavaScript(web,"if(window===window.top){window.GardenNativeActive=false;Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'android',services:'"+(BuildConfig.ENABLE_QA_SERVICES?"test":"disabled")+"',ads:'"+(BuildConfig.ENABLE_QA_SERVICES?"test":"disabled")+"',legacy:true,effects:true,appVersion:"+JSONObject.quote(BuildConfig.VERSION_NAME+"+"+BuildConfig.VERSION_CODE)+",send:message=>window.GardenAdsBridge.postMessage(JSON.stringify(message))}),writable:false});}",Collections.singleton("https://"+HOST));
+   WebViewCompat.addDocumentStartJavaScript(web,"if(window===window.top){window.GardenNativeActive=false;Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'android',services:'"+serviceMode()+"',ads:'"+(!serviceMode().equals("disabled")?"test":"disabled")+"',legacy:true,effects:true,identity:"+JSONObject.quote(BuildConfig.APPLICATION_ID)+",appVersion:"+JSONObject.quote(BuildConfig.VERSION_NAME+"+"+BuildConfig.VERSION_CODE)+",send:message=>window.GardenAdsBridge.postMessage(JSON.stringify(message))}),writable:false});}",Collections.singleton("https://"+HOST));
   }
   WebViewAssetLoader loader=new WebViewAssetLoader.Builder().addPathHandler("/assets/",new WebViewAssetLoader.AssetsPathHandler(this)).build();
   web.setWebViewClient(new WebViewClient(){
-   @Override public WebResourceResponse shouldInterceptRequest(WebView v,WebResourceRequest request){if(BuildConfig.ENABLE_QA_SERVICES&&"https".equals(request.getUrl().getScheme())&&"api.gamemunchies.com".equals(request.getUrl().getHost())&&(request.getUrl().getPort()==-1||request.getUrl().getPort()==443))return null;if(!local(request.getUrl()))return denied();WebResourceResponse response=loader.shouldInterceptRequest(request.getUrl());if(response!=null&&request.getUrl().getPath().endsWith(".mjs"))response.setMimeType("text/javascript");return response==null?denied():response;}
+   @Override public WebResourceResponse shouldInterceptRequest(WebView v,WebResourceRequest request){if(!serviceMode().equals("disabled")&&"https".equals(request.getUrl().getScheme())&&"api.gamemunchies.com".equals(request.getUrl().getHost())&&(request.getUrl().getPort()==-1||request.getUrl().getPort()==443))return null;if(!local(request.getUrl()))return denied();WebResourceResponse response=loader.shouldInterceptRequest(request.getUrl());if(response!=null&&request.getUrl().getPath().endsWith(".mjs"))response.setMimeType("text/javascript");return response==null?denied():response;}
    @Override public boolean shouldOverrideUrlLoading(WebView v,WebResourceRequest request){if(request.isForMainFrame()&&request.hasGesture()&&external(request.getUrl())){try{startActivity(new Intent("mailto".equals(request.getUrl().getScheme())?Intent.ACTION_SENDTO:Intent.ACTION_VIEW,request.getUrl()));}catch(android.content.ActivityNotFoundException error){web.evaluateJavascript("window.GardenExternal && window.GardenExternal.result('open',false)",null);}return true;}return !local(request.getUrl());}
    @Override public void onPageFinished(WebView v,String url){lifecycle(foreground);}
    @Override public void onReceivedError(WebView v,WebResourceRequest request,WebResourceError error){if(request.isForMainFrame())failed();}

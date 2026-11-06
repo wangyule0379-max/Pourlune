@@ -1,14 +1,30 @@
 plugins { id 'com.android.application' }
 def qaServices = providers.gradleProperty('gardenQaServices').orElse('false').get()
-if (!(qaServices in ['true','false'])) throw new GradleException('gardenQaServices must be true or false')
+def productionServices = providers.gradleProperty('gardenProductionServices').orElse('false').get()
+if (!(qaServices in ['true','false']) || !(productionServices in ['true','false']) || (qaServices == 'true' && productionServices == 'true')) throw new GradleException('Choose one explicit service environment')
+def production = productionServices == 'true'
+if (production && (!gradle.startParameter.taskNames || !gradle.startParameter.taskNames.every { it in [':app:assembleRelease', ':app:bundleRelease', 'assembleRelease', 'bundleRelease'] })) throw new GradleException('Production builds are compile-only Release tasks; no debug/install task')
+def requestedNumber = providers.gradleProperty('gardenBuildNumber')
+def requestedVersion = providers.gradleProperty('gardenVersion')
+if (production && (!requestedNumber.isPresent() || !requestedVersion.isPresent())) throw new GradleException('Production requires an explicitly verified store version/build number')
+def number = requestedNumber.orElse('7').get()
+def version = requestedVersion.orElse('0.1.0').get()
+if (!(number ==~ /[1-9][0-9]{0,8}/) || !(version ==~ /[0-9]+\.[0-9]+\.[0-9]+/)) throw new GradleException('Invalid app version/build number')
 android {
  namespace 'dev.pourlune.glassgarden.localqa'
  compileSdk 36
- defaultConfig { applicationId 'dev.pourlune.glassgarden.localqa'; minSdk 26; targetSdk 36; versionCode 6; versionName '0.1.0'; buildConfigField 'boolean','ENABLE_QA_SERVICES',qaServices }
+ defaultConfig { applicationId production ? 'com.pourlune.app' : 'dev.pourlune.glassgarden.localqa'; minSdk 26; targetSdk 36; versionCode number.toInteger(); versionName version; manifestPlaceholders = [gardenDisplayName: production ? 'Pourlune' : 'Pourlune Garden QA']; buildConfigField 'boolean','ENABLE_QA_SERVICES',qaServices; buildConfigField 'boolean','ENABLE_PRODUCTION_SERVICES',productionServices }
  buildFeatures { buildConfig true }
  compileOptions { sourceCompatibility JavaVersion.VERSION_21; targetCompatibility JavaVersion.VERSION_21 }
+ buildTypes { release { if (!production) signingConfig signingConfigs.debug; minifyEnabled true; shrinkResources true; proguardFiles getDefaultProguardFile('proguard-android-optimize.txt') } }
 }
 dependencyLocking { lockAllConfigurations() }
 dependencies { implementation 'androidx.webkit:webkit:1.15.0'; implementation 'com.google.android.gms:play-services-ads:25.5.0'; implementation 'com.google.android.ump:user-messaging-platform:4.0.0' }
 
-tasks.named('preBuild') { doFirst { def stage = new groovy.json.JsonSlurper().parse(rootProject.file('../../build/native/staged-web.json')); if (stage.nativeBridgeVersion != 3 || !file('src/main/assets/web/media/dream-culture.mp3').isFile()) throw new GradleException('Stage the matching migration/native-effects web bridge first'); if (qaServices == 'true' && (stage.ads != 'official_test' || !file('src/main/assets/web/sdk/gamemunchies/src/index.js').isFile())) throw new GradleException('Stage a verified SDK/test-ad candidate with the connected ad notice first') } }
+tasks.named('preBuild') { doFirst {
+ def stage = new groovy.json.JsonSlurper().parse(rootProject.file('../../build/native/staged-web.json'))
+ if (stage.nativeBridgeVersion != 4 || !file('src/main/assets/web/media/dream-culture.mp3').isFile()) throw new GradleException('Stage the matching environment/migration web bridge first')
+ if (stage.serviceTarget != (production ? 'production' : 'test') || stage.identity != (production ? 'com.pourlune.app' : 'dev.pourlune.glassgarden.localqa')) throw new GradleException('Staged service environment/identity mismatch')
+ if (production && (stage.version != version || stage.buildNumber != number)) throw new GradleException('Production version/build does not match the explicit verified stage')
+ if ((production || qaServices == 'true') && (stage.ads != 'official_test' || !file('src/main/assets/web/sdk/gamemunchies/src/index.js').isFile())) throw new GradleException('Stage a verified SDK/test-ad candidate with the connected notice first')
+} }

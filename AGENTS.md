@@ -114,3 +114,14 @@ Android19现已上传原Alpha并被Play识别、版本号已占用；最终更�
 范围随后已获本人直接确认：对美国+巴基斯坦、Pourlune Beta1及10月29test51的明确问题，用户回复“是，19版按当前国家和名单开放”。以此最新授权为准，不恢复成US/仅本人、不再次询问，也不推断历史是谁设置。总控已让Computer核只有本次三项后恢复原自动发布，或在获批后仅发布Alpha19/广告/数据安全；实际恢复状态以最终交付回读为准。保留ID3和已核包，不重传/重提/重邀、不改iOS或公开production。
 
 最终已回读恢复原自动发布：managed publishing关闭、获批自动发布，审核中恰为Alpha19/广告/Data safety三项，ready为空、提交ID3仍在审。当前范围已本人授权，禁止再因该范围反复询问或恢复为旧US/本人，也不重传19/重提审核/重邀。等待Google实际审核及19安装状态，不将已送审或加入链接写成已可安装；iOS19及F9保持不动。
+
+
+2026-11-07当前新产品范围：沿用现有com.pourlune.app但改为glass-garden/的Cocos2d-JS3.17/HTML＋薄原生WebView，不保留Flutter运行时。用户已选保留旧60原库/设置原件、新100从1开始，禁止按关号映射；原100规则/关序/渲染来源只读，以新受验R1原型及2026-11-06重构规格为准，不套用旧固定目标瓶规则。用户已批每局真实激励一次额外普通空瓶，Restart/Undo保留，新重玩新局不叠；免费工具保持。原407源/六核心及曲目hash须核验。父已有限接受网页S2/S3和S4d/e/f逻辑差额，不等于原生/后台/性能/发布通过。
+
+新工程命令在glass-garden：npm ci --ignore-scripts、npm test（当前82）、npm run test:sdk（私有固定JS0.3.0受控测试当前17）、npm run verify -- --inputs；新tag由node scripts/package.mjs TAG --sdk --ads冻结，拒绝覆盖。私有SDK八文件固定元数据sdk-manifest.json，实际源码只在ignored .private-dependencies，不提交/公开；旧Dart七文件Actions授权不自动扩大为上传JS源码。新CI .github/workflows/glass-garden.yml只核心/复制源及服务关闭双端编译，不能声称私有SDK/设备也在CI验过。旧Flutter19及终态CI/邀请不重复。
+
+原生默认dev.pourlune.glassgarden.localqa，当前QA0.1.0(7)，协议4；node scripts/stage-native.mjs TAG后才编译。Android native/android/gradlew --project-dir native/android :app:assembleDebug --offline --no-daemon --max-workers=2 -PgardenQaServices=true；QA assembleRelease保持R8/shrink并复用既有debug证书，真实启动尚待测。iOS既有xcodebuild generic simulator/no signing、GARDEN_QA_SERVICES命令见native/README.md，串行workers2。freeze-native.py核双端资源/版本/权限/icon并在可选minified APK核R8 mapping。已发行图标原字节复用，不再生成新设计。正式模式须显式production＋com身份＋已核商店版本/构建号＋Release，stage --production有严格门控；native/RELEASE.md只是预备，不代表已跑prod或通过发布。SDK test/prod ACK作用域分开，默认采集off、NPA/PG/NoAdID/官方测试广告；不因配置启用Crash或放松隐私。
+
+旧插屏完整本地规则已移植：11起首通、3次资格、fresh首次Next、20/40保护、100无Next；任何actual fullscreen共享180s，prepare先落盘边界、真实shown才消费、晚到不能清后续首通。SDK远配只收紧，UMP独立；无/晚库存直接Next，shown不因后台/elapsed销毁，关闭在后台等前台同原round推进。旧库公共广告时钟复制只读导入；旧Dart SDK原存储/ID/队列保留不改不重发，不冒称JS统计身份完整迁移。iOS Retry复用健康AssetServer同origin，未知/坏旧库不能当不存在。Android Activity重建与晚callback持久化仍在实际QA清单，不凭per-Activity内存自查宣称通过。
+
+完整原生开发自测仍等单设备自然窗口：既有Use Computer聊天01a17b8e-aee4-7322-ae34-7b8d1531cae4操作，拟D79BD258-6E80-4B71-9A7D-E806F5321460。不得占用Fruplop/F9或盲停他人，按顶部单设备/清理约定；当前不能把网页mock/host socket/编译当真实SDK或硬件。开发完整自测修复冻结后才交总控实际复测，通过后同源签名核包更新原Pourlune Self组既有2人，不新建组/重邀，不自动扩大为正式App Store或Play发布。最新逐阶段真实状态见docs/development/deliveries/new-cocos-product-implementation.md；每次后续实际结果以新记录覆盖，不能沿用历史宣称。

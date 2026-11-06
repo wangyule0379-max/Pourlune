@@ -1,0 +1,42 @@
+[
+  {
+    "case": "QA matching",
+    "returncode": 0,
+    "message": ""
+  },
+  {
+    "case": "QA stage rejects production",
+    "returncode": 1,
+    "message": "Staged service environment/identity mismatch\n"
+  },
+  {
+    "case": "Both flags rejected",
+    "returncode": 1,
+    "message": "Choose one explicit service environment\n"
+  },
+  {
+    "case": "Wrong actual identity rejected",
+    "returncode": 1,
+    "message": "Actual app identity does not match the staged environment\n"
+  },
+  {
+    "case": "Controlled metadata-only Release fixture accepted",
+    "returncode": 0,
+    "message": ""
+  },
+  {
+    "case": "Production Debug rejected",
+    "returncode": 1,
+    "message": "Production requires Release and the existing Pourlune display name\n"
+  },
+  {
+    "case": "Production build mismatch rejected",
+    "returncode": 1,
+    "message": "Production version/build must match the explicit store-verified stage\n"
+  },
+  {
+    "case": "Production display-name mismatch rejected",
+    "returncode": 1,
+    "message": "Production requires Release and the existing Pourlune display name\n"
+  }
+]

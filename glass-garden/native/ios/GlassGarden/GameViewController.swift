@@ -22,20 +22,24 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
         let config = WKWebViewConfiguration()
         config.websiteDataStore = .default()
         let bridge = AdMessages(); bridge.owner = self; config.userContentController.add(bridge, name: "gardenAds")
-        #if GARDEN_QA_SERVICES
-        let serviceMode = "test"
+        #if GARDEN_PRODUCTION_SERVICES
+        let serviceMode = Bundle.main.bundleIdentifier == "com.pourlune.app" ? "production" : "disabled"
+        #elseif GARDEN_QA_SERVICES
+        let serviceMode = Bundle.main.bundleIdentifier == "dev.pourlune.glassgarden.localqa" ? "test" : "disabled"
         #else
         let serviceMode = "disabled"
         #endif
+        let adMode = serviceMode == "disabled" ? "disabled" : "test"
+        let identityJSON = (try? JSONSerialization.data(withJSONObject: Bundle.main.bundleIdentifier ?? "", options: [.fragmentsAllowed])).flatMap { String(data: $0, encoding: .utf8) } ?? "null"
         let appVersion = (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "") + "+" + (Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "")
         let appVersionJSON = (try? JSONSerialization.data(withJSONObject: appVersion, options: [.fragmentsAllowed])).flatMap { String(data: $0, encoding: .utf8) } ?? "null"
-        config.userContentController.addUserScript(WKUserScript(source: "window.GardenNativeActive=false;Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'ios',services:'\(serviceMode)',ads:'\(serviceMode)',legacy:true,effects:true,appVersion:\(appVersionJSON),send:message=>window.webkit.messageHandlers.gardenAds.postMessage(message)}),writable:false});", injectionTime: .atDocumentStart, forMainFrameOnly: true))
-        #if GARDEN_QA_SERVICES
-        ads = GardenAds(controller: self) { [weak self] event in
+        config.userContentController.addUserScript(WKUserScript(source: "window.GardenNativeActive=false;Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'ios',services:'\(serviceMode)',ads:'\(adMode)',legacy:true,effects:true,identity:\(identityJSON),appVersion:\(appVersionJSON),send:message=>window.webkit.messageHandlers.gardenAds.postMessage(message)}),writable:false});", injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        #if GARDEN_QA_SERVICES || GARDEN_PRODUCTION_SERVICES
+        if serviceMode != "disabled" { ads = GardenAds(controller: self) { [weak self] event in
             guard let data = try? JSONSerialization.data(withJSONObject: event), let json = String(data: data, encoding: .utf8) else { return }
             self?.web?.evaluateJavaScript("window.GardenAdEvents && window.GardenAdEvents.receive(\(json))", completionHandler: nil)
         }
-        ads?.active = UIApplication.shared.applicationState == .active
+        ads?.active = UIApplication.shared.applicationState == .active }
         #endif
         config.allowsInlineMediaPlayback = true
         config.mediaTypesRequiringUserActionForPlayback = .all

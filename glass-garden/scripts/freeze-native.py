@@ -17,10 +17,16 @@ if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,63}", tag):
 web = root / "build" / tag
 raw_manifest = (web / "artifact-manifest.json").read_bytes()
 manifest = json.loads(raw_manifest)
-apk = root / "native/android/app/build/outputs/apk/debug/app-debug.apk"
+apk = Path(sys.argv[sys.argv.index("--apk") + 1]).resolve() if "--apk" in sys.argv else root / "native/android/app/build/outputs/apk/debug/app-debug.apk"
 app = Path(sys.argv[2]).resolve()
 digest = lambda data: hashlib.sha256(data).hexdigest()
 info = plistlib.loads((app / "Info.plist").read_bytes())
+icon_raw = (root / "native/icon-manifest.json").read_bytes()
+for item in json.loads(icon_raw)["files"]:
+    assert digest((root.parent / item["source"]).read_bytes()) == item["sha256"]
+    assert digest((root.parent / item["copy"]).read_bytes()) == item["sha256"]
+assert info["CFBundleIcons"]["CFBundlePrimaryIcon"]["CFBundleIconName"] == "AppIcon"
+
 assert info["CFBundleIdentifier"] == "dev.pourlune.glassgarden.localqa"
 sdk = Path(os.environ.get("ANDROID_SDK_ROOT", os.environ.get("ANDROID_HOME", str(Path.home() / "Library/Android/sdk"))))
 analyzer = sdk / "cmdline-tools/latest/bin/apkanalyzer"
@@ -35,7 +41,20 @@ if manifest.get("ads"):
     assert (app / "Frameworks/UserMessagingPlatform.framework/UserMessagingPlatform").is_file()
     assert info["GADApplicationIdentifier"] == "ca-app-pub-3940256099942544~1458002511"
 omitted = ["web/game/vendor/cocos/.gitignore"]
+minified_evidence = None
 with zipfile.ZipFile(apk) as archive:
+    if "--apk" in sys.argv:
+        assert android("debuggable") == "false", "Minified QA must use the release manifest"
+        mapping = (root / "native/android/app/build/outputs/mapping/release/mapping.txt").read_bytes()
+        match = re.search(rb"^# pg_map_id: (.+)$", mapping, re.M)
+        assert mapping.startswith(b"# compiler: R8") and match, "Missing R8 mapping"
+        markers = []
+        for name in archive.namelist():
+            if re.fullmatch(r"classes[0-9]*[.]dex", name):
+                markers.extend(json.loads(raw) for raw in re.findall(rb"~~R8(\{[^\0]*?\})", archive.read(name)))
+        assert markers and all(m.get("compilation-mode") == "release" and m.get("pg-map-id") == match.group(1).decode() for m in markers), "DEX/R8 mapping mismatch"
+        minified_evidence = {"mapping_sha256": digest(mapping), "mapping_id": match.group(1).decode(), "dex_markers": markers}
+
     if manifest.get("nativeBridgeVersion", 1) >= 3:
         # BuildConfig constants are folded into the native bridge string. Catch
         # a stale SDK version dimension even when manifest versionCode is right.
@@ -58,11 +77,12 @@ shutil.copytree(app, destination / "GlassGarden.app")
 record = {
     "web_candidate": tag, "native_candidate": native_tag, "web_manifest_sha256": digest(raw_manifest),
     "identity": info["CFBundleIdentifier"], "version": info["CFBundleShortVersionString"] + "(" + info["CFBundleVersion"] + ")",
+    "icon_source_manifest_sha256": digest(icon_raw),
     "reported_app_version": info["CFBundleShortVersionString"] + "+" + info["CFBundleVersion"],
     "sdk": manifest["sdk"], "ads": manifest.get("ads"), "nativeBridgeVersion": manifest.get("nativeBridgeVersion", 1), "stage": "developer self-test; not independent/native/store acceptance",
     "verified_web_files": {"android": len(manifest["files"]) - len(omitted), "ios": len(manifest["files"])},
     "android_only_omitted_nonruntime_metadata": omitted, "android_permissions": permissions,
-    "android": {"path": str(destination / "glass-garden-qa.apk"), "bytes": apk.stat().st_size, "sha256": digest(apk.read_bytes())},
+    "android": {"minified_qa": "--apk" in sys.argv, "minified_evidence": minified_evidence, "path": str(destination / "glass-garden-qa.apk"), "bytes": apk.stat().st_size, "sha256": digest(apk.read_bytes())},
     "ios": {"path": str(destination / "GlassGarden.app"), "files": [
         {"path": str(p.relative_to(app)), "bytes": p.stat().st_size, "sha256": digest(p.read_bytes())}
         for p in sorted(app.rglob("*")) if p.is_file()

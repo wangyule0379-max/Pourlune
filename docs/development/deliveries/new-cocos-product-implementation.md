@@ -131,3 +131,11 @@ S4e预检差额：App未直接调用需申报理由的API，移除空NSPrivacyAc
 Host真实NWListener/URLSession补测复现停止后立刻重绑同端口POSIX48；仅等cancel回调也失败，TCP流可能仍持有端口。改为健康服务复用、失败owner取消完成再重试，openRevision阻止旧打开回调；不延时/换origin/端口共享/清档。20次同origin实际Retry及独占端口冲突→释放后恢复通过。双端QA0.1.0(6)编译通过，web仍s5-fullscreen-selftest-2全434字节一致；新native冻结s4f-native-retry-selftest-1，hash见retry-recovery。仍未做真实WK进程终止/原生验收，不拿host通过冒充。7c925f8的CI42254066125三job已真实成功，最新本原生源码另跑。
 
 S4f追加版本维度修复：Android桥仍固定+4，现双端从真实包metadata构造SDK appVersion并JSON转义；新freeze在实际DEX核版本，旧6包真实RED、新6重编PASS。最终native s4f-native-retry-selftest-2-version，原6不覆盖/不安装，web不改。详retry-recovery/version索引。此差额不代表真实广告/后台验收已通过。
+
+## S4g正式身份配置预备与压缩QA包
+
+未占设备期间完成现有App发布配置：显式prod＋com.pourlune.app＋已核商店版本/构建号才允许正式作用域；默认仍独立QA/test，错配/双flag/production Debug或install/无版本/CI快捷包均拒绝。正式广告仍只官方测试模式，不重开商业AdMob或Play。复用原已发行图标逐字节；生产未运行/签名/上传，不扩Crash/Firebase采集。82核心/UI、17官方SDK受控检查（含重试ID/时间、字段边界与撤回）通过；最新仅诊断metadata差额另2定向检查通过，提交后CI再全量。Computer新目标隔离冒烟QA1GET/production0/POST0、错配全0且离线可玩，非原生/正式后台通过。
+
+QA0.1.0(7)双端debug及Android实际R8 full/shrink/minified/debug证书包已编译核资源；DEX marker与mapping对应、两APK签名匹配，未做minified运行。最终web s4g-release-config-selftest-3/434文件22949373B/manifest9a708df3f32373f12f2cd5ad8b2a06f1cd3c02c887b7e3c0eee223e3dd48be8c；native普通indexb2175361e45fdd6857c5f2dd29061082096cd83f38a70d1639bdd501168ff398，minified indexd9f4246cf47485334c21470759cccdeebed8abd2f6d8f09c75765397650b39a9。完整hash、范围与剩余见native-s4/release-configuration/report.md。与S5仅product/services两web文件，432保持；GameMunchies私有源码/旧app/core不改。未来发布runbook在native/RELEASE.md，不自动执行签名或正式发布。
+
+实际原生迁移/进程恢复/真实广告与路由/测试后台/压缩启动/Activity重建晚回调/性能仍待合法窗口，F9/Fruplop不动。不以本配置检查点冒充完整手机验收或TestFlight更新。此前精确9995201/CI42255647434、0bc3acd/CI42255027814均3job成功，本源码另跑。

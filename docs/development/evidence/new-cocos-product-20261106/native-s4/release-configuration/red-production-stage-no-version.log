@@ -1,0 +1,8 @@
+file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/scripts/stage-native.mjs:5
+if(production&&(!process.argv.includes('--version')||!process.argv.includes('--build-number')||!/^[0-9]+[.][0-9]+[.][0-9]+$/.test(version)||!/^[1-9][0-9]{0,8}$/.test(buildNumber)))throw Error('Production staging requires explicit store-verified --version and --build-number');if(!tag||!/^[a-z0-9-]+$/.test(tag))throw Error('Supply a frozen candidate name');
+                                                                                                                                                                                          ^
+
+Error: Production staging requires explicit store-verified --version and --build-number
+    at file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/scripts/stage-native.mjs:5:187
+
+Node.js v22.23.2
