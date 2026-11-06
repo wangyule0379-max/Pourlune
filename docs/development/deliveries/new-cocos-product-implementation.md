@@ -67,3 +67,15 @@ Computer只读排期：Fruplop QA Launch 74DA9C44-B2C0-436A-A6E0-F2A608D85324仍
 连接器只读核私有gamemunchies主树d34a7448后找到匹配的JavaScript0.3.0。按官方固定交付0a806fda242f55c3b7180fb63969323276f1cd4d获取归档，14670B/SHAf737166865a0d658273b53e372bce87e2e8fc1a24162305d11c7ac570831d796及8文件全部hash通过，源码6b2d595f；完整公开定位/hash元数据在glass-garden/sdk-manifest.json。私有包/源码仅在忽略目录，不提交、不公开、不从浮动工作区引用。匹配SDK存在，不再把旧Dart七文件当无匹配SDK的证据。
 
 SDK单实例、严格失败无内存回退、统计拒绝不POST、保存成功才新局事件/恢复不重复、失败Retry只一次、旧允许须新通知而旧拒绝保留等接线正在实施；实际私有SDK＋受控HTTP/IndexedDB自动检查5项通过，不称真实网络或平台接入通过。基础冻结包尚不含该SDK。继续独立接线，无需用户操作。
+
+## S4b统计撤回修复冻结
+
+本节覆盖上述“尚无SDK”的阶段状态。`s4b-consent-final`已包括固定官方JS0.3.0八文件，不修改SDK或公开其源码；QA平台标记只连接Pourlune test scope。32基础检查、13真实SDK定向检查全部通过，双端独立QA0.1.0(2)编译成功。原407来源/六核心/100关原字节核验通过。连接策略仅本地与api.gamemunchies.com，无网络规则/TLS/DNS变更。仍无原生广告SDK、真实设备上报/奖励或TestFlight通过结论。
+
+总控提出延迟启动期间允许→拒绝→允许旧事件复活反例，实际SDK测试复现后修正：同步撤回、历史选择串行处理、generation作废旧意图。另补跨进程拒绝清理token及按scope持久ACK；SDK完成旧队列清理并成功ACK前不能重启共享。合法重新允许后新队列在下次启动保留，ACK失败停止统计但不阻断游戏。拒绝偏好写入失败时只承诺本窗口暂停，Retry前不显示已保存。实际SDK初次前台启动漏通知同样RED→GREEN；背景测试初次失败是等待微任务不足，不能当产品缺陷证据。证据在native-s4/services/。
+
+只读真实配置GET（stats=false，拒绝POST）iOS200/remote v4、Android200/remote v1，已修正fallback缺kind/scene白名单导致200却config_invalid。此探测不是WebView/广告请求通过。配置场景识别不批准新的插屏策略。
+
+冻结web424文件14294634B，manifest `2d6316937c565d4b2df681fc1c3e6fc508882f353566405f0e8ec09f10d5bf4b`；原生目录`glass-garden/build/native-candidates/s4b-consent-final/`索引SHA `0aedffd8de2f23ef0cadc92075324a7b8f95ea7aa8b10dccc7f3e1de95153256`。APK10368280B/SHA `d2770cbe063e25123b14b00f5fec055640d1de0ed991a382503f150027a9733f`，423运行资源精确一致，唯一省略非运行vendor/.gitignore；iOS424玩家文件一致。中间s4-services-5保留REWORK，不安装。不启动设备、不占用Fruplop/F9。
+
+用户现已确认更新原com.pourlune.app、保留旧存档原件及明确设置、新100关首次第1关，及每局真实激励一次额外普通空瓶、Restart保留/Undo不撤销；上述奖励待选文字仅历史。迁移、原生广告与加瓶事务正在继续，未实现部分不写成完成。

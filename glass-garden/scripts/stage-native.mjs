@@ -8,5 +8,5 @@ for(const rel of ['native/android/app/src/main/assets/web','native/ios/Resources
  const dest=path.join(root,rel);await rm(dest,{recursive:true,force:true});await mkdir(path.dirname(dest),{recursive:true});await cp(path.join(candidate,'web'),dest,{recursive:true});
  for(const file of manifest.files)if(sha(await readFile(path.join(dest,file.path.slice(4))))!==file.sha256)throw Error('Staged file mismatch: '+file.path);
 }
-const record={candidate:tag,manifestSha256:sha(raw),files:manifest.files.length,bytes:manifest.files.reduce((n,f)=>n+f.bytes,0),identity:'dev.pourlune.glassgarden.localqa',services:'not integrated'};
+const record={candidate:tag,manifestSha256:sha(raw),files:manifest.files.length,bytes:manifest.files.reduce((n,f)=>n+f.bytes,0),identity:'dev.pourlune.glassgarden.localqa',services:manifest.sdk?'official JS SDK'+manifest.sdk.version+' staged; explicit native QA flag required':'not integrated'};
 await mkdir(path.join(root,'build/native'),{recursive:true});await writeFile(path.join(root,'build/native/staged-web.json'),JSON.stringify(record,null,2)+'\n');console.log(JSON.stringify(record,null,2));

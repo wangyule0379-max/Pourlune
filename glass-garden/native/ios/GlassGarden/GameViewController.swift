@@ -12,6 +12,9 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
         view.backgroundColor = cream
         let config = WKWebViewConfiguration()
         config.websiteDataStore = .default()
+        #if GARDEN_QA_SERVICES
+        config.userContentController.addUserScript(WKUserScript(source: "Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'ios',services:'test'}),writable:false});", injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        #endif
         config.allowsInlineMediaPlayback = true
         config.mediaTypesRequiringUserActionForPlayback = .all
         web = WKWebView(frame: .zero, configuration: config)
@@ -67,6 +70,7 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
     @objc private func active() { web?.evaluateJavaScript("window.GardenLifecycle && window.GardenLifecycle.setActive(true)", completionHandler: nil) }
     func webView(_ webView: WKWebView, decidePolicyFor action: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         guard let url = action.request.url else { decisionHandler(.cancel); return }
+        if url.absoluteString == "about:blank", action.targetFrame?.isMainFrame != true { decisionHandler(.allow); return }
         decisionHandler(url.scheme == "http" && url.host == "127.0.0.1" && url.port == 43177 ? .allow : .cancel)
     }
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) { if (error as NSError).code != NSURLErrorCancelled { failed() } }

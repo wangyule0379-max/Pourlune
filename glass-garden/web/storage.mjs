@@ -25,5 +25,8 @@ export async function openStore({indexedDB=globalThis.indexedDB,name='pourlune.g
    };
   });
  }
- return {read,write:(data,revision)=>write(data,revision),replace:(data,revision)=>write(data,revision,true),close:()=>db.close()};
+ function resetKey(scope){if(typeof scope!=='string'||!scope||scope.length>512)throw Error('Invalid statistics scope');return 'statistics-reset-ack:'+scope;}
+ const readStatisticsResetAck=scope=>transaction('readonly',(store,done,fail)=>{const q=store.get(resetKey(scope));q.onsuccess=()=>{if(q.result!=null&&(typeof q.result!=='string'||!q.result))return fail(Error('Unreadable statistics reset receipt'));done(q.result??null);};});
+ const ackStatisticsReset=(scope,token)=>transaction('readwrite',(store,done)=>{if(typeof token!=='string'||!token||token.length>128)throw Error('Invalid statistics reset token');store.put(token,resetKey(scope));done(token);});
+ return {read,write:(data,revision)=>write(data,revision),replace:(data,revision)=>write(data,revision,true),readStatisticsResetAck,ackStatisticsReset,close:()=>db.close()};
 }

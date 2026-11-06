@@ -1,8 +1,9 @@
 export function initialState(R,P){return {version:1,catalog:R.CATALOG_ID,currentLevel:1,completedLevels:[],roundInstanceIds:{},completionReceipts:{},gameProgress:P.load(null,null,{levels:R.LEVELS,catalog:R.CATALOG_ID}),analyticsChoice:'unasked',disclosureVersion:1,prefs:{music:false,sound:true,haptics:false,reduced:false},group:0,listScroll:0};}
 export function validateState(s,R,P){
  const object=v=>v&&typeof v==='object'&&!Array.isArray(v),integer=(n,min,max)=>Number.isInteger(n)&&n>=min&&n<=max;
- if(!object(s)||s.version!==1||s.catalog!==R.CATALOG_ID||!integer(s.currentLevel,1,100)||!Array.isArray(s.completedLevels)||s.completedLevels.some((n,i)=>n!==i+1)||s.completedLevels.length>100||!object(s.roundInstanceIds)||!object(s.completionReceipts)||!object(s.prefs)||Object.values(s.prefs).some(x=>typeof x!=='boolean')||!['unasked','allowed','declined'].includes(s.analyticsChoice)||s.disclosureVersion!==1||!integer(s.group,0,9)||!Number.isFinite(s.listScroll)||s.listScroll<0)throw Error('Unreadable product save');
+ if(!object(s)||s.version!==1||s.catalog!==R.CATALOG_ID||!integer(s.currentLevel,1,100)||!Array.isArray(s.completedLevels)||s.completedLevels.some((n,i)=>n!==i+1)||s.completedLevels.length>100||!object(s.roundInstanceIds)||!object(s.completionReceipts)||!object(s.prefs)||Object.values(s.prefs).some(x=>typeof x!=='boolean')||!['unasked','allowed','declined'].includes(s.analyticsChoice)||![1,2].includes(s.disclosureVersion)||!integer(s.group,0,9)||!Number.isFinite(s.listScroll)||s.listScroll<0)throw Error('Unreadable product save');
  for(const key of ['music','sound','haptics','reduced'])if(typeof s.prefs[key]!=='boolean')throw Error('Unreadable settings');
+ if(s.analyticsResetToken!=null&&(typeof s.analyticsResetToken!=='string'||!s.analyticsResetToken||s.analyticsResetToken.length>128))throw Error('Unreadable statistics choice receipt');
  const gp=s.gameProgress;
  if(!object(gp)||gp.current!==s.currentLevel-1||gp.version!==3||gp.catalog!==R.CATALOG_ID||!object(gp.slots)||Object.keys(gp.slots).length>100||!Array.isArray(gp.completed)||JSON.stringify(gp.completed)!==JSON.stringify(s.completedLevels.map(n=>n-1)))throw Error('Unreadable campaign progress');
  const levelKey=key=>String(Number(key))===key&&integer(Number(key),1,100);
@@ -18,7 +19,7 @@ export function validateState(s,R,P){
  return s;
 }
 export class Product {
- constructor({store,R,P,onChange=()=>{},uuid=()=>crypto.randomUUID()}){Object.assign(this,{store,R,P,onChange,uuid});this.state=initialState(R,P);this.working=this.state;this.revision=0;this.saving=0;this.error=null;this.recoveryError=null;this.pending=null;this.chain=Promise.resolve();}
+ constructor({store,R,P,onChange=()=>{},uuid=()=>crypto.randomUUID(),policyVersion=1,onCommit=()=>{}}){Object.assign(this,{store,R,P,onChange,uuid,policyVersion,onCommit});this.state=initialState(R,P);this.working=this.state;this.revision=0;this.saving=0;this.error=null;this.recoveryError=null;this.pending=null;this.chain=Promise.resolve();}
  async open(){try{const raw=await this.store.read();this.revision=Number.isSafeInteger(raw?.revision)?raw.revision:0;if(raw)this.state=validateState(raw.data,this.R,this.P);this.working=this.state;this.recoveryError=null;}catch(e){this.recoveryError=e.message;}this.onChange(this);return !this.recoveryError;}
  unlocked(n){return n===1||this.state.completedLevels.includes(n)||this.state.completedLevels.includes(n-1);}
  resumable(n,s=this.state){const slot=s.gameProgress.slots[n];return !!(s.roundInstanceIds[n]&&slot&&!this.R.isSolved(slot.state));}
@@ -30,17 +31,18 @@ export class Product {
   const snapshot=structuredClone(next);this.saving++;this.onChange(this);
   const job=this.chain.then(async()=>{
    if(this.error&&!replace)return false;
-   try{const record=await this.store[replace?'replace':'write'](snapshot,this.revision);this.revision=record.revision;this.state=record.data;if(this.pending===next||this.saving===1)this.pending=null;this.recoveryError=null;return true;}catch(e){this.error=e.message;return false;}
+   try{const previous=this.state;const record=await this.store[replace?'replace':'write'](snapshot,this.revision);this.revision=record.revision;this.state=record.data;Promise.resolve().then(()=>this.onCommit(record.data,previous)).catch(()=>{});if(this.pending===next||this.saving===1)this.pending=null;this.recoveryError=null;return true;}catch(e){this.error=e.message;return false;}
   }).finally(()=>{this.saving--;if(!this.saving&&!this.error)this.working=this.state;this.onChange(this);});
   this.chain=job.catch(e=>{this.error=e.message;this.onChange(this);return false;});return this.chain;
  }
  async retry(){await this.chain;if(!this.pending)return !this.error;const next=this.pending;this.error=null;return this.save(next);}
  async replaceCorrupt(){await this.chain;this.error=null;return this.save(initialState(this.R,this.P),{replace:true});}
  async reloadSaved(){await this.chain;this.error=null;this.pending=null;return this.open();}
- async chooseAnalytics(choice){if(!['allowed','declined'].includes(choice))return false;return this.save({...this.working,analyticsChoice:choice});}
+ needsAnalyticsChoice(){return this.state.analyticsChoice==='unasked'||(this.state.analyticsChoice==='allowed'&&this.state.disclosureVersion<this.policyVersion);}
+ async chooseAnalytics(choice){if(!['allowed','declined'].includes(choice))return false;return this.save({...this.working,analyticsChoice:choice,disclosureVersion:this.policyVersion,...(choice==='declined'?{analyticsResetToken:this.uuid()}:{})});}
  async preference(key,value){if(!['sound','reduced'].includes(key)||typeof value!=='boolean')return false;return this.save({...this.working,prefs:{...this.working.prefs,[key]:value}});}
  async enter(n,{restart=false,listScroll}={}){
-  if(this.error||this.recoveryError||this.saving||this.state.analyticsChoice==='unasked'||!Number.isInteger(n)||n<1||n>100||!this.unlocked(n))return false;
+  if(this.error||this.recoveryError||this.saving||this.needsAnalyticsChoice()||!Number.isInteger(n)||n<1||n>100||!this.unlocked(n))return false;
   const next=structuredClone(this.state);next.currentLevel=n;next.gameProgress.current=n-1;if(listScroll!==undefined)next.listScroll=listScroll;
   if(restart||!this.resumable(n)){
    next.roundInstanceIds[n]=this.uuid();const session=new this.R.Session(this.R.LEVELS[n-1]);

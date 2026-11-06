@@ -1,0 +1,37 @@
+TAP version 13
+# Subtest: actual SDK delayed startup: allow decline allow invalidates old intent and clears cached events before new consent
+not ok 1 - actual SDK delayed startup: allow decline allow invalidates old intent and clears cached events before new consent
+  ---
+  duration_ms: 37.780416
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test-sdk/services.test.mjs:20:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    pre-withdrawal round revived after reallow
+    + actual - expected
+    
+    + [
+    +   'e96729e4-0f18-4c58-84e3-5e97f5dbe267'
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: 'e96729e4-0f18-4c58-84e3-5e97f5dbe267'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test-sdk/services.test.mjs:26:164)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 134.476666

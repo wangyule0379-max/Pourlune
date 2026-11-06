@@ -19,6 +19,8 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import androidx.webkit.WebViewAssetLoader;
+import androidx.webkit.WebViewCompat;
+import androidx.webkit.WebViewFeature;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -44,9 +46,10 @@ public final class MainActivity extends Activity {
   if(retry!=null){root.removeView(retry);retry=null;}
   web=new WebView(this);root.addView(web,new FrameLayout.LayoutParams(-1,-1));
   web.setBackgroundColor(Color.rgb(255,248,239));web.getSettings().setJavaScriptEnabled(true);web.getSettings().setDomStorageEnabled(true);web.getSettings().setAllowFileAccess(false);web.getSettings().setAllowContentAccess(false);web.getSettings().setMediaPlaybackRequiresUserGesture(true);web.getSettings().setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+  if(BuildConfig.ENABLE_QA_SERVICES&&WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT))WebViewCompat.addDocumentStartJavaScript(web,"if(window===window.top)Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'android',services:'test'}),writable:false});",Collections.singleton("https://"+HOST));
   WebViewAssetLoader loader=new WebViewAssetLoader.Builder().addPathHandler("/assets/",new WebViewAssetLoader.AssetsPathHandler(this)).build();
   web.setWebViewClient(new WebViewClient(){
-   @Override public WebResourceResponse shouldInterceptRequest(WebView v,WebResourceRequest request){if(!local(request.getUrl()))return denied();WebResourceResponse response=loader.shouldInterceptRequest(request.getUrl());if(response!=null&&request.getUrl().getPath().endsWith(".mjs"))response.setMimeType("text/javascript");return response==null?denied():response;}
+   @Override public WebResourceResponse shouldInterceptRequest(WebView v,WebResourceRequest request){if(BuildConfig.ENABLE_QA_SERVICES&&"https".equals(request.getUrl().getScheme())&&"api.gamemunchies.com".equals(request.getUrl().getHost())&&(request.getUrl().getPort()==-1||request.getUrl().getPort()==443))return null;if(!local(request.getUrl()))return denied();WebResourceResponse response=loader.shouldInterceptRequest(request.getUrl());if(response!=null&&request.getUrl().getPath().endsWith(".mjs"))response.setMimeType("text/javascript");return response==null?denied():response;}
    @Override public boolean shouldOverrideUrlLoading(WebView v,WebResourceRequest request){return !local(request.getUrl());}
    @Override public void onReceivedError(WebView v,WebResourceRequest request,WebResourceError error){if(request.isForMainFrame())failed();}
    @Override public void onReceivedHttpError(WebView v,WebResourceRequest request,WebResourceResponse response){if(request.isForMainFrame())failed();}

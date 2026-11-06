@@ -1,0 +1,28 @@
+TAP version 13
+# Subtest: native owner forwards initial foreground so SDK actually activates without a background roundtrip
+not ok 1 - native owner forwards initial foreground so SDK actually activates without a background roundtrip
+  ---
+  duration_ms: 249.7725
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test-sdk/services.test.mjs:56:1'
+  failureType: 'testCodeFailure'
+  error: 'initial foreground never reached SDK'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test-sdk/services.test.mjs:56:679)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 512.795583

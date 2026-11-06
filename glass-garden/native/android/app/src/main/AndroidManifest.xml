@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-  <!-- Offline QA shell: no INTERNET permission or ad/analytics SDK. -->
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <!-- Only explicit QA service builds permit API requests. No advertising SDK. -->
   <application android:allowBackup="false" android:label="Pourlune Garden QA" android:theme="@android:style/Theme.Material.Light.NoActionBar" android:usesCleartextTraffic="false" android:enableOnBackInvokedCallback="true">
     <activity android:name=".MainActivity" android:exported="true" android:configChanges="orientation|screenSize|keyboardHidden">
       <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>

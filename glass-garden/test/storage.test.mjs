@@ -4,6 +4,12 @@ import {IDBFactory, IDBObjectStore} from 'fake-indexeddb';
 let openStore;
 try { ({openStore}=await import('../web/storage.mjs')); } catch(e) { if(e.code!=='ERR_MODULE_NOT_FOUND') throw e; }
 const ready=()=>assert.equal(typeof openStore,'function','transaction-complete product store is required');
+test('scoped statistics receipt survives restart; abort never acknowledges or changes gameplay revision',async()=>{
+ const indexedDB=new IDBFactory();let s=await openStore({indexedDB,name:'reset-ack'});await s.write({moves:7},0);await s.ackStatisticsReset('scope-A','token-A');assert.equal(await s.readStatisticsResetAck('scope-B'),null);
+ const put=IDBObjectStore.prototype.put;
+ try{IDBObjectStore.prototype.put=function(...args){const q=put.apply(this,args);if(args[1]==='statistics-reset-ack:scope-A')q.addEventListener('success',()=>this.transaction.abort());return q;};await assert.rejects(s.ackStatisticsReset('scope-A','token-B'));}finally{IDBObjectStore.prototype.put=put;}
+ assert.equal(await s.readStatisticsResetAck('scope-A'),'token-A');assert.equal((await s.read()).revision,1);assert.deepEqual((await s.read()).data,{moves:7});s.close();s=await openStore({indexedDB,name:'reset-ack'});assert.equal(await s.readStatisticsResetAck('scope-A'),'token-A');assert.equal((await s.write({moves:8},1)).revision,2);s.close();
+});
 test('nonempty whole snapshot survives close and reopen',async()=>{
  ready(); const indexedDB=new IDBFactory();let s=await openStore({indexedDB,name:'persist'});
  const data={level:2,board:[['pink'],[]],round:'r2',history:[[]],choice:'declined'};
