@@ -14,6 +14,17 @@ final class AssetServer {
     }
 
     func start(completion: @escaping (Result<URL, Error>) -> Void) {
+        // Page/renderer Retry reuses its healthy listener and exact origin.
+        // Closing TCP flows can keep a just-stopped port occupied even after
+        // the listener's cancellation callback, so do not rebind it needlessly.
+        if let previous = listener {
+            if case .ready = previous.state, let bound = previous.port,
+               let url = URL(string: "http://127.0.0.1:\(bound.rawValue)/index.html") {
+                completion(.success(url)); return
+            }
+            stop { [weak self] in self?.start(completion: completion) }
+            return
+        }
         do {
             let parameters = NWParameters.tcp
             parameters.requiredLocalEndpoint = .hostPort(host: "127.0.0.1", port: port)
@@ -36,7 +47,17 @@ final class AssetServer {
         } catch { completion(.failure(error)) }
     }
 
-    func stop() { listener?.cancel(); listener = nil }
+    func stop(completion: (() -> Void)? = nil) {
+        guard let previous = listener else { completion?(); return }
+        listener = nil
+        if let completion {
+            if case .cancelled = previous.state { completion(); return }
+            previous.stateUpdateHandler = { state in
+                if case .cancelled = state { completion() }
+            }
+        }
+        previous.cancel()
+    }
     deinit { stop() }
 
     private func accept(_ connection: NWConnection) {

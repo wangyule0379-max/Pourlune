@@ -1,0 +1,9 @@
+# Local origin Retry repair — developer host checkpoint
+
+Observed on7November2026 with actual NWListener/URLSession: stop then immediately bind the same owned origin fails with POSIX48 Address already in use. Waiting for the cancellation callback alone still fails because TCP flows may outlive the listener; the rejected attempt is retained. No arbitrary delay, port fallback, socket-port sharing, TLS/ATS change or data reset was used.
+
+AssetServer.start now reuses its healthy owned listener and exact origin. Only a failed/unready owned listener is canceled to completion before restarting. GameViewController Retry reuses that same owner; an open revision invalidates older open callbacks.20 immediate real GET/Retry cycles pass with identical origin, and a second listener cannot take over an occupied test port. Once that test's own occupier is released, failed-start Retry serves the same original port. GET/module MIME/HEAD/404/traversal/symlink/POST-deny remain passed. All temporary files/listeners belong to the host test; the process exited. This is not a real WK renderer crash or device upgrade proof.
+
+QA native version0.1.0(6) was built serially. Android changes only version metadata, iOS changes the server/Retry route plus version. Frozen native s4f-native-retry-selftest-1 continues to ship the same434 frozen web files from s5-fullscreen-selftest-2. Exact artifact hashes in artifact-index.json/s4f-native-freeze.json. Prior candidates remain unchanged. No device started, no app installed, F9/old app/library/other simulator untouched. Actual WK Retry and lifecycle remain in the queued device batch.
+
+Previous source7c925f8 exact CI42254066125 completed all3 jobs successfully (80 core/copied-source verification and services-disabled Android/iOS compilation). The15 private-SDK controlled tests remain locally verified, not exported to Actions. This new native source needs its own CI after commit, with no repeat of the prior run.

@@ -11,6 +11,7 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
     private var retry: UIButton?
     private var ads: GardenAds?
     private var effects: NativeEffects?
+    private var openRevision = 0
     private let cream = UIColor(red: 1, green: 248/255, blue: 239/255, alpha: 1)
 
     override func viewDidLoad() {
@@ -26,7 +27,7 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
         #else
         let serviceMode = "disabled"
         #endif
-        config.userContentController.addUserScript(WKUserScript(source: "window.GardenNativeActive=false;Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'ios',services:'\(serviceMode)',ads:'\(serviceMode)',legacy:true,effects:true,appVersion:'0.1.0+5',send:message=>window.webkit.messageHandlers.gardenAds.postMessage(message)}),writable:false});", injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        config.userContentController.addUserScript(WKUserScript(source: "window.GardenNativeActive=false;Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'ios',services:'\(serviceMode)',ads:'\(serviceMode)',legacy:true,effects:true,appVersion:'0.1.0+6',send:message=>window.webkit.messageHandlers.gardenAds.postMessage(message)}),writable:false});", injectionTime: .atDocumentStart, forMainFrameOnly: true))
         #if GARDEN_QA_SERVICES
         ads = GardenAds(controller: self) { [weak self] event in
             guard let data = try? JSONSerialization.data(withJSONObject: event), let json = String(data: data, encoding: .utf8) else { return }
@@ -79,13 +80,14 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
     @objc private func openGame() {
         effects?.music(false)
         retry?.removeFromSuperview(); retry = nil
-        server?.stop()
+        openRevision += 1
+        let revision = openRevision
         guard let root = Bundle.main.url(forResource: "Web", withExtension: nil) else { failed(); return }
-        let next = AssetServer(root: root)
+        let next = server ?? AssetServer(root: root)
         server = next
         next.start { [weak self, weak next] result in
             DispatchQueue.main.async {
-                guard let self, self.server === next else { return }
+                guard let self, self.server === next, self.openRevision == revision else { return }
                 switch result {
                 case .success(let url): self.web.load(URLRequest(url: url))
                 case .failure: self.failed()

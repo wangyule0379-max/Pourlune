@@ -26,6 +26,28 @@ import Network
         let (_, escape) = try await request("escape.txt");precondition(escape.statusCode == 403)
         let (_, traversal) = try await request("%2e%2e/outside.txt");precondition(traversal.statusCode != 200)
         let (_, post) = try await request("index.html", method: "POST");precondition(post.statusCode == 405)
-        print("PASS: real loopback GET, JS module MIME, HEAD,404, symlink/traversal deny, POST deny; server/temp cleanup owned only")
+        // Retry must reuse the existing listener, not immediately rebind a
+        // port that may still have TCP flows. Never touch another task's port.
+        for _ in 0..<20 {
+            let url: URL = try await withCheckedThrowingContinuation { continuation in server.start { continuation.resume(with: $0) } }
+            precondition(url == entry)
+            let (body, response) = try await URLSession.shared.data(from: url)
+            precondition((response as? HTTPURLResponse)?.statusCode == 200 && String(data: body, encoding: .utf8) == "garden")
+        }
+        let occupier = AssetServer(root: root, port: .any)
+        defer { occupier.stop() }
+        let occupied: URL = try await withCheckedThrowingContinuation { continuation in occupier.start { continuation.resume(with: $0) } }
+        let blocked = AssetServer(root: root, port: NWEndpoint.Port(rawValue: UInt16(occupied.port!))!)
+        defer { blocked.stop() }
+        do {
+            _ = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<URL, Error>) in blocked.start { continuation.resume(with: $0) } }
+            preconditionFailure("An occupied origin must not be taken over")
+        } catch {}
+        await withCheckedContinuation { continuation in occupier.stop { continuation.resume() } }
+        let recovered: URL = try await withCheckedThrowingContinuation { continuation in blocked.start { continuation.resume(with: $0) } }
+        precondition(recovered == occupied)
+        let (recoveredBody, recoveredResponse) = try await URLSession.shared.data(from: recovered)
+        precondition((recoveredResponse as? HTTPURLResponse)?.statusCode == 200 && String(data: recoveredBody, encoding: .utf8) == "garden")
+        print("PASS: real loopback GET, JS module MIME, HEAD,404, symlink/traversal deny, POST deny; 20 immediate same-origin retries; server/temp cleanup owned only")
     }
 }

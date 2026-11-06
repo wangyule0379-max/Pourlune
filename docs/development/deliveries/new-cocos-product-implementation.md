@@ -125,3 +125,7 @@ Computer浏览器自测browser-s4d：390/320迁移设置、真实动作/Undo/刷
 S4e预检差额：App未直接调用需申报理由的API，移除空NSPrivacyAccessedAPITypes键，不虚填理由。新native s5-fullscreen-selftest-2-privacy-final/index3c760dee2424db5f63263e1310be955bd40c9ae3826ef854d233986a35b1d281，仅根PrivacyInfo.xcprivacy一文件变、445文件同字节，web/Android不变；旧冻结保留。preflight-triage.md逐项记录scanner误报与真实待验，localhost是只读本地资源源，不把它改成公网。仍不称clear to submit。
 
 新CI首跑42253305276（精确864084d）：80核心/来源核验和iOS服务关闭编译真实成功；Android工具安装失败在setup-android默认请求已不存在的SDK tools包，尚未进入编译。依据该Action官方README将packages显式空、下步只安装已指定API36/build-tools，不升SDK/AGP、不弱化TLS。下一精确提交另跑，首失败保留，不重跑旧终态。
+
+## S4f真实本地服务Retry竞态修复
+
+Host真实NWListener/URLSession补测复现停止后立刻重绑同端口POSIX48；仅等cancel回调也失败，TCP流可能仍持有端口。改为健康服务复用、失败owner取消完成再重试，openRevision阻止旧打开回调；不延时/换origin/端口共享/清档。20次同origin实际Retry及独占端口冲突→释放后恢复通过。双端QA0.1.0(6)编译通过，web仍s5-fullscreen-selftest-2全434字节一致；新native冻结s4f-native-retry-selftest-1，hash见retry-recovery。仍未做真实WK进程终止/原生验收，不拿host通过冒充。7c925f8的CI42254066125三job已真实成功，最新本原生源码另跑。
