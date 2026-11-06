@@ -54,6 +54,11 @@ with zipfile.ZipFile(apk) as archive:
                 markers.extend(json.loads(raw) for raw in re.findall(rb"~~R8(\{[^\0]*?\})", archive.read(name)))
         assert markers and all(m.get("compilation-mode") == "release" and m.get("pg-map-id") == match.group(1).decode() for m in markers), "DEX/R8 mapping mismatch"
         minified_evidence = {"mapping_sha256": digest(mapping), "mapping_id": match.group(1).decode(), "dex_markers": markers}
+        # Startup reflection must survive R8 in the actual packaged DEX.
+        guard = root.parent / "tools/validation/android_release_startup.py"
+        constructors = json.loads(subprocess.check_output([sys.executable, str(guard), str(apk), "--apkanalyzer", str(analyzer)], text=True))
+        assert constructors["passed"], "Missing reflected startup constructors"
+        minified_evidence["startup_reflection"] = constructors
 
     if manifest.get("nativeBridgeVersion", 1) >= 3:
         # BuildConfig constants are folded into the native bridge string. Catch

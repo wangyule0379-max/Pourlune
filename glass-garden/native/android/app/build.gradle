@@ -7,7 +7,7 @@ if (production && (!gradle.startParameter.taskNames || !gradle.startParameter.ta
 def requestedNumber = providers.gradleProperty('gardenBuildNumber')
 def requestedVersion = providers.gradleProperty('gardenVersion')
 if (production && (!requestedNumber.isPresent() || !requestedVersion.isPresent())) throw new GradleException('Production requires an explicitly verified store version/build number')
-def number = requestedNumber.orElse('10').get()
+def number = requestedNumber.orElse('12').get()
 def version = requestedVersion.orElse('0.1.0').get()
 if (!(number ==~ /[1-9][0-9]{0,8}/) || !(version ==~ /[0-9]+\.[0-9]+\.[0-9]+/)) throw new GradleException('Invalid app version/build number')
 android {
@@ -16,7 +16,7 @@ android {
  defaultConfig { applicationId production ? 'com.pourlune.app' : 'dev.pourlune.glassgarden.localqa'; minSdk 26; targetSdk 36; versionCode number.toInteger(); versionName version; manifestPlaceholders = [gardenDisplayName: production ? 'Pourlune' : 'Pourlune Garden QA']; buildConfigField 'boolean','ENABLE_QA_SERVICES',qaServices; buildConfigField 'boolean','ENABLE_PRODUCTION_SERVICES',productionServices }
  buildFeatures { buildConfig true }
  compileOptions { sourceCompatibility JavaVersion.VERSION_21; targetCompatibility JavaVersion.VERSION_21 }
- buildTypes { release { if (!production) signingConfig signingConfigs.debug; minifyEnabled true; shrinkResources true; proguardFiles getDefaultProguardFile('proguard-android-optimize.txt') } }
+ buildTypes { release { if (!production) signingConfig signingConfigs.debug; minifyEnabled true; shrinkResources true; proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro' } }
 }
 dependencyLocking { lockAllConfigurations() }
 dependencies { implementation 'androidx.webkit:webkit:1.15.0'; implementation 'com.google.android.gms:play-services-ads:25.5.0'; implementation 'com.google.android.ump:user-messaging-platform:4.0.0' }

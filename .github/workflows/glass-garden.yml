@@ -1,9 +1,9 @@
 name: Glass Garden native foundation
 on:
   push:
-    paths: ['glass-garden/**', '.github/workflows/glass-garden.yml']
+    paths: ['glass-garden/**', 'tools/validation/android_release_startup.py', '.github/workflows/glass-garden.yml']
   pull_request:
-    paths: ['glass-garden/**', '.github/workflows/glass-garden.yml']
+    paths: ['glass-garden/**', 'tools/validation/android_release_startup.py', '.github/workflows/glass-garden.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -48,6 +48,10 @@ jobs:
           node scripts/stage-native.mjs ci-android
       - name: Compile without private SDK or enabled ad services
         run: ./native/android/gradlew --project-dir native/android :app:assembleDebug --no-daemon --max-workers=2 -PgardenQaServices=false
+      - name: Check actual minified DEX reflection entry points
+        run: |
+          ./native/android/gradlew --project-dir native/android :app:assembleRelease --no-daemon --max-workers=2 -PgardenQaServices=false
+          python3 ../tools/validation/android_release_startup.py native/android/app/build/outputs/apk/release/app-release.apk --apkanalyzer "$ANDROID_HOME/cmdline-tools/latest/bin/apkanalyzer"
   ios-compile:
     runs-on: macos-latest
     defaults:

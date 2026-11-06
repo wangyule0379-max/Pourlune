@@ -1,0 +1,5 @@
+export function renderDiagnostic(){
+ const style=(doc,id)=>{const e=doc?.getElementById(id);if(!e)return null;const s=doc.defaultView.getComputedStyle(e),r=e.getBoundingClientRect();return {id,classes:e.className,hidden:e.hidden,inert:e.inert,visibility:s.visibility,display:s.display,opacity:s.opacity,zIndex:s.zIndex,renderState:e.dataset.renderState||null,rect:{x:r.x,y:r.y,width:r.width,height:r.height}};};
+ const frame=document.getElementById('game-frame'),w=frame?.contentWindow,d=w?.document;
+ return {nativeActive:window.GardenNativeActive,visible:document.visibilityState,canRender:window.GardenHost?.canRender(),main:['game-view','game-frame','screen','overlay'].map(id=>style(document,id)),frame:d?{ready:d.readyState,visible:d.visibilityState,htmlClass:d.documentElement.className,loading:!!d.getElementById('loading'),paused:w.cc?.game?.isPaused(),viewportBlocked:w.PourViewportBlocked,elements:['stage-wrap','screen-header','screen-footer','game-shell','gameCanvas'].map(id=>style(d,id))}:null};
+}

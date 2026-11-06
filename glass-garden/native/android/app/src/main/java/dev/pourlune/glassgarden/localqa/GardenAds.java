@@ -40,6 +40,7 @@ final class GardenAds {
   Inventory(String id,String kind){this.id=id;this.kind=kind;}
  }
  private static GardenAds retained;
+ private int qaTraceCount;
  private Activity activity;
  private Consumer<JSONObject> deliver;
  private final Context context;
@@ -129,7 +130,7 @@ final class GardenAds {
  private static String reason(AdError e){return e.getCode()==AdRequest.ERROR_CODE_NO_FILL?"no_fill":e.getCode()==AdRequest.ERROR_CODE_NETWORK_ERROR?"network":"sdk_error";}
  private static void diagnostic(AdError e){Log.w("GardenAds","domain="+e.getDomain()+" code="+e.getCode()+" message="+e.getMessage());}
  private boolean persist(){if(unreadable)return false;boolean ok=storage.edit().putString("pending",queue.toString()).commit();if(!ok){storageFailed=true;Log.e("GardenAds","Native ad receipt write failed");}return ok;}
- private void forward(JSONObject event,boolean replayed){try{if(deliver!=null)deliver.accept(new JSONObject(event.toString()).put("replayed",replayed));}catch(Exception error){Log.e("GardenAds","Could not forward native callback");}}
+ private void forward(JSONObject event,boolean replayed){try{if(deliver!=null){JSONObject copy=new JSONObject(event.toString()).put("replayed",replayed);if(BuildConfig.ENABLE_QA_SERVICES&&qaTraceCount<256){qaTraceCount++;JSONObject trace=new JSONObject();for(String key:new String[]{"id","type","kind","attemptId","occurredAt","reason","error","replayed"})if(copy.opt(key)!=null)trace.put(key,copy.opt(key));Log.i("GardenAds","QA callback "+trace);}deliver.accept(copy);}}catch(Exception error){Log.e("GardenAds","Could not forward native callback");}}
  private void emit(String type,String attemptId,String kind,String reason,AdError error){
   try{String key=attemptId+":"+type;if(!attemptId.isEmpty()&&observations.containsKey(key)){forward(observations.get(key),true);return;}JSONObject event=new JSONObject().put("id",UUID.randomUUID().toString()).put("type",type).put("kind",kind).put("attemptId",attemptId).put("occurredAt",Instant.now().toString());if(reason!=null)event.put("reason",reason);if(error!=null)event.put("error",new JSONObject().put("domain",error.getDomain()).put("code",error.getCode()));if(type.equals("consent"))event.put("canRequestAds",consent.canRequestAds()).put("privacyRequired",consent.getPrivacyOptionsRequirementStatus()==ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED);if(!attemptId.isEmpty())observations.put(key,event);event.put("adConsent",new JSONObject(statisticsGate.toString()));queue.put(event);boolean durable=persist(),certain=attemptId.isEmpty()||(!statisticsGate.optString("session").isEmpty()&&statisticsGate.optString("session").equals(attemptSessions.get(attemptId)));forward(event,!durable||!certain);}catch(Exception error2){Log.e("GardenAds","Could not retain native callback");}
  }

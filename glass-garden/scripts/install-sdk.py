@@ -35,4 +35,4 @@ for name, body in verified.items():
     path = destination / name
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(body)
-print("Verified private JavaScript SDK0.3.0; 8 fixed files installed outside source control")
+print(f"Verified private JavaScript SDK{manifest['version']}; {len(verified)} fixed files installed outside source control")

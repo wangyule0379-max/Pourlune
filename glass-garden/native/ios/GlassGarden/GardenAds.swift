@@ -23,6 +23,9 @@ final class GardenAds: NSObject, FullScreenContentDelegate {
     private var observations: [String: [String: Any]] = [:]
     private var attemptSessions: [String: String] = [:]
     private var statisticsGate: [String: Any] = ["allowed": false]
+    #if DEBUG && GARDEN_QA_SERVICES
+    private var qaTraceCount = 0
+    #endif
     var active = false
 
     init(controller: UIViewController, deliver: @escaping ([String: Any]) -> Void) {
@@ -144,7 +147,18 @@ final class GardenAds: NSObject, FullScreenContentDelegate {
             let handle = try FileHandle(forWritingTo: file); try handle.synchronize(); try handle.close(); return true
         } catch { storageFailed = true; diagnostic(error); return false }
     }
-    private func forward(_ event: [String: Any], replayed: Bool) { var copy = event; copy["replayed"] = replayed; deliver(copy) }
+    private func forward(_ event: [String: Any], replayed: Bool) {
+        var copy = event; copy["replayed"] = replayed
+        #if DEBUG && GARDEN_QA_SERVICES
+        if Bundle.main.bundleIdentifier == "dev.pourlune.glassgarden.localqa",
+           ProcessInfo.processInfo.arguments.contains("--garden-qa-tools"), qaTraceCount < 256 {
+            qaTraceCount += 1
+            let trace = copy.filter { ["id", "type", "kind", "attemptId", "occurredAt", "reason", "error", "replayed"].contains($0.key) }
+            if let data = try? JSONSerialization.data(withJSONObject: trace, options: [.sortedKeys]), let json = String(data: data, encoding: .utf8) { NSLog("GardenAds QA callback %@", json) }
+        }
+        #endif
+        deliver(copy)
+    }
     private func emit(_ type: String, _ attemptId: String, kind: String = "rewarded", reason: String? = nil, fields: [String: Any] = [:]) {
         let key = attemptId + ":" + type
         if !attemptId.isEmpty, let original = observations[key] { forward(original, replayed: true); return }

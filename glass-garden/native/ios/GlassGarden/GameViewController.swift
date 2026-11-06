@@ -11,6 +11,9 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
     private var retry: UIButton?
     private var ads: GardenAds?
     private var effects: NativeEffects?
+    #if DEBUG && GARDEN_QA_SERVICES
+    private var qaDiagnostics: GardenQADiagnostics?
+    #endif
     private var openRevision = 0
     private let cream = UIColor(red: 1, green: 248/255, blue: 239/255, alpha: 1)
 
@@ -60,6 +63,9 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(inactive), name: UIApplication.willResignActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(active), name: UIApplication.didBecomeActiveNotification, object: nil)
         openGame()
+        #if DEBUG && GARDEN_QA_SERVICES
+        qaDiagnostics = GardenQADiagnostics(controller: self, web: web)
+        #endif
     }
     fileprivate func adMessage(_ message: WKScriptMessage) {
         let origin = message.frameInfo.securityOrigin
