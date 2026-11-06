@@ -29,9 +29,12 @@ import SQLite3
         sql("INSERT INTO service_values VALUES('privacy_choices','{\"analytics\":false,\"crash\":true}')")
         // Keep the writer open so the current settings exist in WAL, not just main.
         func originals() throws -> [String: Data] { var result: [String: Data] = [:]; for suffix in ["", "-wal", "-shm"] { let file = URL(fileURLWithPath: source.path + suffix); if fm.fileExists(atPath: file.path) { result[suffix] = try Data(contentsOf: file) } }; return result }
+        sql("INSERT INTO service_values VALUES('last_fullscreen_ms','123456789'),('fullscreen_intent','{\"id\":\"old-show\",\"kind\":\"rewarded\"}')")
         let before = try originals(), record = try LegacyReader.read(from: source)
         precondition((record["preferences"] as? [String: Bool])?["sound"] == false)
         precondition((record["privacy"] as? [String: Bool])?["crash"] == true)
+        precondition((record["fullscreen"] as? [String: Any])?["lastShownAt"] as? Int == 123456789)
+        precondition((record["fullscreen"] as? [String: Any])?["uncertain"] as? Bool == true)
         precondition(JSONSerialization.isValidJSONObject(record))
         let after = try originals(); precondition(after == before, "Reader modified an original database family file")
         sql("UPDATE settings SET value=2 WHERE key='sound'")

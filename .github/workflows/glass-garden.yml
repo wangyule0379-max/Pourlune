@@ -1,0 +1,63 @@
+name: Glass Garden native foundation
+on:
+  push:
+    paths: ['glass-garden/**', '.github/workflows/glass-garden.yml']
+  pull_request:
+    paths: ['glass-garden/**', '.github/workflows/glass-garden.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: glass-garden
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.2'
+          cache: npm
+          cache-dependency-path: glass-garden/package-lock.json
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: npm run verify
+  android-compile:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: glass-garden
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.2'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+      - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - name: Stage copied-source compile-only payload
+        run: |
+          node scripts/package.mjs ci-android --copied-inputs-only
+          node scripts/stage-native.mjs ci-android
+      - name: Compile without private SDK or enabled ad services
+        run: ./native/android/gradlew --project-dir native/android :app:assembleDebug --no-daemon --max-workers=2 -PgardenQaServices=false
+  ios-compile:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: glass-garden
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.2'
+      - name: Stage copied-source compile-only payload
+        run: |
+          node scripts/package.mjs ci-ios --copied-inputs-only
+          node scripts/stage-native.mjs ci-ios
+      - name: Compile without signing, device launch or private SDK
+        run: xcodebuild -project native/ios/GlassGarden.xcodeproj -scheme GlassGarden -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath build/native/ci-derived -jobs 2 CODE_SIGNING_ALLOWED=NO -onlyUsePackageVersionsFromResolvedFile build

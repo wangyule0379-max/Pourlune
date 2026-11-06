@@ -23,13 +23,19 @@ Run these in `glass-garden/`. Open `http://127.0.0.1:4197/`. All actual browser/
 
 `gameProgress.slots` is the sole canonical per-level board/history, with stable original level uid. There is no second divergent resume board. A new/restart/replay round is committed before loading it; resume preserves the round. A legal pour commits the real Session after-state and any completion receipt immediately, independently of animation completion. The bridge preserves the original return-stage input queue and original animation. Duplicate checkpoints join the same write. Old-round finish callbacks are ignored.
 
-Save failure retains the pending complete snapshot, blocks dependent navigation/input and offers Retry/Stay. Corruption is not treated as a new player. Old site/prototype localStorage and Flutter SQLite are neither adopted nor modified. This is **not an implemented migration from the old 60-level app**; a future same-store update requires a separately accepted mapping and nonempty-data migration.
+Save failure retains the pending complete snapshot, blocks dependent navigation/input and offers Retry/Stay. Corruption is not a new player. Native legacy readers copy the fixed old SQLite family read-only, preserve old60 originals and settings/privacy refusal, and start new100 at1 exactly once. Existing new progress is authoritative. Old private Dart SDK state is not rewritten or replayed into the JS SDK. Host/browser checks do not establish a real device upgrade.
 
-## Scope and honest limitations
+## Current mobile/service checkpoint
 
-This local product has no analytics/ad/GameMunchies SDK or outbound collection/queue. The choice is saved but does not enable collection; the notice explicitly requires a fresh disclosure/choice before connecting services. CSP limits network connections to the local origin. SDK callback tests or real ads are not claimed. No rewards, extra bottle, gameId, store registration, signing or upload is introduced.
+The independent mobile QA shells, licensed original music and native selection haptics are implemented. Fixed official GameMunchies JS0.3.0 is ignored outside source control and packaged only by explicit --sdk; --ads additionally includes official test ads and expanded disclosure. QA uses the existing Pourlune test scope; statistics default off. A persisted withdrawal token prevents old queue revival across delayed startup/restart. Native UMP eligibility is separate from optional statistics.
 
-Sound effects and reduced motion are functional. Music/haptics are unavailable controls, matching the accepted prototype's capability state. Their placeholder values do not constitute an approved production default or migration policy; existing stored booleans are preserved. Mobile shells and native lifecycle/storage/Worker validation follow representative acceptance and are not yet implemented or passed. No performance optimization or measured performance claim is made.
+A true rewarded receipt grants one ordinary empty buffer per puzzle atomically; Restart/Undo retain it, replay after completion creates a new puzzle, duplicate/late callbacks cannot stack or reward another puzzle. Original100 definitions and rules remain unchanged; a strictly generated scene adapter accepts the per-instance expanded definition.
+
+The existing interstitial first-clear/Next policy and shared180s fullscreen clock are implemented. No inventory/late inventory never blocks Next or automatically presents. Only true shown consumes its previously saved qualification boundary. Actual shown waits true close/failure, including background; Next advances only after foreground and matching original round. Details and frozen candidate hashes: native/README.md and docs/development/deliveries/new-cocos-product-implementation.md at repository root.
+
+Current local checks:80 core/UI and15 actual-SDK tests pass with controlled HTTP/IndexedDB. Browser developer reports use simulated native ports, with no real ad/backend proof. Actual native upgrade, Worker/lifecycle/process recovery, real ads/routing/backend, audio/hardware and performance remain pending while another task owns the single device slot. No signed release, final acceptance or TestFlight update is claimed. F9 and old app data remain protected.
+
+CI runs core/copied-source verification and services-disabled native compilation without exporting the private SDK. CI packaging uses --copied-inputs-only only for ci- tags without SDK/ads; ordinary frozen candidates still verify original inputs. Remote CI result must be read separately, not inferred from workflow presence.
 
 ## Isolated failure harness
 

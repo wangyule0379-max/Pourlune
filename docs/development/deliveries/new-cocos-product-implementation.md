@@ -111,3 +111,13 @@ Computer浏览器自测browser-s4d：390/320迁移设置、真实动作/Undo/刷
 冻结web s4d-migration-effects-selftest-4：432文件22933677B，manifest SHA16918dc04448cb2486a066a23641f0598833d1741a4ab96e1989a84df214fe82。与浏览器迁移selftest2差额仅六文件、426不变，详差额；晚到奖励实际使用web4。双端QA0.1.0(4)最终候选glass-garden/build/native-candidates/s4d-migration-effects-selftest-4-retry/，index SHA95f17cacd5635de6be0cea2c9c70a7d858fe6129b2d177681b5f36052c5f7611，APK SHA351803aa580238d0422f9869a96a109dede05da5193046c912cde1a858d68b64。旧2/3/4包不覆盖，不安装；最终差额是原生Retry owner恢复，玩家web仍4同字节。
 
 证据native-s4/migration-effects/及browser-s4d、browser-s4d-late。Fruplop占用期间未启动新设备，UDID/serial不适用；F9未动。真实native资源/进程恢复/音乐/UMP/广告/实际路由/测试后台尚未自测，插屏完整旧策略与共享冷却继续集成。此检查点不请总控代做未完成开发测试，不称完整验收、签名或TestFlight更新。
+
+## S4e完整旧插屏策略与共享冷却
+
+已按旧PRD/最终控制器/持久化契约移植11起首通、3次资格、20/40保护、只本次首通首次Next、真实展示消费prepare时边界、任意fullscreen共享180s与保守重启；最终100无Next。SDK远配只进一步限制，加载晚到不自动展示，未shown120s上限，shown等待真实关闭，后台关闭仅前台同源实例推进。原生双库存/单展示路由、真实load_requested及blocked分开。旧库公共广告时钟保留，不改私有SDK状态。详情及反例证据见native-s4/fullscreen-policy/policy-and-validation.md。
+
+80核心/UI＋15真实官方SDK受控检查通过，双端QA0.1.0(5)编译、清单与资源字节核验通过。Computer实际新Next差额browser-s5通过：ready/后台关闭/前台14、共享冷却、late不展示、20结算不展示。进入21预取1次符合后续首通策略，原始计数保留；先前作者“整个20→21不能load”预期过严，已明确纠正而未改代码。上述不是真实AdMob或后台通过。
+
+冻结s5-fullscreen-selftest-2（434文件22948122B/manifest0cd092080c00508ab76baf18d9e4f3a4bd5e0f45b286f49408c7240bbbd0981d），原生s5-fullscreen-selftest-2-privacy（indexb9abaad5b5a45e385af429ee033dd9928a48c39967d9f503ad1e2af9035e9600/APK2874dc8cd0d3d1a6322207ebe9c15b55f2320a581c6ea5e23bd2393f683ff664）。已补App自身统计隐私清单并核SDK两份原清单；尚无商店声明修改或上传。新增CI仅复制来源与核心/服务关闭原生编译，不上传私有JS SDK，不把它当完整SDK运行CI。
+
+本阶段边界Fruplop74DA仍占用且无释放，adb无设备；未启动Pourlune设备/未安装新包。真实原生/升级/广告/路由/后台/性能自测仍等自然窗口，电脑已排完整批次；F9及旧App/库不动。继续独立发布准备，不请总控代做未完成开发原生测试；尚未通过最终实际验收或更新TestFlight。

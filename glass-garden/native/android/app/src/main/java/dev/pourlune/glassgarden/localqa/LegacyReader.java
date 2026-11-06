@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -40,7 +41,17 @@ final class LegacyReader {
     if(version>=4)try(Cursor rows=db.rawQuery("SELECT value FROM service_values WHERE key=?",new String[]{"privacy_choices"})){
      if(rows.moveToFirst()){if(rows.getType(0)!=Cursor.FIELD_TYPE_STRING)throw new IOException("Unreadable privacy value");JSONObject raw=new JSONObject(rows.getString(0));if(!(raw.opt("analytics") instanceof Boolean)||!(raw.opt("crash") instanceof Boolean))throw new IOException("Unreadable privacy choice");privacy=new JSONObject().put("analytics",raw.getBoolean("analytics")).put("crash",raw.getBoolean("crash"));}
     }
-    return result.put("status","present").put("databaseVersion",version).put("preferences",preferences).put("privacy",privacy);
+    Object lastFullscreen=JSONObject.NULL;boolean uncertain=false;
+    if(version>=4)try(Cursor rows=db.rawQuery("SELECT key,value FROM service_values WHERE key IN ('last_fullscreen_ms','fullscreen_intent')",null)){
+     while(rows.moveToNext()){
+      if(rows.getType(1)!=Cursor.FIELD_TYPE_STRING)throw new IOException("Unreadable fullscreen timing");
+      Object raw=new JSONTokener(rows.getString(1)).nextValue();
+      if(rows.getString(0).equals("last_fullscreen_ms")){
+       if(!(raw instanceof Number))throw new IOException("Unreadable fullscreen timestamp");Number number=(Number)raw;double value=number.doubleValue();if(value<0||value>9007199254740991d||value!=Math.rint(value))throw new IOException("Unreadable fullscreen timestamp");lastFullscreen=number.longValue();
+      }else{if(!(raw instanceof JSONObject))throw new IOException("Unreadable fullscreen intent");JSONObject intent=(JSONObject)raw;if(!(intent.opt("id") instanceof String)||intent.getString("id").isEmpty()||!(intent.opt("kind") instanceof String)||!Arrays.asList("rewarded","interstitial").contains(intent.getString("kind")))throw new IOException("Unreadable fullscreen intent");uncertain=true;}
+     }
+    }
+    return result.put("status","present").put("databaseVersion",version).put("preferences",preferences).put("privacy",privacy).put("fullscreen",new JSONObject().put("lastShownAt",lastFullscreen).put("uncertain",uncertain));
    }
   }finally{
    // Cleanup only this unique copied family; originals never enter this subtree.

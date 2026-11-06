@@ -55,6 +55,7 @@ enum LegacyReader {
             }
         }
         var privacy: [String: Bool]?
+        var lastFullscreen: Any = NSNull(), uncertain = false
         if version >= 4 {
             try rows("SELECT value FROM service_values WHERE key='privacy_choices'") { row in
                 guard let text = sqlite3_column_text(row, 0), let data = String(cString: text).data(using: .utf8), let raw = try JSONSerialization.jsonObject(with: data) as? [String: Any] else { throw LegacyReadFailure(code: SQLITE_MISMATCH) }
@@ -63,6 +64,19 @@ enum LegacyReader {
                 privacy = choice
             }
         }
-        return base.merging(["status": "present", "databaseVersion": version, "preferences": preferences, "privacy": privacy as Any? ?? NSNull()]) { _, next in next }
+        if version >= 4 {
+            try rows("SELECT key,value FROM service_values WHERE key IN ('last_fullscreen_ms','fullscreen_intent')") { row in
+                guard let keyText = sqlite3_column_text(row, 0), let valueText = sqlite3_column_text(row, 1), let data = String(cString: valueText).data(using: .utf8) else { throw LegacyReadFailure(code: SQLITE_MISMATCH) }
+                let key = String(cString: keyText), raw = try JSONSerialization.jsonObject(with: data, options: [.fragmentsAllowed])
+                if key == "last_fullscreen_ms" {
+                    guard let value = raw as? NSNumber, CFGetTypeID(value) != CFBooleanGetTypeID(), value.doubleValue >= 0, value.doubleValue <= 9007199254740991, value.doubleValue.rounded() == value.doubleValue else { throw LegacyReadFailure(code: SQLITE_MISMATCH) }
+                    lastFullscreen = value
+                } else {
+                    guard let intent = raw as? [String: Any], let id = intent["id"] as? String, !id.isEmpty, let kind = intent["kind"] as? String, ["rewarded", "interstitial"].contains(kind) else { throw LegacyReadFailure(code: SQLITE_MISMATCH) }
+                    uncertain = true
+                }
+            }
+        }
+        return base.merging(["status": "present", "databaseVersion": version, "preferences": preferences, "privacy": privacy as Any? ?? NSNull(), "fullscreen": ["lastShownAt": lastFullscreen, "uncertain": uncertain]]) { _, next in next }
     }
 }

@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><base href="../build/s5-fullscreen-selftest-2/web/"><title>Controlled fullscreen-policy QA</title><link rel="stylesheet" href="design-tokens.css"><link rel="stylesheet" href="styles.css"></head><body>
+<aside id="qa-tools" style="position:fixed;top:0;left:0;z-index:100;background:#fff;padding:4px;font:12px sans-serif"><strong>SIMULATED ADS · NO GOOGLE / SERVER EVENTS</strong><a href="/qa/fullscreen.html?case=ready">13 ready</a> <a href="/qa/fullscreen.html?case=late">13 late</a> <a href="/qa/fullscreen.html?case=protected">20 protected</a><button id="late-load">Deliver late inventory</button><button id="background">Background</button><button id="close-ad">Real close input</button><button id="foreground">Foreground</button><button onclick="document.getElementById('qa-tools').hidden=true">Hide tools</button><output id="fault-status"></output></aside>
+<main id="phone" aria-label="Pourlune"><div id="screen">Opening isolated storage…</div><section id="game-view" class="inactive"><iframe id="game-frame" title="Puzzle canvas" allow="autoplay"></iframe><div id="hint-banner" hidden role="status"></div></section><div id="overlay" hidden><section id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" tabindex="-1"></section></div><div id="save-banner" hidden role="alert"></div><div id="toast" hidden role="status"></div></main>
+<script src="game/src/campaign.js"></script><script src="game/src/rules.js"></script><script src="game/src/progress.js"></script>
+<script type="module">
+const mode=new URLSearchParams(location.search).get('case')||'ready';if(!['ready','late','protected'].includes(mode))throw Error('Unknown QA case');
+const level=mode==='protected'?20:13,rawOpen=indexedDB.open.bind(indexedDB),rawFetch=fetch.bind(window);indexedDB.open=(name,version)=>rawOpen('pourlune.qa.fullscreen.v1.'+mode+'.'+name,version);
+const fixture=await(await rawFetch('/test-sdk/fixtures/public-qa-config-v4.json')).text();let loaded=null,showing=null,loads=0,shows=0,posts=0;const observed=new Map();
+function status(){document.getElementById('fault-status').textContent=mode+' · requests '+loads+' · shows '+shows+' · overlay '+!!showing+' · intercepted POSTs '+posts;}
+window.fetch=async(input,init={})=>{const url=new URL(typeof input==='string'?input:input.url,location.href);if(url.origin==='https://api.gamemunchies.com'){if((init.method||'GET')==='GET')return new Response(fixture,{status:200});posts++;status();return new Response('',{status:503});}return rawFetch(input,init);};
+function emit(type,attemptId='',kind='interstitial',fields={}){const key=type+':'+attemptId;let event=observed.get(key);if(!event){event={id:crypto.randomUUID(),type,attemptId,kind,occurredAt:new Date().toISOString(),...fields};observed.set(key,event);}window.GardenAdEvents?.receive(event);status();}
+window.GardenNativeActive=true;
+window.GardenNative=Object.freeze({platform:'ios',services:'test',ads:'test',effects:true,legacy:true,appVersion:'0.1.0+5',send:message=>{
+ const kind=message.kind||'rewarded',id=message.attemptId;
+ if(message.command==='initialize')setTimeout(()=>emit('consent','','rewarded',{canRequestAds:true,privacyRequired:false}),0);
+ if(message.command==='state')setTimeout(()=>emit('state','','rewarded',{busyAttemptIds:showing?[showing]:[]}),0);
+ if(message.command==='load'){loads++;loaded={id,kind};setTimeout(()=>emit('load_requested',id,kind),0);if(mode!=='late')setTimeout(()=>emit('loaded',id,kind),50);}
+ if(message.command==='show'){showing=id;shows++;setTimeout(()=>{emit('shown',id,kind);emit('impression',id,kind);},0);}
+ if(message.command==='cancel'){if(loaded?.id===id)loaded=null;emit('cancelled',id,kind);}
+ status();
+}});
+document.getElementById('late-load').onclick=()=>{if(loaded)emit('loaded',loaded.id,loaded.kind);};
+document.getElementById('close-ad').onclick=()=>{if(showing){const id=showing;showing=null;emit('closed',id);}};
+document.getElementById('background').onclick=()=>{window.GardenNativeActive=false;window.GardenLifecycle?.setActive(false);};
+document.getElementById('foreground').onclick=()=>{window.GardenNativeActive=true;window.GardenLifecycle?.setActive(true);};
+const {openStore}=await import('./storage.mjs'),store=await openStore();if(!await store.read()){const data=await(await rawFetch('/build/qa-fullscreen/checkpoint-'+level+'.json')).json();await store.write(data,0);}store.close();
+status();await import('./product.mjs');
+</script></body></html>

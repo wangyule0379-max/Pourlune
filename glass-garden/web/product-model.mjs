@@ -1,5 +1,6 @@
 import {withExtraBottle,expandSlot} from './extra-bottle.mjs';
 import {applyLegacy,legacyRecord} from './legacy.mjs';
+import {adLedger,validateFullscreen} from './fullscreen.mjs';
 export function initialState(R,P){return {version:1,catalog:R.CATALOG_ID,currentLevel:1,completedLevels:[],roundInstanceIds:{},completionReceipts:{},gameProgress:P.load(null,null,{levels:R.LEVELS,catalog:R.CATALOG_ID}),analyticsChoice:'unasked',disclosureVersion:1,prefs:{music:true,sound:true,haptics:true,reduced:false},group:0,listScroll:0};}
 const puzzleId=(s,n)=>s.puzzleInstanceIds?.[n]||s.roundInstanceIds[n];
 const rewarded=(s,n)=>!!s.extraBottles?.[n]&&s.extraBottles[n].puzzleId===puzzleId(s,n);
@@ -10,7 +11,7 @@ export function validateState(s,R,P){
  for(const key of ['music','sound','haptics','reduced'])if(typeof s.prefs[key]!=='boolean')throw Error('Unreadable settings');
  if(s.analyticsResetToken!=null&&(typeof s.analyticsResetToken!=='string'||!s.analyticsResetToken||s.analyticsResetToken.length>128))throw Error('Unreadable statistics choice receipt');
  if(s.legacyImport!=null){legacyRecord(s.legacyImport);if(!Number.isFinite(Date.parse(s.legacyImport.importedAt)))throw Error('Unreadable previous-save import receipt');}
- const gp=s.gameProgress;
+ validateFullscreen(s);const gp=s.gameProgress;
  if(!object(gp)||gp.current!==s.currentLevel-1||gp.version!==3||gp.catalog!==R.CATALOG_ID||!object(gp.slots)||Object.keys(gp.slots).length>100||!Array.isArray(gp.completed)||JSON.stringify(gp.completed)!==JSON.stringify(s.completedLevels.map(n=>n-1)))throw Error('Unreadable campaign progress');
  const levelKey=key=>String(Number(key))===key&&integer(Number(key),1,100);
  for(const [key,id] of Object.entries(s.roundInstanceIds))if(!levelKey(key)||typeof id!=='string'||!id||!gp.slots[key])throw Error('Unreadable round identity');
@@ -29,8 +30,8 @@ export function validateState(s,R,P){
  return s;
 }
 export class Product {
- constructor({store,R,P,onChange=()=>{},uuid=()=>crypto.randomUUID(),policyVersion=1,onCommit=()=>{}}){Object.assign(this,{store,R,P,onChange,uuid,policyVersion,onCommit});this.state=initialState(R,P);this.working=this.state;this.revision=0;this.saving=0;this.error=null;this.recoveryError=null;this.pending=null;this.chain=Promise.resolve();}
- async open(){try{const raw=await this.store.read();this.hasSave=!!raw;this.revision=Number.isSafeInteger(raw?.revision)?raw.revision:0;if(raw)this.state=validateState(raw.data,this.R,this.P);this.working=this.state;this.recoveryError=null;}catch(e){this.recoveryError=e.message;}this.onChange(this);return !this.recoveryError;}
+ constructor({store,R,P,onChange=()=>{},uuid=()=>crypto.randomUUID(),policyVersion=1,onCommit=()=>{}}){Object.assign(this,{store,R,P,onChange,uuid,policyVersion,onCommit});this.freshCompletions=new Set();this.checkedNext=new Set();this.state=initialState(R,P);this.working=this.state;this.revision=0;this.saving=0;this.error=null;this.recoveryError=null;this.pending=null;this.chain=Promise.resolve();}
+ async open(){this.freshCompletions.clear();this.checkedNext.clear();try{const raw=await this.store.read();this.hasSave=!!raw;this.revision=Number.isSafeInteger(raw?.revision)?raw.revision:0;if(raw)this.state=validateState(raw.data,this.R,this.P);this.working=this.state;this.recoveryError=null;}catch(e){this.recoveryError=e.message;}this.onChange(this);return !this.recoveryError;}
  async importLegacy(record){if(this.recoveryError)throw Error('Restore the existing save before importing settings');if(this.hasSave)return true;if(this.error||this.saving||this.pending)return false;return this.save(applyLegacy(this.state,record));}
  unlocked(n){return n===1||this.state.completedLevels.includes(n)||this.state.completedLevels.includes(n-1);}
  resumable(n,s=this.state){const slot=s.gameProgress.slots[n];return !!(s.roundInstanceIds[n]&&slot&&!this.R.isSolved(slot.state));}
@@ -44,7 +45,7 @@ export class Product {
   const snapshot=structuredClone(next);this.saving++;this.onChange(this);
   const job=this.chain.then(async()=>{
    if(this.error&&!replace)return false;
-   try{const previous=this.state;const record=await this.store[replace?'replace':'write'](snapshot,this.revision);this.revision=record.revision;this.state=record.data;this.hasSave=true;Promise.resolve().then(()=>this.onCommit(record.data,previous)).catch(()=>{});if(this.pending===next||this.saving===1)this.pending=null;this.recoveryError=null;return true;}catch(e){this.error=e.message;return false;}
+   try{const previous=this.state;const record=await this.store[replace?'replace':'write'](snapshot,this.revision);this.revision=record.revision;this.state=record.data;this.hasSave=true;for(const n of this.state.completedLevels)if(!previous.completedLevels.includes(n))this.freshCompletions.add(this.state.completionReceipts[n]);Promise.resolve().then(()=>this.onCommit(record.data,previous)).catch(()=>{});if(this.pending===next||this.saving===1)this.pending=null;this.recoveryError=null;return true;}catch(e){this.error=e.message;return false;}
   }).finally(()=>{this.saving--;if(!this.saving&&!this.error)this.working=this.state;this.onChange(this);});
   this.chain=job.catch(e=>{this.error=e.message;this.onChange(this);return false;});return this.chain;
  }
@@ -70,7 +71,7 @@ export class Product {
   const n=index+1;if(!round||round!==this.working.roundInstanceIds[n]||this.recoveryError||!this.R.validState(session.state,this.activeLevel(n,this.working)))return false;
   const next=structuredClone(this.working);next.currentLevel=n;
   if(this.R.isSolved(session.state)){
-   if(!next.completedLevels.includes(n))next.completedLevels.push(n);
+   if(!next.completedLevels.includes(n)){next.completedLevels.push(n);if(next.fullscreen)next.fullscreen.qualifyingTotal=Math.max(0,next.completedLevels.length-10);}
    next.completedLevels.sort((a,b)=>a-b);next.completionReceipts[n]=round;
   }
   this.P.capture(next.gameProgress,index,session,{sound:next.prefs.sound,reduced:next.prefs.reduced,completed:next.completedLevels.map(x=>x-1)},this.R.LEVELS);
@@ -80,6 +81,10 @@ export class Product {
   return this.save(next);
  }
  async next(){if(this.state.currentLevel===100)return false;return this.enter(this.state.currentLevel+1);}
+ canCheckInterstitial(n,round,{ignoreChecked=false}={}){const s=this.state,f=adLedger(s);return !this.error&&!this.recoveryError&&!this.saving&&s.currentLevel===n&&s.roundInstanceIds[n]===round&&s.completionReceipts[n]===round&&this.freshCompletions.has(round)&&(ignoreChecked||!this.checkedNext.has(round))&&n>=11&&n<100&&n!==20&&n!==40&&f.qualifyingTotal-f.consumedTotal>=3;}
+ async prepareFullscreen(id,kind,level,roundId){await this.chain;if(this.error||this.recoveryError||this.saving||!['rewarded','interstitial'].includes(kind))return false;const existing=adLedger(this.state).attempts[id];if(existing)return existing.kind===kind&&existing.level===level&&existing.roundId===roundId&&existing.status==='prepared';if(kind==='rewarded'){if(!this.state.rewardAttempts?.[id]||this.state.rewardAttempts[id].roundId!==roundId)return false;}else if(!this.canCheckInterstitial(level,roundId,{ignoreChecked:true}))return false;const next=structuredClone(this.state);next.fullscreen=structuredClone(adLedger(next));next.fullscreen.attempts[id]={kind,level,roundId,boundary:next.fullscreen.qualifyingTotal,status:'prepared',createdAt:new Date().toISOString()};return this.save(next);}
+ async recordFullscreen(id,occurredAt){await this.chain;const at=Date.parse(occurredAt),a=adLedger(this.working).attempts[id];if(!a||!Number.isSafeInteger(at)||at<0)return false;if(a.shownAt!=null)return !this.error;const next=structuredClone(this.working),f=next.fullscreen;f.attempts[id].shownAt=at;f.attempts[id].status='shown';f.lastShownAt=Math.max(f.lastShownAt||0,at);if(a.kind==='interstitial')f.consumedTotal=Math.max(f.consumedTotal,a.boundary);return this.save(next);}
+ async finishFullscreen(id){await this.chain;const a=adLedger(this.working).attempts[id];if(!a)return true;if(a.status==='closed')return !this.error;const next=structuredClone(this.working);next.fullscreen.attempts[id].status='closed';return this.save(next);}
  async prepareReward(){
   if(this.error||this.recoveryError||this.saving||this.needsAnalyticsChoice())return false;
   const n=this.state.currentLevel;if(!this.resumable(n)||rewarded(this.state,n)||Object.values(this.state.rewardAttempts||{}).some(a=>a.level===n&&a.status==='prepared'))return false;

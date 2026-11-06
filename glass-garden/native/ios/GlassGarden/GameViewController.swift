@@ -26,7 +26,7 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
         #else
         let serviceMode = "disabled"
         #endif
-        config.userContentController.addUserScript(WKUserScript(source: "window.GardenNativeActive=false;Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'ios',services:'\(serviceMode)',ads:'\(serviceMode)',legacy:true,effects:true,appVersion:'0.1.0+4',send:message=>window.webkit.messageHandlers.gardenAds.postMessage(message)}),writable:false});", injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        config.userContentController.addUserScript(WKUserScript(source: "window.GardenNativeActive=false;Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'ios',services:'\(serviceMode)',ads:'\(serviceMode)',legacy:true,effects:true,appVersion:'0.1.0+5',send:message=>window.webkit.messageHandlers.gardenAds.postMessage(message)}),writable:false});", injectionTime: .atDocumentStart, forMainFrameOnly: true))
         #if GARDEN_QA_SERVICES
         ads = GardenAds(controller: self) { [weak self] event in
             guard let data = try? JSONSerialization.data(withJSONObject: event), let json = String(data: data, encoding: .utf8) else { return }
