@@ -73,3 +73,6 @@ Cancellation target now s4h-cancelled-ad-selftest-2 and its -minified variant, Q
 
 
 Latest developer-only target is s4j-native-owner-selftest-2 (QA0.1.0(9), bridge5) and its -minified Android variant, reusing unchanged accepted S4i web435. Native receivers now retain the original shown ad across Android Activity replacement and reject stale owner commands; both platforms fence cross-document first callbacks as replay. Actual-source controlled JVM test: python3 qa/android-ad-owner-check.py (existing Gson2.11 cache, or explicit --gson); it uses controlled platform ports, not a device/GMA/backend. Native batch and exact limitations: evidence/new-cocos-product-20261106/native-s4/native-owner/. The SDK policy-only gap still blocks release; no native installation/runtime acceptance or TestFlight completion is implied. S4i is not the current native install target.
+
+
+Metadata/preflight target s4k-device-preflight-selftest-1 / -minified is QA0.1.0(10), same S4i435 web. It adds iPad's four-orientation plist while keeping iPhone's three; real orientations and lifecycle remain unverified. Device-target Release was compiled/frozen unsigned separately for static inspection, not launched or used as a signed distribution app. Exact preflight/source/site-draft/CI limits are in release-preparation/report.md. All S4j logic is retained.

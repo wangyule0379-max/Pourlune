@@ -7,7 +7,7 @@ if (production && (!gradle.startParameter.taskNames || !gradle.startParameter.ta
 def requestedNumber = providers.gradleProperty('gardenBuildNumber')
 def requestedVersion = providers.gradleProperty('gardenVersion')
 if (production && (!requestedNumber.isPresent() || !requestedVersion.isPresent())) throw new GradleException('Production requires an explicitly verified store version/build number')
-def number = requestedNumber.orElse('9').get()
+def number = requestedNumber.orElse('10').get()
 def version = requestedVersion.orElse('0.1.0').get()
 if (!(number ==~ /[1-9][0-9]{0,8}/) || !(version ==~ /[0-9]+\.[0-9]+\.[0-9]+/)) throw new GradleException('Invalid app version/build number')
 android {
