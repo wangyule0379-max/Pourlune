@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><base href="../web/"><title>Isolated S2 storage QA</title><link rel="stylesheet" href="design-tokens.css"><link rel="stylesheet" href="styles.css"></head><body>
-<aside style="position:fixed;top:0;left:0;z-index:100;background:#fff;padding:4px;font:12px sans-serif"><strong>ISOLATED QA — NOT PLAYER BUILD</strong><button id="arm-abort">Abort next save after put success</button><button id="fail-load">Fail next local engine load</button><output id="fault-status">Not armed</output></aside>
+<aside style="position:fixed;top:0;left:0;z-index:100;background:#fff;padding:4px;font:12px sans-serif"><strong>ISOLATED QA — NOT PLAYER BUILD</strong><button id="arm-abort">Abort next save after put success</button><button id="fail-load">Fail next local engine load</button><button data-checkpoint="16">QA replay16</button><button data-checkpoint="39">QA replay39</button><button data-checkpoint="100">QA replay100</button><output id="fault-status">Not armed</output></aside>
 <main id="phone" aria-label="Pourlune"><div id="screen">Opening isolated storage…</div><section id="game-view" class="inactive"><iframe id="game-frame" title="Puzzle canvas" allow="autoplay"></iframe><div id="hint-banner" hidden role="status"></div></section><div id="overlay" hidden><section id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" tabindex="-1"></section></div><div id="save-banner" hidden role="alert"></div><div id="toast" hidden role="status"></div></main>
 <script>
 // Separate HTTP origin AND forced QA namespace. This file is never packaged.
@@ -8,6 +8,10 @@ indexedDB.open=(_name,version)=>nativeOpen('pourlune.glass-garden.qa.s2.v1',vers
 let armed=false;
 document.getElementById('arm-abort').onclick=()=>{armed=true;document.getElementById('fault-status').textContent='Armed';};
 document.getElementById('fail-load').onclick=async()=>{const r=await fetch('/qa/arm-load-failure',{method:'POST'});if(r.ok)location.reload();else document.getElementById('fault-status').textContent='Use the isolated QA server on port4199';};
+for(const button of document.querySelectorAll('[data-checkpoint]'))button.onclick=async()=>{
+ const n=Number(button.dataset.checkpoint),r=await fetch('/build/qa/checkpoint-'+n+'.json');if(!r.ok)return;
+ const data=await r.json(),q=indexedDB.open('ignored',1);q.onsuccess=()=>{const db=q.result,tx=db.transaction('snapshots','readwrite'),store=tx.objectStore('snapshots'),get=store.get('current');get.onsuccess=()=>{if(get.result)store.put(get.result,'qa-before-checkpoint');store.put({revision:(get.result?.revision||0)+1,data},'current');};tx.oncomplete=()=>{db.close();location.reload();};tx.onabort=()=>document.getElementById('fault-status').textContent='QA checkpoint import failed';};
+};
 const transaction=IDBDatabase.prototype.transaction;
 IDBDatabase.prototype.transaction=function(...args){
  const tx=transaction.apply(this,args);

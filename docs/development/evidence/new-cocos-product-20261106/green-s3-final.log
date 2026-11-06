@@ -1,0 +1,178 @@
+TAP version 13
+# Subtest: cancel terminates real bridge worker and invalidates late response
+ok 1 - cancel terminates real bridge worker and invalidates late response
+  ---
+  duration_ms: 1.532667
+  type: 'test'
+  ...
+# Subtest: child wake cannot resume engine under hidden parent/modal
+ok 2 - child wake cannot resume engine under hidden parent/modal
+  ---
+  duration_ms: 0.395375
+  type: 'test'
+  ...
+# Subtest: interrupt before first pour animation finishes still restores committed action
+ok 3 - interrupt before first pour animation finishes still restores committed action
+  ---
+  duration_ms: 14.9335
+  type: 'test'
+  ...
+# Subtest: winning move completion commits before animation finish or late callbacks
+ok 4 - winning move completion commits before animation finish or late callbacks
+  ---
+  duration_ms: 33.71225
+  type: 'test'
+  ...
+# Subtest: late animation callback from old round cannot replace restarted progress
+ok 5 - late animation callback from old round cannot replace restarted progress
+  ---
+  duration_ms: 12.6045
+  type: 'test'
+  ...
+# Subtest: pending save preserves existing return-stage bottle queue but hidden parent blocks it
+ok 6 - pending save preserves existing return-stage bottle queue but hidden parent blocks it
+  ---
+  duration_ms: 1.245833
+  type: 'test'
+  ...
+# Subtest: late successful save feedback cannot target a restored session with the same round
+ok 7 - late successful save feedback cannot target a restored session with the same round
+  ---
+  duration_ms: 1.215208
+  type: 'test'
+  ...
+# Subtest: actual rules: replay1 Next retains unfinished2 board/history/round and Undo; restart replaces only2
+ok 8 - actual rules: replay1 Next retains unfinished2 board/history/round and Undo; restart replaces only2
+  ---
+  duration_ms: 51.432875
+  type: 'test'
+  ...
+# Subtest: new round commits once; resume/reload and rejected analytics never queue events
+ok 9 - new round commits once; resume/reload and rejected analytics never queue events
+  ---
+  duration_ms: 3.098917
+  type: 'test'
+  ...
+# Subtest: save abort gates state transition and retry commits the same pending round
+ok 10 - save abort gates state transition and retry commits the same pending round
+  ---
+  duration_ms: 3.301083
+  type: 'test'
+  ...
+# Subtest: completion receipt is atomic/idempotent and stale round callback cannot complete replacement
+ok 11 - completion receipt is atomic/idempotent and stale round callback cannot complete replacement
+  ---
+  duration_ms: 19.396125
+  type: 'test'
+  ...
+# Subtest: malformed persisted slot blocks restore and replacement is explicit
+ok 12 - malformed persisted slot blocks restore and replacement is explicit
+  ---
+  duration_ms: 5.717084
+  type: 'test'
+  ...
+# Subtest: locked levels cannot be entered; all100 has no101
+ok 13 - locked levels cannot be entered; all100 has no101
+  ---
+  duration_ms: 1.949458
+  type: 'test'
+  ...
+# Subtest: inconsistent saved current pointer or detached round is retained as corruption
+ok 14 - inconsistent saved current pointer or detached round is retained as corruption
+  ---
+  duration_ms: 4.681417
+  type: 'test'
+  ...
+# Subtest: reopening nonempty product data preserves explicit settings and refusal
+ok 15 - reopening nonempty product data preserves explicit settings and refusal
+  ---
+  duration_ms: 4.800959
+  type: 'test'
+  ...
+# Subtest: real-rule checkpoint last100 commits complete campaign with no101 and keeps all history
+ok 16 - real-rule checkpoint last100 commits complete campaign with no101 and keeps all history
+  ---
+  duration_ms: 431.363375
+  type: 'test'
+  ...
+# Subtest: tall collector and cover checkpoints keep real legal histories and Undo
+ok 17 - tall collector and cover checkpoints keep real legal histories and Undo
+  ---
+  duration_ms: 0.610208
+  type: 'test'
+  ...
+# Subtest: unavailable capabilities never overwrite explicit saved preferences on reopen or choice change
+ok 18 - unavailable capabilities never overwrite explicit saved preferences on reopen or choice change
+  ---
+  duration_ms: 20.358875
+  type: 'test'
+  ...
+# Subtest: nonempty whole snapshot survives close and reopen
+ok 19 - nonempty whole snapshot survives close and reopen
+  ---
+  duration_ms: 5.836792
+  type: 'test'
+  ...
+# Subtest: put request success followed by transaction abort must reject and retain old save
+ok 20 - put request success followed by transaction abort must reject and retain old save
+  ---
+  duration_ms: 2.246667
+  type: 'test'
+  ...
+# Subtest: another tab cannot silently overwrite a newer commit
+ok 21 - another tab cannot silently overwrite a newer commit
+  ---
+  duration_ms: 3.532333
+  type: 'test'
+  ...
+# Subtest: explicit replacement quarantines corrupt payload atomically
+ok 22 - explicit replacement quarantines corrupt payload atomically
+  ---
+  duration_ms: 2.597708
+  type: 'test'
+  ...
+# Subtest: actual Next UI handler resumes2 after replay1 instead of resetting it
+ok 23 - actual Next UI handler resumes2 after replay1 instead of resetting it
+  ---
+  duration_ms: 47.765167
+  type: 'test'
+  ...
+# Subtest: Escape cancels search but cannot hide completion or save/recovery gates
+ok 24 - Escape cancels search but cannot hide completion or save/recovery gates
+  ---
+  duration_ms: 4.87175
+  type: 'test'
+  ...
+# Subtest: entering game and dismissing pause refresh input after parent gate changes
+ok 25 - entering game and dismissing pause refresh input after parent gate changes
+  ---
+  duration_ms: 2.945167
+  type: 'test'
+  ...
+# Subtest: local game loading failure exposes an honest retry instead of hanging Play
+ok 26 - local game loading failure exposes an honest retry instead of hanging Play
+  ---
+  duration_ms: 4.776125
+  type: 'test'
+  ...
+# Subtest: background return refreshes input without dismissing an existing pause
+ok 27 - background return refreshes input without dismissing an existing pause
+  ---
+  duration_ms: 3.698125
+  type: 'test'
+  ...
+# Subtest: choosing a level immediately retains selection scroll before debounce
+ok 28 - choosing a level immediately retains selection scroll before debounce
+  ---
+  duration_ms: 6.455458
+  type: 'test'
+  ...
+1..28
+# tests 28
+# suites 0
+# pass 28
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1162.75625

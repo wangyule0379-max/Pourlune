@@ -39,3 +39,17 @@ Use Computer实际Chrome390×844、320×568及独立IAB新玩家：拒绝/关闭
 r1保留冻结并置REWORK，不覆盖。当前r2-final相较r1仅product.mjs与game-bridge.js两个玩家文件变化，413文件原字节不变，详s2-r2-difference.json。前后台入口补refresh，修复禁用残留；原Pause回前台不自动关闭。受控晚到保存Promise复现了同round恢复成另一Session时旧win音效仍播放；现回调核原Session与state引用，队列开始新动作后不插入旧noMoves。代码提交cc385d89d7ae8b013b31bf55934b7955137ecb22；RED→GREEN日志保留。
 
 Computer实际切Chrome标签后原盘/输入保留，Pause仍在且Resume/Undo可用；但visibilityState持续visible，未证明真实hidden事件触发，因此只记切标签路径通过。4200预览已切换r2-final；4198冗余QA服务已关闭，4197普通和4199隔离QA暂供独立验收。没有设备。本次文档更新不改变候选字节。
+
+## S3外围阶段
+
+总控已在主目录 `docs/development/review/new-cocos-s2-independent.md` 接受r2代表网页范围并放行S3；不升级为原生/SDK/发布通过。本阶段继续原型既定视图，仅新增一个玩家行为修复：滚动后立即选关时，listScroll随enter完整快照保存，避免200ms debounce尚未执行便丢位置，不增加事务或round。真实UI handler RED→GREEN。
+
+当前S3冻结 `glass-garden/build/s3-r2/`：415文件/14240517B，manifest SHA256 **b919deb73826311f53df65dabf1dd61287a3b8cc8288047d829fbf29c8cb3a0b**。与S2-r2-final只改product-model.mjs/product.mjs两玩家文件，413文件保留；完整差额及清单在本证据目录s3-difference.json/s3-r2-artifact-manifest.json。28项Node PASS无跳过，407源/6核心/100关核验不变。
+
+S3新增隔离QA检查点生成器，逐关实际R.solve＋Session重放固定100关，校验合法历史，构造16最后粉色收集前、39开罩前、100最后一手前的状态；只导入4199独立QA库，保留旧QA快照，不进玩家包，不当自然玩家100关通关。生成输入/下一手/hash见s3-qa-checkpoints.json。自动核16收集/39开罩及Undo、100最后一手原子完成/无101/保留100份历史；保存音乐与震动true等显式选择不因能力未接被覆盖。
+
+Computer实际正常库：游戏→设置→帮助→两次返回同盘/1手；sound off、reduced on刷新保持；允许统计刷新保持、再拒绝与政策进出同盘；锁关未进入、分组和滚动返回保持。隔离QA实际16收集满并胜、39开罩后Undo及刷新恢复罩/4手、100实际最后一手→52手/100结算，仅Play Again/Levels/Home，首页与选关无101。报告与截图见browser-s3/。紧200ms人工点击未测（自动handler已覆盖），本轮320补验结果待Computer追加；不重复未改S2的拒绝刷新/故障恢复。
+
+当前无新增设备或网络规则/SDK变动；原生壳/真实后台/精确return快点/广告统计仍待S4。本阶段待总控独立接受，未上传TestFlight。
+
+S3 320x568 supplement: Computer checked final100 Play Again/Levels/Home all visible, actual39 cover removal with stable board/target/tools, settings bottom Credits and nested Back to same one-move board. QA toolbar obscures the top title only; this is explicitly excluded from player UI acceptance. Evidence browser-s3/report.md and 320 images. No device started.

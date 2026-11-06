@@ -35,7 +35,7 @@ export class ProductUI {
   if(n>100||n<1||!this.model.unlocked(n)){this.toast('Complete the previous level first.');return false;}
   if(this.model.state.analyticsChoice==='unasked'){this.choiceNext=()=>this.startLevel(n,options);this.analytics();return false;}
   await this.sceneReady;if(this.scene.busy){this.toast('Let this pour settle first.');return false;}
-  this.scene.cancelHint();const ok=await this.model.enter(n,options);
+  this.scene.cancelHint();const ok=await this.model.enter(n,{...options,listScroll:this.page==='levels'?this.$('screen').scrollTop:this.model.state.listScroll});
   if(!ok){if(this.model.error)this.afterSave=()=>this.loadCommittedLevel();return false;}this.loadCommittedLevel();return true;
  }
  loadCommittedLevel(){const s=this.model.state;this.clearSheet();this.$('save-banner').hidden=true;this.scene.progress=this.model.P.load(JSON.stringify(s.gameProgress),null);this.scene.completed=s.completedLevels.map(n=>n-1);this.scene.loadLevel(s.currentLevel-1,true);this.applyPrefs();this.showPage('game');this.scene.modal=false;this.scene.wake();}

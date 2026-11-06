@@ -39,9 +39,9 @@ export class Product {
  async reloadSaved(){await this.chain;this.error=null;this.pending=null;return this.open();}
  async chooseAnalytics(choice){if(!['allowed','declined'].includes(choice))return false;return this.save({...this.working,analyticsChoice:choice});}
  async preference(key,value){if(!['sound','reduced'].includes(key)||typeof value!=='boolean')return false;return this.save({...this.working,prefs:{...this.working.prefs,[key]:value}});}
- async enter(n,{restart=false}={}){
+ async enter(n,{restart=false,listScroll}={}){
   if(this.error||this.recoveryError||this.saving||this.state.analyticsChoice==='unasked'||!Number.isInteger(n)||n<1||n>100||!this.unlocked(n))return false;
-  const next=structuredClone(this.state);next.currentLevel=n;next.gameProgress.current=n-1;
+  const next=structuredClone(this.state);next.currentLevel=n;next.gameProgress.current=n-1;if(listScroll!==undefined)next.listScroll=listScroll;
   if(restart||!this.resumable(n)){
    next.roundInstanceIds[n]=this.uuid();const session=new this.R.Session(this.R.LEVELS[n-1]);
    this.P.capture(next.gameProgress,n-1,session,{sound:next.prefs.sound,reduced:next.prefs.reduced,completed:next.completedLevels.map(x=>x-1)},this.R.LEVELS);
