@@ -1,6 +1,6 @@
 # 新Cocos玻璃花园 · S1/S2代表阶段
 
-2026-11-06。开发自测已交付，**待总控独立验收**。本阶段没有安装包、构建号或商店更新。原型设计PASS不等于新工程、原生或SDK通过。
+2026-11-06。S2/S3网页阶段已由总控独立有限接受；当前继续S4原生与服务。S4基础QA壳已编译，真实原生运行/SDK仍待验，尚无商店更新。原型设计PASS不等于新工程、原生或SDK通过。
 
 ## 来源与范围
 
@@ -28,7 +28,7 @@ Use Computer实际Chrome390×844、320×568及独立IAB新玩家：拒绝/关闭
 
 ## 未验与下一门槛
 
-总控尚未独立接受S2，因此外围页推广、原生构建及SDK未推进。真实慢Hint取消未捕获（真实搜索过快）；自动取消/晚结果已过。后台原生生命周期、return窗口快操作、同屏几何稳定与性能基线仍需实际证据；不以Node替身或截图代替动态验收。
+历史S2检查点当时未推广；其后S2/S3已获总控有限接受，当前推进S4。真实慢Hint取消未捕获（真实搜索过快）；自动取消/晚结果已过。后台原生生命周期、return窗口快操作、同屏几何稳定与性能基线仍需实际证据；不以Node替身或截图代替动态验收。
 
 当前无广告/GameMunchies/Firebase客户端或远程队列，CSP连接仅本地源；选择允许也不启动采集，真实接线前须重新告知/选择。音乐/震动禁用是能力占位，不是正式默认策略，已有布尔值不覆盖。旧60关→新100关同身份迁移未实现，奖励玩法/频次/匹配SDK另列待定。
 
@@ -50,6 +50,20 @@ S3新增隔离QA检查点生成器，逐关实际R.solve＋Session重放固定10
 
 Computer实际正常库：游戏→设置→帮助→两次返回同盘/1手；sound off、reduced on刷新保持；允许统计刷新保持、再拒绝与政策进出同盘；锁关未进入、分组和滚动返回保持。隔离QA实际16收集满并胜、39开罩后Undo及刷新恢复罩/4手、100实际最后一手→52手/100结算，仅Play Again/Levels/Home，首页与选关无101。报告与截图见browser-s3/。紧200ms人工点击未测（自动handler已覆盖），本轮320补验结果待Computer追加；不重复未改S2的拒绝刷新/故障恢复。
 
-当前无新增设备或网络规则/SDK变动；原生壳/真实后台/精确return快点/广告统计仍待S4。本阶段待总控独立接受，未上传TestFlight。
+当前无新增设备或网络规则/SDK变动；原生壳/真实后台/精确return快点/广告统计仍待S4。S3其后已由总控有限接受（主目录new-cocos-s3-independent.md）；未上传TestFlight。
 
 S3 320x568 supplement: Computer checked final100 Play Again/Levels/Home all visible, actual39 cover removal with stable board/target/tools, settings bottom Credits and nested Back to same one-move board. QA toolbar obscures the top title only; this is explicitly excluded from player UI acceptance. Evidence browser-s3/report.md and 320 images. No device started.
+
+## S4a基础手机壳与匹配SDK核查
+
+S3已由总控有限接受。基础独立QA壳 `dev.pourlune.glassgarden.localqa`、0.1.0(1)，Android debug及iOS generic simulator编译成功；不覆盖旧com.pourlune.app或签名。AndroidX WebKit1.15.0、Gradle9.3.1/AGP9.1.0/Java21、SDK36；iOS Xcode26.6/17F113、SDK26.5、min16，均串行worker≤2。Android首次offline缺AGP缓存，正常HTTPS取依赖后offline重编成功，未改TLS/代理。XML兼容/Gradle弃用警告如实保留。
+
+基础包冻结 `glass-garden/build/native-candidates/s4a-baseline-1/`，精确逐文件索引见native-s4/baseline-artifact-index.json。Android APK10341913B/SHA815e244424eae11b4795f8b081116ae2be24b996b3bdda8aea8a6beb00dd0cd9；其414资源与S3同hash，唯一平台剔除vendor/.gitignore非运行元数据。iOS.app420文件，全部415玩家资源同S3；没有SDK接入或上传。
+
+Android固定HTTPS虚拟资产源，ESM MIME、同源限制、系统Back/生命周期/安全区接线；本基础包没有INTERNET权限。iOS固定127.0.0.1:43177只读资产服务与WK持久数据，端口失败不换源，原生前后台接既有controller。实际macOS运行同AssetServer实现，GET/模块MIME/HEAD/404/symlink/越界/POST拒绝通过，临时listener与文件只清本测试；不能替代iOS原生运行。
+
+Computer只读排期：Fruplop QA Launch 74DA9C44-B2C0-436A-A6E0-F2A608D85324仍Booted且无释放证据，adb无设备。遵守单设备规则，未启新设备/安装；拟复用已关闭的Pourlune Liquid Color QA D79BD258-6E80-4B71-9A7D-E806F5321460/iOS26.5，待持有人自然释放窗口。真实资源/Worker/非空进程恢复/hidden/return时序/音触觉/性能仍未验，不以编译或host测试替代。
+
+连接器只读核私有gamemunchies主树d34a7448后找到匹配的JavaScript0.3.0。按官方固定交付0a806fda242f55c3b7180fb63969323276f1cd4d获取归档，14670B/SHAf737166865a0d658273b53e372bce87e2e8fc1a24162305d11c7ac570831d796及8文件全部hash通过，源码6b2d595f；完整公开定位/hash元数据在glass-garden/sdk-manifest.json。私有包/源码仅在忽略目录，不提交、不公开、不从浮动工作区引用。匹配SDK存在，不再把旧Dart七文件当无匹配SDK的证据。
+
+SDK单实例、严格失败无内存回退、统计拒绝不POST、保存成功才新局事件/恢复不重复、失败Retry只一次、旧允许须新通知而旧拒绝保留等接线正在实施；实际私有SDK＋受控HTTP/IndexedDB自动检查5项通过，不称真实网络或平台接入通过。基础冻结包尚不含该SDK。继续独立接线，无需用户操作。

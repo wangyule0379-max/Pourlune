@@ -1,0 +1,30 @@
+# Local QA mobile shells
+
+Both use **dev.pourlune.glassgarden.localqa**, version0.1.0(1), an unregistered independent development identity. They do not replace `com.pourlune.app`, register a store app or use production signing. The first builds contain the accepted S3 web candidate and **no ad/statistics SDK**.
+
+```sh
+# glass-garden/ — verify and stage one frozen candidate to generated ignored assets
+node scripts/stage-native.mjs s3-r2
+
+# native/android/ — Java21, Gradle9.3.1, AGP9.1.0, compile/target36, min26
+./gradlew :app:assembleDebug --offline --no-daemon --max-workers=2
+
+# glass-garden/ — Xcode26.6/SDK26.5, min iOS16; no boot or signing
+xcodebuild -project native/ios/GlassGarden.xcodeproj -scheme GlassGarden -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath build/native/ios-derived -jobs 2 CODE_SIGNING_ALLOWED=NO build
+
+# Same iOS asset-server implementation, exercised on macOS without a simulator
+swiftc -swift-version 5 native/ios/GlassGarden/AssetServer.swift qa/AssetServerCheck.swift -o build/native/asset-server-check
+build/native/asset-server-check
+```
+
+First Android offline attempt identified uncached AGP transitive dependencies; a normal authenticated-free HTTPS dependency fetch completed, then offline rebuild passed. The application dependency lock is committed. No TLS/proxy/DNS or SDK version workarounds were made. SDK XML/deprecation warnings remain separate from the successful build.
+
+Android serves bundled resources from the fixed virtual HTTPS `appassets.androidplatform.net/assets/web/` origin, with AndroidX WebKit1.15.0. Only that prefix can navigate or return content; file/content access and mixed content are disabled. ESM MIME is explicit. This baseline has no INTERNET permission. Platform packaging omits only the vendor `.gitignore`; all414 shipped web files match S3. Native lifecycle forwards to the existing controller; system Back preserves modal/navigation semantics. Insets are handled by the native root without changing game geometry.
+
+iOS uses WKWebView's persistent data store and a bundled read-only server bound specifically to127.0.0.1:43177. The origin is fixed across restarts; occupied-port failure offers Retry instead of silently creating a new origin/save. Only GET/HEAD are served; decoded traversal, symlink escape, directory listing and writes are refused. Both `.mjs` and Worker scripts have JavaScript MIME. No cloud/gameplay server or broad ATS exception exists. Safe-area layout keeps system controls outside the game; foreground/background callbacks reach the same controller. The simulator bundle contains all415 S3 web files unchanged.
+
+Host tests actually request GET/module/HEAD/404/symlink/traversal/POST and close only their ephemeral listener/temp files in cleanup. They do not establish iOS runtime, disk eviction, lifecycle, native audio or physical performance. Debug web inspection is enabled only in debug builds.
+
+All actual simulator/emulator operations belong to the existing Use Computer chat. Before a batch, confirm Fruplop/other-task release; reuse the recorded matching Pourlune device and keep at most one device running. Record UDID/serial, never clear old apps/data, and use finally/trap cleanup for the device this batch starts. F9 is protected. Compilation does not authorize booting another device while one is occupied.
+
+The private JavaScript GameMunchies0.3.0 package was subsequently found and hash-verified (see `../sdk-manifest.json`). It is ignored outside source control, not yet included in these baseline binaries. Matching SDK availability is established; integration and real test-scope data/ad callbacks are still separate work.
