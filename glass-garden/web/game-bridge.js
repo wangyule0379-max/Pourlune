@@ -6,7 +6,7 @@
  const bind=S.bindUI,refresh=S.refresh,finish=S.finishPour,select=S.select,undo=S.undo,handle=S.handleHint,clear=S.clearHint,wake=S.wake,pour=S.pour,loadLevel=S.loadLevel;
  S.routeSelection=function(_hash,current){return {index:current,obsolete:false};};
  S.routeChanged=function(){};
- S.loadLevel=function(index,restore){this.stopAllActions?.();for(const b of this.bottles||[])b.stopAllActions();this._roundId=host().roundId(index+1);this._actionRound=null;loadLevel.call(this,index,restore);};
+ S.loadLevel=function(index,restore){this.stopAllActions?.();for(const b of this.bottles||[])b.stopAllActions();this._roundId=host().roundId(index+1);this._actionRound=null;loadLevel.call(this,index,restore,host().activeLevel(index+1));};
  S.bindUI=function(){bind.call(this);const scene=this;
   document.getElementById('levels').setAttribute('aria-label','Pause game');document.getElementById('levels').onclick=()=>host().pause();
   document.getElementById('settings').onclick=()=>host().settings();document.getElementById('help').onclick=()=>host().help();document.getElementById('restart').onclick=()=>host().restart();

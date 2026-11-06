@@ -1,0 +1,79 @@
+TAP version 13
+# Subtest: reward is persisted before show and only its receipt adds one ordinary bottle; close is not reward
+not ok 1 - reward is persisted before show and only its receipt adds one ordinary bottle; close is not reward
+  ---
+  duration_ms: 9.216208
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/reward.test.mjs:4:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'undefined'
+    - 'function'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'function'
+  actual: 'undefined'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/reward.test.mjs:5:29)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: reward survives Undo, Restart and process restore without resetting the puzzle entitlement
+not ok 2 - reward survives Undo, Restart and process restore without resetting the puzzle entitlement
+  ---
+  duration_ms: 1.83775
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/reward.test.mjs:9:1'
+  failureType: 'testCodeFailure'
+  error: 'a.activeLevel is not a function'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/reward.test.mjs:10:42)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: late reward targets the retained original puzzle, never a new replay or another current level
+not ok 3 - late reward targets the retained original puzzle, never a new replay or another current level
+  ---
+  duration_ms: 1.024334
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/reward.test.mjs:14:1'
+  failureType: 'testCodeFailure'
+  error: 'a.prepareReward is not a function'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/reward.test.mjs:15:38)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: aborted reward transaction keeps bottle and receipt pending together for one retry
+not ok 4 - aborted reward transaction keeps bottle and receipt pending together for one retry
+  ---
+  duration_ms: 0.962291
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/reward.test.mjs:17:1'
+  failureType: 'testCodeFailure'
+  error: 'a.prepareReward is not a function'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/reward.test.mjs:18:38)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 0
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 163.180833

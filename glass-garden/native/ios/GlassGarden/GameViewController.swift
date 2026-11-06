@@ -1,10 +1,15 @@
 import UIKit
 import WebKit
+private final class AdMessages: NSObject, WKScriptMessageHandler {
+    weak var owner: GameViewController?
+    func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) { owner?.adMessage(message) }
+}
 
 final class GameViewController: UIViewController, WKNavigationDelegate {
     private var server: AssetServer?
     private var web: WKWebView!
     private var retry: UIButton?
+    private var ads: GardenAds?
     private let cream = UIColor(red: 1, green: 248/255, blue: 239/255, alpha: 1)
 
     override func viewDidLoad() {
@@ -13,7 +18,13 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
         let config = WKWebViewConfiguration()
         config.websiteDataStore = .default()
         #if GARDEN_QA_SERVICES
-        config.userContentController.addUserScript(WKUserScript(source: "Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'ios',services:'test'}),writable:false});", injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        let bridge = AdMessages(); bridge.owner = self; config.userContentController.add(bridge, name: "gardenAds")
+        config.userContentController.addUserScript(WKUserScript(source: "Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'ios',services:'test',ads:'test',appVersion:'0.1.0+3',send:message=>window.webkit.messageHandlers.gardenAds.postMessage(message)}),writable:false});", injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        ads = GardenAds(controller: self) { [weak self] event in
+            guard let data = try? JSONSerialization.data(withJSONObject: event), let json = String(data: data, encoding: .utf8) else { return }
+            self?.web?.evaluateJavaScript("window.GardenAdEvents && window.GardenAdEvents.receive(\(json))", completionHandler: nil)
+        }
+        ads?.active = UIApplication.shared.applicationState == .active
         #endif
         config.allowsInlineMediaPlayback = true
         config.mediaTypesRequiringUserActionForPlayback = .all
@@ -34,6 +45,11 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(inactive), name: UIApplication.willResignActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(active), name: UIApplication.didBecomeActiveNotification, object: nil)
         openGame()
+    }
+    fileprivate func adMessage(_ message: WKScriptMessage) {
+        let origin = message.frameInfo.securityOrigin
+        guard message.frameInfo.isMainFrame, origin.protocol == "http", origin.host == "127.0.0.1", origin.port == 43177, message.frameInfo.request.url?.path == "/index.html", let value = message.body as? [String: Any] else { return }
+        ads?.command(value)
     }
 
     @objc private func openGame() {
@@ -66,10 +82,11 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
         NSLayoutConstraint.activate([button.centerXAnchor.constraint(equalTo: view.centerXAnchor),button.centerYAnchor.constraint(equalTo: view.centerYAnchor),button.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -32),button.heightAnchor.constraint(greaterThanOrEqualToConstant: 64)])
         retry = button
     }
-    @objc private func inactive() { web?.evaluateJavaScript("window.GardenLifecycle && window.GardenLifecycle.setActive(false)", completionHandler: nil) }
-    @objc private func active() { web?.evaluateJavaScript("window.GardenLifecycle && window.GardenLifecycle.setActive(true)", completionHandler: nil) }
+    @objc private func inactive() { ads?.active = false; web?.evaluateJavaScript("window.GardenLifecycle && window.GardenLifecycle.setActive(false)", completionHandler: nil) }
+    @objc private func active() { ads?.active = true; web?.evaluateJavaScript("window.GardenLifecycle && window.GardenLifecycle.setActive(true)", completionHandler: nil) }
     func webView(_ webView: WKWebView, decidePolicyFor action: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         guard let url = action.request.url else { decisionHandler(.cancel); return }
+        if action.navigationType == .linkActivated, action.targetFrame?.isMainFrame == true, url.absoluteString == "https://policies.google.com/privacy" { UIApplication.shared.open(url); decisionHandler(.cancel); return }
         if url.absoluteString == "about:blank", action.targetFrame?.isMainFrame != true { decisionHandler(.allow); return }
         decisionHandler(url.scheme == "http" && url.host == "127.0.0.1" && url.port == 43177 ? .allow : .cancel)
     }

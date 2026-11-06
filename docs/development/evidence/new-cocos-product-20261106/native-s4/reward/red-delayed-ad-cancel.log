@@ -1,0 +1,62 @@
+TAP version 13
+# Subtest: actual load/show commands follow a durable attempt and loaded event; closing alone never grants
+ok 1 - actual load/show commands follow a durable attempt and loaded event; closing alone never grants
+  ---
+  duration_ms: 4.358417
+  type: 'test'
+  ...
+# Subtest: reward callback saves inventory before analytics, repeats are harmless, statistics failure cannot erase reward
+ok 2 - reward callback saves inventory before analytics, repeats are harmless, statistics failure cannot erase reward
+  ---
+  duration_ms: 4.7195
+  type: 'test'
+  ...
+# Subtest: aborted reward save is not acknowledged; a repeated native receipt retries after the pending game commit
+ok 3 - aborted reward save is not acknowledged; a repeated native receipt retries after the pending game commit
+  ---
+  duration_ms: 0.683625
+  type: 'test'
+  ...
+# Subtest: background and cancelled load never show late inventory, but shown reward/close still route
+ok 4 - background and cancelled load never show late inventory, but shown reward/close still route
+  ---
+  duration_ms: 0.639375
+  type: 'test'
+  ...
+# Subtest: remote disabled scene blocks native load; impression retains original observation and funnel dimensions
+ok 5 - remote disabled scene blocks native load; impression retains original observation and funnel dimensions
+  ---
+  duration_ms: 0.327666
+  type: 'test'
+  ...
+# Subtest: cancelling while configuration is delayed never starts a late ad request
+not ok 6 - cancelling while configuration is delayed never starts a late ad request
+  ---
+  duration_ms: 1.358833
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/ads.test.mjs:10:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/ads.test.mjs:10:256)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 5
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 191.610583

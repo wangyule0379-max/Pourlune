@@ -79,3 +79,19 @@ SDK单实例、严格失败无内存回退、统计拒绝不POST、保存成功�
 冻结web424文件14294634B，manifest `2d6316937c565d4b2df681fc1c3e6fc508882f353566405f0e8ec09f10d5bf4b`；原生目录`glass-garden/build/native-candidates/s4b-consent-final/`索引SHA `0aedffd8de2f23ef0cadc92075324a7b8f95ea7aa8b10dccc7f3e1de95153256`。APK10368280B/SHA `d2770cbe063e25123b14b00f5fec055640d1de0ed991a382503f150027a9733f`，423运行资源精确一致，唯一省略非运行vendor/.gitignore；iOS424玩家文件一致。中间s4-services-5保留REWORK，不安装。不启动设备、不占用Fruplop/F9。
 
 用户现已确认更新原com.pourlune.app、保留旧存档原件及明确设置、新100关首次第1关，及每局真实激励一次额外普通空瓶、Restart保留/Undo不撤销；上述奖励待选文字仅历史。迁移、原生广告与加瓶事务正在继续，未实现部分不写成完成。
+
+## S4c加瓶与原生广告接线：开发自测检查点
+
+已实现获准单局一次加瓶：prepare先落盘原puzzle/round/attempt，真正reward输入才把一个容量4空瓶与receipt原子写入。Restart保留puzzle ID/权益但换统计round；Undo的完整历史同步扩瓶，不回收已兑权益。重新游玩已完成关创建新局、移除旧局attempt；晚到奖励只兑原保留局，当前另一关不动。未知/重复/跨新局回调不重复加瓶；保存中止保持瓶与receipt同一pending供Retry。统计失败、初始化延迟或撤回不阻断已确认游戏奖励/广告关闭。原存档读失败先保留native reward，不以空新档身份ACK丢弃。
+
+原100关初始数据/六核心原件保持hash；extra-bottle.mjs只生成单实例emptyCount+1定义，普通瓶在collector前插入，历史/遮罩/collector索引同步转换。game-runtime.js为严格按原game SHA和三个唯一替换点生成的集成副本：loadLevel新增activeLevel参数，restore/layout使用它；原game.js不改。最大普通14→15最后一排五列；密集长collector13→14侧列追加位置。瓶宽、液体unit、collector容量及原初盘不变。全部100扩瓶状态/合法历史/Undo验证通过，1/16/39/61/99/100用原求解与动作实际算至胜利。
+
+原生独立QA0.1.0(3)双端编译成功。iOS GMA13.11.0/UMP3.1.0固定旧已核版本；Android GMA25.5.0/UMP4.0.0及锁文件。官方平台sample AppID/unit，NPA、PG、UMP canRequestAds、无ATT和两AD_ID权限排除；不强制地理、不重置隐私、不改代理/TLS/DNS。主本地域主frame桥接，实际reward/impression/shown/close/failure分流；native观察保留首ID/时间并留至游戏/统计确认，已shown不因后台或elapsed销毁回调。原生离线回执读坏保留原文件、广告关闭，不覆盖成空。原生策略与connected notice不符会在构建守卫失败（双端负向执行并恢复staged元数据）。当前没有新增插屏触发/频次批准或实现。
+
+新增通知version3说明真实Google测试广告及可选广告事件；已有declined保持，旧allowed2须更新通知选择后才采集新范围。自测发现配置延迟取消后仍可能晚启动，已RED→GREEN；统计version带括号被SDK拒绝，改用0.1.0+3并用实际SDK检查所有漏斗上下文无拒绝。背景测试初次微任务/奖励冷却混淆属于测试假设修正，不算SDK缺陷；rewarded impression不消费interstitial专属冷却，真正受控interstitial impression在statsOff仍持久生效。页面history pageshow补回前台；Home后台不再用旧scene覆盖新读入盘。
+
+52基础/UI/控制器与14真实官方SDK定向检查PASS（HTTP受控，后者不是真广告）；匹配SDK8文件未改。Computer代表浏览器开发自测报告browser-s4-reward/report.md：390/320实际6/11/12/14/15瓶，无已见瓶/target/tools重叠，1 Hint倒/重开保留/Undo、16满收集、39开罩/Undo/刷新同4手、61小屏粉色收集、100最后52手胜利；未逐瓶逐尺寸点击、不等于AdMob或原生通过。根开发复看320的61/100图确认代表几何，仍等总控后续独立复测。
+
+冻结web s4c-reward-selftest-2：427文件14346810B/manifest 12aeb843aa658fddf5a8b58144775c655993c2d0b5aa070f2ed07292fe544d07，相较浏览器实测selftest-1只改ads.mjs：426文件（全部渲染、UI、题库）同字节。原生最终自测路径glass-garden/build/native-candidates/s4c-reward-selftest-2-guard/，indexSHA 04b9064bc82b494109bed9dba3b95886a9b2bc7e14e1866fd6fab0dea1d9cad7，APK 2e3f3a9f929d2de8556e40c064b42ddcb0c3eea3078ff870154dee4151db479d；426/427双端玩家文件精确核对，唯一Android非运行.gitignore省略。中间native selftest-1/2均保留，不安装。stage守卫重编令iOS debug dylib字节改变，已另冻guard目录，不拿前index冒充。
+
+证据native-s4/reward/。Fruplop74DA仍唯一Booted、无释放，未启Pourlune设备；真实native UMP/广告load/impression/reward/close、路由原日志、SDK test后台回读、进程恢复/性能尚未验。迁移、音乐/震动/支持实际能力及必要发布工作仍推进。本检查点不交总控代做未完成的开发自测，不宣称完整验收或TestFlight更新。
