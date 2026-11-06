@@ -21,6 +21,7 @@ final class GardenAds: NSObject, FullScreenContentDelegate {
     private var presenting: Inventory?
     private var presentationIds: [ObjectIdentifier: Inventory] = [:]
     private var observations: [String: [String: Any]] = [:]
+    private var statisticsGate: [String: Any] = ["allowed": false]
     var active = false
 
     init(controller: UIViewController, deliver: @escaping ([String: Any]) -> Void) {
@@ -37,7 +38,15 @@ final class GardenAds: NSObject, FullScreenContentDelegate {
     }
     func command(_ message: [String: Any]) {
         let command = message["command"] as? String ?? ""
-        if command == "drain" { queue.forEach(deliver); return }
+        if command == "statistics-gate" {
+            statisticsGate = ["allowed": false]
+            if let session = message["session"] as? String, UUID(uuidString: session) != nil,
+               let epoch = message["epoch"] as? NSNumber, CFGetTypeID(epoch) != CFBooleanGetTypeID(), epoch.doubleValue >= 0, epoch.doubleValue <= 9007199254740991, epoch.doubleValue.rounded() == epoch.doubleValue,
+               let allowed = message["allowed"] as? NSNumber, CFGetTypeID(allowed) == CFBooleanGetTypeID() {
+                statisticsGate = ["session": session, "epoch": epoch, "allowed": allowed.boolValue]
+            }; return
+        }
+        if command == "drain" { queue.forEach { forward($0, replayed: true) }; return }
         if command == "state" { emit("state", "", fields: ["busyAttemptIds": Array(inventories.values.map { $0.id }) + [presenting?.id].compactMap { $0 }]); return }
         if command == "ack", let id = message["eventId"] as? String { queue.removeAll { $0["id"] as? String == id }; persist(); return }
         if command == "initialize" {
@@ -126,19 +135,20 @@ final class GardenAds: NSObject, FullScreenContentDelegate {
     func adDidDismissFullScreenContent(_ ad: FullScreenPresentingAd) { if let slot = presentationIds.removeValue(forKey: ObjectIdentifier(ad)) { if presenting === slot { presenting = nil }; emit("closed", slot.id, kind: slot.kind) } }
     func ad(_ ad: FullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) { diagnostic(error); if let slot = presentationIds.removeValue(forKey: ObjectIdentifier(ad)) { if presenting === slot { presenting = nil }; let e = error as NSError; emit("show_failed", slot.id, kind: slot.kind, reason: "sdk_error", fields: ["error": ["domain": e.domain, "code": e.code]]) } }
     private func diagnostic(_ error: Error) { let e = error as NSError; NSLog("GardenAds domain=%@ code=%ld message=%@", e.domain, e.code, e.localizedDescription) }
-    private func persist() {
-        guard !unreadable else { return }
+    @discardableResult private func persist() -> Bool {
+        guard !unreadable else { return false }
         do {
             try FileManager.default.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
             try JSONSerialization.data(withJSONObject: queue).write(to: file, options: .atomic)
-            let handle = try FileHandle(forWritingTo: file); try handle.synchronize(); try handle.close()
-        } catch { storageFailed = true; diagnostic(error) }
+            let handle = try FileHandle(forWritingTo: file); try handle.synchronize(); try handle.close(); return true
+        } catch { storageFailed = true; diagnostic(error); return false }
     }
+    private func forward(_ event: [String: Any], replayed: Bool) { var copy = event; copy["replayed"] = replayed; deliver(copy) }
     private func emit(_ type: String, _ attemptId: String, kind: String = "rewarded", reason: String? = nil, fields: [String: Any] = [:]) {
         let key = attemptId + ":" + type
-        if !attemptId.isEmpty, let original = observations[key] { deliver(original); return }
-        var event = fields; event["id"] = UUID().uuidString; event["type"] = type; event["kind"] = kind; event["attemptId"] = attemptId; event["occurredAt"] = ISO8601DateFormatter().string(from: Date()); if let reason { event["reason"] = reason }
+        if !attemptId.isEmpty, let original = observations[key] { forward(original, replayed: true); return }
+        var event = fields; event["adConsent"] = statisticsGate; event["id"] = UUID().uuidString; event["type"] = type; event["kind"] = kind; event["attemptId"] = attemptId; event["occurredAt"] = ISO8601DateFormatter().string(from: Date()); if let reason { event["reason"] = reason }
         if !attemptId.isEmpty { observations[key] = event }
-        queue.append(event); persist(); deliver(event)
+        queue.append(event); let durable = persist(); forward(event, replayed: !durable)
     }
 }

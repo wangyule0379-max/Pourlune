@@ -1,7 +1,10 @@
+import {modelAdConsent,observation} from './ad-consent.mjs';
 const stages={load_requested:'ad_load_requested',blocked:'ad_blocked',loaded:'ad_loaded',load_failed:'ad_load_failed',impression:'ad_impression',reward:'ad_reward_earned',show_failed:'ad_show_failed'};
 export class RewardedAds {
- constructor({model,services,send,notify=()=>{},appVersion,gate={clock:{remaining:()=>0,shown(){}},owner:null}}){Object.assign(this,{model,services,send,notify,appVersion,gate});this.active=true;this.phase='idle';this.chain=Promise.resolve();this.processed=new Set();this.observing=new Map();}
- async report(type,attempt,event,reason){try{const owner=await this.services();if(!owner)return;const context={kind:'rewarded',scene:'extra_bottle',provider:'admob',appVersion:this.appVersion,opportunityId:attempt.id,loadAttemptId:attempt.id,...(reason?{reason}:{})};await owner.client.trackAdEvent(type,context,event,attempt.level);}catch{/* Statistics cannot prevent a legitimate game reward. */}}
+ constructor({model,consent=modelAdConsent(model),services,send,notify=()=>{},appVersion,gate={clock:{remaining:()=>0,shown(){}},owner:null}}){Object.assign(this,{model,consent,services,send,notify,appVersion,gate});this.active=true;this.phase='idle';this.chain=Promise.resolve();this.processed=new Set();this.observing=new Map();}
+ async report(type,attempt,event,reason,stamp=this.consent.capture()){
+  const first=observation(event);try{const owner=await this.services();if(!owner)return true;const context={kind:'rewarded',scene:'extra_bottle',provider:'admob',appVersion:this.appVersion,opportunityId:attempt.id,loadAttemptId:attempt.id,...(reason?{reason}:{})};if(owner.observeAd)return await owner.observeAd(type,context,first,attempt.level,()=>this.consent.permits(stamp));if(this.consent.permits(stamp))await owner.client.trackAdEvent(type,context,first,attempt.level);}catch{/* Statistics cannot prevent a legitimate game reward. */}return true;
+ }
  async watch(){
   if(this.phase!=='idle'||!this.active||this.gate.owner||this.gate.clock.remaining()>0){this.notify('unavailable');return false;}this.gate.owner=this;
   this.phase='checking';const operation=this.operation=(this.operation||0)+1;this.notify('loading');
@@ -18,8 +21,8 @@ export class RewardedAds {
  }
  cancel(reason='unknown',{silent=false}={}){if(this.shown||!['checking','loading','presenting'].includes(this.phase))return false;this.operation=(this.operation||0)+1;clearTimeout(this.timer);if(['loading','presenting'].includes(this.phase)){this.send({command:'cancel',attemptId:this.attempt.id});this.report('ad_blocked',this.attempt,undefined,reason);this.model.finishRewardAttempt(this.attempt.id);this.model.finishFullscreen(this.attempt.id);}this.phase='idle';if(this.gate.owner===this)this.gate.owner=null;if(!silent)this.notify(reason==='timeout'?'unavailable':'cancelled');return true;}
  setActive(active){this.active=active;if(!active&&['checking','loading'].includes(this.phase))this.cancel('in_background');}
- receive(event){this.chain=this.chain.then(()=>this.handle(event)).catch(()=>{});return this.chain;}
- async handle(event){
+ receive(event){const stamp=this.consent.capture(event);this.chain=this.chain.then(()=>this.handle(event,stamp)).catch(()=>{});return this.chain;}
+ async handle(event,stamp){
   if(this.model.recoveryError)return; // Retain native receipts until their original save can be read.
   if(!event||typeof event.id!=='string'||!Number.isFinite(Date.parse(event.occurredAt)))return;
   if(this.observing.has(event.id))return;
@@ -41,7 +44,7 @@ export class RewardedAds {
   }
   if(event.type==='state'&&Array.isArray(event.busyAttemptIds))for(const a of Object.values(this.model.working?.rewardAttempts||this.model.state.rewardAttempts||{})){if(a.status==='prepared'&&!event.busyAttemptIds.includes(a.id)&&!await this.model.finishRewardAttempt(a.id)&&this.model.error){this.notify('save_failed',a);return;}}
   const finish=async()=>{
-   if(stages[event.type]&&attempt){const failure=event.type.endsWith('failed')||event.type==='blocked';await this.report(stages[event.type],attempt,observation,failure?(['no_fill','network','timeout','privacy','busy','in_background','not_ready'].includes(event.reason)?event.reason:'sdk_error'):undefined);}
+   if(stages[event.type]&&attempt){const failure=event.type.endsWith('failed')||event.type==='blocked';await this.report(stages[event.type],attempt,observation,failure?(['no_fill','network','timeout','privacy','busy','in_background','not_ready'].includes(event.reason)?event.reason:'sdk_error'):undefined,stamp);}
    this.processed.add(event.id);if(this.processed.size>256)this.processed.delete(this.processed.values().next().value);this.send({command:'ack',eventId:event.id});this.observing.delete(event.id);
   };
   const work=Promise.resolve().then(finish);this.observing.set(event.id,work);

@@ -8,9 +8,9 @@ export const statisticsAllowed=(state,requiredVersion=2)=>state.analyticsChoice=
 // Own the official SDK once. Observations follow confirmed game commits; game
 // storage/navigation never await a service request or pretend a service is ready.
 export class GameServices {
- constructor({SDK,platform,statisticsEnabled=false,pendingResetToken=null,acknowledgeReset=null,dependencies={},onDiagnostic=()=>{},policyVersion=2,environment='test',identity}){
+ constructor({SDK,platform,adObservationRecorder=null,statisticsEnabled=false,pendingResetToken=null,acknowledgeReset=null,dependencies={},onDiagnostic=()=>{},policyVersion=2,environment='test',identity}){
   if(!['ios','android'].includes(platform))throw Error('Explicit native QA platform required');
-  const service=target(environment,identity);this.environment=service.environment;this.gameId=service.gameId;this.policyVersion=policyVersion;this.allowed=statisticsEnabled;this.applied=statisticsEnabled&&!pendingResetToken;this.acknowledgeReset=acknowledgeReset;this.consentGeneration=0;this.active=null;this.observed={};this.disposed=false;this.pending=Promise.resolve();
+  this.adObservationRecorder=adObservationRecorder;this.pendingAdPolicy=new Set();const service=target(environment,identity);this.environment=service.environment;this.gameId=service.gameId;this.policyVersion=policyVersion;this.allowed=statisticsEnabled;this.applied=statisticsEnabled&&!pendingResetToken;this.acknowledgeReset=acknowledgeReset;this.consentGeneration=0;this.active=null;this.observed={};this.disposed=false;this.pending=Promise.resolve();
   // Existing QA scene keys are a decode boundary, not enabled game placements.
   this.client=new SDK({baseUrl:'https://api.gamemunchies.com',gameId:service.gameId,platform,environment:service.environment,defaultConfig:{enabled:false,interstitial:{enabled:false,minIntervalSeconds:0,scenes:{next_level:false}},rewarded:{scenes:{extra_bottle:false}}},statisticsEnabled:this.applied,storageFailurePolicy:'disable',onDiagnostic}, {...dependencies,browser:false});
   this.ready=Promise.resolve().then(async()=>{await this.client.start();if(pendingResetToken&&this.client.getStorageStatus()!=='failed')await this.recordReset(pendingResetToken);}).catch(()=>this.fail());
@@ -44,6 +44,23 @@ export class GameServices {
  }
  revokeNow(){this.heldOff=true;this.allowed=false;this.consentGeneration++;let stop;try{stop=Promise.resolve(this.client.setStatisticsEnabled(false)).catch(()=>this.fail());}catch{this.fail();stop=Promise.resolve();}this.pending=this.pending.then(async()=>{await this.ready;await stop;this.applied=false;}).catch(()=>this.fail());return this.pending;}
  allowAfterCommit(state){if(!statisticsAllowed(state,this.policyVersion))return;this.heldOff=false;this.allowed=true;const generation=this.consentGeneration;this.pending=this.pending.then(async()=>{await this.ready;if(!this.disposed&&!this.failed&&this.client.getStorageStatus()!=='failed')await this.applyConsent(true,generation);}).catch(()=>this.fail());return this.pending;}
+ canShowAd(kind,scene,level){return !this.disposed&&!this.failed&&!(kind==='interstitial'&&this.pendingAdPolicy.size)&&this.client.canShowAd(kind,scene,level);}
+ observeAd(type,context,event,level,permitted=()=>false){
+  const policy=type==='ad_impression'&&context.kind==='interstitial';if(policy)this.pendingAdPolicy.add(event.id);
+  const job=this.pending.then(async()=>{
+   await this.ready;if(this.disposed||this.failed||this.client.getStorageStatus()==='failed')return !policy;
+   const generation=this.consentGeneration;await this.applyConsent(this.allowed&&!this.heldOff,generation);
+   const share=permitted()===true&&this.allowed&&!this.heldOff&&this.applied&&generation===this.consentGeneration;
+   if(this.adObservationRecorder)await this.adObservationRecorder(this.client,type,context,event,level,share);
+   else if(share||policy&&!this.applied)await this.client.trackAdEvent(type,context,event,level);
+   else if(policy)return false; // Fixed SDK has no policy-only API while global statistics is on.
+   if(policy)this.pendingAdPolicy.delete(event.id);return true;
+  }).catch(()=>!policy);
+  // A held policy receipt blocks further interstitials but never gameplay or
+  // valid SDK queue retries. Native keeps its ID/time until this returns true.
+  this.pending=job.then(()=>{});return job;
+ }
+
  setActive(active){if(this.active===active)return;this.active=active;if(!this.disposed&&!this.failed)this.client.setForeground(active);}
  settle(){return this.pending;}
  async dispose(){this.disposed=true;await this.ready;await this.pending;await this.client.dispose();}

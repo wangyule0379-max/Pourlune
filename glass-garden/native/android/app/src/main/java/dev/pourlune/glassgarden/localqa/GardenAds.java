@@ -40,6 +40,7 @@ final class GardenAds {
  private final ConsentInformation consent;
  private JSONArray queue;
  private boolean storageFailed=false,unreadable=false,initialized=false,initializing=false,active=false;
+ private JSONObject statisticsGate=new JSONObject();
  private Inventory presenting;
  private final Map<String,Inventory> inventories=new HashMap<>();
  private final Map<String,JSONObject> observations=new HashMap<>();
@@ -50,8 +51,9 @@ final class GardenAds {
  void setActive(boolean value){active=value;}
  void command(JSONObject message){
   String command=message.optString("command"),id=message.optString("attemptId"),kind=message.optString("kind","rewarded");
+  if(command.equals("statistics-gate")){statisticsGate=new JSONObject();try{Object session=message.opt("session"),epoch=message.opt("epoch"),allowed=message.opt("allowed");if(session instanceof String&&epoch instanceof Number&&allowed instanceof Boolean){UUID.fromString((String)session);double value=((Number)epoch).doubleValue();if(Double.isFinite(value)&&value>=0&&value<=9007199254740991d&&Math.floor(value)==value)statisticsGate.put("session",session).put("epoch",epoch).put("allowed",allowed);}}catch(Exception error){statisticsGate=new JSONObject();}return;}
   if(command.equals("drain")){drain();return;}
-  if(command.equals("state")){try{JSONArray ids=new JSONArray();for(Inventory slot:inventories.values())ids.put(slot.id);if(presenting!=null)ids.put(presenting.id);JSONObject event=new JSONObject().put("id",UUID.randomUUID().toString()).put("type","state").put("attemptId","").put("occurredAt",Instant.now().toString()).put("busyAttemptIds",ids);queue.put(event);persist();deliver.accept(event);}catch(Exception error){Log.e("GardenAds","Could not report native state");}return;}
+  if(command.equals("state")){try{JSONArray ids=new JSONArray();for(Inventory slot:inventories.values())ids.put(slot.id);if(presenting!=null)ids.put(presenting.id);JSONObject event=new JSONObject().put("id",UUID.randomUUID().toString()).put("type","state").put("attemptId","").put("occurredAt",Instant.now().toString()).put("busyAttemptIds",ids);event.put("adConsent",new JSONObject(statisticsGate.toString()));queue.put(event);forward(event,!persist());}catch(Exception error){Log.e("GardenAds","Could not report native state");}return;}
   if(command.equals("ack")){ack(message.optString("eventId"));return;}
   if(command.equals("initialize")){for(Inventory slot:new ArrayList<>(inventories.values()))cancel(slot);updateConsent();return;}
   if(command.equals("privacy")){if(active&&presenting==null&&consent.getPrivacyOptionsRequirementStatus()==ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED)UserMessagingPlatform.showPrivacyOptionsForm(activity,error->{if(error!=null)Log.w("GardenAds","UMP privacy code="+error.getErrorCode()+" message="+error.getMessage());status();});return;}
@@ -109,10 +111,11 @@ final class GardenAds {
  }
  private static String reason(AdError e){return e.getCode()==AdRequest.ERROR_CODE_NO_FILL?"no_fill":e.getCode()==AdRequest.ERROR_CODE_NETWORK_ERROR?"network":"sdk_error";}
  private static void diagnostic(AdError e){Log.w("GardenAds","domain="+e.getDomain()+" code="+e.getCode()+" message="+e.getMessage());}
- private void persist(){if(unreadable)return;if(!storage.edit().putString("pending",queue.toString()).commit()){storageFailed=true;Log.e("GardenAds","Native ad receipt write failed");}}
+ private boolean persist(){if(unreadable)return false;boolean ok=storage.edit().putString("pending",queue.toString()).commit();if(!ok){storageFailed=true;Log.e("GardenAds","Native ad receipt write failed");}return ok;}
+ private void forward(JSONObject event,boolean replayed){try{deliver.accept(new JSONObject(event.toString()).put("replayed",replayed));}catch(Exception error){Log.e("GardenAds","Could not forward native callback");}}
  private void emit(String type,String attemptId,String kind,String reason,AdError error){
-  try{String key=attemptId+":"+type;if(!attemptId.isEmpty()&&observations.containsKey(key)){deliver.accept(observations.get(key));return;}JSONObject event=new JSONObject().put("id",UUID.randomUUID().toString()).put("type",type).put("kind",kind).put("attemptId",attemptId).put("occurredAt",Instant.now().toString());if(reason!=null)event.put("reason",reason);if(error!=null)event.put("error",new JSONObject().put("domain",error.getDomain()).put("code",error.getCode()));if(type.equals("consent"))event.put("canRequestAds",consent.canRequestAds()).put("privacyRequired",consent.getPrivacyOptionsRequirementStatus()==ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED);if(!attemptId.isEmpty())observations.put(key,event);queue.put(event);persist();deliver.accept(event);}catch(Exception error2){Log.e("GardenAds","Could not retain native callback");}
+  try{String key=attemptId+":"+type;if(!attemptId.isEmpty()&&observations.containsKey(key)){forward(observations.get(key),true);return;}JSONObject event=new JSONObject().put("id",UUID.randomUUID().toString()).put("type",type).put("kind",kind).put("attemptId",attemptId).put("occurredAt",Instant.now().toString());if(reason!=null)event.put("reason",reason);if(error!=null)event.put("error",new JSONObject().put("domain",error.getDomain()).put("code",error.getCode()));if(type.equals("consent"))event.put("canRequestAds",consent.canRequestAds()).put("privacyRequired",consent.getPrivacyOptionsRequirementStatus()==ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED);if(!attemptId.isEmpty())observations.put(key,event);event.put("adConsent",new JSONObject(statisticsGate.toString()));queue.put(event);forward(event,!persist());}catch(Exception error2){Log.e("GardenAds","Could not retain native callback");}
  }
  private void ack(String id){JSONArray remaining=new JSONArray();for(int i=0;i<queue.length();i++){JSONObject item=queue.optJSONObject(i);if(item!=null&&!id.equals(item.optString("id")))remaining.put(item);}queue=remaining;persist();}
- private void drain(){for(int i=0;i<queue.length();i++){JSONObject event=queue.optJSONObject(i);if(event!=null)deliver.accept(event);}}
+ private void drain(){for(int i=0;i<queue.length();i++){JSONObject event=queue.optJSONObject(i);if(event!=null)forward(event,true);}}
 }

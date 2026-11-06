@@ -10,7 +10,7 @@ qa = "GARDEN_QA_SERVICES" in flags
 production = "GARDEN_PRODUCTION_SERVICES" in flags
 if qa and production:
     raise SystemExit("Choose one explicit service environment")
-if stage.get("nativeBridgeVersion") != 4:
+if stage.get("nativeBridgeVersion") != 5:
     raise SystemExit("Stage the matching environment/migration web bridge before building")
 identity = "com.pourlune.app" if production else "dev.pourlune.glassgarden.localqa"
 if stage.get("identity") != identity or stage.get("serviceTarget") != ("production" if production else "test"):

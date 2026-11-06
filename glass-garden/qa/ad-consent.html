@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><base href="../build/s4i-native-consent-selftest-1/web/"><title>Native ad consent boundary QA</title><link rel="stylesheet" href="design-tokens.css"><link rel="stylesheet" href="styles.css"></head><body>
+<aside id="qa-tools" style="position:fixed;top:0;left:0;z-index:100;background:#fff;padding:4px;font:12px sans-serif"><strong>SIMULATED NATIVE ADS / HTTP INTERCEPTED</strong><button id="hold">Deliver old Off impression</button><button id="release">Release held SDK</button><button id="replay">Replay old impression</button><button id="live">New permitted reward</button><button id="reward">Replay reward</button><output id="status"></output></aside>
+<main id="phone" aria-label="Pourlune"><div id="screen">Opening isolated storage…</div><section id="game-view" class="inactive"><iframe id="game-frame" title="Puzzle canvas" allow="autoplay"></iframe><div id="hint-banner" hidden role="status"></div></section><div id="overlay" hidden><section id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" tabindex="-1"></section></div><div id="save-banner" hidden role="alert"></div><div id="toast" hidden role="status"></div></main>
+<script>
+const nativeOpen=indexedDB.open.bind(indexedDB),originalFetch=window.fetch.bind(window);const isolated='pourlune.qa.ad-consent.'+crypto.randomUUID()+'.';indexedDB.open=(name,version)=>nativeOpen(isolated+name,version);window.GardenNativeActive=true;
+let gate={allowed:false},attempt=null,old=null,live=null,held=true;const posted=[];const status=()=>document.getElementById('status').textContent='old sent '+posted.filter(e=>e.id===old?.id).length+' / new sent '+posted.filter(e=>e.id===live?.id).length+' / observer '+(held?'held':'released')+' / gate '+gate.allowed;
+const fixture={gameId:'566121d2-a3f5-4950-8bd9-6ff2f673a0ac',platform:'ios',version:4,publishedAt:'2026-10-28T06:12:27.441Z',config:{enabled:true,interstitial:{enabled:true,scenes:{next_level:true},minIntervalSeconds:180},rewarded:{scenes:{extra_bottle:true}}},configSchema:2};
+window.fetch=async(input,init={})=>{const url=new URL(typeof input==='string'?input:input.url,location.href);if(url.origin==='https://api.gamemunchies.com'){if((init.method||'GET')==='GET')return new Response(JSON.stringify(fixture),{status:200});posted.push(...(JSON.parse(init.body).events||[]));status();return new Response('',{status:503});}return originalFetch(input,init);};
+function emit(type,id=attempt,fields={}){const event={id:crypto.randomUUID(),type,attemptId:id,occurredAt:new Date().toISOString(),replayed:false,adConsent:{...gate},...fields};window.GardenAdEvents?.receive(event);return event;}
+window.GardenNative=Object.freeze({platform:'ios',services:'test',ads:'test',legacy:true,effects:false,identity:'dev.pourlune.glassgarden.localqa',appVersion:'0.1.0+8',send:message=>{
+ if(message.command==='statistics-gate'){gate={session:message.session,epoch:message.epoch,allowed:message.allowed};status();}
+ if(message.command==='legacy-read')setTimeout(()=>window.GardenLegacy?.receive({protocolVersion:1,status:'missing',sourceFile:'pourlune_dev.sqlite',originalRetained:true}),0);
+ if(message.command==='initialize')setTimeout(()=>emit('consent','',{canRequestAds:true,privacyRequired:false}),0);
+ if(message.command==='state')setTimeout(()=>emit('state','',{busyAttemptIds:[]}),0);
+ if(message.command==='load'){attempt=message.attemptId;setTimeout(()=>{emit('load_requested');emit('loaded');},30);}
+ if(message.command==='show')setTimeout(()=>{emit('shown');emit('closed');},30);
+}});
+document.getElementById('hold').onclick=()=>{if(attempt&&!old)old=emit('impression');status();};
+document.getElementById('release').onclick=async()=>{await originalFetch('/qa/release-s4i-sdk',{method:'POST'});held=false;status();};
+document.getElementById('replay').onclick=()=>{if(old)window.GardenAdEvents.receive({...old,replayed:true});status();};
+document.getElementById('live').onclick=()=>{if(!live)live=emit('reward');status();};
+document.getElementById('reward').onclick=()=>{if(live)window.GardenAdEvents.receive({...live,replayed:true});status();};
+status();
+</script><script src="game/src/campaign.js"></script><script src="game/src/rules.js"></script><script src="game/src/progress.js"></script><script type="module">
+import {openStore} from './storage.mjs';import {Product} from './product-model.mjs';
+const store=await openStore(),model=new Product({store,R:window.PourRules,P:window.PourProgress,policyVersion:3});await model.open();await model.chooseAnalytics('declined');await model.enter(1);const prepared=await model.prepareReward();attempt=prepared.id;await model.finishRewardAttempt(attempt);model.close();
+await originalFetch('/qa/hold-s4i-sdk',{method:'POST'});await import('./product.mjs');
+</script></body></html>

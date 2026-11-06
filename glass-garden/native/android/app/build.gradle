@@ -7,7 +7,7 @@ if (production && (!gradle.startParameter.taskNames || !gradle.startParameter.ta
 def requestedNumber = providers.gradleProperty('gardenBuildNumber')
 def requestedVersion = providers.gradleProperty('gardenVersion')
 if (production && (!requestedNumber.isPresent() || !requestedVersion.isPresent())) throw new GradleException('Production requires an explicitly verified store version/build number')
-def number = requestedNumber.orElse('7').get()
+def number = requestedNumber.orElse('8').get()
 def version = requestedVersion.orElse('0.1.0').get()
 if (!(number ==~ /[1-9][0-9]{0,8}/) || !(version ==~ /[0-9]+\.[0-9]+\.[0-9]+/)) throw new GradleException('Invalid app version/build number')
 android {
@@ -23,7 +23,7 @@ dependencies { implementation 'androidx.webkit:webkit:1.15.0'; implementation 'c
 
 tasks.named('preBuild') { doFirst {
  def stage = new groovy.json.JsonSlurper().parse(rootProject.file('../../build/native/staged-web.json'))
- if (stage.nativeBridgeVersion != 4 || !file('src/main/assets/web/media/dream-culture.mp3').isFile()) throw new GradleException('Stage the matching environment/migration web bridge first')
+ if (stage.nativeBridgeVersion != 5 || !file('src/main/assets/web/media/dream-culture.mp3').isFile()) throw new GradleException('Stage the matching environment/migration web bridge first')
  if (stage.serviceTarget != (production ? 'production' : 'test') || stage.identity != (production ? 'com.pourlune.app' : 'dev.pourlune.glassgarden.localqa')) throw new GradleException('Staged service environment/identity mismatch')
  if (production && (stage.version != version || stage.buildNumber != number)) throw new GradleException('Production version/build does not match the explicit verified stage')
  if ((production || qaServices == 'true') && (stage.ads != 'official_test' || !file('src/main/assets/web/sdk/gamemunchies/src/index.js').isFile())) throw new GradleException('Stage a verified SDK/test-ad candidate with the connected notice first')
