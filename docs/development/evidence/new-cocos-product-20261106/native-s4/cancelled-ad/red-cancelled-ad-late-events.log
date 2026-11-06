@@ -1,0 +1,123 @@
+TAP version 13
+# Subtest: actual load/show commands follow a durable attempt and loaded event; closing alone never grants
+ok 1 - actual load/show commands follow a durable attempt and loaded event; closing alone never grants
+  ---
+  duration_ms: 5.519667
+  type: 'test'
+  ...
+# Subtest: reward callback saves inventory before analytics, repeats are harmless, statistics failure cannot erase reward
+ok 2 - reward callback saves inventory before analytics, repeats are harmless, statistics failure cannot erase reward
+  ---
+  duration_ms: 0.817542
+  type: 'test'
+  ...
+# Subtest: aborted reward save is not acknowledged; a repeated native receipt retries after the pending game commit
+ok 3 - aborted reward save is not acknowledged; a repeated native receipt retries after the pending game commit
+  ---
+  duration_ms: 2.692791
+  type: 'test'
+  ...
+# Subtest: background and cancelled load never show late inventory, but shown reward/close still route
+ok 4 - background and cancelled load never show late inventory, but shown reward/close still route
+  ---
+  duration_ms: 0.288125
+  type: 'test'
+  ...
+# Subtest: remote disabled scene blocks native load; impression retains original observation and funnel dimensions
+ok 5 - remote disabled scene blocks native load; impression retains original observation and funnel dimensions
+  ---
+  duration_ms: 0.142209
+  type: 'test'
+  ...
+# Subtest: cancelling while configuration is delayed never starts a late ad request
+ok 6 - cancelling while configuration is delayed never starts a late ad request
+  ---
+  duration_ms: 0.083042
+  type: 'test'
+  ...
+# Subtest: restored native state closes interrupted unconfirmed attempts without granting or closing an actually showing ad
+ok 7 - restored native state closes interrupted unconfirmed attempts without granting or closing an actually showing ad
+  ---
+  duration_ms: 1.239583
+  type: 'test'
+  ...
+# Subtest: unreadable game storage retains a native earned receipt until restore can identify the original puzzle
+ok 8 - unreadable game storage retains a native earned receipt until restore can identify the original puzzle
+  ---
+  duration_ms: 2.071959
+  type: 'test'
+  ...
+# Subtest: a held optional statistics observer cannot hold ad close or a legitimate game reward
+ok 9 - a held optional statistics observer cannot hold ad close or a legitimate game reward
+  ---
+  duration_ms: 0.95225
+  type: 'test'
+  ...
+# Subtest: late failure after cancelled loading is observed without reopening player feedback
+not ok 10 - late failure after cancelled loading is observed without reopening player feedback
+  ---
+  duration_ms: 12.125416
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/ads.test.mjs:14:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + [
+    +   [
+    +     'unavailable',
+    +     {
+    +       id: 'attempt',
+    +       level: 1
+    +     }
+    +   ]
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0:
+      0: 'unavailable'
+      1:
+        id: 'attempt'
+        level: 1
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/ads.test.mjs:14:255)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: cancelling during durable fullscreen prepare cannot start a late show
+not ok 11 - cancelling during durable fullscreen prepare cannot start a late show
+  ---
+  duration_ms: 0.479584
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/ads.test.mjs:15:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/ads.test.mjs:15:425)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 9
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 192.253333

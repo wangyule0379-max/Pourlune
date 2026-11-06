@@ -1,0 +1,154 @@
+TAP version 13
+# Subtest: actual Next UI handler resumes2 after replay1 instead of resetting it
+ok 1 - actual Next UI handler resumes2 after replay1 instead of resetting it
+  ---
+  duration_ms: 21.290625
+  type: 'test'
+  ...
+# Subtest: Escape cancels search but cannot hide completion or save/recovery gates
+ok 2 - Escape cancels search but cannot hide completion or save/recovery gates
+  ---
+  duration_ms: 1.523667
+  type: 'test'
+  ...
+# Subtest: entering game and dismissing pause refresh input after parent gate changes
+ok 3 - entering game and dismissing pause refresh input after parent gate changes
+  ---
+  duration_ms: 1.006041
+  type: 'test'
+  ...
+# Subtest: local game loading failure exposes an honest retry instead of hanging Play
+ok 4 - local game loading failure exposes an honest retry instead of hanging Play
+  ---
+  duration_ms: 0.99175
+  type: 'test'
+  ...
+# Subtest: background return refreshes input without dismissing an existing pause
+ok 5 - background return refreshes input without dismissing an existing pause
+  ---
+  duration_ms: 1.125125
+  type: 'test'
+  ...
+# Subtest: choosing a level immediately retains selection scroll before debounce
+ok 6 - choosing a level immediately retains selection scroll before debounce
+  ---
+  duration_ms: 0.942958
+  type: 'test'
+  ...
+# Subtest: expanded notice labels an old allowed choice as review and Close records refusal
+ok 7 - expanded notice labels an old allowed choice as review and Close records refusal
+  ---
+  duration_ms: 0.7905
+  type: 'test'
+  ...
+# Subtest: Not Now pauses sharing before a blocked save and reports an unsaved choice honestly
+ok 8 - Not Now pauses sharing before a blocked save and reports an unsaved choice honestly
+  ---
+  duration_ms: 0.611625
+  type: 'test'
+  ...
+# Subtest: earned bottle commits while native ad stays gated, then the close feedback restores its expanded board
+ok 9 - earned bottle commits while native ad stays gated, then the close feedback restores its expanded board
+  ---
+  duration_ms: 6.515416
+  type: 'test'
+  ...
+# Subtest: ads expand the optional notice and require a fresh choice from an earlier allowed play-only notice
+ok 10 - ads expand the optional notice and require a fresh choice from an earlier allowed play-only notice
+  ---
+  duration_ms: 3.013167
+  type: 'test'
+  ...
+# Subtest: pagehide then browser history pageshow resumes the same board and preserves Pause
+ok 11 - pagehide then browser history pageshow resumes the same board and preserves Pause
+  ---
+  duration_ms: 0.894583
+  type: 'test'
+  ...
+# Subtest: background while Home cannot checkpoint a stale scene after loading another saved board
+ok 12 - background while Home cannot checkpoint a stale scene after loading another saved board
+  ---
+  duration_ms: 5.932625
+  type: 'test'
+  ...
+# Subtest: real UI music/haptics gates follow saved choices and pause, hidden or audio interruption without resetting the board
+ok 13 - real UI music/haptics gates follow saved choices and pause, hidden or audio interruption without resetting the board
+  ---
+  duration_ms: 0.933084
+  type: 'test'
+  ...
+# Subtest: interrupted hint search returns to a playable puzzle instead of a searching sheet with no worker
+ok 14 - interrupted hint search returns to a playable puzzle instead of a searching sheet with no worker
+  ---
+  duration_ms: 1.348041
+  type: 'test'
+  ...
+# Subtest: native background before asynchronous bootstrap cannot be replaced by a visible WebView document
+ok 15 - native background before asynchronous bootstrap cannot be replaced by a visible WebView document
+  ---
+  duration_ms: 0.696959
+  type: 'test'
+  ...
+# Subtest: only the current saved, audible Win sheet permits success feedback; background or another round cannot
+ok 16 - only the current saved, audible Win sheet permits success feedback; background or another round cannot
+  ---
+  duration_ms: 2.534375
+  type: 'test'
+  ...
+# Subtest: late earned callback while Settings is open refreshes the original board without navigating away or losing the next pour
+ok 17 - late earned callback while Settings is open refreshes the original board without navigating away or losing the next pour
+  ---
+  duration_ms: 7.902791
+  type: 'test'
+  ...
+# Subtest: a prior earned callback during another ad for the same puzzle keeps its receipt, blocked overlay and truthful close feedback
+ok 18 - a prior earned callback during another ad for the same puzzle keeps its receipt, blocked overlay and truthful close feedback
+  ---
+  duration_ms: 2.522917
+  type: 'test'
+  ...
+# Subtest: Next waits for real ad completion and foreground, never advances a changed origin
+ok 19 - Next waits for real ad completion and foreground, never advances a changed origin
+  ---
+  duration_ms: 4.53225
+  type: 'test'
+  ...
+# Subtest: cancelled SDK load failure arriving on Settings never reopens an advertising sheet
+ok 20 - cancelled SDK load failure arriving on Settings never reopens an advertising sheet
+  ---
+  duration_ms: 1.068417
+  type: 'test'
+  ...
+# Subtest: a prior earned reward cancels another still-loading ad for the same puzzle instead of showing it needlessly
+not ok 21 - a prior earned reward cancels another still-loading ad for the same puzzle instead of showing it needlessly
+  ---
+  duration_ms: 2.11325
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/ui.test.mjs:36:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'presenting'
+    - 'idle'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'idle'
+  actual: 'presenting'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/ui.test.mjs:36:857)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..21
+# tests 21
+# suites 0
+# pass 20
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 161.119875

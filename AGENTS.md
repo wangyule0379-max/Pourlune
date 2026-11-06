@@ -125,3 +125,6 @@ Android19现已上传原Alpha并被Play识别、版本号已占用；最终更�
 旧插屏完整本地规则已移植：11起首通、3次资格、fresh首次Next、20/40保护、100无Next；任何actual fullscreen共享180s，prepare先落盘边界、真实shown才消费、晚到不能清后续首通。SDK远配只收紧，UMP独立；无/晚库存直接Next，shown不因后台/elapsed销毁，关闭在后台等前台同原round推进。旧库公共广告时钟复制只读导入；旧Dart SDK原存储/ID/队列保留不改不重发，不冒称JS统计身份完整迁移。iOS Retry复用健康AssetServer同origin，未知/坏旧库不能当不存在。Android Activity重建与晚callback持久化仍在实际QA清单，不凭per-Activity内存自查宣称通过。
 
 完整原生开发自测仍等单设备自然窗口：既有Use Computer聊天01a17b8e-aee4-7322-ae34-7b8d1531cae4操作，拟D79BD258-6E80-4B71-9A7D-E806F5321460。不得占用Fruplop/F9或盲停他人，按顶部单设备/清理约定；当前不能把网页mock/host socket/编译当真实SDK或硬件。开发完整自测修复冻结后才交总控实际复测，通过后同源签名核包更新原Pourlune Self组既有2人，不新建组/重邀，不自动扩大为正式App Store或Play发布。最新逐阶段真实状态见docs/development/deliveries/new-cocos-product-implementation.md；每次后续实际结果以新记录覆盖，不能沿用历史宣称。
+
+
+2026-11-07 S4h覆盖在途状态：当前冻结s4h-cancelled-ad-selftest-2及-minified（QA7，86核心/UI＋17固定SDK受控检查；只ads.mjs相对S4g变）。取消后late failure拉回Settings、prepare期间取消后旧show、旧reward到达仍show第二load已RED→GREEN，Computer对应模拟路径过；真实原生仍未验。另qa/reproduce-late-ad-consent.mjs独立RED：Off时Native观察可能在延迟SDK import＋后Allow后补记，父已独立确认并协调正式SDK逐观察policy-only补丁。未修前是发布阻断，不能用86绿覆盖。host待补同步许可/withdraw epoch及native回放保守边界，不私改当前固定JS8文件/SDK private state、不第二owner、不以全局Off清新合法队列、也不丢interstitial政策更新。继续原子奖励和Core免费流程；详新delivery/cancelled-ad证据。F9/Fruplop不动，原生/后台/性能完成开发自测后再总控复测、同源核包更新原Self组；不称本轮已更新TestFlight。

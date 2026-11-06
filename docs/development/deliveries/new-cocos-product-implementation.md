@@ -139,3 +139,9 @@ S4f追加版本维度修复：Android桥仍固定+4，现双端从真实包metad
 QA0.1.0(7)双端debug及Android实际R8 full/shrink/minified/debug证书包已编译核资源；DEX marker与mapping对应、两APK签名匹配，未做minified运行。最终web s4g-release-config-selftest-3/434文件22949373B/manifest9a708df3f32373f12f2cd5ad8b2a06f1cd3c02c887b7e3c0eee223e3dd48be8c；native普通indexb2175361e45fdd6857c5f2dd29061082096cd83f38a70d1639bdd501168ff398，minified indexd9f4246cf47485334c21470759cccdeebed8abd2f6d8f09c75765397650b39a9。完整hash、范围与剩余见native-s4/release-configuration/report.md。与S5仅product/services两web文件，432保持；GameMunchies私有源码/旧app/core不改。未来发布runbook在native/RELEASE.md，不自动执行签名或正式发布。
 
 实际原生迁移/进程恢复/真实广告与路由/测试后台/压缩启动/Activity重建晚回调/性能仍待合法窗口，F9/Fruplop不动。不以本配置检查点冒充完整手机验收或TestFlight更新。此前精确9995201/CI42255647434、0bc3acd/CI42255027814均3job成功，本源码另跑。
+
+## S4h取消与晚回调修复，另有统计边界阻断
+
+RED复现并修正：取消后late failure重新弹页、durable prepare等待取消仍send过期show、旧奖励到账仍show第二条未展示load。现代际/阶段/前台/权益/远配在save后再核，过期terminal仅观察不拉回UI，旧奖原子兑一次并取消同局未show的冗余load；已presenting仍等真实close。86核心/UI及17固定SDK受控检查通过，407源核符；Computer late failure/Settings及模拟旧奖/第二load路径过（模拟181s不算实际冷却）。最终s4h-cancelled-ad-selftest-2及-minified、QA7，hash/差额/原始红绿见native-s4/cancelled-ad/report.md，较S4g只ads.mjs变、433文件不变。
+
+新独立统计反例仍RED：Off观察到的Native回执，SDK import延迟后Allow可能使旧事件入队。真实SDK＋Product/GameServices实际onCommit顺序/全部HTTP拦截复现，父独立确认；非真实服务数据，不验证reward。父协调官方逐观察policy-only能力，host继续前await许可/撤回epoch及native回放保守边界；不私改固定包、不建第二owner、不用临时globalOff清合法队列，也不跳过interstitial冷却。该项和真实原生/后台/性能均是发布阻断，不能用86绿冒充完整通过。当前不上传TF，F9不动。

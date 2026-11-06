@@ -16,7 +16,7 @@ export class RewardedAds {
   this.send({command:'load',attemptId:attempt.id});
   this.timer=setTimeout(()=>{if(['loading','presenting'].includes(this.phase)&&!this.shown)this.cancel('timeout');},120000);this.timer.unref?.();return true;
  }
- cancel(reason='unknown'){if(this.shown||!['checking','loading','presenting'].includes(this.phase))return false;this.operation=(this.operation||0)+1;clearTimeout(this.timer);if(['loading','presenting'].includes(this.phase)){this.send({command:'cancel',attemptId:this.attempt.id});this.report('ad_blocked',this.attempt,undefined,reason);this.model.finishRewardAttempt(this.attempt.id);this.model.finishFullscreen(this.attempt.id);}this.phase='idle';if(this.gate.owner===this)this.gate.owner=null;this.notify(reason==='timeout'?'unavailable':'cancelled');return true;}
+ cancel(reason='unknown',{silent=false}={}){if(this.shown||!['checking','loading','presenting'].includes(this.phase))return false;this.operation=(this.operation||0)+1;clearTimeout(this.timer);if(['loading','presenting'].includes(this.phase)){this.send({command:'cancel',attemptId:this.attempt.id});this.report('ad_blocked',this.attempt,undefined,reason);this.model.finishRewardAttempt(this.attempt.id);this.model.finishFullscreen(this.attempt.id);}this.phase='idle';if(this.gate.owner===this)this.gate.owner=null;if(!silent)this.notify(reason==='timeout'?'unavailable':'cancelled');return true;}
  setActive(active){this.active=active;if(!active&&['checking','loading'].includes(this.phase))this.cancel('in_background');}
  receive(event){this.chain=this.chain.then(()=>this.handle(event)).catch(()=>{});return this.chain;}
  async handle(event){
@@ -26,14 +26,18 @@ export class RewardedAds {
   if(this.processed.has(event.id)){this.send({command:'ack',eventId:event.id});return;}
   const attempt=this.model.working?.rewardAttempts?.[event.attemptId]||this.model.state.rewardAttempts?.[event.attemptId]||(this.attempt?.id===event.attemptId?this.attempt:null),current=this.attempt?.id===event.attemptId,observation={id:event.id,occurredAt:event.occurredAt};
   if(event.type==='shown'&&attempt){if(current){this.shown=true;clearTimeout(this.timer);}this.gate.clock.shown(Date.parse(event.occurredAt));if(!await this.model.recordFullscreen(attempt.id,event.occurredAt)&&this.model.error){this.notify('save_failed',attempt);return;}this.gate.clock.shown(this.model.working.fullscreen?.lastShownAt??Date.parse(event.occurredAt));if(current){this.shown=true;clearTimeout(this.timer);}}
-  if(event.type==='reward'&&attempt){const ok=await this.model.grantReward(attempt.id);if(!ok&&this.model.error){this.notify('save_failed',attempt);return;}if(ok){if(current||(this.attempt?.level===attempt.level&&this.attempt?.puzzleId===attempt.puzzleId))this.earned=true;this.notify('reward',attempt);}}
+  if(event.type==='reward'&&attempt){const ok=await this.model.grantReward(attempt.id);if(!ok&&this.model.error){this.notify('save_failed',attempt);return;}if(ok){const samePuzzle=this.attempt?.level===attempt.level&&this.attempt?.puzzleId===attempt.puzzleId;if(current||samePuzzle)this.earned=true;if(samePuzzle&&this.phase==='loading')this.cancel('not_ready',{silent:true});this.notify('reward',attempt);}}
   if(event.type==='loaded'&&current&&this.phase==='loading'){
-   let owner;try{owner=await this.services();}catch{}if(this.active&&this.gate.clock.remaining()===0&&owner?.client.canShowAd('rewarded','extra_bottle',attempt.level)&&await this.model.prepareFullscreen(attempt.id,'rewarded',attempt.level,attempt.roundId)){this.phase='presenting';this.report('ad_show_attempted',attempt);this.send({command:'show',attemptId:attempt.id});this.notify('presenting');}else this.cancel(this.active?'not_ready':'in_background');
+   const operation=this.operation;let owner;try{owner=await this.services();}catch{}
+   const permitted=()=>this.operation===operation&&this.attempt?.id===attempt.id&&this.phase==='loading'&&this.active&&!this.model.error&&!this.model.recoveryError&&this.gate.owner===this&&!this.model.hasExtraBottle?.(attempt.level)&&this.gate.clock.remaining()===0&&owner?.client.canShowAd('rewarded','extra_bottle',attempt.level);
+   const prepared=permitted()&&await this.model.prepareFullscreen(attempt.id,'rewarded',attempt.level,attempt.roundId);
+   if(prepared&&permitted()){this.phase='presenting';this.report('ad_show_attempted',attempt);this.send({command:'show',attemptId:attempt.id});this.notify('presenting');}
+   else {if(prepared)await this.model.finishFullscreen(attempt.id);if(this.operation===operation&&this.phase==='loading')this.cancel(this.active?'not_ready':'in_background');}
   }
   if(['closed','load_failed','show_failed','cancelled','blocked'].includes(event.type)&&attempt){
    if(!await this.model.finishFullscreen(attempt.id)&&this.model.error){this.notify('save_failed',attempt);return;}
    if(!await this.model.finishRewardAttempt(attempt.id)&&this.model.error){this.notify('save_failed',attempt);return;}
-   if(current){clearTimeout(this.timer);this.phase='idle';if(this.gate.owner===this)this.gate.owner=null;this.notify(this.earned?'received':event.type==='closed'?'unrewarded':'unavailable',attempt);}
+   if(current&&this.attempt?.id===event.attemptId&&['loading','presenting'].includes(this.phase)){clearTimeout(this.timer);this.phase='idle';if(this.gate.owner===this)this.gate.owner=null;this.notify(this.earned?'received':event.type==='closed'?'unrewarded':'unavailable',attempt);}
   }
   if(event.type==='state'&&Array.isArray(event.busyAttemptIds))for(const a of Object.values(this.model.working?.rewardAttempts||this.model.state.rewardAttempts||{})){if(a.status==='prepared'&&!event.busyAttemptIds.includes(a.id)&&!await this.model.finishRewardAttempt(a.id)&&this.model.error){this.notify('save_failed',a);return;}}
   const finish=async()=>{
