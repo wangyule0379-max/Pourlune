@@ -64,4 +64,4 @@ Files: evidence and `docs/development/deliveries/new-cocos-product-implementatio
 
 ## S2 checkpoint
 
-Candidate `glass-garden/build/s2-r1/`, manifest8310e20e1ddfa7a5bbdef52ca9a238626f7258f4eac9712b00acd4b2bf095d3b,415 player files/14240210 bytes.22 Node tests PASS; source407 entries verified,6 core files unchanged,100 levels retained. Computer representative ordinary play/resume/Next and isolated real transaction-abort PASS, with initial disabled-input defect retained and repaired. Parent independent acceptance pending; do not promote or upload yet. See delivery for precise measured boundaries.
+Candidate `glass-garden/build/s2-r2-final/`, manifestca42924a5b2ac6403b2f439870d8d1212be9cd840110e04f120877bff8264978,415 player files/14240361 bytes.24 Node tests PASS; source407 entries verified,6 core files unchanged,100 levels retained. Computer representative ordinary play/resume/Next and isolated real transaction-abort PASS, with initial disabled-input defect retained and repaired. Parent independent acceptance pending; do not promote or upload yet. See delivery for precise measured boundaries.

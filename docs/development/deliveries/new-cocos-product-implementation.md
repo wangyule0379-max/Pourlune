@@ -18,9 +18,9 @@
 
 ## 冻结与检查
 
-候选绝对路径 `/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/build/s2-r1/`：415玩家文件，14240210 bytes；artifact-manifest SHA256 **8310e20e1ddfa7a5bbdef52ca9a238626f7258f4eac9712b00acd4b2bf095d3b**。逐文件清单副本 `../evidence/new-cocos-product-20261106/s2-r1-artifact-manifest.json`。候选未覆盖，不含QA/reference/npm依赖/samples.js。精确源码提交随交接发送总控。
+候选绝对路径 `/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/build/s2-r2-final/`：415玩家文件，14240361 bytes；artifact-manifest SHA256 **ca42924a5b2ac6403b2f439870d8d1212be9cd840110e04f120877bff8264978**。逐文件清单副本 `../evidence/new-cocos-product-20261106/s2-r2-final-artifact-manifest.json`。候选未覆盖，不含QA/reference/npm依赖/samples.js。精确源码提交随交接发送总控。
 
-在glass-garden执行 `npm ci --ignore-scripts`、`npm test`、`npm run verify -- --inputs`；`npm run package -- <new-name>`拒绝覆盖。Node22.23.2，22项PASS/无跳过，原407条源与六核心/100关核验通过。RED/GREEN原始日志保留。自动覆盖真实规则恢复/Undo/Next、完成幂等/旧round、写入中止/竞争/损坏隔离、设置与拒绝保留、未执行动画回调时动作/最后通关已落盘、输入刷新和加载Retry。动画测试只替代绘制端口，不当实际动画或SDK证明。
+在glass-garden执行 `npm ci --ignore-scripts`、`npm test`、`npm run verify -- --inputs`；`npm run package -- <new-name>`拒绝覆盖。Node22.23.2，24项PASS/无跳过，原407条源与六核心/100关核验通过。RED/GREEN原始日志保留。自动覆盖真实规则恢复/Undo/Next、完成幂等/旧round、写入中止/竞争/损坏隔离、设置与拒绝保留、未执行动画回调时动作/最后通关已落盘、输入刷新和加载Retry。动画测试只替代绘制端口，不当实际动画或SDK证明。
 
 Use Computer实际Chrome390×844、320×568及独立IAB新玩家：拒绝/关闭后可玩，刷新不重问；倒水/Undo/Pause/Resume/Restart取消与确认；真实首关9手→2关1手→重玩1关9手→Next保持2关原盘/1手，刷新Continue保持且Undo可用。正常标签console error/warning空。
 
@@ -33,3 +33,9 @@ Use Computer实际Chrome390×844、320×568及独立IAB新玩家：拒绝/关闭
 当前无广告/GameMunchies/Firebase客户端或远程队列，CSP连接仅本地源；选择允许也不启动采集，真实接线前须重新告知/选择。音乐/震动禁用是能力占位，不是正式默认策略，已有布尔值不覆盖。旧60关→新100关同身份迁移未实现，奖励玩法/频次/匹配SDK另列待定。
 
 **没有广告超时修复或真实展示/奖励通过结论，没有签名、上传、审核或发布。** F9、原设备/库及旧iOS19/Android19未动。未启动设备，UDID/serial不适用。预览HTTP进程仅供验收，结束后由开发清理。按总控实际结果继续返工，不能将本阶段自测写成TestFlight就绪。
+
+## r2定向返工
+
+r1保留冻结并置REWORK，不覆盖。当前r2-final相较r1仅product.mjs与game-bridge.js两个玩家文件变化，413文件原字节不变，详s2-r2-difference.json。前后台入口补refresh，修复禁用残留；原Pause回前台不自动关闭。受控晚到保存Promise复现了同round恢复成另一Session时旧win音效仍播放；现回调核原Session与state引用，队列开始新动作后不插入旧noMoves。代码提交cc385d89d7ae8b013b31bf55934b7955137ecb22；RED→GREEN日志保留。
+
+Computer实际切Chrome标签后原盘/输入保留，Pause仍在且Resume/Undo可用；但visibilityState持续visible，未证明真实hidden事件触发，因此只记切标签路径通过。4200预览已切换r2-final；4198冗余QA服务已关闭，4197普通和4199隔离QA暂供独立验收。没有设备。本次文档更新不改变候选字节。
