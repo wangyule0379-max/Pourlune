@@ -44,7 +44,7 @@ public final class MainActivity extends Activity {
   if(Build.VERSION.SDK_INT>=30){getWindow().setDecorFitsSystemWindows(false);root.setOnApplyWindowInsetsListener((view,insets)->{android.graphics.Insets bars=insets.getInsets(WindowInsets.Type.systemBars()|WindowInsets.Type.displayCutout());view.setPadding(bars.left,bars.top,bars.right,bars.bottom);return insets;});}
   if(Build.VERSION.SDK_INT>=33)getOnBackInvokedDispatcher().registerOnBackInvokedCallback(android.window.OnBackInvokedDispatcher.PRIORITY_DEFAULT,this::back);
   WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
-  if(!serviceMode().equals("disabled"))ads=new GardenAds(this,event->{if(web!=null)web.evaluateJavascript("window.GardenAdEvents && window.GardenAdEvents.receive("+event.toString()+")",null);});
+  if(!serviceMode().equals("disabled"))ads=GardenAds.attach(this,event->{if(web!=null)web.evaluateJavascript("window.GardenAdEvents && window.GardenAdEvents.receive("+event.toString()+")",null);});
   effects=new NativeEffects(this,()->{if(web!=null)web.evaluateJavascript("window.GardenLifecycle && window.GardenLifecycle.stopAudio()",null);});
   openGame();
  }
@@ -85,13 +85,13 @@ public final class MainActivity extends Activity {
     final JSONObject payload=result;runOnUiThread(()->{if(web!=null)web.evaluateJavascript("window.GardenLegacy && window.GardenLegacy.receive("+payload.toString()+")",null);});
    },"GardenLegacyRead").start();return;
   }
-  if(ads!=null)ads.command(message);
+  if(ads!=null)ads.command(this,message);
  }
  private void failed(){runOnUiThread(()->{if(retry!=null)return;lifecycle(false);if(effects!=null)effects.music(false);web.onPause();retry=new Button(this);retry.setText("Could not open local game files. Retry");retry.setOnClickListener(v->openGame());FrameLayout.LayoutParams p=new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT,Gravity.CENTER);root.addView(retry,p);});}
  private void lifecycle(boolean active){if(web!=null)web.evaluateJavascript("window.GardenNativeActive="+active+";window.GardenLifecycle && window.GardenLifecycle.setActive("+active+")",null);}
- @Override public void onResume(){super.onResume();foreground=true;if(effects!=null)effects.setActive(true);if(ads!=null)ads.setActive(true);if(web!=null){web.onResume();lifecycle(true);}}
- @Override public void onPause(){foreground=false;lifecycle(false);if(effects!=null)effects.setActive(false);if(ads!=null)ads.setActive(false);if(web!=null)web.onPause();super.onPause();}
+ @Override public void onResume(){super.onResume();foreground=true;if(effects!=null)effects.setActive(true);if(ads!=null)ads.setActive(this,true);if(web!=null){web.onResume();lifecycle(true);}}
+ @Override public void onPause(){foreground=false;lifecycle(false);if(effects!=null)effects.setActive(false);if(ads!=null)ads.setActive(this,false);if(web!=null)web.onPause();super.onPause();}
  private void back(){if(web==null){finish();return;}web.evaluateJavascript("window.GardenLifecycle ? window.GardenLifecycle.back() : false",handled->{if(!"true".equals(handled)){if(web.canGoBack())web.goBack();else finish();}});}
  @SuppressWarnings("deprecation") @Override public void onBackPressed(){back();}
- @Override public void onDestroy(){if(effects!=null)effects.close();if(web!=null){root.removeView(web);web.destroy();web=null;}super.onDestroy();}
+ @Override public void onDestroy(){if(ads!=null)ads.detach(this);if(effects!=null)effects.close();if(web!=null){root.removeView(web);web.destroy();web=null;}super.onDestroy();}
 }

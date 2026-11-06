@@ -1,0 +1,128 @@
+
+> pourlune-glass-garden@0.1.0 test:sdk
+> node --test test-sdk/*.test.mjs
+
+TAP version 13
+# Subtest: actual private SDK: refusal never POSTs; only persisted new round gets stable ID, resume/action do not repeat
+ok 1 - actual private SDK: refusal never POSTs; only persisted new round gets stable ID, resume/action do not repeat
+  ---
+  duration_ms: 36.962334
+  type: 'test'
+  ...
+# Subtest: failed game transaction never starts a telemetry round; successful retry does once
+ok 2 - failed game transaction never starts a telemetry round; successful retry does once
+  ---
+  duration_ms: 1.742834
+  type: 'test'
+  ...
+# Subtest: expanded notice requires a fresh old-allow choice while explicit old refusal stays off
+ok 3 - expanded notice requires a fresh old-allow choice while explicit old refusal stays off
+  ---
+  duration_ms: 1.38925
+  type: 'test'
+  ...
+# Subtest: actual SDK withdrawal clears retry queue and never retroactively records a declined round
+ok 4 - actual SDK withdrawal clears retry queue and never retroactively records a declined round
+  ---
+  duration_ms: 2.548166
+  type: 'test'
+  ...
+# Subtest: actual SDK strict storage failure latches without network or memory fallback
+ok 5 - actual SDK strict storage failure latches without network or memory fallback
+  ---
+  duration_ms: 0.337542
+  type: 'test'
+  ...
+# Subtest: official SDK accepts existing Pourlune QA config scene schema while all fallback ads remain disabled
+ok 6 - official SDK accepts existing Pourlune QA config scene schema while all fallback ads remain disabled
+  ---
+  duration_ms: 1.895375
+  type: 'test'
+  ...
+# Subtest: actual SDK delayed startup: allow decline allow invalidates old intent and clears cached events before new consent
+ok 7 - actual SDK delayed startup: allow decline allow invalidates old intent and clears cached events before new consent
+  ---
+  duration_ms: 2.67725
+  type: 'test'
+  ...
+# Subtest: withdraw and reallow before SDK import then restart cannot resurrect persisted old events
+ok 8 - withdraw and reallow before SDK import then restart cannot resurrect persisted old events
+  ---
+  duration_ms: 2.652
+  type: 'test'
+  ...
+# Subtest: acknowledged reset preserves legitimate later pending events on another restart
+ok 9 - acknowledged reset preserves legitimate later pending events on another restart
+  ---
+  duration_ms: 1.873125
+  type: 'test'
+  ...
+# Subtest: clear receipt storage failure leaves sharing off while gameplay commits continue
+ok 10 - clear receipt storage failure leaves sharing off while gameplay commits continue
+  ---
+  duration_ms: 1.59075
+  type: 'test'
+  ...
+# Subtest: immediate withdrawal survives failed choice save and saved-game reload until explicit allow
+ok 11 - immediate withdrawal survives failed choice save and saved-game reload until explicit allow
+  ---
+  duration_ms: 2.404959
+  type: 'test'
+  ...
+# Subtest: background before SDK startup does not record an active visit until foreground
+ok 12 - background before SDK startup does not record an active visit until foreground
+  ---
+  duration_ms: 8.26175
+  type: 'test'
+  ...
+# Subtest: native owner forwards initial foreground so SDK actually activates without a background roundtrip
+ok 13 - native owner forwards initial foreground so SDK actually activates without a background roundtrip
+  ---
+  duration_ms: 5.991208
+  type: 'test'
+  ...
+# Subtest: real SDK stats-off controlled callbacks preserve rewarded grants and interstitial cooldown independently
+ok 14 - real SDK stats-off controlled callbacks preserve rewarded grants and interstitial cooldown independently
+  ---
+  duration_ms: 3.302333
+  type: 'test'
+  ...
+# Subtest: actual SDK interstitial funnel obeys the host shared floor with statistics off, without rejected contexts
+ok 15 - actual SDK interstitial funnel obeys the host shared floor with statistics off, without rejected contexts
+  ---
+  duration_ms: 9.42725
+  type: 'test'
+  ...
+# Subtest: explicit production options reach only controlled transport and keep statistics off; QA scope remains separate
+ok 16 - explicit production options reach only controlled transport and keep statistics off; QA scope remains separate
+  ---
+  duration_ms: 0.568667
+  type: 'test'
+  ...
+# Subtest: actual SDK ad retries preserve ID/time and bounded payload without transmitting the local policy level
+ok 17 - actual SDK ad retries preserve ID/time and bounded payload without transmitting the local policy level
+  ---
+  duration_ms: 1.355208
+  type: 'test'
+  ...
+# Subtest: real fixed SDK: denied old ad observations do not enter the allowed queue or erase legitimate retries; interstitial awaits policy-only capability
+ok 18 - real fixed SDK: denied old ad observations do not enter the allowed queue or erase legitimate retries; interstitial awaits policy-only capability
+  ---
+  duration_ms: 1.163834
+  type: 'test'
+  ...
+# Subtest: real SDK validates the controller remote-block outcome while statistics is allowed
+ok 19 - real SDK validates the controller remote-block outcome while statistics is allowed
+  ---
+  duration_ms: 1.815541
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 163.991333

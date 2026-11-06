@@ -21,6 +21,7 @@ final class GardenAds: NSObject, FullScreenContentDelegate {
     private var presenting: Inventory?
     private var presentationIds: [ObjectIdentifier: Inventory] = [:]
     private var observations: [String: [String: Any]] = [:]
+    private var attemptSessions: [String: String] = [:]
     private var statisticsGate: [String: Any] = ["allowed": false]
     var active = false
 
@@ -66,7 +67,7 @@ final class GardenAds: NSObject, FullScreenContentDelegate {
         guard kind == "rewarded" || kind == "interstitial" else { return }
         if command == "cancel" { if presenting?.id != id, let slot = inventories[kind], slot.id == id { cancel(slot) }; return }
         guard active, !storageFailed else { emit("blocked", id, kind: kind, reason: active ? "sdk_error" : "in_background"); return }
-        if command == "load" { load(id, kind) }
+        if command == "load" { if attemptSessions[id] == nil { attemptSessions[id] = statisticsGate["session"] as? String ?? "" }; load(id, kind) }
         if command == "show" { show(id, kind) }
     }
     private func cancel(_ slot: Inventory) {
@@ -149,6 +150,9 @@ final class GardenAds: NSObject, FullScreenContentDelegate {
         if !attemptId.isEmpty, let original = observations[key] { forward(original, replayed: true); return }
         var event = fields; event["adConsent"] = statisticsGate; event["id"] = UUID().uuidString; event["type"] = type; event["kind"] = kind; event["attemptId"] = attemptId; event["occurredAt"] = ISO8601DateFormatter().string(from: Date()); if let reason { event["reason"] = reason }
         if !attemptId.isEmpty { observations[key] = event }
-        queue.append(event); let durable = persist(); forward(event, replayed: !durable)
+        queue.append(event); let durable = persist()
+        let session = statisticsGate["session"] as? String ?? ""
+        let certain = attemptId.isEmpty || (!session.isEmpty && attemptSessions[attemptId] == session)
+        forward(event, replayed: !durable || !certain)
     }
 }

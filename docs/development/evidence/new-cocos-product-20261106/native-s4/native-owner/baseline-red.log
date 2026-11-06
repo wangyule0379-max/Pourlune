@@ -1,0 +1,11 @@
+注: 某些输入文件使用了未经检查或不安全的操作。
+注: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+Exception in thread "main" java.lang.AssertionError: RED: original shown reward stayed on destroyed Activity instead of the current document
+	at dev.pourlune.glassgarden.localqa.OwnerCheck.check(OwnerCheck.java:4)
+	at dev.pourlune.glassgarden.localqa.OwnerCheck.main(OwnerCheck.java:16)
+Traceback (most recent call last):
+  File "/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/qa/android-ad-owner-check.py", line 73, in <module>
+    subprocess.run(['java','-cp',str(folder)+':'+str(gson),'dev.pourlune.glassgarden.localqa.OwnerCheck'],check=True)
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py", line 528, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['java', '-cp', '/var/folders/0f/87xwdcwj6vn47_5j0pn3fzdm0000gn/T/pourlune-native-ad-owner-e5o43f5h:/Users/wangyule/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.11.0/527175ca6d81050b53bdd4c457a6d6e017626b0e/gson-2.11.0.jar', 'dev.pourlune.glassgarden.localqa.OwnerCheck']' returned non-zero exit status 1.
