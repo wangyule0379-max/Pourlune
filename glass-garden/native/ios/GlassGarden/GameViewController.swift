@@ -27,7 +27,9 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
         #else
         let serviceMode = "disabled"
         #endif
-        config.userContentController.addUserScript(WKUserScript(source: "window.GardenNativeActive=false;Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'ios',services:'\(serviceMode)',ads:'\(serviceMode)',legacy:true,effects:true,appVersion:'0.1.0+6',send:message=>window.webkit.messageHandlers.gardenAds.postMessage(message)}),writable:false});", injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        let appVersion = (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "") + "+" + (Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "")
+        let appVersionJSON = (try? JSONSerialization.data(withJSONObject: appVersion, options: [.fragmentsAllowed])).flatMap { String(data: $0, encoding: .utf8) } ?? "null"
+        config.userContentController.addUserScript(WKUserScript(source: "window.GardenNativeActive=false;Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'ios',services:'\(serviceMode)',ads:'\(serviceMode)',legacy:true,effects:true,appVersion:\(appVersionJSON),send:message=>window.webkit.messageHandlers.gardenAds.postMessage(message)}),writable:false});", injectionTime: .atDocumentStart, forMainFrameOnly: true))
         #if GARDEN_QA_SERVICES
         ads = GardenAds(controller: self) { [weak self] event in
             guard let data = try? JSONSerialization.data(withJSONObject: event), let json = String(data: data, encoding: .utf8) else { return }
