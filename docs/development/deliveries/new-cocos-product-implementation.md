@@ -95,3 +95,19 @@ SDK单实例、严格失败无内存回退、统计拒绝不POST、保存成功�
 冻结web s4c-reward-selftest-2：427文件14346810B/manifest 12aeb843aa658fddf5a8b58144775c655993c2d0b5aa070f2ed07292fe544d07，相较浏览器实测selftest-1只改ads.mjs：426文件（全部渲染、UI、题库）同字节。原生最终自测路径glass-garden/build/native-candidates/s4c-reward-selftest-2-guard/，indexSHA 04b9064bc82b494109bed9dba3b95886a9b2bc7e14e1866fd6fab0dea1d9cad7，APK 2e3f3a9f929d2de8556e40c064b42ddcb0c3eea3078ff870154dee4151db479d；426/427双端玩家文件精确核对，唯一Android非运行.gitignore省略。中间native selftest-1/2均保留，不安装。stage守卫重编令iOS debug dylib字节改变，已另冻guard目录，不拿前index冒充。
 
 证据native-s4/reward/。Fruplop74DA仍唯一Booted、无释放，未启Pourlune设备；真实native UMP/广告load/impression/reward/close、路由原日志、SDK test后台回读、进程恢复/性能尚未验。迁移、音乐/震动/支持实际能力及必要发布工作仍推进。本检查点不交总控代做未完成的开发自测，不宣称完整验收或TestFlight更新。
+
+## S4d迁移、原生能力与晚到奖励：开发自测检查点
+
+本节覆盖历史占位状态：现已实现只读旧SQLite的复制读取、幂等导入明确设置与隐私拒绝、新100关从1开始，旧60原库/题目/记录不改不映射。读取失败或孤立WAL等异常显示错误与Retry，不假作新安装；存在新存档不再导入。旧Dart SDK内部ID/队列保持原件，未导入JS SDK，不称完整统计身份迁移。
+
+音乐与震动接入原生能力，沿用旧默认true、保留已选false；原批准Dream Culture MP3原字节/完整循环/0.12音量、作者与CC-BY4.0归属保留。Home/Pause/设置/后台/广告/中断停止音乐，旧WebAudio短音停止后不在恢复时重放。iOS ambient遵从静音且不夺其他音频；Android不申请音频焦点或震动权限。邮件支持和复制失败回退已实现，不自动发送。
+
+定向修复包括：bootstrap晚于原生前台回调时仍取当前状态；加载失败Retry同步恢复原生owner状态；晚到奖励停在Settings仍保留该页，返回同局已是6瓶，后续保存/Undo正常；成功音效须当前已落盘胜利且满足前台/页面/偏好门控。69核心/UI/控制器检查、14实际官方SDK受控HTTP检查PASS，原407来源/六核心/100关及音乐hash核验通过。原app/core无源码差额。
+
+旧Flutter GameStore真实API生成非空schema5夹具：20首通、普通21两手并获真实事务权益、每日13及明确设置/隐私。真实Swift LegacyReader在host读取该夹具并核main/WAL/SHM不变，实际Product导入/动作/重开保持新进度通过；坏布尔、坏库、未知schema、孤立WAL、软链等读取反例通过。第一次夹具失败为FFI相对路径的最终文件断言问题，原产物完整保留，不算产品故障。此项不等于商店安装升级或手机容器实测。
+
+Computer浏览器自测browser-s4d：390/320迁移设置、真实动作/Undo/刷新不重导、支持/署名/错误Retry均通过；音乐及震动仅mock端口，不称听到或触觉通过。browser-s4d-late在独立库/受控GM HTTP与假广告回调中验证无奖关闭后Settings晚到重复奖励不跳页，返回6瓶→动作落盘/Undo→真实9手首通，console空。不是AdMob/native/后台数据证明。
+
+冻结web s4d-migration-effects-selftest-4：432文件22933677B，manifest SHA16918dc04448cb2486a066a23641f0598833d1741a4ab96e1989a84df214fe82。与浏览器迁移selftest2差额仅六文件、426不变，详差额；晚到奖励实际使用web4。双端QA0.1.0(4)最终候选glass-garden/build/native-candidates/s4d-migration-effects-selftest-4-retry/，index SHA95f17cacd5635de6be0cea2c9c70a7d858fe6129b2d177681b5f36052c5f7611，APK SHA351803aa580238d0422f9869a96a109dede05da5193046c912cde1a858d68b64。旧2/3/4包不覆盖，不安装；最终差额是原生Retry owner恢复，玩家web仍4同字节。
+
+证据native-s4/migration-effects/及browser-s4d、browser-s4d-late。Fruplop占用期间未启动新设备，UDID/serial不适用；F9未动。真实native资源/进程恢复/音乐/UMP/广告/实际路由/测试后台尚未自测，插屏完整旧策略与共享冷却继续集成。此检查点不请总控代做未完成开发测试，不称完整验收、签名或TestFlight更新。

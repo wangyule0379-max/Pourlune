@@ -17,12 +17,16 @@ export async function verify({inputs=false}={}){
  }
  if(inputs)for(const [name,hash] of Object.entries(ledger.prototype_inputs))if(sha(await readFile(path.join(ledger.prototype_root,name)))!==hash)errors.push('Changed prototype input: '+name);
  const require=createRequire(import.meta.url),R=require('../web/game/src/rules.js');
+ const media=JSON.parse(await readFile(path.join(root,'media-manifest.json')));
+ for(const name of [path.join(root,'web',media.file),path.join(root,'..',media.source)]){const bytes=await readFile(name);if(bytes.length!==media.bytes||sha(bytes)!==media.sha256)errors.push('Changed approved music: '+name);}
+ if(sha(await readFile(path.join(root,'web',media.attributionFile)))!==media.attributionSha256)errors.push('Changed music attribution');
  if(R.LEVELS.length!==100||R.LEVELS.some((level,i)=>level.id!==i+1))errors.push('Campaign is not the fixed 100 levels');
  const html=await readFile(path.join(root,'web/index.html'),'utf8'),loader=await readFile(path.join(root,'web/game-loader.js'),'utf8');
  if(!html.includes("connect-src 'self'")||!html.includes('product.mjs')||html.includes('dev.html'))errors.push('Unexpected player entry');
  if(!loader.includes("history.replaceState(null,''")||!loader.includes('parent.GardenHost'))errors.push('Game must only start through product host');
  const project=JSON.parse(await readFile(path.join(root,'web/game/project.json')));
  if(project.jsList.includes('src/samples.js')||project.jsList.at(-1)!=='../game-bridge.js')errors.push('Unexpected game script wiring');
+ if(project.jsList.filter(name=>name==='../game-audio-bridge.js').length!==1)errors.push('Missing finite-audio lifecycle adapter');
  if(project.jsList.includes('src/game.js')||!project.jsList.includes('../game-runtime.js')||await readFile(path.join(root,'web/game-runtime.js'),'utf8')!==await runtimeSource())errors.push('Unknown runtime scene adapter');
  for(const name of ['privacy.html','licenses.html'])await stat(path.join(root,'web',name));
  if(errors.length)throw Error(errors.join('\n'));

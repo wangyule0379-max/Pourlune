@@ -10,7 +10,7 @@ export class RewardedAds {
   if(!owner?.client.canShowAd('rewarded','extra_bottle')){this.phase='idle';this.notify('unavailable');return false;}
   const attempt=await this.model.prepareReward();
   if(operation!==this.operation||!this.active){if(attempt)await this.model.finishRewardAttempt(attempt.id);return false;}
-  if(!attempt){this.phase='idle';this.notify(this.model.error?'save_failed':'unavailable');return false;}
+  if(!attempt){this.phase='idle';this.notify(this.model.error?'save_failed':this.model.hasExtraBottle?.()?'received':'unavailable',{level:this.model.state.currentLevel});return false;}
   this.attempt=attempt;this.phase='loading';this.earned=false;this.notify('loading');
   this.report('ad_opportunity',attempt);this.report('ad_load_requested',attempt);
   this.send({command:'load',attemptId:attempt.id});
@@ -25,7 +25,7 @@ export class RewardedAds {
   if(this.observing.has(event.id))return;
   if(this.processed.has(event.id)){this.send({command:'ack',eventId:event.id});return;}
   const attempt=this.model.working?.rewardAttempts?.[event.attemptId]||this.model.state.rewardAttempts?.[event.attemptId]||(this.attempt?.id===event.attemptId?this.attempt:null),current=this.attempt?.id===event.attemptId,observation={id:event.id,occurredAt:event.occurredAt};
-  if(event.type==='reward'&&attempt){const ok=await this.model.grantReward(attempt.id);if(!ok&&this.model.error){this.notify('save_failed',attempt);return;}if(ok){if(current)this.earned=true;this.notify('reward',attempt);}}
+  if(event.type==='reward'&&attempt){const ok=await this.model.grantReward(attempt.id);if(!ok&&this.model.error){this.notify('save_failed',attempt);return;}if(ok){if(current||(this.attempt?.level===attempt.level&&this.attempt?.puzzleId===attempt.puzzleId))this.earned=true;this.notify('reward',attempt);}}
   if(event.type==='loaded'&&current&&this.phase==='loading'){
    clearTimeout(this.timer);if(this.active){this.phase='presenting';this.report('ad_show_attempted',attempt);this.send({command:'show',attemptId:attempt.id});this.notify('presenting');}else this.cancel('in_background');
   }

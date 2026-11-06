@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: same-app import preserves old explicit settings and originals, never maps old60 progress into new100
+ok 1 - same-app import preserves old explicit settings and originals, never maps old60 progress into new100
+  ---
+  duration_ms: 10.673667
+  type: 'test'
+  ...
+# Subtest: existing new campaign and choices are authoritative: repeat startup never imports or resets them again
+ok 2 - existing new campaign and choices are authoritative: repeat startup never imports or resets them again
+  ---
+  duration_ms: 12.055875
+  type: 'test'
+  ...
+# Subtest: missing old library is distinct from read/schema failures; no unreadable import may create a fresh save
+ok 3 - missing old library is distinct from read/schema failures; no unreadable import may create a fresh save
+  ---
+  duration_ms: 2.714917
+  type: 'test'
+  ...
+# Subtest: earlier explicit analytics allow needs the expanded notice; missing values use old defaults without authorizing crash collection
+ok 4 - earlier explicit analytics allow needs the expanded notice; missing values use old defaults without authorizing crash collection
+  ---
+  duration_ms: 0.916834
+  type: 'test'
+  ...
+# Subtest: aborted first import retains one full pending snapshot and retry never initializes a second campaign
+ok 5 - aborted first import retains one full pending snapshot and retry never initializes a second campaign
+  ---
+  duration_ms: 0.729667
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 127.716708

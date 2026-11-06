@@ -1,0 +1,97 @@
+TAP version 13
+# Subtest: same-app import preserves old explicit settings and originals, never maps old60 progress into new100
+not ok 1 - same-app import preserves old explicit settings and originals, never maps old60 progress into new100
+  ---
+  duration_ms: 3.6095
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/legacy.test.mjs:5:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'undefined'
+    - 'function'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'function'
+  actual: 'undefined'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/legacy.test.mjs:5:148)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: existing new campaign and choices are authoritative: repeat startup never imports or resets them again
+not ok 2 - existing new campaign and choices are authoritative: repeat startup never imports or resets them again
+  ---
+  duration_ms: 0.950417
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/legacy.test.mjs:6:1'
+  failureType: 'testCodeFailure'
+  error: 'a.importLegacy is not a function'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/legacy.test.mjs:6:151)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: missing old library is distinct from read/schema failures; no unreadable import may create a fresh save
+not ok 3 - missing old library is distinct from read/schema failures; no unreadable import may create a fresh save
+  ---
+  duration_ms: 0.673125
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/legacy.test.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: 'a.importLegacy is not a function'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/legacy.test.mjs:7:377
+    waitForActual (node:assert:630:21)
+    Function.rejects (node:assert:767:31)
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/legacy.test.mjs:7:363)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: earlier explicit analytics allow needs the expanded notice; missing values use old defaults without authorizing crash collection
+not ok 4 - earlier explicit analytics allow needs the expanded notice; missing values use old defaults without authorizing crash collection
+  ---
+  duration_ms: 0.998875
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/legacy.test.mjs:8:1'
+  failureType: 'testCodeFailure'
+  error: 'a.importLegacy is not a function'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/legacy.test.mjs:8:177)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: aborted first import retains one full pending snapshot and retry never initializes a second campaign
+not ok 5 - aborted first import retains one full pending snapshot and retry never initializes a second campaign
+  ---
+  duration_ms: 0.53175
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/legacy.test.mjs:9:1'
+  failureType: 'testCodeFailure'
+  error: 'a.importLegacy is not a function'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/legacy.test.mjs:9:231)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 0
+# fail 5
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 103.196917

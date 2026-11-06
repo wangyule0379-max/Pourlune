@@ -10,16 +10,24 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
     private var web: WKWebView!
     private var retry: UIButton?
     private var ads: GardenAds?
+    private var effects: NativeEffects?
     private let cream = UIColor(red: 1, green: 248/255, blue: 239/255, alpha: 1)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = cream
+        effects = NativeEffects { [weak self] script in self?.web?.evaluateJavaScript(script, completionHandler: nil) }
+        effects?.active = UIApplication.shared.applicationState == .active
         let config = WKWebViewConfiguration()
         config.websiteDataStore = .default()
-        #if GARDEN_QA_SERVICES
         let bridge = AdMessages(); bridge.owner = self; config.userContentController.add(bridge, name: "gardenAds")
-        config.userContentController.addUserScript(WKUserScript(source: "Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'ios',services:'test',ads:'test',appVersion:'0.1.0+3',send:message=>window.webkit.messageHandlers.gardenAds.postMessage(message)}),writable:false});", injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        #if GARDEN_QA_SERVICES
+        let serviceMode = "test"
+        #else
+        let serviceMode = "disabled"
+        #endif
+        config.userContentController.addUserScript(WKUserScript(source: "window.GardenNativeActive=false;Object.defineProperty(window,'GardenNative',{value:Object.freeze({platform:'ios',services:'\(serviceMode)',ads:'\(serviceMode)',legacy:true,effects:true,appVersion:'0.1.0+4',send:message=>window.webkit.messageHandlers.gardenAds.postMessage(message)}),writable:false});", injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        #if GARDEN_QA_SERVICES
         ads = GardenAds(controller: self) { [weak self] event in
             guard let data = try? JSONSerialization.data(withJSONObject: event), let json = String(data: data, encoding: .utf8) else { return }
             self?.web?.evaluateJavaScript("window.GardenAdEvents && window.GardenAdEvents.receive(\(json))", completionHandler: nil)
@@ -49,10 +57,27 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
     fileprivate func adMessage(_ message: WKScriptMessage) {
         let origin = message.frameInfo.securityOrigin
         guard message.frameInfo.isMainFrame, origin.protocol == "http", origin.host == "127.0.0.1", origin.port == 43177, message.frameInfo.request.url?.path == "/index.html", let value = message.body as? [String: Any] else { return }
+        let command = value["command"] as? String
+        if command == "music" { if let enabled = value["enabled"] as? Bool { effects?.music(enabled) }; return }
+        if command == "haptic" { effects?.haptic(); return }
+        if command == "audio-interaction" { effects?.interaction(); return }
+        if command == "copy-email" { UIPasteboard.general.string = "wangyule0379@gmail.com"; web.evaluateJavaScript("window.GardenExternal && window.GardenExternal.result('copy',true)", completionHandler: nil); return }
+        if command == "legacy-read" {
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                let source = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("pourlune_dev.sqlite")
+                let payload: [String: Any]
+                do { payload = try LegacyReader.read(from: source) }
+                catch { NSLog("GardenQA previous save read failed; originals retained"); payload = ["protocolVersion": 1, "status": "error", "sourceFile": "pourlune_dev.sqlite", "originalRetained": true] }
+                guard let data = try? JSONSerialization.data(withJSONObject: payload), let json = String(data: data, encoding: .utf8) else { return }
+                DispatchQueue.main.async { self?.web?.evaluateJavaScript("window.GardenLegacy && window.GardenLegacy.receive(\(json))", completionHandler: nil) }
+            }
+            return
+        }
         ads?.command(value)
     }
 
     @objc private func openGame() {
+        effects?.music(false)
         retry?.removeFromSuperview(); retry = nil
         server?.stop()
         guard let root = Bundle.main.url(forResource: "Web", withExtension: nil) else { failed(); return }
@@ -82,13 +107,20 @@ final class GameViewController: UIViewController, WKNavigationDelegate {
         NSLayoutConstraint.activate([button.centerXAnchor.constraint(equalTo: view.centerXAnchor),button.centerYAnchor.constraint(equalTo: view.centerYAnchor),button.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -32),button.heightAnchor.constraint(greaterThanOrEqualToConstant: 64)])
         retry = button
     }
-    @objc private func inactive() { ads?.active = false; web?.evaluateJavaScript("window.GardenLifecycle && window.GardenLifecycle.setActive(false)", completionHandler: nil) }
-    @objc private func active() { ads?.active = true; web?.evaluateJavaScript("window.GardenLifecycle && window.GardenLifecycle.setActive(true)", completionHandler: nil) }
+    @objc private func inactive() { effects?.active = false; ads?.active = false; web?.evaluateJavaScript("window.GardenNativeActive=false;window.GardenLifecycle && window.GardenLifecycle.setActive(false)", completionHandler: nil) }
+    @objc private func active() { effects?.active = true; ads?.active = true; web?.evaluateJavaScript("window.GardenNativeActive=true;window.GardenLifecycle && window.GardenLifecycle.setActive(true)", completionHandler: nil) }
     func webView(_ webView: WKWebView, decidePolicyFor action: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         guard let url = action.request.url else { decisionHandler(.cancel); return }
-        if action.navigationType == .linkActivated, action.targetFrame?.isMainFrame == true, url.absoluteString == "https://policies.google.com/privacy" { UIApplication.shared.open(url); decisionHandler(.cancel); return }
+        let external: Set<String> = ["https://policies.google.com/privacy", "mailto:wangyule0379@gmail.com?subject=Pourlune%20support", "https://wangyule0379-max.github.io/pourlune-support/", "https://creativecommons.org/licenses/by/4.0/", "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1300046"]
+        if action.navigationType == .linkActivated, action.targetFrame?.isMainFrame == true, external.contains(url.absoluteString) { UIApplication.shared.open(url, options: [:]) { [weak self] success in if !success { self?.web?.evaluateJavaScript("window.GardenExternal && window.GardenExternal.result('open',false)", completionHandler: nil) } }; decisionHandler(.cancel); return }
         if url.absoluteString == "about:blank", action.targetFrame?.isMainFrame != true { decisionHandler(.allow); return }
         decisionHandler(url.scheme == "http" && url.host == "127.0.0.1" && url.port == 43177 ? .allow : .cancel)
+    }
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        let foreground = UIApplication.shared.applicationState == .active
+        effects?.active = foreground; ads?.active = foreground
+        let state = foreground ? "true" : "false"
+        webView.evaluateJavaScript("window.GardenNativeActive=\(state);window.GardenLifecycle && window.GardenLifecycle.setActive(\(state))", completionHandler: nil)
     }
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) { if (error as NSError).code != NSURLErrorCancelled { failed() } }
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) { failed() }

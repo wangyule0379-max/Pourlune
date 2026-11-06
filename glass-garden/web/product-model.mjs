@@ -1,5 +1,6 @@
 import {withExtraBottle,expandSlot} from './extra-bottle.mjs';
-export function initialState(R,P){return {version:1,catalog:R.CATALOG_ID,currentLevel:1,completedLevels:[],roundInstanceIds:{},completionReceipts:{},gameProgress:P.load(null,null,{levels:R.LEVELS,catalog:R.CATALOG_ID}),analyticsChoice:'unasked',disclosureVersion:1,prefs:{music:false,sound:true,haptics:false,reduced:false},group:0,listScroll:0};}
+import {applyLegacy,legacyRecord} from './legacy.mjs';
+export function initialState(R,P){return {version:1,catalog:R.CATALOG_ID,currentLevel:1,completedLevels:[],roundInstanceIds:{},completionReceipts:{},gameProgress:P.load(null,null,{levels:R.LEVELS,catalog:R.CATALOG_ID}),analyticsChoice:'unasked',disclosureVersion:1,prefs:{music:true,sound:true,haptics:true,reduced:false},group:0,listScroll:0};}
 const puzzleId=(s,n)=>s.puzzleInstanceIds?.[n]||s.roundInstanceIds[n];
 const rewarded=(s,n)=>!!s.extraBottles?.[n]&&s.extraBottles[n].puzzleId===puzzleId(s,n);
 const activeLevel=(s,n,R)=>rewarded(s,n)?withExtraBottle(R.LEVELS[n-1],R):R.LEVELS[n-1];
@@ -8,6 +9,7 @@ export function validateState(s,R,P){
  if(!object(s)||s.version!==1||s.catalog!==R.CATALOG_ID||!integer(s.currentLevel,1,100)||!Array.isArray(s.completedLevels)||s.completedLevels.some((n,i)=>n!==i+1)||s.completedLevels.length>100||!object(s.roundInstanceIds)||!object(s.completionReceipts)||!object(s.prefs)||Object.values(s.prefs).some(x=>typeof x!=='boolean')||!['unasked','allowed','declined'].includes(s.analyticsChoice)||![1,2,3].includes(s.disclosureVersion)||!integer(s.group,0,9)||!Number.isFinite(s.listScroll)||s.listScroll<0)throw Error('Unreadable product save');
  for(const key of ['music','sound','haptics','reduced'])if(typeof s.prefs[key]!=='boolean')throw Error('Unreadable settings');
  if(s.analyticsResetToken!=null&&(typeof s.analyticsResetToken!=='string'||!s.analyticsResetToken||s.analyticsResetToken.length>128))throw Error('Unreadable statistics choice receipt');
+ if(s.legacyImport!=null){legacyRecord(s.legacyImport);if(!Number.isFinite(Date.parse(s.legacyImport.importedAt)))throw Error('Unreadable previous-save import receipt');}
  const gp=s.gameProgress;
  if(!object(gp)||gp.current!==s.currentLevel-1||gp.version!==3||gp.catalog!==R.CATALOG_ID||!object(gp.slots)||Object.keys(gp.slots).length>100||!Array.isArray(gp.completed)||JSON.stringify(gp.completed)!==JSON.stringify(s.completedLevels.map(n=>n-1)))throw Error('Unreadable campaign progress');
  const levelKey=key=>String(Number(key))===key&&integer(Number(key),1,100);
@@ -28,10 +30,12 @@ export function validateState(s,R,P){
 }
 export class Product {
  constructor({store,R,P,onChange=()=>{},uuid=()=>crypto.randomUUID(),policyVersion=1,onCommit=()=>{}}){Object.assign(this,{store,R,P,onChange,uuid,policyVersion,onCommit});this.state=initialState(R,P);this.working=this.state;this.revision=0;this.saving=0;this.error=null;this.recoveryError=null;this.pending=null;this.chain=Promise.resolve();}
- async open(){try{const raw=await this.store.read();this.revision=Number.isSafeInteger(raw?.revision)?raw.revision:0;if(raw)this.state=validateState(raw.data,this.R,this.P);this.working=this.state;this.recoveryError=null;}catch(e){this.recoveryError=e.message;}this.onChange(this);return !this.recoveryError;}
+ async open(){try{const raw=await this.store.read();this.hasSave=!!raw;this.revision=Number.isSafeInteger(raw?.revision)?raw.revision:0;if(raw)this.state=validateState(raw.data,this.R,this.P);this.working=this.state;this.recoveryError=null;}catch(e){this.recoveryError=e.message;}this.onChange(this);return !this.recoveryError;}
+ async importLegacy(record){if(this.recoveryError)throw Error('Restore the existing save before importing settings');if(this.hasSave)return true;if(this.error||this.saving||this.pending)return false;return this.save(applyLegacy(this.state,record));}
  unlocked(n){return n===1||this.state.completedLevels.includes(n)||this.state.completedLevels.includes(n-1);}
  resumable(n,s=this.state){const slot=s.gameProgress.slots[n];return !!(s.roundInstanceIds[n]&&slot&&!this.R.isSolved(slot.state));}
  activeLevel(n,s=this.state){return activeLevel(s,n,this.R);}
+ hasExtraBottle(n=this.state.currentLevel,s=this.state){return rewarded(s,n);}
  homeTarget(){if(this.state.completedLevels.length===100)return null;return this.resumable(this.state.currentLevel)?this.state.currentLevel:this.state.completedLevels.length+1;}
  save(next,{replace=false}={}){
   if(this.recoveryError&&!replace)return Promise.resolve(false);
@@ -40,7 +44,7 @@ export class Product {
   const snapshot=structuredClone(next);this.saving++;this.onChange(this);
   const job=this.chain.then(async()=>{
    if(this.error&&!replace)return false;
-   try{const previous=this.state;const record=await this.store[replace?'replace':'write'](snapshot,this.revision);this.revision=record.revision;this.state=record.data;Promise.resolve().then(()=>this.onCommit(record.data,previous)).catch(()=>{});if(this.pending===next||this.saving===1)this.pending=null;this.recoveryError=null;return true;}catch(e){this.error=e.message;return false;}
+   try{const previous=this.state;const record=await this.store[replace?'replace':'write'](snapshot,this.revision);this.revision=record.revision;this.state=record.data;this.hasSave=true;Promise.resolve().then(()=>this.onCommit(record.data,previous)).catch(()=>{});if(this.pending===next||this.saving===1)this.pending=null;this.recoveryError=null;return true;}catch(e){this.error=e.message;return false;}
   }).finally(()=>{this.saving--;if(!this.saving&&!this.error)this.working=this.state;this.onChange(this);});
   this.chain=job.catch(e=>{this.error=e.message;this.onChange(this);return false;});return this.chain;
  }
@@ -49,7 +53,7 @@ export class Product {
  async reloadSaved(){await this.chain;this.error=null;this.pending=null;return this.open();}
  needsAnalyticsChoice(){return this.state.analyticsChoice==='unasked'||(this.state.analyticsChoice==='allowed'&&this.state.disclosureVersion<this.policyVersion);}
  async chooseAnalytics(choice){if(!['allowed','declined'].includes(choice))return false;return this.save({...this.working,analyticsChoice:choice,disclosureVersion:this.policyVersion,...(choice==='declined'?{analyticsResetToken:this.uuid()}:{})});}
- async preference(key,value){if(!['sound','reduced'].includes(key)||typeof value!=='boolean')return false;return this.save({...this.working,prefs:{...this.working.prefs,[key]:value}});}
+ async preference(key,value){if(!['music','sound','haptics','reduced'].includes(key)||typeof value!=='boolean')return false;return this.save({...this.working,prefs:{...this.working.prefs,[key]:value}});}
  async enter(n,{restart=false,listScroll}={}){
   if(this.error||this.recoveryError||this.saving||this.needsAnalyticsChoice()||!Number.isInteger(n)||n<1||n>100||!this.unlocked(n))return false;
   const next=structuredClone(this.state);next.currentLevel=n;next.gameProgress.current=n-1;if(listScroll!==undefined)next.listScroll=listScroll;

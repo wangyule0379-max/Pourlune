@@ -1,0 +1,424 @@
+TAP version 13
+# Subtest: actual load/show commands follow a durable attempt and loaded event; closing alone never grants
+ok 1 - actual load/show commands follow a durable attempt and loaded event; closing alone never grants
+  ---
+  duration_ms: 3.190958
+  type: 'test'
+  ...
+# Subtest: reward callback saves inventory before analytics, repeats are harmless, statistics failure cannot erase reward
+ok 2 - reward callback saves inventory before analytics, repeats are harmless, statistics failure cannot erase reward
+  ---
+  duration_ms: 0.766792
+  type: 'test'
+  ...
+# Subtest: aborted reward save is not acknowledged; a repeated native receipt retries after the pending game commit
+ok 3 - aborted reward save is not acknowledged; a repeated native receipt retries after the pending game commit
+  ---
+  duration_ms: 0.324708
+  type: 'test'
+  ...
+# Subtest: background and cancelled load never show late inventory, but shown reward/close still route
+ok 4 - background and cancelled load never show late inventory, but shown reward/close still route
+  ---
+  duration_ms: 0.482667
+  type: 'test'
+  ...
+# Subtest: remote disabled scene blocks native load; impression retains original observation and funnel dimensions
+ok 5 - remote disabled scene blocks native load; impression retains original observation and funnel dimensions
+  ---
+  duration_ms: 0.355125
+  type: 'test'
+  ...
+# Subtest: cancelling while configuration is delayed never starts a late ad request
+ok 6 - cancelling while configuration is delayed never starts a late ad request
+  ---
+  duration_ms: 0.203833
+  type: 'test'
+  ...
+# Subtest: restored native state closes interrupted unconfirmed attempts without granting or closing an actually showing ad
+ok 7 - restored native state closes interrupted unconfirmed attempts without granting or closing an actually showing ad
+  ---
+  duration_ms: 0.429375
+  type: 'test'
+  ...
+# Subtest: unreadable game storage retains a native earned receipt until restore can identify the original puzzle
+ok 8 - unreadable game storage retains a native earned receipt until restore can identify the original puzzle
+  ---
+  duration_ms: 0.471042
+  type: 'test'
+  ...
+# Subtest: a held optional statistics observer cannot hold ad close or a legitimate game reward
+ok 9 - a held optional statistics observer cannot hold ad close or a legitimate game reward
+  ---
+  duration_ms: 0.774167
+  type: 'test'
+  ...
+# Subtest: suspending the game cuts pending finite cues as well as water; new cues can play after return
+ok 10 - suspending the game cuts pending finite cues as well as water; new cues can play after return
+  ---
+  duration_ms: 0.73425
+  type: 'test'
+  ...
+# Subtest: music follows saved preference and visible playable game, not Home/Pause/background or ads
+ok 11 - music follows saved preference and visible playable game, not Home/Pause/background or ads
+  ---
+  duration_ms: 2.069417
+  type: 'test'
+  ...
+# Subtest: selection haptics require an active game and explicit stored preference; they cannot write game state
+ok 12 - selection haptics require an active game and explicit stored preference; they cannot write game state
+  ---
+  duration_ms: 0.205083
+  type: 'test'
+  ...
+# Subtest: native effects failure is isolated from gameplay, including a disappearing bridge
+ok 13 - native effects failure is isolated from gameplay, including a disappearing bridge
+  ---
+  duration_ms: 0.225375
+  type: 'test'
+  ...
+# Subtest: same-app import preserves old explicit settings and originals, never maps old60 progress into new100
+ok 14 - same-app import preserves old explicit settings and originals, never maps old60 progress into new100
+  ---
+  duration_ms: 11.460334
+  type: 'test'
+  ...
+# Subtest: existing new campaign and choices are authoritative: repeat startup never imports or resets them again
+ok 15 - existing new campaign and choices are authoritative: repeat startup never imports or resets them again
+  ---
+  duration_ms: 43.34575
+  type: 'test'
+  ...
+# Subtest: missing old library is distinct from read/schema failures; no unreadable import may create a fresh save
+ok 16 - missing old library is distinct from read/schema failures; no unreadable import may create a fresh save
+  ---
+  duration_ms: 12.47475
+  type: 'test'
+  ...
+# Subtest: earlier explicit analytics allow needs the expanded notice; missing values use old defaults without authorizing crash collection
+ok 17 - earlier explicit analytics allow needs the expanded notice; missing values use old defaults without authorizing crash collection
+  ---
+  duration_ms: 2.242666
+  type: 'test'
+  ...
+# Subtest: aborted first import retains one full pending snapshot and retry never initializes a second campaign
+ok 18 - aborted first import retains one full pending snapshot and retry never initializes a second campaign
+  ---
+  duration_ms: 1.678375
+  type: 'test'
+  ...
+# Subtest: native local response or timeout is explicit; no timeout becomes missing data
+ok 19 - native local response or timeout is explicit; no timeout becomes missing data
+  ---
+  duration_ms: 0.633375
+  type: 'test'
+  ...
+# Subtest: cancel terminates real bridge worker and invalidates late response
+ok 20 - cancel terminates real bridge worker and invalidates late response
+  ---
+  duration_ms: 2.170375
+  type: 'test'
+  ...
+# Subtest: child wake cannot resume engine under hidden parent/modal
+ok 21 - child wake cannot resume engine under hidden parent/modal
+  ---
+  duration_ms: 0.689
+  type: 'test'
+  ...
+# Subtest: interrupt before first pour animation finishes still restores committed action
+ok 22 - interrupt before first pour animation finishes still restores committed action
+  ---
+  duration_ms: 26.675208
+  type: 'test'
+  ...
+# Subtest: winning move completion commits before animation finish or late callbacks
+ok 23 - winning move completion commits before animation finish or late callbacks
+  ---
+  duration_ms: 20.057834
+  type: 'test'
+  ...
+# Subtest: late animation callback from old round cannot replace restarted progress
+ok 24 - late animation callback from old round cannot replace restarted progress
+  ---
+  duration_ms: 21.830125
+  type: 'test'
+  ...
+# Subtest: pending save preserves existing return-stage bottle queue but hidden parent blocks it
+ok 25 - pending save preserves existing return-stage bottle queue but hidden parent blocks it
+  ---
+  duration_ms: 1.033875
+  type: 'test'
+  ...
+# Subtest: late successful save feedback cannot target a restored session with the same round
+ok 26 - late successful save feedback cannot target a restored session with the same round
+  ---
+  duration_ms: 1.193375
+  type: 'test'
+  ...
+# Subtest: the saved Win sheet can play its legitimate success cue even though board input is paused
+ok 27 - the saved Win sheet can play its legitimate success cue even though board input is paused
+  ---
+  duration_ms: 1.26525
+  type: 'test'
+  ...
+# Subtest: actual rules: replay1 Next retains unfinished2 board/history/round and Undo; restart replaces only2
+ok 28 - actual rules: replay1 Next retains unfinished2 board/history/round and Undo; restart replaces only2
+  ---
+  duration_ms: 54.710791
+  type: 'test'
+  ...
+# Subtest: new round commits once; resume/reload and rejected analytics never queue events
+ok 29 - new round commits once; resume/reload and rejected analytics never queue events
+  ---
+  duration_ms: 4.253125
+  type: 'test'
+  ...
+# Subtest: save abort gates state transition and retry commits the same pending round
+ok 30 - save abort gates state transition and retry commits the same pending round
+  ---
+  duration_ms: 4.403333
+  type: 'test'
+  ...
+# Subtest: completion receipt is atomic/idempotent and stale round callback cannot complete replacement
+ok 31 - completion receipt is atomic/idempotent and stale round callback cannot complete replacement
+  ---
+  duration_ms: 11.670458
+  type: 'test'
+  ...
+# Subtest: malformed persisted slot blocks restore and replacement is explicit
+ok 32 - malformed persisted slot blocks restore and replacement is explicit
+  ---
+  duration_ms: 4.958917
+  type: 'test'
+  ...
+# Subtest: locked levels cannot be entered; all100 has no101
+ok 33 - locked levels cannot be entered; all100 has no101
+  ---
+  duration_ms: 3.135833
+  type: 'test'
+  ...
+# Subtest: inconsistent saved current pointer or detached round is retained as corruption
+ok 34 - inconsistent saved current pointer or detached round is retained as corruption
+  ---
+  duration_ms: 5.5055
+  type: 'test'
+  ...
+# Subtest: reopening nonempty product data preserves explicit settings and refusal
+ok 35 - reopening nonempty product data preserves explicit settings and refusal
+  ---
+  duration_ms: 9.281583
+  type: 'test'
+  ...
+# Subtest: a rejected statistics observer cannot turn a committed game save into failure
+ok 36 - a rejected statistics observer cannot turn a committed game save into failure
+  ---
+  duration_ms: 3.874625
+  type: 'test'
+  ...
+# Subtest: reward is persisted before show and only its receipt adds one ordinary bottle; close is not reward
+ok 37 - reward is persisted before show and only its receipt adds one ordinary bottle; close is not reward
+  ---
+  duration_ms: 31.139291
+  type: 'test'
+  ...
+# Subtest: reward survives Undo, Restart and process restore without resetting the puzzle entitlement
+ok 38 - reward survives Undo, Restart and process restore without resetting the puzzle entitlement
+  ---
+  duration_ms: 26.053041
+  type: 'test'
+  ...
+# Subtest: late reward targets the retained original puzzle, never a new replay or another current level
+ok 39 - late reward targets the retained original puzzle, never a new replay or another current level
+  ---
+  duration_ms: 21.2105
+  type: 'test'
+  ...
+# Subtest: aborted reward transaction keeps bottle and receipt pending together for one retry
+ok 40 - aborted reward transaction keeps bottle and receipt pending together for one retry
+  ---
+  duration_ms: 4.021375
+  type: 'test'
+  ...
+# Subtest: all100 fixed definitions stay byte-identical; expanded states preserve legal history, covers and collector
+ok 41 - all100 fixed definitions stay byte-identical; expanded states preserve legal history, covers and collector
+  ---
+  duration_ms: 25.410792
+  type: 'test'
+  ...
+# Subtest: rewarded ordinary, collector, covered and max15 boards solve using original moves and win rules
+ok 42 - rewarded ordinary, collector, covered and max15 boards solve using original moves and win rules
+  ---
+  duration_ms: 21.163417
+  type: 'test'
+  ...
+# Subtest: every rewarded bottle has its own nonoverlapping lane; units and tall capacity stay unchanged
+ok 43 - every rewarded bottle has its own nonoverlapping lane; units and tall capacity stay unchanged
+  ---
+  duration_ms: 3.478833
+  type: 'test'
+  ...
+# Subtest: real-rule checkpoint last100 commits complete campaign with no101 and keeps all history
+ok 44 - real-rule checkpoint last100 commits complete campaign with no101 and keeps all history
+  ---
+  duration_ms: 414.667625
+  type: 'test'
+  ...
+# Subtest: tall collector and cover checkpoints keep real legal histories and Undo
+ok 45 - tall collector and cover checkpoints keep real legal histories and Undo
+  ---
+  duration_ms: 0.594833
+  type: 'test'
+  ...
+# Subtest: unavailable capabilities never overwrite explicit saved preferences on reopen or choice change
+ok 46 - unavailable capabilities never overwrite explicit saved preferences on reopen or choice change
+  ---
+  duration_ms: 20.633959
+  type: 'test'
+  ...
+# Subtest: scoped statistics receipt survives restart; abort never acknowledges or changes gameplay revision
+ok 47 - scoped statistics receipt survives restart; abort never acknowledges or changes gameplay revision
+  ---
+  duration_ms: 18.562958
+  type: 'test'
+  ...
+# Subtest: nonempty whole snapshot survives close and reopen
+ok 48 - nonempty whole snapshot survives close and reopen
+  ---
+  duration_ms: 7.127083
+  type: 'test'
+  ...
+# Subtest: put request success followed by transaction abort must reject and retain old save
+ok 49 - put request success followed by transaction abort must reject and retain old save
+  ---
+  duration_ms: 7.812542
+  type: 'test'
+  ...
+# Subtest: another tab cannot silently overwrite a newer commit
+ok 50 - another tab cannot silently overwrite a newer commit
+  ---
+  duration_ms: 11.05825
+  type: 'test'
+  ...
+# Subtest: explicit replacement quarantines corrupt payload atomically
+ok 51 - explicit replacement quarantines corrupt payload atomically
+  ---
+  duration_ms: 4.011333
+  type: 'test'
+  ...
+# Subtest: actual Next UI handler resumes2 after replay1 instead of resetting it
+ok 52 - actual Next UI handler resumes2 after replay1 instead of resetting it
+  ---
+  duration_ms: 34.852417
+  type: 'test'
+  ...
+# Subtest: Escape cancels search but cannot hide completion or save/recovery gates
+ok 53 - Escape cancels search but cannot hide completion or save/recovery gates
+  ---
+  duration_ms: 1.522
+  type: 'test'
+  ...
+# Subtest: entering game and dismissing pause refresh input after parent gate changes
+ok 54 - entering game and dismissing pause refresh input after parent gate changes
+  ---
+  duration_ms: 3.217125
+  type: 'test'
+  ...
+# Subtest: local game loading failure exposes an honest retry instead of hanging Play
+ok 55 - local game loading failure exposes an honest retry instead of hanging Play
+  ---
+  duration_ms: 2.377916
+  type: 'test'
+  ...
+# Subtest: background return refreshes input without dismissing an existing pause
+ok 56 - background return refreshes input without dismissing an existing pause
+  ---
+  duration_ms: 1.045625
+  type: 'test'
+  ...
+# Subtest: choosing a level immediately retains selection scroll before debounce
+ok 57 - choosing a level immediately retains selection scroll before debounce
+  ---
+  duration_ms: 1.329042
+  type: 'test'
+  ...
+# Subtest: expanded notice labels an old allowed choice as review and Close records refusal
+ok 58 - expanded notice labels an old allowed choice as review and Close records refusal
+  ---
+  duration_ms: 0.853042
+  type: 'test'
+  ...
+# Subtest: Not Now pauses sharing before a blocked save and reports an unsaved choice honestly
+ok 59 - Not Now pauses sharing before a blocked save and reports an unsaved choice honestly
+  ---
+  duration_ms: 0.709
+  type: 'test'
+  ...
+# Subtest: earned bottle commits while native ad stays gated, then the close feedback restores its expanded board
+ok 60 - earned bottle commits while native ad stays gated, then the close feedback restores its expanded board
+  ---
+  duration_ms: 3.030208
+  type: 'test'
+  ...
+# Subtest: ads expand the optional notice and require a fresh choice from an earlier allowed play-only notice
+ok 61 - ads expand the optional notice and require a fresh choice from an earlier allowed play-only notice
+  ---
+  duration_ms: 1.041458
+  type: 'test'
+  ...
+# Subtest: pagehide then browser history pageshow resumes the same board and preserves Pause
+ok 62 - pagehide then browser history pageshow resumes the same board and preserves Pause
+  ---
+  duration_ms: 0.883792
+  type: 'test'
+  ...
+# Subtest: background while Home cannot checkpoint a stale scene after loading another saved board
+ok 63 - background while Home cannot checkpoint a stale scene after loading another saved board
+  ---
+  duration_ms: 7.548417
+  type: 'test'
+  ...
+# Subtest: real UI music/haptics gates follow saved choices and pause, hidden or audio interruption without resetting the board
+ok 64 - real UI music/haptics gates follow saved choices and pause, hidden or audio interruption without resetting the board
+  ---
+  duration_ms: 1.290917
+  type: 'test'
+  ...
+# Subtest: interrupted hint search returns to a playable puzzle instead of a searching sheet with no worker
+ok 65 - interrupted hint search returns to a playable puzzle instead of a searching sheet with no worker
+  ---
+  duration_ms: 1.713291
+  type: 'test'
+  ...
+# Subtest: native background before asynchronous bootstrap cannot be replaced by a visible WebView document
+ok 66 - native background before asynchronous bootstrap cannot be replaced by a visible WebView document
+  ---
+  duration_ms: 0.893583
+  type: 'test'
+  ...
+# Subtest: only the current saved, audible Win sheet permits success feedback; background or another round cannot
+ok 67 - only the current saved, audible Win sheet permits success feedback; background or another round cannot
+  ---
+  duration_ms: 2.9385
+  type: 'test'
+  ...
+# Subtest: late earned callback while Settings is open refreshes the original board without navigating away or losing the next pour
+ok 68 - late earned callback while Settings is open refreshes the original board without navigating away or losing the next pour
+  ---
+  duration_ms: 7.986333
+  type: 'test'
+  ...
+# Subtest: a prior earned callback during another ad for the same puzzle keeps its receipt, blocked overlay and truthful close feedback
+ok 69 - a prior earned callback during another ad for the same puzzle keeps its receipt, blocked overlay and truthful close feedback
+  ---
+  duration_ms: 2.202083
+  type: 'test'
+  ...
+1..69
+# tests 69
+# suites 0
+# pass 69
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1065.642958

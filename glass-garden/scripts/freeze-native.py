@@ -36,6 +36,8 @@ if manifest.get("ads"):
     assert info["GADApplicationIdentifier"] == "ca-app-pub-3940256099942544~1458002511"
 omitted = ["web/game/vendor/cocos/.gitignore"]
 with zipfile.ZipFile(apk) as archive:
+    if manifest.get("nativeBridgeVersion", 1) >= 2:
+        assert archive.getinfo("assets/web/media/dream-culture.mp3").compress_type == zipfile.ZIP_STORED, "Native AssetFileDescriptor requires stored MP3"
     for item in manifest["files"]:
         source = (web / item["path"]).read_bytes()
         assert len(source) == item["bytes"] and digest(source) == item["sha256"]
@@ -51,7 +53,7 @@ shutil.copytree(app, destination / "GlassGarden.app")
 record = {
     "web_candidate": tag, "native_candidate": native_tag, "web_manifest_sha256": digest(raw_manifest),
     "identity": info["CFBundleIdentifier"], "version": info["CFBundleShortVersionString"] + "(" + info["CFBundleVersion"] + ")",
-    "sdk": manifest["sdk"], "ads": manifest.get("ads"), "stage": "developer self-test; not independent/native/store acceptance",
+    "sdk": manifest["sdk"], "ads": manifest.get("ads"), "nativeBridgeVersion": manifest.get("nativeBridgeVersion", 1), "stage": "developer self-test; not independent/native/store acceptance",
     "verified_web_files": {"android": len(manifest["files"]) - len(omitted), "ios": len(manifest["files"])},
     "android_only_omitted_nonruntime_metadata": omitted, "android_permissions": permissions,
     "android": {"path": str(destination / "glass-garden-qa.apk"), "bytes": apk.stat().st_size, "sha256": digest(apk.read_bytes())},
