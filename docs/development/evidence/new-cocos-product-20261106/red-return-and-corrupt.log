@@ -1,0 +1,124 @@
+TAP version 13
+# Subtest: cancel terminates real bridge worker and invalidates late response
+ok 1 - cancel terminates real bridge worker and invalidates late response
+  ---
+  duration_ms: 1.719084
+  type: 'test'
+  ...
+# Subtest: child wake cannot resume engine under hidden parent/modal
+ok 2 - child wake cannot resume engine under hidden parent/modal
+  ---
+  duration_ms: 0.723333
+  type: 'test'
+  ...
+# Subtest: interrupt before first pour animation finishes still restores committed action
+ok 3 - interrupt before first pour animation finishes still restores committed action
+  ---
+  duration_ms: 32.573125
+  type: 'test'
+  ...
+# Subtest: winning move completion commits before animation finish or late callbacks
+ok 4 - winning move completion commits before animation finish or late callbacks
+  ---
+  duration_ms: 35.32775
+  type: 'test'
+  ...
+# Subtest: late animation callback from old round cannot replace restarted progress
+ok 5 - late animation callback from old round cannot replace restarted progress
+  ---
+  duration_ms: 21.774708
+  type: 'test'
+  ...
+# Subtest: pending save preserves existing return-stage bottle queue but hidden parent blocks it
+not ok 6 - pending save preserves existing return-stage bottle queue but hidden parent blocks it
+  ---
+  duration_ms: 2.900667
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/lifecycle.test.mjs:35:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    return-stage target was locked by persistence
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/lifecycle.test.mjs:35:190)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: actual rules: replay1 Next retains unfinished2 board/history/round and Undo; restart replaces only2
+ok 7 - actual rules: replay1 Next retains unfinished2 board/history/round and Undo; restart replaces only2
+  ---
+  duration_ms: 70.93875
+  type: 'test'
+  ...
+# Subtest: new round commits once; resume/reload and rejected analytics never queue events
+ok 8 - new round commits once; resume/reload and rejected analytics never queue events
+  ---
+  duration_ms: 5.679959
+  type: 'test'
+  ...
+# Subtest: save abort gates state transition and retry commits the same pending round
+ok 9 - save abort gates state transition and retry commits the same pending round
+  ---
+  duration_ms: 10.335583
+  type: 'test'
+  ...
+# Subtest: completion receipt is atomic/idempotent and stale round callback cannot complete replacement
+ok 10 - completion receipt is atomic/idempotent and stale round callback cannot complete replacement
+  ---
+  duration_ms: 21.331833
+  type: 'test'
+  ...
+# Subtest: malformed persisted slot blocks restore and replacement is explicit
+ok 11 - malformed persisted slot blocks restore and replacement is explicit
+  ---
+  duration_ms: 4.085292
+  type: 'test'
+  ...
+# Subtest: locked levels cannot be entered; all100 has no101
+ok 12 - locked levels cannot be entered; all100 has no101
+  ---
+  duration_ms: 0.975083
+  type: 'test'
+  ...
+# Subtest: inconsistent saved current pointer or detached round is retained as corruption
+not ok 13 - inconsistent saved current pointer or detached round is retained as corruption
+  ---
+  duration_ms: 2.011875
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/product.test.mjs:29:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/product.test.mjs:29:400)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 11
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 307.090583

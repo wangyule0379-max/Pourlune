@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: actual Next UI handler resumes2 after replay1 instead of resetting it
+ok 1 - actual Next UI handler resumes2 after replay1 instead of resetting it
+  ---
+  duration_ms: 63.606333
+  type: 'test'
+  ...
+# Subtest: Escape cancels search but cannot hide completion or save/recovery gates
+ok 2 - Escape cancels search but cannot hide completion or save/recovery gates
+  ---
+  duration_ms: 2.829083
+  type: 'test'
+  ...
+# Subtest: entering game and dismissing pause refresh input after parent gate changes
+ok 3 - entering game and dismissing pause refresh input after parent gate changes
+  ---
+  duration_ms: 3.963708
+  type: 'test'
+  ...
+# Subtest: local game loading failure exposes an honest retry instead of hanging Play
+not ok 4 - local game loading failure exposes an honest retry instead of hanging Play
+  ---
+  duration_ms: 5.305125
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/ui.test.mjs:11:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'undefined'
+    - 'function'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'function'
+  actual: 'undefined'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/ui.test.mjs:11:145)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 3
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 274.317167

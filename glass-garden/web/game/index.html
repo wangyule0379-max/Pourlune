@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="A little color, a little calm. Sort the colors and collect a bottle of pink moonlight."><meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#fff0e5"><title>Pourlune · A little color, a little calm</title>
+  <link rel="preload" href="assets/art/garden-daylight.webp" as="image"><link rel="icon" href="assets/icons/moon.svg"><link rel="preload" href="assets/fonts/nunito.ttf" as="font" type="font/ttf" crossorigin><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="../game-chrome.css">
+</head>
+<body>
+  <section id="loading" role="status" aria-live="polite" aria-label="Loading Pourlune">
+    <div class="loading-brand"><img src="assets/icons/moon.svg" alt=""><span>pourlune</span></div>
+    <img class="loading-drop" src="assets/art/pink-drop.png" alt="">
+    <p id="loading-message">Loading your garden…</p>
+    <progress id="loading-progress" aria-label="Loading game"></progress>
+    <button id="loading-retry" hidden onclick="location.reload()">Try again</button>
+    <span class="loading-note">A little color. A little calm.</span>
+  </section>
+  <aside class="desktop-note"><div class="small-brand">POURLUNE</div><h1>A little color.<br>A little calm.</h1><p>Make room for a little magic.<br>One gentle pour at a time.</p><div class="note-line"></div><div class="key-tip"><span>01</span> Pick a bottle</div><div class="key-tip"><span>02</span> Pour onto a matching color</div><div class="key-tip"><span>03</span> Sort every color</div><p class="footnote">No timer. No rush.<br>Find your own rhythm.</p></aside>
+  <main id="stage-wrap"><div id="game-shell">
+    <canvas id="gameCanvas" width="480" height="1040" aria-label="Water sort puzzle"></canvas>
+    <div class="hud">
+      <button id="board-dismiss" class="board-dismiss" aria-label="Deselect bottle" tabindex="-1"></button>
+      <div id="bottle-targets" aria-label="Game bottles"></div>
+      <div class="collector-tag" id="collector-tag">Pink only</div>
+      <button id="sound" hidden aria-label="Mute sound"></button>
+    </div>
+
+  </div></main>
+  <div id="screen-header">
+      <div class="wordmark"><img src="assets/icons/moon.svg" alt="">pourlune</div>
+      <header class="topbar"><button id="levels" class="icon-button" aria-label="Choose a level"><img src="assets/icons/squares-four.svg" alt=""></button><button id="settings" class="icon-button" aria-label="Settings"><img src="assets/icons/gear.svg" alt=""></button></header>
+      <section class="level-heading"><h2 id="level-title">LEVEL 1</h2><div class="level-subline"><span id="level-name">First Flow</span><span id="level-difficulty" hidden></span></div><div class="level-dots" id="level-dots" hidden></div></section>
+      <section class="objective"><img src="assets/art/pink-drop.png" class="drop-icon" id="objective-icon" alt="" hidden><strong id="objective-text">Sort each color into its own bottle.</strong><div class="objective-count" hidden><b id="collected">6</b><span>/ 10</span></div><div class="objective-progress" hidden><i id="progress-bar"></i></div></section>
+      <div class="board-caption"><span id="moves">0 moves</span></div>
+      <div class="message" id="message" role="status" aria-live="polite"></div>
+  </div>
+  <div id="screen-footer">
+      <nav class="tools" aria-label="Game controls"><button id="help" aria-label="How to play"><img src="assets/icons/question.svg" alt=""></button><button id="undo" class="tool" disabled><img src="assets/icons/arrow-u-up-left.svg" alt=""><span>Undo</span></button><button id="hint" class="tool"><img src="assets/icons/lightbulb.svg" alt=""><span>Hint</span></button><button id="restart" class="tool"><img src="assets/icons/arrow-clockwise.svg" alt=""><span>Restart</span></button></nav>
+  </div>
+    <div id="modal" class="modal-wrap" hidden><section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button id="modal-close" aria-label="Close" class="modal-close"><img src="assets/icons/x.svg" alt=""></button><div id="modal-content"></div></section></div>
+  <section id="orientation" hidden role="status"><img src="assets/icons/moon.svg" alt=""><h2>A little turn</h2><p>Turn your phone upright to play.</p><small>Your puzzle will be right here.</small></section>
+  <script id="boot-controller">
+  window.PourBoot=(function(){
+    var ready=false,failed=false,message=document.getElementById('loading-message'),retry=document.getElementById('loading-retry'),progress=document.getElementById('loading-progress');
+    var slow=setTimeout(function(){if(!ready&&!failed){message.textContent='Taking a little longer… You can wait or try again.';retry.hidden=false;}},20000);
+    function fail(){if(ready)return;parent.GardenHost?.loadFailed();failed=true;clearTimeout(slow);message.textContent='Could not load local game files. Try again.';progress.hidden=true;retry.hidden=false;}
+    window.addEventListener('error',function(event){
+      var id=event.target&&event.target.id;
+      if(id==='game-engine'||id==='game-main'||(event.filename&&event.filename.indexOf(location.origin+'/')===0))fail();
+    },true);
+    return {stage:function(text){if(!ready&&!failed)message.textContent=text;},fail:fail,ready:function(){if(ready)return;ready=true;clearTimeout(slow);document.documentElement.classList.add('game-ready');document.getElementById('loading').remove();}};
+  })();
+  </script>
+  <script src="../game-loader.js"></script>
+</body></html>

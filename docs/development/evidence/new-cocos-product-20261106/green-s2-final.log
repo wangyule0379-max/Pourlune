@@ -1,0 +1,142 @@
+TAP version 13
+# Subtest: cancel terminates real bridge worker and invalidates late response
+ok 1 - cancel terminates real bridge worker and invalidates late response
+  ---
+  duration_ms: 1.395459
+  type: 'test'
+  ...
+# Subtest: child wake cannot resume engine under hidden parent/modal
+ok 2 - child wake cannot resume engine under hidden parent/modal
+  ---
+  duration_ms: 0.350792
+  type: 'test'
+  ...
+# Subtest: interrupt before first pour animation finishes still restores committed action
+ok 3 - interrupt before first pour animation finishes still restores committed action
+  ---
+  duration_ms: 14.4425
+  type: 'test'
+  ...
+# Subtest: winning move completion commits before animation finish or late callbacks
+ok 4 - winning move completion commits before animation finish or late callbacks
+  ---
+  duration_ms: 12.188042
+  type: 'test'
+  ...
+# Subtest: late animation callback from old round cannot replace restarted progress
+ok 5 - late animation callback from old round cannot replace restarted progress
+  ---
+  duration_ms: 11.295542
+  type: 'test'
+  ...
+# Subtest: pending save preserves existing return-stage bottle queue but hidden parent blocks it
+ok 6 - pending save preserves existing return-stage bottle queue but hidden parent blocks it
+  ---
+  duration_ms: 0.81725
+  type: 'test'
+  ...
+# Subtest: actual rules: replay1 Next retains unfinished2 board/history/round and Undo; restart replaces only2
+ok 7 - actual rules: replay1 Next retains unfinished2 board/history/round and Undo; restart replaces only2
+  ---
+  duration_ms: 29.573584
+  type: 'test'
+  ...
+# Subtest: new round commits once; resume/reload and rejected analytics never queue events
+ok 8 - new round commits once; resume/reload and rejected analytics never queue events
+  ---
+  duration_ms: 2.205666
+  type: 'test'
+  ...
+# Subtest: save abort gates state transition and retry commits the same pending round
+ok 9 - save abort gates state transition and retry commits the same pending round
+  ---
+  duration_ms: 2.42
+  type: 'test'
+  ...
+# Subtest: completion receipt is atomic/idempotent and stale round callback cannot complete replacement
+ok 10 - completion receipt is atomic/idempotent and stale round callback cannot complete replacement
+  ---
+  duration_ms: 10.69375
+  type: 'test'
+  ...
+# Subtest: malformed persisted slot blocks restore and replacement is explicit
+ok 11 - malformed persisted slot blocks restore and replacement is explicit
+  ---
+  duration_ms: 1.880458
+  type: 'test'
+  ...
+# Subtest: locked levels cannot be entered; all100 has no101
+ok 12 - locked levels cannot be entered; all100 has no101
+  ---
+  duration_ms: 1.128208
+  type: 'test'
+  ...
+# Subtest: inconsistent saved current pointer or detached round is retained as corruption
+ok 13 - inconsistent saved current pointer or detached round is retained as corruption
+  ---
+  duration_ms: 1.810375
+  type: 'test'
+  ...
+# Subtest: reopening nonempty product data preserves explicit settings and refusal
+ok 14 - reopening nonempty product data preserves explicit settings and refusal
+  ---
+  duration_ms: 3.3455
+  type: 'test'
+  ...
+# Subtest: nonempty whole snapshot survives close and reopen
+ok 15 - nonempty whole snapshot survives close and reopen
+  ---
+  duration_ms: 4.518875
+  type: 'test'
+  ...
+# Subtest: put request success followed by transaction abort must reject and retain old save
+ok 16 - put request success followed by transaction abort must reject and retain old save
+  ---
+  duration_ms: 2.320792
+  type: 'test'
+  ...
+# Subtest: another tab cannot silently overwrite a newer commit
+ok 17 - another tab cannot silently overwrite a newer commit
+  ---
+  duration_ms: 1.116042
+  type: 'test'
+  ...
+# Subtest: explicit replacement quarantines corrupt payload atomically
+ok 18 - explicit replacement quarantines corrupt payload atomically
+  ---
+  duration_ms: 0.915458
+  type: 'test'
+  ...
+# Subtest: actual Next UI handler resumes2 after replay1 instead of resetting it
+ok 19 - actual Next UI handler resumes2 after replay1 instead of resetting it
+  ---
+  duration_ms: 26.081875
+  type: 'test'
+  ...
+# Subtest: Escape cancels search but cannot hide completion or save/recovery gates
+ok 20 - Escape cancels search but cannot hide completion or save/recovery gates
+  ---
+  duration_ms: 1.799083
+  type: 'test'
+  ...
+# Subtest: entering game and dismissing pause refresh input after parent gate changes
+ok 21 - entering game and dismissing pause refresh input after parent gate changes
+  ---
+  duration_ms: 1.951084
+  type: 'test'
+  ...
+# Subtest: local game loading failure exposes an honest retry instead of hanging Play
+ok 22 - local game loading failure exposes an honest retry instead of hanging Play
+  ---
+  duration_ms: 2.496458
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 145.627875
