@@ -1,0 +1,68 @@
+TAP version 13
+# Subtest: cancel terminates real bridge worker and invalidates late response
+ok 1 - cancel terminates real bridge worker and invalidates late response
+  ---
+  duration_ms: 4.234625
+  type: 'test'
+  ...
+# Subtest: child wake cannot resume engine under hidden parent/modal
+ok 2 - child wake cannot resume engine under hidden parent/modal
+  ---
+  duration_ms: 1.0355
+  type: 'test'
+  ...
+# Subtest: interrupt before first pour animation finishes still restores committed action
+ok 3 - interrupt before first pour animation finishes still restores committed action
+  ---
+  duration_ms: 29.234125
+  type: 'test'
+  ...
+# Subtest: winning move completion commits before animation finish or late callbacks
+ok 4 - winning move completion commits before animation finish or late callbacks
+  ---
+  duration_ms: 13.37425
+  type: 'test'
+  ...
+# Subtest: late animation callback from old round cannot replace restarted progress
+ok 5 - late animation callback from old round cannot replace restarted progress
+  ---
+  duration_ms: 13.039125
+  type: 'test'
+  ...
+# Subtest: pending save preserves existing return-stage bottle queue but hidden parent blocks it
+ok 6 - pending save preserves existing return-stage bottle queue but hidden parent blocks it
+  ---
+  duration_ms: 0.589792
+  type: 'test'
+  ...
+# Subtest: late successful save feedback cannot target a restored session with the same round
+not ok 7 - late successful save feedback cannot target a restored session with the same round
+  ---
+  duration_ms: 1.035416
+  type: 'test'
+  location: '/Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/lifecycle.test.mjs:37:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    old finish played win feedback in a restored session
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/wangyule/.codex/worktrees/testflight17-fixes/Pourlune/glass-garden/test/lifecycle.test.mjs:37:509)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 6
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 264.420625

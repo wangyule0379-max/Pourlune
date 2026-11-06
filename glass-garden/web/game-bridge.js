@@ -33,16 +33,16 @@
  };
  S.handleHint=function(data){if(data.id!==this.hintRequest)return;clearTimeout(this.hintTimer);handle.call(this,data);host().hintStatus(data.status==='solved'&&data.path.length?'result':data.status==='dead'?'dead':data.status==='limit'?'timeout':'unavailable');};
  S.finishPour=function(m){
-  const scene=this,round=this._actionRound;
+  const scene=this,round=this._actionRound,session=this.session,state=this.session.state;
   if(!this.flow||this.flow.state!==m.state||!round||round!==host().roundId(this.levelIndex+1))return;
   this._queuedSelections=[];this._finishing=true;
   try{finish.call(this,m);}finally{this._finishing=false;}
   const queued=this._queuedSelections;this._queuedSelections=[];
   this.save().then(ok=>{
-   if(!ok||round!==host().roundId(scene.levelIndex+1))return;
+   if(!ok||scene.session!==session||session.state!==state||round!==host().roundId(scene.levelIndex+1))return;
    if(this._winSound){if(host().canRender())this._winSound();this._winSound=null;}
    if(host().canRender())for(const i of queued)select.call(this,i);
-   if(!PourRules.isSolved(scene.session.state)&&!scene.hasMoves()&&host().canRender())host().noMoves(scene);
+   if(!scene.busy&&session.state===state&&!PourRules.isSolved(scene.session.state)&&!scene.hasMoves()&&host().canRender())host().noMoves(scene);
   }).catch(()=>{});
  };
 })();

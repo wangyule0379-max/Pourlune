@@ -1,0 +1,154 @@
+TAP version 13
+# Subtest: cancel terminates real bridge worker and invalidates late response
+ok 1 - cancel terminates real bridge worker and invalidates late response
+  ---
+  duration_ms: 2.33775
+  type: 'test'
+  ...
+# Subtest: child wake cannot resume engine under hidden parent/modal
+ok 2 - child wake cannot resume engine under hidden parent/modal
+  ---
+  duration_ms: 0.935125
+  type: 'test'
+  ...
+# Subtest: interrupt before first pour animation finishes still restores committed action
+ok 3 - interrupt before first pour animation finishes still restores committed action
+  ---
+  duration_ms: 17.576833
+  type: 'test'
+  ...
+# Subtest: winning move completion commits before animation finish or late callbacks
+ok 4 - winning move completion commits before animation finish or late callbacks
+  ---
+  duration_ms: 12.163667
+  type: 'test'
+  ...
+# Subtest: late animation callback from old round cannot replace restarted progress
+ok 5 - late animation callback from old round cannot replace restarted progress
+  ---
+  duration_ms: 14.560709
+  type: 'test'
+  ...
+# Subtest: pending save preserves existing return-stage bottle queue but hidden parent blocks it
+ok 6 - pending save preserves existing return-stage bottle queue but hidden parent blocks it
+  ---
+  duration_ms: 1.206208
+  type: 'test'
+  ...
+# Subtest: late successful save feedback cannot target a restored session with the same round
+ok 7 - late successful save feedback cannot target a restored session with the same round
+  ---
+  duration_ms: 0.92025
+  type: 'test'
+  ...
+# Subtest: actual rules: replay1 Next retains unfinished2 board/history/round and Undo; restart replaces only2
+ok 8 - actual rules: replay1 Next retains unfinished2 board/history/round and Undo; restart replaces only2
+  ---
+  duration_ms: 39.328541
+  type: 'test'
+  ...
+# Subtest: new round commits once; resume/reload and rejected analytics never queue events
+ok 9 - new round commits once; resume/reload and rejected analytics never queue events
+  ---
+  duration_ms: 2.585
+  type: 'test'
+  ...
+# Subtest: save abort gates state transition and retry commits the same pending round
+ok 10 - save abort gates state transition and retry commits the same pending round
+  ---
+  duration_ms: 2.656875
+  type: 'test'
+  ...
+# Subtest: completion receipt is atomic/idempotent and stale round callback cannot complete replacement
+ok 11 - completion receipt is atomic/idempotent and stale round callback cannot complete replacement
+  ---
+  duration_ms: 16.586959
+  type: 'test'
+  ...
+# Subtest: malformed persisted slot blocks restore and replacement is explicit
+ok 12 - malformed persisted slot blocks restore and replacement is explicit
+  ---
+  duration_ms: 2.944916
+  type: 'test'
+  ...
+# Subtest: locked levels cannot be entered; all100 has no101
+ok 13 - locked levels cannot be entered; all100 has no101
+  ---
+  duration_ms: 0.530625
+  type: 'test'
+  ...
+# Subtest: inconsistent saved current pointer or detached round is retained as corruption
+ok 14 - inconsistent saved current pointer or detached round is retained as corruption
+  ---
+  duration_ms: 2.215542
+  type: 'test'
+  ...
+# Subtest: reopening nonempty product data preserves explicit settings and refusal
+ok 15 - reopening nonempty product data preserves explicit settings and refusal
+  ---
+  duration_ms: 4.369375
+  type: 'test'
+  ...
+# Subtest: nonempty whole snapshot survives close and reopen
+ok 16 - nonempty whole snapshot survives close and reopen
+  ---
+  duration_ms: 7.658416
+  type: 'test'
+  ...
+# Subtest: put request success followed by transaction abort must reject and retain old save
+ok 17 - put request success followed by transaction abort must reject and retain old save
+  ---
+  duration_ms: 2.198208
+  type: 'test'
+  ...
+# Subtest: another tab cannot silently overwrite a newer commit
+ok 18 - another tab cannot silently overwrite a newer commit
+  ---
+  duration_ms: 1.377375
+  type: 'test'
+  ...
+# Subtest: explicit replacement quarantines corrupt payload atomically
+ok 19 - explicit replacement quarantines corrupt payload atomically
+  ---
+  duration_ms: 1.061458
+  type: 'test'
+  ...
+# Subtest: actual Next UI handler resumes2 after replay1 instead of resetting it
+ok 20 - actual Next UI handler resumes2 after replay1 instead of resetting it
+  ---
+  duration_ms: 35.600958
+  type: 'test'
+  ...
+# Subtest: Escape cancels search but cannot hide completion or save/recovery gates
+ok 21 - Escape cancels search but cannot hide completion or save/recovery gates
+  ---
+  duration_ms: 2.96325
+  type: 'test'
+  ...
+# Subtest: entering game and dismissing pause refresh input after parent gate changes
+ok 22 - entering game and dismissing pause refresh input after parent gate changes
+  ---
+  duration_ms: 2.689125
+  type: 'test'
+  ...
+# Subtest: local game loading failure exposes an honest retry instead of hanging Play
+ok 23 - local game loading failure exposes an honest retry instead of hanging Play
+  ---
+  duration_ms: 3.12875
+  type: 'test'
+  ...
+# Subtest: background return refreshes input without dismissing an existing pause
+ok 24 - background return refreshes input without dismissing an existing pause
+  ---
+  duration_ms: 4.152084
+  type: 'test'
+  ...
+1..24
+# tests 24
+# suites 0
+# pass 24
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 186.192875

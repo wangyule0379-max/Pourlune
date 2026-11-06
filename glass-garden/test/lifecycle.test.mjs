@@ -33,3 +33,5 @@ test('winning move completion commits before animation finish or late callbacks'
 test('late animation callback from old round cannot replace restarted progress',()=>interrupted(true,true));
 
 test('pending save preserves existing return-stage bottle queue but hidden parent blocks it',()=>{const h=bridge();h.scene.returning=true;h.host.canRender=()=>true;h.scene.refresh();assert.equal(h.targets[0].disabled,false,'return-stage target was locked by persistence');h.host.canRender=()=>false;h.scene.refresh();assert.equal(h.targets[0].disabled,true);});
+
+test('late successful save feedback cannot target a restored session with the same round',async()=>{const h=bridge(),s=h.scene;let resolve,played=0;h.host.roundId=()=> 'same-round';h.host.canRender=()=>true;h.host.capture=()=>new Promise(done=>resolve=done);const state={};Object.assign(s,{flow:{state},_actionRound:'same-round',session:{state},levelIndex:0,_winSound:()=>played++});s.finishPour({state});s.session={state:{restored:true}};resolve(true);await Promise.resolve();await Promise.resolve();assert.equal(played,0,'old finish played win feedback in a restored session');});
