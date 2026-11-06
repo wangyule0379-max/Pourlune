@@ -1,0 +1,18 @@
+# Native preflight checkpoint — not clear to submit
+
+7November2026; app-store-compliance and app-store-preflight-skills applied. Universal/game checklists read; actual scanner logs retained. This is the independent QA shell, not a signed production submission. Do not convert general jurisdiction/deadline text or regex warnings into unverified legal declarations.
+
+| Finding | Evidence / handling | State |
+| --- | --- | --- |
+| App privacy manifest absent | Added first-party DeviceID/ProductInteraction/AdvertisingData for optional GM analytics, linked to random installation ID, no first-party tracking. Required-reason key omitted because no corresponding direct app API is used; do not invent reason codes. Both pinned GMA/UMP manifests remain byte-identical. | Fixed, bundled bytes verified |
+| localhost/staging string | 127.0.0.1:43177 is the bound read-only bundled-asset origin, not a remote backend. No port fallback or broad ATS exception. Actual remote API is HTTPS api.gamemunchies.com. | Scanner false positive; native runtime pending |
+| Plain SharedPreferences / IndexedDB warning | Game snapshots, anonymous event IDs and callback receipts contain no account tokens or login credentials. No login/account/cloud service added. Damaged stores fail closed; private credentials never enter the game. | Regex warning assessed; storage recovery still needs device test |
+| AD_ID warning | Both merged permission removals verified from actual APK. NPA/PG and official test units; no ATT request. Vendor manifest describes its generic possible collection and is not rewritten to claim zero collection. | Static package pass; actual SDK network pending |
+| Policy/labels/age rating | Real in-app policy and support links are packaged, optional statistics and independent Google consent explained. Scanner does not follow bundled Web resources. Existing live store declarations must be compared with final actual runtime and metadata; no automatic store write yet. | Final check pending |
+| Export compliance | No unsupported NO declaration made. QA/Simulator strings do not establish final device binary crypto; final source/framework/link audit plus existing holder choices required before upload. | Pending final device package |
+| R8/release configuration | This is debug independent QA, not the Android release candidate. Existing API36 target is pinned. Minified release/signing/startup remain a separate final build gate. | Pending |
+| VoiceOver/contrast | Existing DOM semantics/buttons retained; native alert/loading views still need actual device review. Canvas gameplay accessibility is not asserted from scanner success. | Pending actual review |
+
+Final manifest-only native tag is s5-fullscreen-selftest-2-privacy-final, index3c760dee2424db5f63263e1310be955bd40c9ae3826ef854d233986a35b1d281. Previous446-file iOS bundle has445 identical files; only root PrivacyInfo.xcprivacy changes. Android and434 web files are unchanged. No device was started and no store declaration was submitted. The scanner still exits2 for the local-only origin; no override environment flag was used and no real remote endpoint was changed.
+
+Primary references read: Apple privacy manifest documentation https://developer.apple.com/documentation/bundleresources/privacy-manifest-files ; Google pinned SDK manifests in the actual frozen app are the version-specific evidence. https://developers.google.com/admob/ios/privacy/data-disclosure is currently for13.12.0 and does not replace the bundled13.11.0 manifest audit. This report neither approves general legal compliance nor permits public store release.

@@ -121,3 +121,7 @@ Computer浏览器自测browser-s4d：390/320迁移设置、真实动作/Undo/刷
 冻结s5-fullscreen-selftest-2（434文件22948122B/manifest0cd092080c00508ab76baf18d9e4f3a4bd5e0f45b286f49408c7240bbbd0981d），原生s5-fullscreen-selftest-2-privacy（indexb9abaad5b5a45e385af429ee033dd9928a48c39967d9f503ad1e2af9035e9600/APK2874dc8cd0d3d1a6322207ebe9c15b55f2320a581c6ea5e23bd2393f683ff664）。已补App自身统计隐私清单并核SDK两份原清单；尚无商店声明修改或上传。新增CI仅复制来源与核心/服务关闭原生编译，不上传私有JS SDK，不把它当完整SDK运行CI。
 
 本阶段边界Fruplop74DA仍占用且无释放，adb无设备；未启动Pourlune设备/未安装新包。真实原生/升级/广告/路由/后台/性能自测仍等自然窗口，电脑已排完整批次；F9及旧App/库不动。继续独立发布准备，不请总控代做未完成开发原生测试；尚未通过最终实际验收或更新TestFlight。
+
+S4e预检差额：App未直接调用需申报理由的API，移除空NSPrivacyAccessedAPITypes键，不虚填理由。新native s5-fullscreen-selftest-2-privacy-final/index3c760dee2424db5f63263e1310be955bd40c9ae3826ef854d233986a35b1d281，仅根PrivacyInfo.xcprivacy一文件变、445文件同字节，web/Android不变；旧冻结保留。preflight-triage.md逐项记录scanner误报与真实待验，localhost是只读本地资源源，不把它改成公网。仍不称clear to submit。
+
+新CI首跑42253305276（精确864084d）：80核心/来源核验和iOS服务关闭编译真实成功；Android工具安装失败在setup-android默认请求已不存在的SDK tools包，尚未进入编译。依据该Action官方README将packages显式空、下步只安装已指定API36/build-tools，不升SDK/AGP、不弱化TLS。下一精确提交另跑，首失败保留，不重跑旧终态。
